@@ -1,0 +1,58 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+Space Weather
+=============
+
+
+.. class:: CoronalMassEjection
+
+   A coronal mass ejection: a cloud of plasma thrown out by a star. One that reaches a body
+   with a magnetosphere can cause a geomagnetic storm. See
+   :func:`Body::recent_coronal_mass_ejections` and
+   :func:`Flight::incoming_coronal_mass_ejections`.
+
+   .. function:: Body star()
+
+      The star that threw out the ejection.
+
+   
+
+   .. function:: double ut()
+
+      The universal time at which the ejection left the star, in seconds.
+
+   
+
+   .. function:: float speed()
+
+      The speed of the ejection as it leaves the star, in :math:`\mathrm{m/s}`.
+
+   
+
+   .. function:: double arrival_time(Vehicle vehicle)
+
+      The universal time at which the shock of the ejection is forecast to reach the
+      vehicle, in seconds. Not a number if the ejection misses the vehicle, or has
+      already reached it.
+
+      :Parameters:
+
+       * **vehicle** -- The vehicle.
+
+   
+
+      .. note::
+
+         The forecast the game's space weather window shows. It is uncertain by up to
+         :func:`CoronalMassEjection::arrival_uncertainty`, which shrinks as the ejection nears.
+
+   .. function:: float arrival_uncertainty(Vehicle vehicle)
+
+      The uncertainty of :func:`CoronalMassEjection::arrival_time`, in seconds. Not a number if the
+      ejection misses the vehicle, or has already reached it.
+
+      :Parameters:
+
+       * **vehicle** -- The vehicle.

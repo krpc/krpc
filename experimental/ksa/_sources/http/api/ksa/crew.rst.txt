@@ -1,0 +1,881 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Crew
+====
+
+
+.. _http-KSA.Kitten:
+
+.. rubric:: Kitten
+
+A kitten in the agency's roster. Obtained from :http:get:`/ksa/kittens`,
+:http:get:`/ksa/vehicle/(id)/crew` or :http:get:`/ksa/seat/(id)/kitten`.
+
+A ``Kitten`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/kitten/(id)/name
+
+   The kitten's name, which is unique in the roster.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/roster-index
+
+   The kitten's position in the agency's roster, from 0. See :http:get:`/ksa/kittens`.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/vehicle
+
+   The vehicle the kitten is in, or ``null`` if it is not in a seat.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson KSA.Vehicle? value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/seat
+
+   The seat the kitten is in, or ``null`` if it is not in a seat.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson KSA.Seat? value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/killed-in-action
+
+   Whether the kitten has been killed in action.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/cause-of-death
+
+   What killed the kitten, or ``null`` if it is alive.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson KSA.DeathCause? value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/mission-count
+
+   The number of missions the kitten has flown, including the current one.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/mission-time
+
+   The time the kitten has spent on missions, including the current one, in seconds.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/distance-traveled
+
+   The distance the kitten has traveled on missions, in meters.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/fastest-speed
+
+   The kitten's highest speed on a mission, in meters per second.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/acute-dose
+
+   The kitten's acute radiation dose, in sieverts. It heals over time, and causes
+   radiation sickness from 1 sievert and death from 4 sieverts.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/lifetime-dose
+
+   The kitten's lifetime radiation dose, in sieverts. The kitten retires after a
+   mission that takes it past 0.6 sieverts.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/dose-rate
+
+   The radiation dose rate the kitten receives, in sieverts per second. The vehicle's
+   shielding reduces it in a seat, and on EVA the kitten is unshielded. Zero when the
+   kitten is not on a mission.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/radiation-sickness
+
+   Whether the kitten has radiation sickness, which keeps it from flying.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/time-to-radiation-sickness
+
+   The time until the kitten gets radiation sickness at its current dose rate, in
+   seconds. Infinite if it never does, or the kitten already has it.
+
+   .. note::
+
+      The game forecasts it for a kitten on a mission while
+      :http:get:`/ksa/radiation-enabled` is true.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/time-to-lethal-dose
+
+   The time until the kitten takes a lethal radiation dose at its current dose rate, in
+   seconds. Infinite if it never does.
+
+   .. note::
+
+      The game forecasts it for a kitten on a mission while
+      :http:get:`/ksa/radiation-enabled` is true, and only within a day of radiation
+      sickness.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/time-until-fit-to-fly
+
+   The time until the kitten has recovered from radiation sickness and can fly, resting
+   at home, in seconds. Zero if the kitten does not have radiation sickness.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/recovery-time
+
+   The time until the kitten's acute radiation dose has healed below 1 millisievert,
+   resting at home, in seconds.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/retired
+
+   Whether the kitten has retired, having reached its lifetime radiation dose limit.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/worst-condition
+
+   The kitten's worst condition across its supplies.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson KSA.KittenCondition value:
+
+
+
+
+.. http:post:: /ksa/kitten/(id)/condition
+
+   The effect on the kitten of going without a supply.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :reqjson KSA.LifeSupportSupply supply: The supply.
+   :resjson KSA.KittenCondition value:
+
+
+
+
+
+.. http:post:: /ksa/kitten/(id)/time-without
+
+   The time the kitten has gone without a supply, in seconds. It counts down again
+   once the supply returns.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :reqjson KSA.LifeSupportSupply supply: The supply.
+   :resjson float value:
+
+
+
+
+
+.. http:post:: /ksa/kitten/(id)/time-to-next-condition
+
+   The further time the kitten can go without a supply before its condition from the
+   supply worsens, in seconds. Infinite once the kitten is dead.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :reqjson KSA.LifeSupportSupply supply: The supply.
+   :resjson float value:
+
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/incapacitated
+
+   Whether the kitten is incapacitated by going without a supply. An incapacitated
+   kitten cannot fly the vehicle or move supplies.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/on-eva
+
+   Whether the kitten is on EVA.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /ksa/kitten/(id)/go-on-eva
+
+   Leave the kitten's vehicle through its EVA hatch, and return once the kitten is on
+   EVA. The kitten becomes the controlled kitten, see :http:get:`/ksa/active-kitten`.
+
+   .. note::
+
+      Throws an exception if the kitten is not in a seat, or the vehicle has no EVA hatch.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/can-go-on-eva
+
+   Whether the kitten can go on EVA. See :http:post:`/ksa/kitten/(id)/go-on-eva`.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /ksa/kitten/(id)/board
+
+   Board the nearest vehicle with a free seat, and return once the kitten is in the
+   seat. The vehicle becomes the controlled vehicle.
+
+   .. note::
+
+      Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
+      within one meter.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson KSA.Vehicle value: The vehicle the kitten boarded.
+
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/can-board
+
+   Whether the kitten is on EVA and an EVA hatch with a free seat is in range. See
+   :http:post:`/ksa/kitten/(id)/board`.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/locomotion-mode
+
+   How the kitten on EVA is moving. Throws an exception if the kitten is not on EVA.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson KSA.LocomotionMode value:
+
+
+
+
+.. http:post:: /ksa/kitten/(id)/position
+
+   The position of the kitten, in meters. For a kitten in a seat, the position of the
+   seat's part. Throws an exception if the kitten is neither in a seat nor on EVA.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/kitten/(id)/velocity
+
+   The velocity of the kitten, in meters per second. For a kitten in a seat, the
+   velocity of the seat's part. Throws an exception if the kitten is neither in a seat
+   nor on EVA.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the velocity.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/life-support
+
+   How long the supplies in the kitten's suit last, or ``null`` if the kitten is
+   not on EVA.
+
+   .. note::
+
+      The suit is filled from the kitten's habitat zone when it goes on EVA, and what is
+      left returns to the zone when it boards.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson KSA.LifeSupport? value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/carried-meals
+
+   The number of meals the kitten on EVA carries. Throws an exception if the kitten is
+   not on EVA.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /ksa/kitten/(id)/carried-canisters
+
+   The number of carbon dioxide scrubber canisters the kitten on EVA carries. Throws an
+   exception if the kitten is not on EVA.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:post:: /ksa/kitten/(id)/can-carry
+
+   Whether the kitten can take supplies from or stow them in a habitat. See
+   :http:post:`/ksa/kitten/(id)/take` and :http:post:`/ksa/kitten/(id)/stow`.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :reqjson KSA.Habitat habitat: The habitat.
+   :resjson bool value:
+
+
+
+
+
+.. http:post:: /ksa/kitten/(id)/take
+
+   Take meals and canisters from a habitat within reach, and return once the kitten
+   carries them. Takes fewer when the habitat holds fewer, or the kitten cannot carry
+   more.
+
+   .. note::
+
+      Throws an exception if the kitten is not on EVA or is unwell, life support is
+      disabled, or the habitat stores no supplies or is out of reach. See
+      :http:post:`/ksa/kitten/(id)/can-carry`.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :reqjson KSA.Habitat habitat: The habitat, which must store supplies.
+   :reqjson int32 meals: The number of meals to take. Optional, defaults to ``0``.
+   :reqjson int32 canisters: The number of canisters to take. Optional, defaults to ``0``.
+
+
+
+
+
+.. http:post:: /ksa/kitten/(id)/stow
+
+   Stow the meals and canisters the kitten carries in a habitat within reach, and
+   return once they are stowed. Stows fewer when the kitten carries fewer, or the
+   habitat has less room.
+
+   .. note::
+
+      Throws an exception if the kitten is not on EVA or is unwell, life support is
+      disabled, or the habitat stores no supplies or is out of reach. See
+      :http:post:`/ksa/kitten/(id)/can-carry`.
+
+
+   :param id: The identifier of the :ref:`Kitten <http-KSA.Kitten>` object.
+
+   :reqjson KSA.Habitat habitat: The habitat, which must store supplies.
+   :reqjson int32 meals: The number of meals to stow. Optional, defaults to ``0``.
+   :reqjson int32 canisters: The number of canisters to stow. Optional, defaults to ``0``.
+
+
+
+
+
+
+.. _http-KSA.LocomotionMode:
+
+.. rubric:: LocomotionMode
+
+How a kitten on EVA is moving. See :http:get:`/ksa/kitten/(id)/locomotion-mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"mmu"``
+   Flying with the maneuvering unit, away from any surface.
+
+
+``"grounded"``
+   Standing or walking on a surface.
+
+
+``"airborne"``
+   In the air above a surface, such as during a jump.
+
+
+``"tumbling"``
+   Tumbling after a fall or an impact.
+
+
+``"righting"``
+   Getting back up after tumbling.
+
+
+``"ladder"``
+   Holding a ladder or grab rail.
+
+
+``"swimming"``
+   Swimming in an ocean.
+
+
+
+.. _http-KSA.KittenCondition:
+
+.. rubric:: KittenCondition
+
+The effect on a kitten of going without a supply. See :http:post:`/ksa/kitten/(id)/condition`.
+
+Passed and returned as the name of one of its values:
+
+
+``"healthy"``
+   Unaffected.
+
+
+``"warning"``
+   Going without, with no effect yet.
+
+
+``"degraded"``
+   Weakened, and unable to go on EVA.
+
+
+``"incapacitated"``
+   Unable to fly the vehicle or move supplies.
+
+
+``"dead"``
+   Dead.
+
+
+
+.. _http-KSA.DeathCause:
+
+.. rubric:: DeathCause
+
+What killed a kitten. See :http:get:`/ksa/kitten/(id)/cause-of-death`.
+
+Passed and returned as the name of one of its values:
+
+
+``"unknown"``
+   Not recorded.
+
+
+``"no_oxygen"``
+   Lack of oxygen.
+
+
+``"no_scrubber"``
+   Carbon dioxide, with no scrubber canisters left.
+
+
+``"no_water"``
+   Lack of water.
+
+
+``"no_food"``
+   Lack of food.
+
+
+``"radiation"``
+   A lethal radiation dose.
+
+
+``"ground_impact"``
+   Hitting the ground.
+
+
+``"ocean_impact"``
+   Hitting the ocean.
+
+
+``"collision"``
+   A collision.
+
+
+``"excessive_g_force"``
+   Excessive acceleration.
+
+
+``"aerodynamic_forces"``
+   Aerodynamic forces breaking up the vehicle.
+
+
+``"hydrodynamic_forces"``
+   Hydrodynamic forces breaking up the vehicle.
+
+
+``"fall"``
+   A fall on EVA.
+
+
+``"abandoned"``
+   Left in a vehicle that was abandoned.
+
+
+
+.. _http-KSA.CrewEvent:
+
+.. rubric:: CrewEvent
+
+A kitten's most urgent coming event: its supplies running low, or its condition
+worsening. Obtained from :http:get:`/ksa/vehicle/(id)/crew-events` or
+:http:get:`/ksa/vehicle/(id)/next-crew-event`.
+
+.. note::
+
+   As the game's crew clock, an event within a day is the worst stage the kitten reaches
+   in that time, and a later event is the soonest. The event is the game's forecast when it
+   is read from the vehicle. Read it again for a new forecast.
+
+
+A ``CrewEvent`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/crew-event/(id)/kitten
+
+   The kitten.
+
+
+   :param id: The identifier of the :ref:`CrewEvent <http-KSA.CrewEvent>` object.
+
+   :resjson KSA.Kitten value:
+
+
+
+
+.. http:get:: /ksa/crew-event/(id)/stage
+
+   What happens to the kitten.
+
+
+   :param id: The identifier of the :ref:`CrewEvent <http-KSA.CrewEvent>` object.
+
+   :resjson KSA.CrewStage value:
+
+
+
+
+.. http:get:: /ksa/crew-event/(id)/hazard
+
+   The cause of the event.
+
+
+   :param id: The identifier of the :ref:`CrewEvent <http-KSA.CrewEvent>` object.
+
+   :resjson KSA.CrewHazard value:
+
+
+
+
+.. http:get:: /ksa/crew-event/(id)/ut
+
+   The universal time of the event, in seconds.
+
+
+   :param id: The identifier of the :ref:`CrewEvent <http-KSA.CrewEvent>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/crew-event/(id)/time-to
+
+   The time until the event, in seconds. Zero once its time has passed.
+
+
+   :param id: The identifier of the :ref:`CrewEvent <http-KSA.CrewEvent>` object.
+
+   :resjson float value:
+
+
+
+
+
+.. _http-KSA.CrewStage:
+
+.. rubric:: CrewStage
+
+What happens to a kitten in a crew event. See :http:get:`/ksa/crew-event/(id)/stage`.
+
+Passed and returned as the name of one of its values:
+
+
+``"low"``
+   The supply runs low.
+
+
+``"degraded"``
+   The kitten is weakened, and unable to go on EVA. For radiation, the kitten gets
+   radiation sickness.
+
+
+``"incapacitated"``
+   The kitten is unable to fly the vehicle or move supplies.
+
+
+``"dead"``
+   The kitten dies.
+
+
+
+.. _http-KSA.CrewHazard:
+
+.. rubric:: CrewHazard
+
+The cause of a crew event. See :http:get:`/ksa/crew-event/(id)/hazard`.
+
+Passed and returned as the name of one of its values:
+
+
+``"air"``
+   Running out of air.
+
+
+``"scrubber"``
+   Running out of carbon dioxide scrubber.
+
+
+``"water"``
+   Running out of water.
+
+
+``"food"``
+   Running out of food.
+
+
+``"radiation"``
+   The radiation dose.
+
+
+
+.. _http-KSA.Seat:
+
+.. rubric:: Seat
+
+A crew seat. Obtained from :http:get:`/ksa/part/(id)/seats`.
+
+A ``Seat`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/seat/(id)/part
+
+   The part the seat is in.
+
+
+   :param id: The identifier of the :ref:`Seat <http-KSA.Seat>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/seat/(id)/kitten
+
+   Returns the kitten in the seat, or ``null`` if the seat is empty, and sets the
+   kitten in the seat. Setting ``null`` empties the seat.
+
+   .. note::
+
+      A kitten in another seat of the vehicle moves to this one, within its habitat zone.
+      Throws an exception if the kitten is killed in action, retired, on EVA, in another
+      vehicle, or incapacitated, or the seat is in another habitat zone.
+
+
+   :param id: The identifier of the :ref:`Seat <http-KSA.Seat>` object.
+
+   :resjson KSA.Kitten? value:
+
+.. http:put:: /ksa/seat/(id)/kitten
+
+   Returns the kitten in the seat, or ``null`` if the seat is empty, and sets the
+   kitten in the seat. Setting ``null`` empties the seat.
+
+   .. note::
+
+      A kitten in another seat of the vehicle moves to this one, within its habitat zone.
+      Throws an exception if the kitten is killed in action, retired, on EVA, in another
+      vehicle, or incapacitated, or the seat is in another habitat zone.
+
+
+   :param id: The identifier of the :ref:`Seat <http-KSA.Seat>` object.
+
+   :reqjson KSA.Kitten? value: The new value.

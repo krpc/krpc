@@ -87,12 +87,70 @@ Parts
       :rtype: list(:class:`Resource`)
    
 
+   .. attribute:: shield_areal_density
+
+      The areal density of the part's radiation shielding, its hull included, in
+      :math:`\mathrm{kg/m^{2}}`. Zero for an unshielded part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: shield_mass
+
+      The mass of the shielding material added to the part, in kilograms. Zero when the
+      shielding is built into the hull.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: tank_cover
+
+      The fraction of the sky, seen from the part, that the contents of the vehicle's tanks
+      cover, between 0 and 1. The contents shield the part from radiation.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: dose_rate
+
+      The radiation dose rate inside the part, behind its shielding and the vehicle's tanks,
+      in sieverts per second. Includes any solar particle event under way. A kitten in the
+      part's seats receives this dose rate.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: highlight
+
+      The color the part is highlighted in.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`HighlightColor`
+   
+
+      .. note::
+
+         The life support window uses this highlight to pick parts, and replaces it on
+         the parts it picks from.
+
    .. attribute:: tanks
 
       The part's propellant tanks. Empty if it has none.
 
       :Attribute: Read-only, cannot be set
       :rtype: list(:class:`Tank`)
+   
+
+   .. attribute:: habitats
+
+      The part's habitats.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Habitat`)
    
 
    .. attribute:: batteries
@@ -125,6 +183,22 @@ Parts
 
       :Attribute: Read-only, cannot be set
       :rtype: list(:class:`PowerConsumer`)
+   
+
+   .. attribute:: power_forecast
+
+      The charge, draw and supply of the electrical circuit the part is on.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`PowerForecast`
+   
+
+   .. attribute:: avionics
+
+      The part's avionics, or ``None`` if it has none. A probe core has avionics.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Avionics` or None
    
 
    .. attribute:: lights
@@ -242,6 +316,37 @@ Parts
 
 
 
+.. class:: HighlightColor
+
+   The color of a part's highlight. See :attr:`Part.highlight`.
+
+
+   .. data:: none
+
+      Not highlighted.
+
+
+   .. data:: green
+
+      Green.
+
+
+   .. data:: yellow
+
+      Yellow.
+
+
+   .. data:: red
+
+      Red.
+
+
+   .. data:: purple
+
+      Purple.
+
+
+
 .. class:: Engine
 
    An engine. Obtained from :attr:`Part.engine`.
@@ -326,6 +431,73 @@ Parts
       :Attribute: Read-only, cannot be set
       :rtype: float
    
+
+   .. method:: available_thrust_at(pressure)
+
+      The thrust of the engine at full throttle and the given atmospheric pressure, in
+      Newtons. Zero when it is inactive or has no propellant.
+
+      :param float pressure: The atmospheric pressure, in pascals.
+      :rtype: float
+   
+
+   .. method:: specific_impulse_at(pressure)
+
+      The specific impulse of the engine at the given atmospheric pressure, in seconds.
+      Zero when it is inactive or has no propellant.
+
+      :param float pressure: The atmospheric pressure, in pascals.
+      :rtype: float
+   
+
+   .. attribute:: max_thrust
+
+      The thrust of the engine at full throttle and the current atmospheric pressure, in
+      Newtons, whether or not it is active and has propellant.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: max_vacuum_thrust
+
+      The thrust of the engine at full throttle in a vacuum, in Newtons, whether or not
+      it is active and has propellant.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: chamber_pressure
+
+      The pressure in the engine's combustion chamber, in pascals. Zero when it is not
+      firing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: solid
+
+      Whether the engine is a solid rocket motor. Once ignited, a solid motor burns at
+      full thrust until its grain runs out.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: grain_mass
+
+      The mass of the propellant grain of a solid rocket motor, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         Some of the grain is left unburned when the motor burns out. Throws an exception
+         if the engine is not a solid rocket motor.
 
 
 
@@ -602,6 +774,20 @@ Parts
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part` or None
    
+
+   .. attribute:: hatch_open
+
+      Returns whether the hatch through the docked ports is open, and opens or closes it.
+      An open hatch joins the habitat zones on either side.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+      .. note::
+
+         The hatch is closed while the port is not docked. Throws an exception when set on a
+         port that is not docked.
 
    .. method:: undock()
 

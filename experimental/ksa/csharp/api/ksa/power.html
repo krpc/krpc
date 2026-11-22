@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Power &#8212; kRPC v0.2.0 documentation</title>
+    <title>Power &#8212; kRPC v0.3.0 documentation</title>
   
   
   
@@ -26,23 +26,24 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5ab7b574" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'csharp/api/ksa/power';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/external-links.js?v=e8892020"></script>
@@ -54,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.0" />
+  <meta name="docsearch:version" content="0.3.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -102,7 +103,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -206,14 +207,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -248,7 +249,7 @@
   
 
   
-    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -262,7 +263,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -333,14 +334,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -386,8 +387,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -397,6 +400,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -410,8 +418,10 @@
 <li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
@@ -421,6 +431,11 @@
 <li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -434,8 +449,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -445,6 +462,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -458,8 +480,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -469,6 +493,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -482,8 +511,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -493,6 +524,42 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../js.html">JavaScript</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -506,8 +573,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -517,6 +586,42 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../http.html">HTTP</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -532,8 +637,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -546,6 +653,11 @@
 </ul>
 </details></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 </ul>
@@ -585,7 +697,7 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../../../index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     
@@ -822,6 +934,320 @@ proportion to the engine’s throttle.</p>
 </dl>
 </dd></dl>
 
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.PowerConsumer.HasPowerSwitch">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">HasPowerSwitch</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.PowerConsumer.HasPowerSwitch" title="Link to this definition">#</a></dt>
+<dd><p>Whether the part has a power switch, as a probe core does.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.PowerConsumer.Mode">
+<a class="reference internal" href="#enum-KRPC.Client.Services.KSA.PowerMode" title="enum: KRPC.Client.Services.KSA.PowerMode"><span class="pre">PowerMode</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Mode</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.PowerConsumer.Mode" title="Link to this definition">#</a></dt>
+<dd><p>The setting of the power switch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the part has no power switch.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.PowerConsumer.StandbyInStorms">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">StandbyInStorms</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.PowerConsumer.StandbyInStorms" title="Link to this definition">#</a></dt>
+<dd><p>Whether the part goes on standby, drawing no power, while a radiation storm is under
+way at the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game takes a storm of level 1 or worse on the S scale, as
+<a class="reference internal" href="flight.html#property-KRPC.Client.Services.KSA.Flight.RadiationStormLevel" title="property: KRPC.Client.Services.KSA.Flight.RadiationStormLevel"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Flight.RadiationStormLevel</span></code></a> gives. Throws an exception if the part has
+no power switch.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.PowerConsumer.Status">
+<a class="reference internal" href="#enum-KRPC.Client.Services.KSA.PowerStatus" title="enum: KRPC.Client.Services.KSA.PowerStatus"><span class="pre">PowerStatus</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Status</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.PowerConsumer.Status" title="Link to this definition">#</a></dt>
+<dd><p>The power status of the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the part has no power switch.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs enum">
+<dt class="sig sig-object cs" id="enum-KRPC.Client.Services.KSA.PowerMode">
+<span class="property"><span class="k"><span class="pre">enum</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">PowerMode</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.KSA.PowerMode" title="Link to this definition">#</a></dt>
+<dd><p>The setting of a power switch. See <a class="reference internal" href="#property-KRPC.Client.Services.KSA.PowerConsumer.Mode" title="property: KRPC.Client.Services.KSA.PowerConsumer.Mode"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">PowerConsumer.Mode</span></code></a>.</p>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KSA.PowerMode.Off">
+<span class="sig-name descname"><span class="pre">Off</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KSA.PowerMode.Off" title="Link to this definition">#</a></dt>
+<dd><p>Switched off.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KSA.PowerMode.Auto">
+<span class="sig-name descname"><span class="pre">Auto</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KSA.PowerMode.Auto" title="Link to this definition">#</a></dt>
+<dd><p>On standby while another control module flies the vehicle, and on when none can.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KSA.PowerMode.On">
+<span class="sig-name descname"><span class="pre">On</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KSA.PowerMode.On" title="Link to this definition">#</a></dt>
+<dd><p>Switched on.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs enum">
+<dt class="sig sig-object cs" id="enum-KRPC.Client.Services.KSA.PowerStatus">
+<span class="property"><span class="k"><span class="pre">enum</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">PowerStatus</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.KSA.PowerStatus" title="Link to this definition">#</a></dt>
+<dd><p>The power status of a part with a power switch. See <a class="reference internal" href="#property-KRPC.Client.Services.KSA.PowerConsumer.Status" title="property: KRPC.Client.Services.KSA.PowerConsumer.Status"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">PowerConsumer.Status</span></code></a>.</p>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KSA.PowerStatus.Off">
+<span class="sig-name descname"><span class="pre">Off</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KSA.PowerStatus.Off" title="Link to this definition">#</a></dt>
+<dd><p>Switched off.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KSA.PowerStatus.Standby">
+<span class="sig-name descname"><span class="pre">Standby</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KSA.PowerStatus.Standby" title="Link to this definition">#</a></dt>
+<dd><p>On standby, while another control module flies the vehicle or a radiation storm is under way.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KSA.PowerStatus.Rebooting">
+<span class="sig-name descname"><span class="pre">Rebooting</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KSA.PowerStatus.Rebooting" title="Link to this definition">#</a></dt>
+<dd><p>Rebooting after a radiation upset.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KSA.PowerStatus.On">
+<span class="sig-name descname"><span class="pre">On</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KSA.PowerStatus.On" title="Link to this definition">#</a></dt>
+<dd><p>On, with power.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KSA.PowerStatus.Low">
+<span class="sig-name descname"><span class="pre">Low</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KSA.PowerStatus.Low" title="Link to this definition">#</a></dt>
+<dd><p>On, with power for less than five minutes.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KSA.PowerStatus.Out">
+<span class="sig-name descname"><span class="pre">Out</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KSA.PowerStatus.Out" title="Link to this definition">#</a></dt>
+<dd><p>Out of power.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KSA.PowerStatus.Failed">
+<span class="sig-name descname"><span class="pre">Failed</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KSA.PowerStatus.Failed" title="Link to this definition">#</a></dt>
+<dd><p>Failed from its radiation dose.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KSA.PowerForecast">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">PowerForecast</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KSA.PowerForecast" title="Link to this definition">#</a></dt>
+<dd><p>The charge, draw and supply of the electrical circuit a part is on, and how long its
+batteries last. Obtained from <a class="reference internal" href="parts.html#property-KRPC.Client.Services.KSA.Part.PowerForecast" title="property: KRPC.Client.Services.KSA.Part.PowerForecast"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.PowerForecast</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A circuit is the parts joined by connections that carry electricity. This is the
+forecast the game shows for a probe core.</p>
+</div>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.PowerForecast.HasBattery">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">HasBattery</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.PowerForecast.HasBattery" title="Link to this definition">#</a></dt>
+<dd><p>Whether the circuit has a battery.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.PowerForecast.Charge">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Charge</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.PowerForecast.Charge" title="Link to this definition">#</a></dt>
+<dd><p>The energy stored in the circuit’s batteries, in joules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.PowerForecast.Draw">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Draw</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.PowerForecast.Draw" title="Link to this definition">#</a></dt>
+<dd><p>The power the parts on the circuit draw, in watts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.PowerForecast.Supply">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Supply</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.PowerForecast.Supply" title="Link to this definition">#</a></dt>
+<dd><p>The power the solar panels and generators on the circuit supply, in watts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.PowerForecast.TimeLeft">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TimeLeft</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.PowerForecast.TimeLeft" title="Link to this definition">#</a></dt>
+<dd><p>The time until the batteries run out, in seconds. Infinite while the supply meets
+the draw, and zero when the batteries are empty or there are none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KSA.Avionics">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Avionics</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KSA.Avionics" title="Link to this definition">#</a></dt>
+<dd><p>The avionics of a probe core, which radiation wears out and upsets. Obtained from
+<a class="reference internal" href="parts.html#property-KRPC.Client.Services.KSA.Part.Avionics" title="property: KRPC.Client.Services.KSA.Part.Avionics"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.Avionics</span></code></a> or <a class="reference internal" href="vehicle.html#property-KRPC.Client.Services.KSA.Vehicle.Avionics" title="property: KRPC.Client.Services.KSA.Vehicle.Avionics"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vehicle.Avionics</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The avionics take a dose only while <a class="reference internal" href="ksa.html#property-KRPC.Client.Services.KSA.KSA.RadiationEnabled" title="property: KRPC.Client.Services.KSA.KSA.RadiationEnabled"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">KSA.RadiationEnabled</span></code></a> is true. Switched
+off or on standby, they take half the dose and no upsets.</p>
+</div>
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.Avionics.Part">
+<a class="reference internal" href="parts.html#class-KRPC.Client.Services.KSA.Part" title="class: KRPC.Client.Services.KSA.Part"><span class="pre">Part</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Part</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.Avionics.Part" title="Link to this definition">#</a></dt>
+<dd><p>The part the avionics are in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.Avionics.Health">
+<a class="reference internal" href="#enum-KRPC.Client.Services.KSA.AvionicsHealth" title="enum: KRPC.Client.Services.KSA.AvionicsHealth"><span class="pre">AvionicsHealth</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Health</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.Avionics.Health" title="Link to this definition">#</a></dt>
+<dd><p>The health of the avionics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.Avionics.Dose">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Dose</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.Avionics.Dose" title="Link to this definition">#</a></dt>
+<dd><p>The radiation dose the avionics have taken, in grays of silicon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.Avionics.Tolerance">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Tolerance</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.Avionics.Tolerance" title="Link to this definition">#</a></dt>
+<dd><p>The dose at which the avionics fail, in grays of silicon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.Avionics.DoseRate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">DoseRate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.Avionics.DoseRate" title="Link to this definition">#</a></dt>
+<dd><p>The rate at which the avionics take a dose, in grays of silicon per second,
+averaged over about an hour. Not a number until the avionics have taken a dose.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.Avionics.TimeLeft">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TimeLeft</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.Avionics.TimeLeft" title="Link to this definition">#</a></dt>
+<dd><p>The time until the avionics fail at <a class="reference internal" href="#property-KRPC.Client.Services.KSA.Avionics.DoseRate" title="property: KRPC.Client.Services.KSA.Avionics.DoseRate"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Avionics.DoseRate</span></code></a>, in seconds. Infinite
+while they take no dose, and zero once they have failed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.Avionics.Rebooting">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Rebooting</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.Avionics.Rebooting" title="Link to this definition">#</a></dt>
+<dd><p>Whether the avionics are rebooting after a radiation upset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs enum">
+<dt class="sig sig-object cs" id="enum-KRPC.Client.Services.KSA.AvionicsHealth">
+<span class="property"><span class="k"><span class="pre">enum</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">AvionicsHealth</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.KSA.AvionicsHealth" title="Link to this definition">#</a></dt>
+<dd><p>The health of avionics. See <a class="reference internal" href="#property-KRPC.Client.Services.KSA.Avionics.Health" title="property: KRPC.Client.Services.KSA.Avionics.Health"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Avionics.Health</span></code></a>.</p>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KSA.AvionicsHealth.Ok">
+<span class="sig-name descname"><span class="pre">Ok</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KSA.AvionicsHealth.Ok" title="Link to this definition">#</a></dt>
+<dd><p>Working.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KSA.AvionicsHealth.Worn">
+<span class="sig-name descname"><span class="pre">Worn</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KSA.AvionicsHealth.Worn" title="Link to this definition">#</a></dt>
+<dd><p>Working, with a dose of at least four fifths of the tolerance.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KSA.AvionicsHealth.Failed">
+<span class="sig-name descname"><span class="pre">Failed</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KSA.AvionicsHealth.Failed" title="Link to this definition">#</a></dt>
+<dd><p>Failed for good, at the tolerance.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="cs class">
@@ -894,7 +1320,7 @@ Cabin lights are always on.</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -920,8 +1346,8 @@ Cabin lights are always on.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -954,7 +1380,7 @@ Cabin lights are always on.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

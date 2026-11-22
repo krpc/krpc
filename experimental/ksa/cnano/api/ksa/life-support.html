@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Life Support &#8212; kRPC v0.3.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5ab7b574" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cnano/api/ksa/life-support';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <link rel="icon" href="../../../_static/logo-mark.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Body" href="body.html" />
+    <link rel="prev" title="Crew" href="crew.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="../../../_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../js.html">JavaScript</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../http.html">HTTP</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../clients.html" class="nav-link">Clients</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../../cnano.html" class="nav-link">C-nano</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../ksa.html" class="nav-link">KSA API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Life Support</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="life-support">
+<h1>Life Support<a class="headerlink" href="#life-support" title="Link to this heading">#</a></h1>
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupport_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupport_t</span></span></span><a class="headerlink" href="#c.krpc_KSA_LifeSupport_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>How long the supplies of a vehicle, a habitat zone or a kitten’s suit last. Obtained
+from <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_Vehicle_LifeSupport()</span></code>, <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_HabitatZone_LifeSupport()</span></code> or
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_Kitten_LifeSupport()</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The times count down only while <a class="reference internal" href="ksa.html#c.krpc_KSA_LifeSupportEnabled" title="krpc_KSA_LifeSupportEnabled"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_LifeSupportEnabled()</span></code></a> is true. Air
+lasts forever in breathable air outside the vehicle.</p>
+</div>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupport_t.KRPC_CLASS_KSA_LIFESUPPORT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_KSA_LIFESUPPORT</span></span></span><a class="headerlink" href="#c.krpc_KSA_LifeSupport_t.KRPC_CLASS_KSA_LIFESUPPORT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_Kittens">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupport_Kittens</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupport_t" title="krpc_KSA_LifeSupport_t"><span class="n"><span class="pre">krpc_KSA_LifeSupport_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_Kittens" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of kittens the supplies are shared between.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_AirMass">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupport_AirMass</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupport_t" title="krpc_KSA_LifeSupport_t"><span class="n"><span class="pre">krpc_KSA_LifeSupport_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_AirMass" title="Link to this definition">#</a><br /></dt>
+<dd><p>The mass of oxygen in the crew’s tanks, in kilograms.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_WaterMass">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupport_WaterMass</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupport_t" title="krpc_KSA_LifeSupport_t"><span class="n"><span class="pre">krpc_KSA_LifeSupport_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_WaterMass" title="Link to this definition">#</a><br /></dt>
+<dd><p>The mass of water in the crew’s tanks, in kilograms.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_Meals">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupport_Meals</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupport_t" title="krpc_KSA_LifeSupport_t"><span class="n"><span class="pre">krpc_KSA_LifeSupport_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_Meals" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of meals.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_AirTime">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupport_AirTime</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupport_t" title="krpc_KSA_LifeSupport_t"><span class="n"><span class="pre">krpc_KSA_LifeSupport_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_AirTime" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time the air lasts, in seconds. Infinite with no crew, or in breathable air.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_ScrubberTime">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupport_ScrubberTime</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupport_t" title="krpc_KSA_LifeSupport_t"><span class="n"><span class="pre">krpc_KSA_LifeSupport_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_ScrubberTime" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time the carbon dioxide scrubbers last, in seconds. Infinite with no crew.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_WaterTime">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupport_WaterTime</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupport_t" title="krpc_KSA_LifeSupport_t"><span class="n"><span class="pre">krpc_KSA_LifeSupport_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_WaterTime" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time the water lasts, in seconds. Infinite with no crew.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_FoodTime">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupport_FoodTime</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupport_t" title="krpc_KSA_LifeSupport_t"><span class="n"><span class="pre">krpc_KSA_LifeSupport_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_FoodTime" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time the food lasts, in seconds. Infinite with no crew.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_Time">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupport_Time</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupport_t" title="krpc_KSA_LifeSupport_t"><span class="n"><span class="pre">krpc_KSA_LifeSupport_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_Time" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time until the first supply runs out, in seconds. A suit counts its air and
+scrubber only. Infinite with no crew.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_LimitingSupply">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupport_LimitingSupply</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupportSupply_t" title="krpc_KSA_LifeSupportSupply_t"><span class="n"><span class="pre">krpc_KSA_LifeSupportSupply_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupport_t" title="krpc_KSA_LifeSupport_t"><span class="n"><span class="pre">krpc_KSA_LifeSupport_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_LimitingSupply" title="Link to this definition">#</a><br /></dt>
+<dd><p>The supply that runs out first. Air when every time is infinite, as with no crew.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_Level">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupport_Level</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupportLevel_t" title="krpc_KSA_LifeSupportLevel_t"><span class="n"><span class="pre">krpc_KSA_LifeSupportLevel_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupport_t" title="krpc_KSA_LifeSupport_t"><span class="n"><span class="pre">krpc_KSA_LifeSupport_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_Level" title="Link to this definition">#</a><br /></dt>
+<dd><p>How long the supplies last, as the game’s life support gauge shows it.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_TimeToNextLevel">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupport_TimeToNextLevel</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupport_t" title="krpc_KSA_LifeSupport_t"><span class="n"><span class="pre">krpc_KSA_LifeSupport_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_TimeToNextLevel" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time until <a class="reference internal" href="#c.krpc_KSA_LifeSupport_t.krpc_KSA_LifeSupport_Level" title="krpc_KSA_LifeSupport_Level"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_LifeSupport_Level()</span></code></a> next changes, in seconds. Infinite with no crew.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupportLevel_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupportLevel_t</span></span></span><a class="headerlink" href="#c.krpc_KSA_LifeSupportLevel_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>How long the crew’s supplies last. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_LifeSupport_Level()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupportLevel_t.KRPC_ENUMERATION_KSA_LIFESUPPORTLEVEL">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_KSA_LIFESUPPORTLEVEL</span></span></span><a class="headerlink" href="#c.krpc_KSA_LifeSupportLevel_t.KRPC_ENUMERATION_KSA_LIFESUPPORTLEVEL" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupportLevel_t.KRPC_KSA_LIFESUPPORTLEVEL_OK">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_LIFESUPPORTLEVEL_OK</span></span></span><a class="headerlink" href="#c.krpc_KSA_LifeSupportLevel_t.KRPC_KSA_LIFESUPPORTLEVEL_OK" title="Link to this definition">#</a><br /></dt>
+<dd><p>More than a day of supplies, or no crew.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupportLevel_t.KRPC_KSA_LIFESUPPORTLEVEL_LOW">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_LIFESUPPORTLEVEL_LOW</span></span></span><a class="headerlink" href="#c.krpc_KSA_LifeSupportLevel_t.KRPC_KSA_LIFESUPPORTLEVEL_LOW" title="Link to this definition">#</a><br /></dt>
+<dd><p>A day of supplies or less.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupportLevel_t.KRPC_KSA_LIFESUPPORTLEVEL_CRITICAL">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_LIFESUPPORTLEVEL_CRITICAL</span></span></span><a class="headerlink" href="#c.krpc_KSA_LifeSupportLevel_t.KRPC_KSA_LIFESUPPORTLEVEL_CRITICAL" title="Link to this definition">#</a><br /></dt>
+<dd><p>An hour of supplies or less.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupportLevel_t.KRPC_KSA_LIFESUPPORTLEVEL_OUT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_LIFESUPPORTLEVEL_OUT</span></span></span><a class="headerlink" href="#c.krpc_KSA_LifeSupportLevel_t.KRPC_KSA_LIFESUPPORTLEVEL_OUT" title="Link to this definition">#</a><br /></dt>
+<dd><p>A supply has run out.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupportSupply_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_LifeSupportSupply_t</span></span></span><a class="headerlink" href="#c.krpc_KSA_LifeSupportSupply_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>A supply the crew needs. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_LifeSupport_LimitingSupply()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupportSupply_t.KRPC_ENUMERATION_KSA_LIFESUPPORTSUPPLY">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_KSA_LIFESUPPORTSUPPLY</span></span></span><a class="headerlink" href="#c.krpc_KSA_LifeSupportSupply_t.KRPC_ENUMERATION_KSA_LIFESUPPORTSUPPLY" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupportSupply_t.KRPC_KSA_LIFESUPPORTSUPPLY_AIR">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_LIFESUPPORTSUPPLY_AIR</span></span></span><a class="headerlink" href="#c.krpc_KSA_LifeSupportSupply_t.KRPC_KSA_LIFESUPPORTSUPPLY_AIR" title="Link to this definition">#</a><br /></dt>
+<dd><p>Oxygen to breathe.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupportSupply_t.KRPC_KSA_LIFESUPPORTSUPPLY_SCRUBBER">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_LIFESUPPORTSUPPLY_SCRUBBER</span></span></span><a class="headerlink" href="#c.krpc_KSA_LifeSupportSupply_t.KRPC_KSA_LIFESUPPORTSUPPLY_SCRUBBER" title="Link to this definition">#</a><br /></dt>
+<dd><p>Lithium hydroxide canisters, which scrub carbon dioxide from the air.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupportSupply_t.KRPC_KSA_LIFESUPPORTSUPPLY_WATER">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_LIFESUPPORTSUPPLY_WATER</span></span></span><a class="headerlink" href="#c.krpc_KSA_LifeSupportSupply_t.KRPC_KSA_LIFESUPPORTSUPPLY_WATER" title="Link to this definition">#</a><br /></dt>
+<dd><p>Drinking water.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_LifeSupportSupply_t.KRPC_KSA_LIFESUPPORTSUPPLY_FOOD">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_LIFESUPPORTSUPPLY_FOOD</span></span></span><a class="headerlink" href="#c.krpc_KSA_LifeSupportSupply_t.KRPC_KSA_LIFESUPPORTSUPPLY_FOOD" title="Link to this definition">#</a><br /></dt>
+<dd><p>Meals.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KSA_HabitatZone_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></span><a class="headerlink" href="#c.krpc_KSA_HabitatZone_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The connected habitable parts of a vehicle, which share their crew’s supplies.
+Obtained from <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_Vehicle_HabitatZones()</span></code> or <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_Habitat_Zone()</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Parts join a zone through connections the crew can pass, such as an open docking
+port hatch.</p>
+</div>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_HabitatZone_t.KRPC_CLASS_KSA_HABITATZONE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_KSA_HABITATZONE</span></span></span><a class="headerlink" href="#c.krpc_KSA_HabitatZone_t.KRPC_CLASS_KSA_HABITATZONE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_Vehicle">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_HabitatZone_Vehicle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="vehicle.html#c.krpc_KSA_Vehicle_t" title="krpc_KSA_Vehicle_t"><span class="n"><span class="pre">krpc_KSA_Vehicle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t" title="krpc_KSA_HabitatZone_t"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_Vehicle" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle the zone is in.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_Parts">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_HabitatZone_Parts</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t" title="krpc_KSA_HabitatZone_t"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_Parts" title="Link to this definition">#</a><br /></dt>
+<dd><p>The parts in the zone.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_Habitats">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_HabitatZone_Habitats</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t" title="krpc_KSA_HabitatZone_t"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_Habitats" title="Link to this definition">#</a><br /></dt>
+<dd><p>The habitats in the zone.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_Seats">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_HabitatZone_Seats</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t" title="krpc_KSA_HabitatZone_t"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_Seats" title="Link to this definition">#</a><br /></dt>
+<dd><p>The crew seats in the zone.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_Crew">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_HabitatZone_Crew</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t" title="krpc_KSA_HabitatZone_t"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_Crew" title="Link to this definition">#</a><br /></dt>
+<dd><p>The kittens in the zone’s seats.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_LinkedZones">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_HabitatZone_LinkedZones</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t" title="krpc_KSA_HabitatZone_t"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_LinkedZones" title="Link to this definition">#</a><br /></dt>
+<dd><p>The zones that join this one when closed docking port hatches between them open.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_HatchesTo">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_HabitatZone_HatchesTo</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t" title="krpc_KSA_HabitatZone_t"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t" title="krpc_KSA_HabitatZone_t"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">zone</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_HatchesTo" title="Link to this definition">#</a><br /></dt>
+<dd><p>The closed docking port hatches that join this zone to a linked zone when they
+open.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zone</strong> – A zone in <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_LinkedZones" title="krpc_KSA_HabitatZone_LinkedZones"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_HabitatZone_LinkedZones()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the zone is not linked to this one.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_HabitableVolume">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_HabitatZone_HabitableVolume</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t" title="krpc_KSA_HabitatZone_t"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_HabitableVolume" title="Link to this definition">#</a><br /></dt>
+<dd><p>The volume the crew can live in, in cubic meters.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_StorageVolume">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_HabitatZone_StorageVolume</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t" title="krpc_KSA_HabitatZone_t"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_StorageVolume" title="Link to this definition">#</a><br /></dt>
+<dd><p>The volume for stored supplies, in cubic meters.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_LifeSupport">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_HabitatZone_LifeSupport</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupport_t" title="krpc_KSA_LifeSupport_t"><span class="n"><span class="pre">krpc_KSA_LifeSupport_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t" title="krpc_KSA_HabitatZone_t"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_LifeSupport" title="Link to this definition">#</a><br /></dt>
+<dd><p>How long the zone’s supplies last its crew.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_MissionSupplies">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_HabitatZone_MissionSupplies</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KSA_MissionSupplies_t" title="krpc_KSA_MissionSupplies_t"><span class="n"><span class="pre">krpc_KSA_MissionSupplies_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t" title="krpc_KSA_HabitatZone_t"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_MissionSupplies" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the zone’s supplies last its crew through the vehicle’s mission. <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>
+without a feasible mission with time left, or while
+<a class="reference internal" href="ksa.html#c.krpc_KSA_LifeSupportEnabled" title="krpc_KSA_LifeSupportEnabled"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_LifeSupportEnabled()</span></code></a> is false.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_PlannedKittens">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_HabitatZone_PlannedKittens</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t" title="krpc_KSA_HabitatZone_t"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="#c.krpc_KSA_MissionLeg_t" title="krpc_KSA_MissionLeg_t"><span class="n"><span class="pre">krpc_KSA_MissionLeg_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">leg</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_HabitatZone_t.krpc_KSA_HabitatZone_PlannedKittens" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of kittens planned in the zone for a leg of the vehicle’s mission. The
+plan defaults to the kittens seated in the zone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>leg</strong> – The leg.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></span><a class="headerlink" href="#c.krpc_KSA_Mission_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The mission planned for a vehicle in the editor’s life support window. Obtained from
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_Vehicle_Mission()</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game times the legs of the mission from the plan, and checks the supplies of each
+habitat zone against them. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_HabitatZone_MissionSupplies()</span></code>.</p>
+</div>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.KRPC_CLASS_KSA_MISSION">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_KSA_MISSION</span></span></span><a class="headerlink" href="#c.krpc_KSA_Mission_t.KRPC_CLASS_KSA_MISSION" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_Destination">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_Destination</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KSA_MissionDestination_t" title="krpc_KSA_MissionDestination_t"><span class="n"><span class="pre">krpc_KSA_MissionDestination_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_Destination" title="Link to this definition">#</a><br /></dt>
+<dd><p>Where the mission goes.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_Body">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_Body</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="body.html#c.krpc_KSA_Body_t" title="krpc_KSA_Body_t"><span class="n"><span class="pre">krpc_KSA_Body_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_Body" title="Link to this definition">#</a><br /></dt>
+<dd><p>The body the mission goes to, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if it has no destination. For a low
+orbit, this is the home body.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_Arrival">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_Arrival</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KSA_MissionArrival_t" title="krpc_KSA_MissionArrival_t"><span class="n"><span class="pre">krpc_KSA_MissionArrival_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_Arrival" title="Link to this definition">#</a><br /></dt>
+<dd><p>What the mission does at its destination.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_Trip">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_Trip</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KSA_MissionTrip_t" title="krpc_KSA_MissionTrip_t"><span class="n"><span class="pre">krpc_KSA_MissionTrip_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_Trip" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the mission comes back.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_Stay">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_Stay</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_Stay" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time planned at the destination, in seconds.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game rounds a stay before a return up to the next transfer window home. See
+<a class="reference internal" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_StayTime" title="krpc_KSA_Mission_StayTime"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_Mission_StayTime()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_Custom">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_Custom</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_Custom" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the mission has a length set by the player, in place of legs timed from
+its destination. See <a class="reference internal" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_CustomLength" title="krpc_KSA_Mission_CustomLength"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_Mission_CustomLength()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_CustomLength">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_CustomLength</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_CustomLength" title="Link to this definition">#</a><br /></dt>
+<dd><p>The length of a mission with <a class="reference internal" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_Custom" title="krpc_KSA_Mission_Custom"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_Mission_Custom()</span></code></a> set, in seconds.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_Feasible">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_Feasible</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_Feasible" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the game can time the legs of the mission. A mission with no destination,
+or a flyby with no way back, cannot be timed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The leg times are zero when this is false.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_OutTime">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_OutTime</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_OutTime" title="Link to this definition">#</a><br /></dt>
+<dd><p>The planned time of the way out, in seconds.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_StayTime">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_StayTime</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_StayTime" title="Link to this definition">#</a><br /></dt>
+<dd><p>The planned time at the destination, in seconds.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_BackTime">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_BackTime</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_BackTime" title="Link to this definition">#</a><br /></dt>
+<dd><p>The planned time of the way back, in seconds. Zero for a one way trip.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_ReturnWait">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_ReturnWait</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_ReturnWait" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time from arriving at the destination until the next transfer window home, in
+seconds. Zero when there is no wait.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_TotalTime">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_TotalTime</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_TotalTime" title="Link to this definition">#</a><br /></dt>
+<dd><p>The planned length of the mission, in seconds.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_TimeLeft">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_TimeLeft</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_TimeLeft" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time left in the mission as planned, counted from the vehicle’s launch, in
+seconds.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_ArrivalUT">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_ArrivalUT</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_ArrivalUT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The universal time the vehicle arrived at the destination body, in seconds. Not a
+number until it has.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game records the arrival for a mission to another body.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Mission_t.krpc_KSA_Mission_DepartureUT">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Mission_DepartureUT</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Mission_t" title="krpc_KSA_Mission_t"><span class="n"><span class="pre">krpc_KSA_Mission_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Mission_t.krpc_KSA_Mission_DepartureUT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The universal time the vehicle left the destination body, in seconds. Not a number
+until it has.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionDestination_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_MissionDestination_t</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionDestination_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Where a mission goes. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_Mission_Destination()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionDestination_t.KRPC_ENUMERATION_KSA_MISSIONDESTINATION">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_KSA_MISSIONDESTINATION</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionDestination_t.KRPC_ENUMERATION_KSA_MISSIONDESTINATION" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionDestination_t.KRPC_KSA_MISSIONDESTINATION_NONE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_MISSIONDESTINATION_NONE</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionDestination_t.KRPC_KSA_MISSIONDESTINATION_NONE" title="Link to this definition">#</a><br /></dt>
+<dd><p>No destination.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionDestination_t.KRPC_KSA_MISSIONDESTINATION_LOWORBIT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_MISSIONDESTINATION_LOWORBIT</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionDestination_t.KRPC_KSA_MISSIONDESTINATION_LOWORBIT" title="Link to this definition">#</a><br /></dt>
+<dd><p>A low orbit around the home body.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionDestination_t.KRPC_KSA_MISSIONDESTINATION_BODY">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_MISSIONDESTINATION_BODY</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionDestination_t.KRPC_KSA_MISSIONDESTINATION_BODY" title="Link to this definition">#</a><br /></dt>
+<dd><p>Another body, given by <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_Mission_Body()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionArrival_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_MissionArrival_t</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionArrival_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>What a mission does at its destination. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_Mission_Arrival()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionArrival_t.KRPC_ENUMERATION_KSA_MISSIONARRIVAL">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_KSA_MISSIONARRIVAL</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionArrival_t.KRPC_ENUMERATION_KSA_MISSIONARRIVAL" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionArrival_t.KRPC_KSA_MISSIONARRIVAL_FLYBY">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_MISSIONARRIVAL_FLYBY</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionArrival_t.KRPC_KSA_MISSIONARRIVAL_FLYBY" title="Link to this definition">#</a><br /></dt>
+<dd><p>Flies past it.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionArrival_t.KRPC_KSA_MISSIONARRIVAL_ORBIT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_MISSIONARRIVAL_ORBIT</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionArrival_t.KRPC_KSA_MISSIONARRIVAL_ORBIT" title="Link to this definition">#</a><br /></dt>
+<dd><p>Orbits it.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionArrival_t.KRPC_KSA_MISSIONARRIVAL_LAND">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_MISSIONARRIVAL_LAND</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionArrival_t.KRPC_KSA_MISSIONARRIVAL_LAND" title="Link to this definition">#</a><br /></dt>
+<dd><p>Lands on it.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionTrip_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_MissionTrip_t</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionTrip_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether a mission comes back. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_Mission_Trip()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionTrip_t.KRPC_ENUMERATION_KSA_MISSIONTRIP">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_KSA_MISSIONTRIP</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionTrip_t.KRPC_ENUMERATION_KSA_MISSIONTRIP" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionTrip_t.KRPC_KSA_MISSIONTRIP_RETURN">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_MISSIONTRIP_RETURN</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionTrip_t.KRPC_KSA_MISSIONTRIP_RETURN" title="Link to this definition">#</a><br /></dt>
+<dd><p>Goes and comes back.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionTrip_t.KRPC_KSA_MISSIONTRIP_ONEWAY">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_MISSIONTRIP_ONEWAY</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionTrip_t.KRPC_KSA_MISSIONTRIP_ONEWAY" title="Link to this definition">#</a><br /></dt>
+<dd><p>Goes and stays.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionLeg_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_MissionLeg_t</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionLeg_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>A leg of a mission. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_HabitatZone_PlannedKittens()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionLeg_t.KRPC_ENUMERATION_KSA_MISSIONLEG">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_KSA_MISSIONLEG</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionLeg_t.KRPC_ENUMERATION_KSA_MISSIONLEG" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionLeg_t.KRPC_KSA_MISSIONLEG_OUT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_MISSIONLEG_OUT</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionLeg_t.KRPC_KSA_MISSIONLEG_OUT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The way out.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionLeg_t.KRPC_KSA_MISSIONLEG_STAY">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_MISSIONLEG_STAY</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionLeg_t.KRPC_KSA_MISSIONLEG_STAY" title="Link to this definition">#</a><br /></dt>
+<dd><p>The stay at the destination.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionLeg_t.KRPC_KSA_MISSIONLEG_BACK">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_MISSIONLEG_BACK</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionLeg_t.KRPC_KSA_MISSIONLEG_BACK" title="Link to this definition">#</a><br /></dt>
+<dd><p>The way back.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionSupplies_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_MissionSupplies_t</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionSupplies_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the supplies of a habitat zone last its crew through the vehicle’s mission, as
+the life support window shows it. Obtained from <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_HabitatZone_MissionSupplies()</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The check takes the legs left in the mission as planned, counted from the vehicle’s
+launch, and the kittens planned for each leg. The times are from now.</p>
+</div>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionSupplies_t.KRPC_CLASS_KSA_MISSIONSUPPLIES">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_KSA_MISSIONSUPPLIES</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionSupplies_t.KRPC_CLASS_KSA_MISSIONSUPPLIES" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionSupplies_t.krpc_KSA_MissionSupplies_Verdict">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_MissionSupplies_Verdict</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KSA_MissionSupplyVerdict_t" title="krpc_KSA_MissionSupplyVerdict_t"><span class="n"><span class="pre">krpc_KSA_MissionSupplyVerdict_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_MissionSupplies_t" title="krpc_KSA_MissionSupplies_t"><span class="n"><span class="pre">krpc_KSA_MissionSupplies_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_MissionSupplies_t.krpc_KSA_MissionSupplies_Verdict" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the supplies last the mission.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionSupplies_t.krpc_KSA_MissionSupplies_ShortBy">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_MissionSupplies_ShortBy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_MissionSupplies_t" title="krpc_KSA_MissionSupplies_t"><span class="n"><span class="pre">krpc_KSA_MissionSupplies_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_MissionSupplies_t.krpc_KSA_MissionSupplies_ShortBy" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time by which the first supply to run out falls short of the end of the
+mission, in seconds. Zero when the supplies last.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionSupplies_t.krpc_KSA_MissionSupplies_FirstSupply">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_MissionSupplies_FirstSupply</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupportSupply_t" title="krpc_KSA_LifeSupportSupply_t"><span class="n"><span class="pre">krpc_KSA_LifeSupportSupply_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_MissionSupplies_t" title="krpc_KSA_MissionSupplies_t"><span class="n"><span class="pre">krpc_KSA_MissionSupplies_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_MissionSupplies_t.krpc_KSA_MissionSupplies_FirstSupply" title="Link to this definition">#</a><br /></dt>
+<dd><p>The supply that runs out first.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionSupplies_t.krpc_KSA_MissionSupplies_TimeLeft">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_MissionSupplies_TimeLeft</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_MissionSupplies_t" title="krpc_KSA_MissionSupplies_t"><span class="n"><span class="pre">krpc_KSA_MissionSupplies_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="#c.krpc_KSA_LifeSupportSupply_t" title="krpc_KSA_LifeSupportSupply_t"><span class="n"><span class="pre">krpc_KSA_LifeSupportSupply_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">supply</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_MissionSupplies_t.krpc_KSA_MissionSupplies_TimeLeft" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time until a supply runs out with the crew planned for each leg, in seconds.
+Infinite if it lasts the mission.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>supply</strong> – The supply.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Air lasts while the vehicle is in breathable air.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionSupplies_t.krpc_KSA_MissionSupplies_End">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_MissionSupplies_End</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_MissionSupplies_t" title="krpc_KSA_MissionSupplies_t"><span class="n"><span class="pre">krpc_KSA_MissionSupplies_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_MissionSupplies_t.krpc_KSA_MissionSupplies_End" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time until the zone has no crew left in the mission, in seconds.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionSupplyVerdict_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_MissionSupplyVerdict_t</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionSupplyVerdict_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether a habitat zone has the supplies for a mission. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_MissionSupplies_Verdict()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionSupplyVerdict_t.KRPC_ENUMERATION_KSA_MISSIONSUPPLYVERDICT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ENUMERATION_KSA_MISSIONSUPPLYVERDICT</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionSupplyVerdict_t.KRPC_ENUMERATION_KSA_MISSIONSUPPLYVERDICT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and enumeration ids of the enumeration, for
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_EnumerationTypeById()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ConstantEnumById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionSupplyVerdict_t.KRPC_KSA_MISSIONSUPPLYVERDICT_UNUSED">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_MISSIONSUPPLYVERDICT_UNUSED</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionSupplyVerdict_t.KRPC_KSA_MISSIONSUPPLYVERDICT_UNUSED" title="Link to this definition">#</a><br /></dt>
+<dd><p>The zone has no crew during the mission.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionSupplyVerdict_t.KRPC_KSA_MISSIONSUPPLYVERDICT_ENOUGH">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_MISSIONSUPPLYVERDICT_ENOUGH</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionSupplyVerdict_t.KRPC_KSA_MISSIONSUPPLYVERDICT_ENOUGH" title="Link to this definition">#</a><br /></dt>
+<dd><p>The supplies last the mission.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_MissionSupplyVerdict_t.KRPC_KSA_MISSIONSUPPLYVERDICT_SHORT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_KSA_MISSIONSUPPLYVERDICT_SHORT</span></span></span><a class="headerlink" href="#c.krpc_KSA_MissionSupplyVerdict_t.KRPC_KSA_MISSIONSUPPLYVERDICT_SHORT" title="Link to this definition">#</a><br /></dt>
+<dd><p>A supply runs out before the end of the mission.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KSA_Habitat_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Habitat_t</span></span></span><a class="headerlink" href="#c.krpc_KSA_Habitat_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>A habitable or storage space in a part, which holds meals and carbon dioxide scrubber
+canisters. Obtained from <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KSA_Part_Habitats()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_KSA_Habitat_t.KRPC_CLASS_KSA_HABITAT">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_CLASS_KSA_HABITAT</span></span></span><a class="headerlink" href="#c.krpc_KSA_Habitat_t.KRPC_CLASS_KSA_HABITAT" title="Link to this definition">#</a><br /></dt>
+<dd><p>The service and class ids of the class, for <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Type_ClassTypeById()</span></code>.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_Part">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Habitat_Part</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="parts.html#c.krpc_KSA_Part_t" title="krpc_KSA_Part_t"><span class="n"><span class="pre">krpc_KSA_Part_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Habitat_t" title="krpc_KSA_Habitat_t"><span class="n"><span class="pre">krpc_KSA_Habitat_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_Part" title="Link to this definition">#</a><br /></dt>
+<dd><p>The part the habitat is in.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_Zone">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Habitat_Zone</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KSA_HabitatZone_t" title="krpc_KSA_HabitatZone_t"><span class="n"><span class="pre">krpc_KSA_HabitatZone_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Habitat_t" title="krpc_KSA_Habitat_t"><span class="n"><span class="pre">krpc_KSA_Habitat_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_Zone" title="Link to this definition">#</a><br /></dt>
+<dd><p>The habitat zone the habitat is in.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_HabitableVolume">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Habitat_HabitableVolume</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Habitat_t" title="krpc_KSA_Habitat_t"><span class="n"><span class="pre">krpc_KSA_Habitat_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_HabitableVolume" title="Link to this definition">#</a><br /></dt>
+<dd><p>The volume the crew can live in, in cubic meters.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_StorageVolume">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Habitat_StorageVolume</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Habitat_t" title="krpc_KSA_Habitat_t"><span class="n"><span class="pre">krpc_KSA_Habitat_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_StorageVolume" title="Link to this definition">#</a><br /></dt>
+<dd><p>The volume for stored supplies, in cubic meters.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_Meals">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Habitat_Meals</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Habitat_t" title="krpc_KSA_Habitat_t"><span class="n"><span class="pre">krpc_KSA_Habitat_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_Meals" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of meals in the habitat.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_Canisters">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Habitat_Canisters</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Habitat_t" title="krpc_KSA_Habitat_t"><span class="n"><span class="pre">krpc_KSA_Habitat_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_Canisters" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of carbon dioxide scrubber canisters in the habitat.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_MealCapacity">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Habitat_MealCapacity</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Habitat_t" title="krpc_KSA_Habitat_t"><span class="n"><span class="pre">krpc_KSA_Habitat_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_MealCapacity" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of meals the habitat holds when full.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_CanisterCapacity">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Habitat_CanisterCapacity</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_KSA_Habitat_t" title="krpc_KSA_Habitat_t"><span class="n"><span class="pre">krpc_KSA_Habitat_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_CanisterCapacity" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of carbon dioxide scrubber canisters the habitat holds when full.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_Transfer">
+<span class="n"><span class="pre">krpc_error_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KSA_Habitat_Transfer</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KSA_Habitat_t" title="krpc_KSA_Habitat_t"><span class="n"><span class="pre">krpc_KSA_Habitat_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <a class="reference internal" href="#c.krpc_KSA_Habitat_t" title="krpc_KSA_Habitat_t"><span class="n"><span class="pre">krpc_KSA_Habitat_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">to</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n"><span class="pre">meals</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n"><span class="pre">canisters</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KSA_Habitat_t.krpc_KSA_Habitat_Transfer" title="Link to this definition">#</a><br /></dt>
+<dd><p>Moves meals and canisters to another habitat in the same zone. Moves fewer when
+this habitat holds fewer, or the other has less room.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>to</strong> – The habitat to move the supplies to.</p></li>
+<li><p><strong>meals</strong> – The number of meals to move.</p></li>
+<li><p><strong>canisters</strong> – The number of canisters to move.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A kitten in the zone moves the supplies. Throws an exception if life support is
+disabled, the habitats are in different zones, or the zone has no crew able to
+move them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="crew.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Crew</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="body.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Body</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/cnano/api/ksa/life-support.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026 kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

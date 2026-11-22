@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Crew &#8212; kRPC v0.2.0 documentation</title>
+    <title>Crew &#8212; kRPC v0.3.0 documentation</title>
   
   
   
@@ -26,35 +26,36 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5ab7b574" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cpp/api/ksa/crew';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/external-links.js?v=e8892020"></script>
     <link rel="icon" href="../../../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Body" href="body.html" />
+    <link rel="next" title="Life Support" href="life-support.html" />
     <link rel="prev" title="Power" href="power.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.0" />
+  <meta name="docsearch:version" content="0.3.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -102,7 +103,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -206,14 +207,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -248,7 +249,7 @@
   
 
   
-    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -262,7 +263,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -333,14 +334,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -386,8 +387,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -397,6 +400,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -410,8 +418,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -421,6 +431,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -434,8 +449,10 @@
 <li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
 <li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
@@ -445,6 +462,11 @@
 <li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -458,8 +480,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -469,6 +493,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -482,8 +511,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -493,6 +524,42 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../js.html">JavaScript</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -506,8 +573,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -517,6 +586,42 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../http.html">HTTP</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -532,8 +637,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -546,6 +653,11 @@
 </ul>
 </details></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 </ul>
@@ -585,7 +697,7 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../../../index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     
@@ -652,6 +764,12 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten14cause_of_deathEv">
+<span id="_CPPv3N4krpc8services3KSA6Kitten14cause_of_deathEv"></span><span id="_CPPv2N4krpc8services3KSA6Kitten14cause_of_deathEv"></span><span id="krpc::services::KSA::Kitten::cause_of_death"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4krpc8services3KSA10DeathCauseE" title="krpc::services::KSA::DeathCause"><span class="n"><span class="pre">DeathCause</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cause_of_death</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten14cause_of_deathEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>What killed the kitten, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if it is alive.</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten13mission_countEv">
 <span id="_CPPv3N4krpc8services3KSA6Kitten13mission_countEv"></span><span id="_CPPv2N4krpc8services3KSA6Kitten13mission_countEv"></span><span id="krpc::services::KSA::Kitten::mission_count"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mission_count</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten13mission_countEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The number of missions the kitten has flown, including the current one.</p>
@@ -704,6 +822,31 @@ kitten is not on a mission.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten26time_to_radiation_sicknessEv">
+<span id="_CPPv3N4krpc8services3KSA6Kitten26time_to_radiation_sicknessEv"></span><span id="_CPPv2N4krpc8services3KSA6Kitten26time_to_radiation_sicknessEv"></span><span id="krpc::services::KSA::Kitten::time_to_radiation_sickness"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_to_radiation_sickness</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten26time_to_radiation_sicknessEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time until the kitten gets radiation sickness at its current dose rate, in
+seconds. Infinite if it never does, or the kitten already has it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game forecasts it for a kitten on a mission while
+<a class="reference internal" href="ksa.html#_CPPv4N4krpc8services3KSA17radiation_enabledEv" title="krpc::services::KSA::radiation_enabled"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">radiation_enabled()</span></code></a> is true.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten19time_to_lethal_doseEv">
+<span id="_CPPv3N4krpc8services3KSA6Kitten19time_to_lethal_doseEv"></span><span id="_CPPv2N4krpc8services3KSA6Kitten19time_to_lethal_doseEv"></span><span id="krpc::services::KSA::Kitten::time_to_lethal_dose"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_to_lethal_dose</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten19time_to_lethal_doseEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time until the kitten takes a lethal radiation dose at its current dose rate, in
+seconds. Infinite if it never does.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game forecasts it for a kitten on a mission while
+<a class="reference internal" href="ksa.html#_CPPv4N4krpc8services3KSA17radiation_enabledEv" title="krpc::services::KSA::radiation_enabled"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">radiation_enabled()</span></code></a> is true, and only within a day of radiation
+sickness.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten21time_until_fit_to_flyEv">
 <span id="_CPPv3N4krpc8services3KSA6Kitten21time_until_fit_to_flyEv"></span><span id="_CPPv2N4krpc8services3KSA6Kitten21time_until_fit_to_flyEv"></span><span id="krpc::services::KSA::Kitten::time_until_fit_to_fly"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_until_fit_to_fly</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten21time_until_fit_to_flyEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The time until the kitten has recovered from radiation sickness and can fly, resting
@@ -724,6 +867,60 @@ resting at home, in seconds.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten15worst_conditionEv">
+<span id="_CPPv3N4krpc8services3KSA6Kitten15worst_conditionEv"></span><span id="_CPPv2N4krpc8services3KSA6Kitten15worst_conditionEv"></span><span id="krpc::services::KSA::Kitten::worst_condition"></span><a class="reference internal" href="#_CPPv4N4krpc8services3KSA15KittenConditionE" title="krpc::services::KSA::KittenCondition"><span class="n"><span class="pre">KittenCondition</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">worst_condition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten15worst_conditionEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The kitten’s worst condition across its supplies.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten9conditionE17LifeSupportSupply">
+<span id="_CPPv3N4krpc8services3KSA6Kitten9conditionE17LifeSupportSupply"></span><span id="_CPPv2N4krpc8services3KSA6Kitten9conditionE17LifeSupportSupply"></span><span id="krpc::services::KSA::Kitten::condition__LifeSupportSupply"></span><a class="reference internal" href="#_CPPv4N4krpc8services3KSA15KittenConditionE" title="krpc::services::KSA::KittenCondition"><span class="n"><span class="pre">KittenCondition</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">condition</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="life-support.html#_CPPv4N4krpc8services3KSA17LifeSupportSupplyE" title="krpc::services::KSA::LifeSupportSupply"><span class="n"><span class="pre">LifeSupportSupply</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">supply</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten9conditionE17LifeSupportSupply" title="Link to this definition">#</a><br /></dt>
+<dd><p>The effect on the kitten of going without a supply.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>supply</strong> – The supply.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten12time_withoutE17LifeSupportSupply">
+<span id="_CPPv3N4krpc8services3KSA6Kitten12time_withoutE17LifeSupportSupply"></span><span id="_CPPv2N4krpc8services3KSA6Kitten12time_withoutE17LifeSupportSupply"></span><span id="krpc::services::KSA::Kitten::time_without__LifeSupportSupply"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_without</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="life-support.html#_CPPv4N4krpc8services3KSA17LifeSupportSupplyE" title="krpc::services::KSA::LifeSupportSupply"><span class="n"><span class="pre">LifeSupportSupply</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">supply</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten12time_withoutE17LifeSupportSupply" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time the kitten has gone without a supply, in seconds. It counts down again
+once the supply returns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>supply</strong> – The supply.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten22time_to_next_conditionE17LifeSupportSupply">
+<span id="_CPPv3N4krpc8services3KSA6Kitten22time_to_next_conditionE17LifeSupportSupply"></span><span id="_CPPv2N4krpc8services3KSA6Kitten22time_to_next_conditionE17LifeSupportSupply"></span><span id="krpc::services::KSA::Kitten::time_to_next_condition__LifeSupportSupply"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_to_next_condition</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="life-support.html#_CPPv4N4krpc8services3KSA17LifeSupportSupplyE" title="krpc::services::KSA::LifeSupportSupply"><span class="n"><span class="pre">LifeSupportSupply</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">supply</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten22time_to_next_conditionE17LifeSupportSupply" title="Link to this definition">#</a><br /></dt>
+<dd><p>The further time the kitten can go without a supply before its condition from the
+supply worsens, in seconds. Infinite once the kitten is dead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>supply</strong> – The supply.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten13incapacitatedEv">
+<span id="_CPPv3N4krpc8services3KSA6Kitten13incapacitatedEv"></span><span id="_CPPv2N4krpc8services3KSA6Kitten13incapacitatedEv"></span><span id="krpc::services::KSA::Kitten::incapacitated"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">incapacitated</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten13incapacitatedEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the kitten is incapacitated by going without a supply. An incapacitated
+kitten cannot fly the vehicle or move supplies.</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten6on_evaEv">
 <span id="_CPPv3N4krpc8services3KSA6Kitten6on_evaEv"></span><span id="_CPPv2N4krpc8services3KSA6Kitten6on_evaEv"></span><span id="krpc::services::KSA::Kitten::on_eva"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">on_eva</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten6on_evaEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the kitten is on EVA.</p>
@@ -741,6 +938,12 @@ EVA. The kitten becomes the controlled kitten, see <a class="reference internal"
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten13can_go_on_evaEv">
+<span id="_CPPv3N4krpc8services3KSA6Kitten13can_go_on_evaEv"></span><span id="_CPPv2N4krpc8services3KSA6Kitten13can_go_on_evaEv"></span><span id="krpc::services::KSA::Kitten::can_go_on_eva"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">can_go_on_eva</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten13can_go_on_evaEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the kitten can go on EVA. See <a class="reference internal" href="#_CPPv4N4krpc8services3KSA6Kitten9go_on_evaEv" title="krpc::services::KSA::Kitten::go_on_eva"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Kitten::go_on_eva()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten5boardEv">
 <span id="_CPPv3N4krpc8services3KSA6Kitten5boardEv"></span><span id="_CPPv2N4krpc8services3KSA6Kitten5boardEv"></span><span id="krpc::services::KSA::Kitten::board"></span><a class="reference internal" href="vehicle.html#_CPPv4N4krpc8services3KSA7VehicleE" title="krpc::services::KSA::Vehicle"><span class="n"><span class="pre">Vehicle</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">board</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten5boardEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Board the nearest vehicle with a free seat, and return once the kitten is in the
@@ -755,6 +958,13 @@ seat. The vehicle becomes the controlled vehicle.</p>
 <p>Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
 within one meter.</p>
 </div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten9can_boardEv">
+<span id="_CPPv3N4krpc8services3KSA6Kitten9can_boardEv"></span><span id="_CPPv2N4krpc8services3KSA6Kitten9can_boardEv"></span><span id="krpc::services::KSA::Kitten::can_board"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">can_board</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten9can_boardEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the kitten is on EVA and an EVA hatch with a free seat is in range. See
+<a class="reference internal" href="#_CPPv4N4krpc8services3KSA6Kitten5boardEv" title="krpc::services::KSA::Kitten::board"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Kitten::board()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -790,6 +1000,92 @@ nor on EVA.</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten12life_supportEv">
+<span id="_CPPv3N4krpc8services3KSA6Kitten12life_supportEv"></span><span id="_CPPv2N4krpc8services3KSA6Kitten12life_supportEv"></span><span id="krpc::services::KSA::Kitten::life_support"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="life-support.html#_CPPv4N4krpc8services3KSA11LifeSupportE" title="krpc::services::KSA::LifeSupport"><span class="n"><span class="pre">LifeSupport</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">life_support</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten12life_supportEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>How long the supplies in the kitten’s suit last, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if the kitten is
+not on EVA.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The suit is filled from the kitten’s habitat zone when it goes on EVA, and what is
+left returns to the zone when it boards.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten13carried_mealsEv">
+<span id="_CPPv3N4krpc8services3KSA6Kitten13carried_mealsEv"></span><span id="_CPPv2N4krpc8services3KSA6Kitten13carried_mealsEv"></span><span id="krpc::services::KSA::Kitten::carried_meals"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">carried_meals</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten13carried_mealsEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of meals the kitten on EVA carries. Throws an exception if the kitten is
+not on EVA.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten17carried_canistersEv">
+<span id="_CPPv3N4krpc8services3KSA6Kitten17carried_canistersEv"></span><span id="_CPPv2N4krpc8services3KSA6Kitten17carried_canistersEv"></span><span id="krpc::services::KSA::Kitten::carried_canisters"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">carried_canisters</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten17carried_canistersEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of carbon dioxide scrubber canisters the kitten on EVA carries. Throws an
+exception if the kitten is not on EVA.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten9can_carryE7Habitat">
+<span id="_CPPv3N4krpc8services3KSA6Kitten9can_carryE7Habitat"></span><span id="_CPPv2N4krpc8services3KSA6Kitten9can_carryE7Habitat"></span><span id="krpc::services::KSA::Kitten::can_carry__Habitat"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">can_carry</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="life-support.html#_CPPv4N4krpc8services3KSA7HabitatE" title="krpc::services::KSA::Habitat"><span class="n"><span class="pre">Habitat</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">habitat</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten9can_carryE7Habitat" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the kitten can take supplies from or stow them in a habitat. See
+<a class="reference internal" href="#_CPPv4N4krpc8services3KSA6Kitten4takeE7Habitat7int32_t7int32_t" title="krpc::services::KSA::Kitten::take"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Kitten::take()</span></code></a> and <a class="reference internal" href="#_CPPv4N4krpc8services3KSA6Kitten4stowE7Habitat7int32_t7int32_t" title="krpc::services::KSA::Kitten::stow"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Kitten::stow()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>habitat</strong> – The habitat.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten4takeE7Habitat7int32_t7int32_t">
+<span id="_CPPv3N4krpc8services3KSA6Kitten4takeE7Habitat7int32_t7int32_t"></span><span id="_CPPv2N4krpc8services3KSA6Kitten4takeE7Habitat7int32_t7int32_t"></span><span id="krpc::services::KSA::Kitten::take__Habitat.int32_t.int32_t"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">take</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="life-support.html#_CPPv4N4krpc8services3KSA7HabitatE" title="krpc::services::KSA::Habitat"><span class="n"><span class="pre">Habitat</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">habitat</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">meals</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">canisters</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten4takeE7Habitat7int32_t7int32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Take meals and canisters from a habitat within reach, and return once the kitten
+carries them. Takes fewer when the habitat holds fewer, or the kitten cannot carry
+more.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>habitat</strong> – The habitat, which must store supplies.</p></li>
+<li><p><strong>meals</strong> – The number of meals to take.</p></li>
+<li><p><strong>canisters</strong> – The number of canisters to take.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the kitten is not on EVA or is unwell, life support is
+disabled, or the habitat stores no supplies or is out of reach. See
+<a class="reference internal" href="#_CPPv4N4krpc8services3KSA6Kitten9can_carryE7Habitat" title="krpc::services::KSA::Kitten::can_carry"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Kitten::can_carry()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Kitten4stowE7Habitat7int32_t7int32_t">
+<span id="_CPPv3N4krpc8services3KSA6Kitten4stowE7Habitat7int32_t7int32_t"></span><span id="_CPPv2N4krpc8services3KSA6Kitten4stowE7Habitat7int32_t7int32_t"></span><span id="krpc::services::KSA::Kitten::stow__Habitat.int32_t.int32_t"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stow</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="life-support.html#_CPPv4N4krpc8services3KSA7HabitatE" title="krpc::services::KSA::Habitat"><span class="n"><span class="pre">Habitat</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">habitat</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">meals</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">canisters</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Kitten4stowE7Habitat7int32_t7int32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Stow the meals and canisters the kitten carries in a habitat within reach, and
+return once they are stowed. Stows fewer when the kitten carries fewer, or the
+habitat has less room.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>habitat</strong> – The habitat, which must store supplies.</p></li>
+<li><p><strong>meals</strong> – The number of meals to stow.</p></li>
+<li><p><strong>canisters</strong> – The number of canisters to stow.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the kitten is not on EVA or is unwell, life support is
+disabled, or the habitat stores no supplies or is out of reach. See
+<a class="reference internal" href="#_CPPv4N4krpc8services3KSA6Kitten9can_carryE7Habitat" title="krpc::services::KSA::Kitten::can_carry"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Kitten::can_carry()</span></code></a>.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -842,6 +1138,243 @@ nor on EVA.</p>
 
 </dd></dl>
 
+<dl class="cpp enum-struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA15KittenConditionE">
+<span id="_CPPv3N4krpc8services3KSA15KittenConditionE"></span><span id="_CPPv2N4krpc8services3KSA15KittenConditionE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">KittenCondition</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA15KittenConditionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The effect on a kitten of going without a supply. See <a class="reference internal" href="#_CPPv4N4krpc8services3KSA6Kitten9conditionE17LifeSupportSupply" title="krpc::services::KSA::Kitten::condition"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Kitten::condition()</span></code></a>.</p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA15KittenCondition7healthyE">
+<span id="_CPPv3N4krpc8services3KSA15KittenCondition7healthyE"></span><span id="_CPPv2N4krpc8services3KSA15KittenCondition7healthyE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">healthy</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA15KittenCondition7healthyE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Unaffected.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA15KittenCondition7warningE">
+<span id="_CPPv3N4krpc8services3KSA15KittenCondition7warningE"></span><span id="_CPPv2N4krpc8services3KSA15KittenCondition7warningE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">warning</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA15KittenCondition7warningE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Going without, with no effect yet.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA15KittenCondition8degradedE">
+<span id="_CPPv3N4krpc8services3KSA15KittenCondition8degradedE"></span><span id="_CPPv2N4krpc8services3KSA15KittenCondition8degradedE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">degraded</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA15KittenCondition8degradedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Weakened, and unable to go on EVA.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA15KittenCondition13incapacitatedE">
+<span id="_CPPv3N4krpc8services3KSA15KittenCondition13incapacitatedE"></span><span id="_CPPv2N4krpc8services3KSA15KittenCondition13incapacitatedE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">incapacitated</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA15KittenCondition13incapacitatedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Unable to fly the vehicle or move supplies.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA15KittenCondition4deadE">
+<span id="_CPPv3N4krpc8services3KSA15KittenCondition4deadE"></span><span id="_CPPv2N4krpc8services3KSA15KittenCondition4deadE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dead</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA15KittenCondition4deadE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Dead.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum-struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCauseE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCauseE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCauseE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DeathCause</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCauseE" title="Link to this definition">#</a><br /></dt>
+<dd><p>What killed a kitten. See <a class="reference internal" href="#_CPPv4N4krpc8services3KSA6Kitten14cause_of_deathEv" title="krpc::services::KSA::Kitten::cause_of_death"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Kitten::cause_of_death()</span></code></a>.</p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCause7unknownE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCause7unknownE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCause7unknownE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unknown</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCause7unknownE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Not recorded.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCause9no_oxygenE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCause9no_oxygenE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCause9no_oxygenE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">no_oxygen</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCause9no_oxygenE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Lack of oxygen.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCause11no_scrubberE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCause11no_scrubberE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCause11no_scrubberE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">no_scrubber</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCause11no_scrubberE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Carbon dioxide, with no scrubber canisters left.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCause8no_waterE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCause8no_waterE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCause8no_waterE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">no_water</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCause8no_waterE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Lack of water.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCause7no_foodE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCause7no_foodE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCause7no_foodE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">no_food</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCause7no_foodE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Lack of food.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCause9radiationE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCause9radiationE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCause9radiationE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radiation</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCause9radiationE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A lethal radiation dose.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCause13ground_impactE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCause13ground_impactE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCause13ground_impactE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ground_impact</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCause13ground_impactE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Hitting the ground.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCause12ocean_impactE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCause12ocean_impactE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCause12ocean_impactE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ocean_impact</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCause12ocean_impactE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Hitting the ocean.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCause9collisionE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCause9collisionE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCause9collisionE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">collision</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCause9collisionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A collision.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCause17excessive_g_forceE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCause17excessive_g_forceE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCause17excessive_g_forceE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">excessive_g_force</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCause17excessive_g_forceE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Excessive acceleration.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCause18aerodynamic_forcesE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCause18aerodynamic_forcesE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCause18aerodynamic_forcesE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">aerodynamic_forces</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCause18aerodynamic_forcesE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Aerodynamic forces breaking up the vehicle.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCause19hydrodynamic_forcesE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCause19hydrodynamic_forcesE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCause19hydrodynamic_forcesE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hydrodynamic_forces</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCause19hydrodynamic_forcesE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Hydrodynamic forces breaking up the vehicle.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCause4fallE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCause4fallE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCause4fallE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fall</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCause4fallE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A fall on EVA.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10DeathCause9abandonedE">
+<span id="_CPPv3N4krpc8services3KSA10DeathCause9abandonedE"></span><span id="_CPPv2N4krpc8services3KSA10DeathCause9abandonedE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">abandoned</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10DeathCause9abandonedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Left in a vehicle that was abandoned.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA9CrewEventE">
+<span id="_CPPv3N4krpc8services3KSA9CrewEventE"></span><span id="_CPPv2N4krpc8services3KSA9CrewEventE"></span><span id="krpc::services::KSA::CrewEvent"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CrewEvent</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA9CrewEventE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A kitten’s most urgent coming event: its supplies running low, or its condition
+worsening. Obtained from <a class="reference internal" href="vehicle.html#_CPPv4N4krpc8services3KSA7Vehicle11crew_eventsEv" title="krpc::services::KSA::Vehicle::crew_events"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vehicle::crew_events()</span></code></a> or
+<a class="reference internal" href="vehicle.html#_CPPv4N4krpc8services3KSA7Vehicle15next_crew_eventEv" title="krpc::services::KSA::Vehicle::next_crew_event"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vehicle::next_crew_event()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As the game’s crew clock, an event within a day is the worst stage the kitten reaches
+in that time, and a later event is the soonest. The event is the game’s forecast when it
+is read from the vehicle. Read it again for a new forecast.</p>
+</div>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA9CrewEvent6kittenEv">
+<span id="_CPPv3N4krpc8services3KSA9CrewEvent6kittenEv"></span><span id="_CPPv2N4krpc8services3KSA9CrewEvent6kittenEv"></span><span id="krpc::services::KSA::CrewEvent::kitten"></span><a class="reference internal" href="#_CPPv4N4krpc8services3KSA6KittenE" title="krpc::services::KSA::Kitten"><span class="n"><span class="pre">Kitten</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kitten</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA9CrewEvent6kittenEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The kitten.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA9CrewEvent5stageEv">
+<span id="_CPPv3N4krpc8services3KSA9CrewEvent5stageEv"></span><span id="_CPPv2N4krpc8services3KSA9CrewEvent5stageEv"></span><span id="krpc::services::KSA::CrewEvent::stage"></span><a class="reference internal" href="#_CPPv4N4krpc8services3KSA9CrewStageE" title="krpc::services::KSA::CrewStage"><span class="n"><span class="pre">CrewStage</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stage</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA9CrewEvent5stageEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>What happens to the kitten.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA9CrewEvent6hazardEv">
+<span id="_CPPv3N4krpc8services3KSA9CrewEvent6hazardEv"></span><span id="_CPPv2N4krpc8services3KSA9CrewEvent6hazardEv"></span><span id="krpc::services::KSA::CrewEvent::hazard"></span><a class="reference internal" href="#_CPPv4N4krpc8services3KSA10CrewHazardE" title="krpc::services::KSA::CrewHazard"><span class="n"><span class="pre">CrewHazard</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hazard</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA9CrewEvent6hazardEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The cause of the event.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA9CrewEvent2utEv">
+<span id="_CPPv3N4krpc8services3KSA9CrewEvent2utEv"></span><span id="_CPPv2N4krpc8services3KSA9CrewEvent2utEv"></span><span id="krpc::services::KSA::CrewEvent::ut"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ut</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA9CrewEvent2utEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The universal time of the event, in seconds.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA9CrewEvent7time_toEv">
+<span id="_CPPv3N4krpc8services3KSA9CrewEvent7time_toEv"></span><span id="_CPPv2N4krpc8services3KSA9CrewEvent7time_toEv"></span><span id="krpc::services::KSA::CrewEvent::time_to"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_to</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA9CrewEvent7time_toEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time until the event, in seconds. Zero once its time has passed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum-struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA9CrewStageE">
+<span id="_CPPv3N4krpc8services3KSA9CrewStageE"></span><span id="_CPPv2N4krpc8services3KSA9CrewStageE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CrewStage</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA9CrewStageE" title="Link to this definition">#</a><br /></dt>
+<dd><p>What happens to a kitten in a crew event. See <a class="reference internal" href="#_CPPv4N4krpc8services3KSA9CrewEvent5stageEv" title="krpc::services::KSA::CrewEvent::stage"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CrewEvent::stage()</span></code></a>.</p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA9CrewStage3lowE">
+<span id="_CPPv3N4krpc8services3KSA9CrewStage3lowE"></span><span id="_CPPv2N4krpc8services3KSA9CrewStage3lowE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">low</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA9CrewStage3lowE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The supply runs low.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA9CrewStage8degradedE">
+<span id="_CPPv3N4krpc8services3KSA9CrewStage8degradedE"></span><span id="_CPPv2N4krpc8services3KSA9CrewStage8degradedE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">degraded</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA9CrewStage8degradedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The kitten is weakened, and unable to go on EVA. For radiation, the kitten gets
+radiation sickness.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA9CrewStage13incapacitatedE">
+<span id="_CPPv3N4krpc8services3KSA9CrewStage13incapacitatedE"></span><span id="_CPPv2N4krpc8services3KSA9CrewStage13incapacitatedE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">incapacitated</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA9CrewStage13incapacitatedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The kitten is unable to fly the vehicle or move supplies.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA9CrewStage4deadE">
+<span id="_CPPv3N4krpc8services3KSA9CrewStage4deadE"></span><span id="_CPPv2N4krpc8services3KSA9CrewStage4deadE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dead</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA9CrewStage4deadE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The kitten dies.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum-struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10CrewHazardE">
+<span id="_CPPv3N4krpc8services3KSA10CrewHazardE"></span><span id="_CPPv2N4krpc8services3KSA10CrewHazardE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CrewHazard</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10CrewHazardE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The cause of a crew event. See <a class="reference internal" href="#_CPPv4N4krpc8services3KSA9CrewEvent6hazardEv" title="krpc::services::KSA::CrewEvent::hazard"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CrewEvent::hazard()</span></code></a>.</p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10CrewHazard3airE">
+<span id="_CPPv3N4krpc8services3KSA10CrewHazard3airE"></span><span id="_CPPv2N4krpc8services3KSA10CrewHazard3airE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">air</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10CrewHazard3airE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Running out of air.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10CrewHazard8scrubberE">
+<span id="_CPPv3N4krpc8services3KSA10CrewHazard8scrubberE"></span><span id="_CPPv2N4krpc8services3KSA10CrewHazard8scrubberE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scrubber</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10CrewHazard8scrubberE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Running out of carbon dioxide scrubber.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10CrewHazard5waterE">
+<span id="_CPPv3N4krpc8services3KSA10CrewHazard5waterE"></span><span id="_CPPv2N4krpc8services3KSA10CrewHazard5waterE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">water</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10CrewHazard5waterE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Running out of water.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10CrewHazard4foodE">
+<span id="_CPPv3N4krpc8services3KSA10CrewHazard4foodE"></span><span id="_CPPv2N4krpc8services3KSA10CrewHazard4foodE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">food</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10CrewHazard4foodE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Running out of food.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA10CrewHazard9radiationE">
+<span id="_CPPv3N4krpc8services3KSA10CrewHazard9radiationE"></span><span id="_CPPv2N4krpc8services3KSA10CrewHazard9radiationE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radiation</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA10CrewHazard9radiationE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The radiation dose.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA4SeatE">
 <span id="_CPPv3N4krpc8services3KSA4SeatE"></span><span id="_CPPv2N4krpc8services3KSA4SeatE"></span><span id="krpc::services::KSA::Seat"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Seat</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA4SeatE" title="Link to this definition">#</a><br /></dt>
@@ -864,8 +1397,9 @@ nor on EVA.</p>
 kitten in the seat. Setting <code class="docutils literal notranslate"><span class="pre">NULL</span></code> empties the seat.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>A kitten in another seat of the vehicle moves to this one. Throws an exception if
-the kitten is killed in action, on EVA, or in another vehicle.</p>
+<p>A kitten in another seat of the vehicle moves to this one, within its habitat zone.
+Throws an exception if the kitten is killed in action, retired, on EVA, in another
+vehicle, or incapacitated, or the seat is in another habitat zone.</p>
 </div>
 </dd></dl>
 
@@ -893,11 +1427,11 @@ the kitten is killed in action, on EVA, or in another vehicle.</p>
       </div>
     </a>
     <a class="right-next"
-       href="body.html"
+       href="life-support.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Body</p>
+        <p class="prev-next-title">Life Support</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -908,7 +1442,7 @@ the kitten is killed in action, on EVA, or in another vehicle.</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -934,8 +1468,8 @@ the kitten is killed in action, on EVA, or in another vehicle.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -968,7 +1502,7 @@ the kitten is killed in action, on EVA, or in another vehicle.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

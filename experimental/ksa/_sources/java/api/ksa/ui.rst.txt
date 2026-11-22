@@ -13,7 +13,7 @@ UI
    .. note::
 
       The windows are removed when the client that added them disconnects. For messages on
-      the screen, see :meth:`showMessage(String, float, boolean)`.
+      the screen, see :meth:`KSA.showMessage(String, float, boolean)`.
 
    .. method:: static Window addWindow(Connection connection, String title, boolean visible)
 

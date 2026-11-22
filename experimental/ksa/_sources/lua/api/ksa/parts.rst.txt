@@ -20,105 +20,148 @@ Parts
       The id of the part's template.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: title: string
 
       The name of the part, as shown in the game.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: vehicle: KSA.Vehicle
 
       The vehicle the part belongs to.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Vehicle`
 
-   .. attribute:: parent: KSA.Part
+   .. attribute:: parent: KSA.Part | nil
 
       The part this part is attached to, or ``nil`` for the root part.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part` or ``Types.none``
 
    .. attribute:: children: List
 
       The parts attached to this part.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: sequence: number
 
       The number of the sequence that activates the part, or -1 if no sequence does.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: mass: number
 
       The mass of the part, including its propellant, in kilograms.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: dry_mass: number
 
       The mass of the part without its propellant, in kilograms.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: resources: List
 
       The resources the part holds, one for each substance.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
+
+   .. attribute:: shield_areal_density: number
+
+      The areal density of the part's radiation shielding, its hull included, in
+      :math:`\mathrm{kg/m^{2}}`. Zero for an unshielded part.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: shield_mass: number
+
+      The mass of the shielding material added to the part, in kilograms. Zero when the
+      shielding is built into the hull.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: tank_cover: number
+
+      The fraction of the sky, seen from the part, that the contents of the vehicle's tanks
+      cover, between 0 and 1. The contents shield the part from radiation.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: dose_rate: number
+
+      The radiation dose rate inside the part, behind its shielding and the vehicle's tanks,
+      in sieverts per second. Includes any solar particle event under way. A kitten in the
+      part's seats receives this dose rate.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: highlight: KSA.HighlightColor
+
+      The color the part is highlighted in.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         The life support window uses this highlight to pick parts, and replaces it on
+         the parts it picks from.
 
    .. attribute:: tanks: List
 
       The part's propellant tanks. Empty if it has none.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
+
+   .. attribute:: habitats: List
+
+      The part's habitats.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: batteries: List
 
       The part's batteries.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: solar_panels: List
 
       The part's solar panels.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: generators: List
 
       The part's generators.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: power_consumers: List
 
       The part's power consumers.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
+
+   .. attribute:: power_forecast: KSA.PowerForecast
+
+      The charge, draw and supply of the electrical circuit the part is on.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: avionics: KSA.Avionics | nil
+
+      The part's avionics, or ``nil`` if it has none. A probe core has avionics.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: lights: List
 
       The part's lights.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: deployables: List
 
@@ -126,91 +169,109 @@ Parts
       service module.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: magnetic_scoops: List
 
       The part's magnetic scoops. Empty if it has none.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
-   .. method:: position(reference_frame)
+   .. method:: position(reference_frame: KSA.ReferenceFrame): Tuple
 
       The position of the part's origin, in meters.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the position.
 
-   .. method:: velocity(reference_frame)
+   .. method:: velocity(reference_frame: KSA.ReferenceFrame): Tuple
 
       The velocity of the part's origin, in meters per second.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the velocity.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the velocity.
 
-   .. method:: rotation(reference_frame)
+   .. method:: rotation(reference_frame: KSA.ReferenceFrame): Tuple
 
       The rotation of the part's axes, relative to the given frame.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the rotation.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the rotation.
 
-   .. attribute:: engine: KSA.Engine
+   .. attribute:: engine: KSA.Engine | nil
 
       The part's engine, or ``nil`` if it has none.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Engine` or ``Types.none``
 
    .. attribute:: gimbals: List
 
       The part's gimbals. An engine part can have several, each steering one nozzle.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
-   .. attribute:: rcs: KSA.RCS
+   .. attribute:: rcs: KSA.RCS | nil
 
       The part's RCS thrusters, or ``nil`` if it has none.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.RCS` or ``Types.none``
 
-   .. attribute:: decoupler: KSA.Decoupler
+   .. attribute:: decoupler: KSA.Decoupler | nil
 
       The part's decoupler, or ``nil`` if it has none.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Decoupler` or ``Types.none``
 
-   .. attribute:: parachute: KSA.Parachute
+   .. attribute:: parachute: KSA.Parachute | nil
 
       The part's parachute, or ``nil`` if it has none.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Parachute` or ``Types.none``
 
-   .. attribute:: docking_port: KSA.DockingPort
+   .. attribute:: docking_port: KSA.DockingPort | nil
 
       The part's docking port, or ``nil`` if it has none.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.DockingPort` or ``Types.none``
 
    .. attribute:: seats: List
 
       The part's crew seats.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: crew: List
 
       The kittens in the part's seats.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
+
+
+
+.. class:: HighlightColor
+
+   The color of a part's highlight. See :attr:`KSA.Part.highlight`.
+
+
+   .. data:: none
+
+      Not highlighted.
+
+
+   .. data:: green
+
+      Green.
+
+
+   .. data:: yellow
+
+      Yellow.
+
+
+   .. data:: red
+
+      Red.
+
+
+   .. data:: purple
+
+      Purple.
 
 
 
@@ -228,14 +289,12 @@ Parts
       The part the engine is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: gimbals: List
 
       The gimbals that steer the engine's nozzles. Empty if the engine has none.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: active: boolean
 
@@ -243,28 +302,24 @@ Parts
       once the change has applied.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: has_propellant: boolean
 
       Whether the engine has propellant to burn.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: minimum_throttle: number
 
       The lowest throttle the engine runs at, between 0 and 1.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: propellants: List
 
       The names of the substances the engine burns. See :attr:`KSA.Resource.name`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: thrust: number
 
@@ -272,7 +327,6 @@ Parts
       pressure, in Newtons. Zero when it is not firing.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: available_thrust: number
 
@@ -280,7 +334,6 @@ Parts
       Newtons. Zero when it is inactive or has no propellant.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: specific_impulse: number
 
@@ -288,7 +341,59 @@ Parts
       Zero when it is inactive or has no propellant.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
+
+   .. method:: available_thrust_at(pressure: number): number
+
+      The thrust of the engine at full throttle and the given atmospheric pressure, in
+      Newtons. Zero when it is inactive or has no propellant.
+
+      :param pressure: The atmospheric pressure, in pascals.
+
+   .. method:: specific_impulse_at(pressure: number): number
+
+      The specific impulse of the engine at the given atmospheric pressure, in seconds.
+      Zero when it is inactive or has no propellant.
+
+      :param pressure: The atmospheric pressure, in pascals.
+
+   .. attribute:: max_thrust: number
+
+      The thrust of the engine at full throttle and the current atmospheric pressure, in
+      Newtons, whether or not it is active and has propellant.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: max_vacuum_thrust: number
+
+      The thrust of the engine at full throttle in a vacuum, in Newtons, whether or not
+      it is active and has propellant.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: chamber_pressure: number
+
+      The pressure in the engine's combustion chamber, in pascals. Zero when it is not
+      firing.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: solid: boolean
+
+      Whether the engine is a solid rocket motor. Once ignited, a solid motor burns at
+      full thrust until its grain runs out.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: grain_mass: number
+
+      The mass of the propellant grain of a solid rocket motor, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Some of the grain is left unburned when the motor burns out. Throws an exception
+         if the engine is not a solid rocket motor.
 
 
 
@@ -307,21 +412,18 @@ Parts
       The part the gimbal is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: angle_y: number
 
       The angle of the gimbal about its y axis, in degrees.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: angle_z: number
 
       The angle of the gimbal about its z axis, in degrees.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: max_angle_y: number
 
@@ -329,7 +431,6 @@ Parts
       turn about that axis.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: max_angle_z: number
 
@@ -337,21 +438,18 @@ Parts
       turn about that axis.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: active: boolean
 
       Whether an engine the gimbal steers is active.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
-   .. method:: rotation(reference_frame)
+   .. method:: rotation(reference_frame: KSA.ReferenceFrame): Tuple
 
       The rotation of the gimbal's mount, whose y and z axes the gimbal turns about.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the rotation.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the rotation.
 
 
 
@@ -368,14 +466,12 @@ Parts
       The part the thrusters are in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: active: boolean
 
       Whether the thrusters are active. Setting it returns once the change has applied.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
 
 
@@ -388,29 +484,25 @@ Parts
       The part the decoupler is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: enabled: boolean
 
       Whether the decoupler can fire.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: decoupled: boolean
 
       Whether the decoupler has fired, or is attached to nothing.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
-   .. method:: decouple()
+   .. method:: decouple(): List
 
       Fire the decoupler, separating the vehicle into two. Returns once it has fired.
       Throws an exception if the decoupler is disabled or :attr:`KSA.Decoupler.decoupled`.
 
       :returns: The vehicles that separated from this one.
-      :rtype: List
 
 
 
@@ -423,35 +515,30 @@ Parts
       The part the parachute is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: state: KSA.ParachuteState
 
       The state of the parachute.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.ParachuteState`
 
    .. attribute:: fill: number
 
       How far the canopy is open, from 0 to 1.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: deploy_altitude: number
 
       The height above the terrain at which an armed parachute deploys, in meters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: can_cut: boolean
 
       Whether the parachute can be cut away. Main parachutes cannot.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. method:: deploy()
 
@@ -525,29 +612,37 @@ Parts
       The part the docking port is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: docked: boolean
 
       Whether the port is docked.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
-   .. attribute:: docked_part: KSA.Part
+   .. attribute:: docked_part: KSA.Part | nil
 
       The part the port is docked to, or ``nil`` if it is not docked.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part` or ``Types.none``
 
-   .. method:: undock()
+   .. attribute:: hatch_open: boolean
+
+      Returns whether the hatch through the docked ports is open, and opens or closes it.
+      An open hatch joins the habitat zones on either side.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         The hatch is closed while the port is not docked. Throws an exception when set on a
+         port that is not docked.
+
+   .. method:: undock(): List
 
       Undock the port, separating the vehicle into two. Returns once it has undocked.
       Throws an exception if the port is not docked.
 
       :returns: The new vehicles.
-      :rtype: List
 
       .. note::
 
@@ -570,14 +665,12 @@ Parts
       The part the deployable is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: state: KSA.DeployableState
 
       The state of the part.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.DeployableState`
 
    .. method:: deploy()
 
@@ -640,25 +733,21 @@ Parts
       The part the scoop is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: active: boolean
 
       Whether the scoop is switched on.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: substance: string
 
       The name of the substance the scoop collects. See :attr:`KSA.Resource.name`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: collection_rate: number
 
       The rate the scoop collects gas at, in kilograms per second.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number

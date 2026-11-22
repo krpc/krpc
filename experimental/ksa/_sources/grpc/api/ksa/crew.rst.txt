@@ -55,6 +55,15 @@ Crew
 
       :Kitten.GetKilledInActionResponse: ``value`` (``bool``)
 
+   .. grpc:rpc:: GetCauseOfDeath (Kitten.GetCauseOfDeathRequest) returns (Kitten.GetCauseOfDeathResponse)
+
+      What killed the kitten, or ``null`` if it is alive.
+
+      :Kitten.GetCauseOfDeathRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetCauseOfDeathResponse: ``value`` (``optional`` :grpc:enum:`DeathCause <krpc.ksa.DeathCause>`)
+
    .. grpc:rpc:: GetMissionCount (Kitten.GetMissionCountRequest) returns (Kitten.GetMissionCountResponse)
 
       The number of missions the kitten has flown, including the current one.
@@ -131,6 +140,37 @@ Crew
 
       :Kitten.GetRadiationSicknessResponse: ``value`` (``bool``)
 
+   .. grpc:rpc:: GetTimeToRadiationSickness (Kitten.GetTimeToRadiationSicknessRequest) returns (Kitten.GetTimeToRadiationSicknessResponse)
+
+      The time until the kitten gets radiation sickness at its current dose rate, in
+      seconds. Infinite if it never does, or the kitten already has it.
+
+      :Kitten.GetTimeToRadiationSicknessRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetTimeToRadiationSicknessResponse: ``value`` (``float``)
+
+      .. note::
+
+         The game forecasts it for a kitten on a mission while
+         :grpc:rpc:`KSAService.GetRadiationEnabled <krpc.ksa.KSAService.GetRadiationEnabled>` is true.
+
+   .. grpc:rpc:: GetTimeToLethalDose (Kitten.GetTimeToLethalDoseRequest) returns (Kitten.GetTimeToLethalDoseResponse)
+
+      The time until the kitten takes a lethal radiation dose at its current dose rate, in
+      seconds. Infinite if it never does.
+
+      :Kitten.GetTimeToLethalDoseRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetTimeToLethalDoseResponse: ``value`` (``float``)
+
+      .. note::
+
+         The game forecasts it for a kitten on a mission while
+         :grpc:rpc:`KSAService.GetRadiationEnabled <krpc.ksa.KSAService.GetRadiationEnabled>` is true, and only within a day of radiation
+         sickness.
+
    .. grpc:rpc:: GetTimeUntilFitToFly (Kitten.GetTimeUntilFitToFlyRequest) returns (Kitten.GetTimeUntilFitToFlyResponse)
 
       The time until the kitten has recovered from radiation sickness and can fly, resting
@@ -160,6 +200,57 @@ Crew
 
       :Kitten.GetRetiredResponse: ``value`` (``bool``)
 
+   .. grpc:rpc:: GetWorstCondition (Kitten.GetWorstConditionRequest) returns (Kitten.GetWorstConditionResponse)
+
+      The kitten's worst condition across its supplies.
+
+      :Kitten.GetWorstConditionRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetWorstConditionResponse: ``value`` (:grpc:enum:`KittenCondition <krpc.ksa.KittenCondition>`)
+
+   .. grpc:rpc:: Condition (Kitten.ConditionRequest) returns (Kitten.ConditionResponse)
+
+      The effect on the kitten of going without a supply.
+
+      :Kitten.ConditionRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+         * ``supply`` (:grpc:enum:`LifeSupportSupply <krpc.ksa.LifeSupportSupply>`): The supply.
+
+      :Kitten.ConditionResponse: ``value`` (:grpc:enum:`KittenCondition <krpc.ksa.KittenCondition>`)
+
+   .. grpc:rpc:: TimeWithout (Kitten.TimeWithoutRequest) returns (Kitten.TimeWithoutResponse)
+
+      The time the kitten has gone without a supply, in seconds. It counts down again
+      once the supply returns.
+
+      :Kitten.TimeWithoutRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+         * ``supply`` (:grpc:enum:`LifeSupportSupply <krpc.ksa.LifeSupportSupply>`): The supply.
+
+      :Kitten.TimeWithoutResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: TimeToNextCondition (Kitten.TimeToNextConditionRequest) returns (Kitten.TimeToNextConditionResponse)
+
+      The further time the kitten can go without a supply before its condition from the
+      supply worsens, in seconds. Infinite once the kitten is dead.
+
+      :Kitten.TimeToNextConditionRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+         * ``supply`` (:grpc:enum:`LifeSupportSupply <krpc.ksa.LifeSupportSupply>`): The supply.
+
+      :Kitten.TimeToNextConditionResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetIncapacitated (Kitten.GetIncapacitatedRequest) returns (Kitten.GetIncapacitatedResponse)
+
+      Whether the kitten is incapacitated by going without a supply. An incapacitated
+      kitten cannot fly the vehicle or move supplies.
+
+      :Kitten.GetIncapacitatedRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetIncapacitatedResponse: ``value`` (``bool``)
+
    .. grpc:rpc:: GetOnEva (Kitten.GetOnEvaRequest) returns (Kitten.GetOnEvaResponse)
 
       Whether the kitten is on EVA.
@@ -183,6 +274,15 @@ Crew
 
          Throws an exception if the kitten is not in a seat, or the vehicle has no EVA hatch.
 
+   .. grpc:rpc:: GetCanGoOnEva (Kitten.GetCanGoOnEvaRequest) returns (Kitten.GetCanGoOnEvaResponse)
+
+      Whether the kitten can go on EVA. See :grpc:rpc:`KittenService.GoOnEva <krpc.ksa.KittenService.GoOnEva>`.
+
+      :Kitten.GetCanGoOnEvaRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetCanGoOnEvaResponse: ``value`` (``bool``)
+
    .. grpc:rpc:: Board (Kitten.BoardRequest) returns (Kitten.BoardResponse)
 
       Board the nearest vehicle with a free seat, and return once the kitten is in the
@@ -197,6 +297,16 @@ Crew
 
          Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
          within one meter.
+
+   .. grpc:rpc:: GetCanBoard (Kitten.GetCanBoardRequest) returns (Kitten.GetCanBoardResponse)
+
+      Whether the kitten is on EVA and an EVA hatch with a free seat is in range. See
+      :grpc:rpc:`KittenService.Board <krpc.ksa.KittenService.Board>`.
+
+      :Kitten.GetCanBoardRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetCanBoardResponse: ``value`` (``bool``)
 
    .. grpc:rpc:: GetLocomotionMode (Kitten.GetLocomotionModeRequest) returns (Kitten.GetLocomotionModeResponse)
 
@@ -230,6 +340,92 @@ Crew
 
       :Kitten.VelocityResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
 
+   .. grpc:rpc:: GetLifeSupport (Kitten.GetLifeSupportRequest) returns (Kitten.GetLifeSupportResponse)
+
+      How long the supplies in the kitten's suit last, or ``null`` if the kitten is
+      not on EVA.
+
+      :Kitten.GetLifeSupportRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetLifeSupportResponse: ``value`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+      .. note::
+
+         The suit is filled from the kitten's habitat zone when it goes on EVA, and what is
+         left returns to the zone when it boards.
+
+   .. grpc:rpc:: GetCarriedMeals (Kitten.GetCarriedMealsRequest) returns (Kitten.GetCarriedMealsResponse)
+
+      The number of meals the kitten on EVA carries. Throws an exception if the kitten is
+      not on EVA.
+
+      :Kitten.GetCarriedMealsRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetCarriedMealsResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetCarriedCanisters (Kitten.GetCarriedCanistersRequest) returns (Kitten.GetCarriedCanistersResponse)
+
+      The number of carbon dioxide scrubber canisters the kitten on EVA carries. Throws an
+      exception if the kitten is not on EVA.
+
+      :Kitten.GetCarriedCanistersRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetCarriedCanistersResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: CanCarry (Kitten.CanCarryRequest) returns (Kitten.CanCarryResponse)
+
+      Whether the kitten can take supplies from or stow them in a habitat. See
+      :grpc:rpc:`KittenService.Take <krpc.ksa.KittenService.Take>` and :grpc:rpc:`KittenService.Stow <krpc.ksa.KittenService.Stow>`.
+
+      :Kitten.CanCarryRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+         * ``habitat`` (:grpc:service:`Habitat <krpc.ksa.HabitatService>`): The habitat.
+
+      :Kitten.CanCarryResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: Take (Kitten.TakeRequest) returns (Kitten.TakeResponse)
+
+      Take meals and canisters from a habitat within reach, and return once the kitten
+      carries them. Takes fewer when the habitat holds fewer, or the kitten cannot carry
+      more.
+
+      :Kitten.TakeRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+         * ``habitat`` (:grpc:service:`Habitat <krpc.ksa.HabitatService>`): The habitat, which must store supplies.
+         * ``meals`` (``optional sint32``): The number of meals to take. Defaults to ``0``.
+         * ``canisters`` (``optional sint32``): The number of canisters to take. Defaults to ``0``.
+
+      :Kitten.TakeResponse: Empty
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA or is unwell, life support is
+         disabled, or the habitat stores no supplies or is out of reach. See
+         :grpc:rpc:`KittenService.CanCarry <krpc.ksa.KittenService.CanCarry>`.
+
+   .. grpc:rpc:: Stow (Kitten.StowRequest) returns (Kitten.StowResponse)
+
+      Stow the meals and canisters the kitten carries in a habitat within reach, and
+      return once they are stowed. Stows fewer when the kitten carries fewer, or the
+      habitat has less room.
+
+      :Kitten.StowRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+         * ``habitat`` (:grpc:service:`Habitat <krpc.ksa.HabitatService>`): The habitat, which must store supplies.
+         * ``meals`` (``optional sint32``): The number of meals to stow. Defaults to ``0``.
+         * ``canisters`` (``optional sint32``): The number of canisters to stow. Defaults to ``0``.
+
+      :Kitten.StowResponse: Empty
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA or is unwell, life support is
+         disabled, or the habitat stores no supplies or is out of reach. See
+         :grpc:rpc:`KittenService.CanCarry <krpc.ksa.KittenService.CanCarry>`.
+
 .. grpc:enum:: LocomotionMode
 
    How a kitten on EVA is moving. See :grpc:rpc:`KittenService.GetLocomotionMode <krpc.ksa.KittenService.GetLocomotionMode>`.
@@ -262,6 +458,192 @@ Crew
 
       Swimming in an ocean.
 
+.. grpc:enum:: KittenCondition
+
+   The effect on a kitten of going without a supply. See :grpc:rpc:`KittenService.Condition <krpc.ksa.KittenService.Condition>`.
+
+   .. grpc:value:: KITTEN_CONDITION_HEALTHY
+
+      Unaffected.
+
+   .. grpc:value:: KITTEN_CONDITION_WARNING
+
+      Going without, with no effect yet.
+
+   .. grpc:value:: KITTEN_CONDITION_DEGRADED
+
+      Weakened, and unable to go on EVA.
+
+   .. grpc:value:: KITTEN_CONDITION_INCAPACITATED
+
+      Unable to fly the vehicle or move supplies.
+
+   .. grpc:value:: KITTEN_CONDITION_DEAD
+
+      Dead.
+
+.. grpc:enum:: DeathCause
+
+   What killed a kitten. See :grpc:rpc:`KittenService.GetCauseOfDeath <krpc.ksa.KittenService.GetCauseOfDeath>`.
+
+   .. grpc:value:: DEATH_CAUSE_UNKNOWN
+
+      Not recorded.
+
+   .. grpc:value:: DEATH_CAUSE_NO_OXYGEN
+
+      Lack of oxygen.
+
+   .. grpc:value:: DEATH_CAUSE_NO_SCRUBBER
+
+      Carbon dioxide, with no scrubber canisters left.
+
+   .. grpc:value:: DEATH_CAUSE_NO_WATER
+
+      Lack of water.
+
+   .. grpc:value:: DEATH_CAUSE_NO_FOOD
+
+      Lack of food.
+
+   .. grpc:value:: DEATH_CAUSE_RADIATION
+
+      A lethal radiation dose.
+
+   .. grpc:value:: DEATH_CAUSE_GROUND_IMPACT
+
+      Hitting the ground.
+
+   .. grpc:value:: DEATH_CAUSE_OCEAN_IMPACT
+
+      Hitting the ocean.
+
+   .. grpc:value:: DEATH_CAUSE_COLLISION
+
+      A collision.
+
+   .. grpc:value:: DEATH_CAUSE_EXCESSIVE_G_FORCE
+
+      Excessive acceleration.
+
+   .. grpc:value:: DEATH_CAUSE_AERODYNAMIC_FORCES
+
+      Aerodynamic forces breaking up the vehicle.
+
+   .. grpc:value:: DEATH_CAUSE_HYDRODYNAMIC_FORCES
+
+      Hydrodynamic forces breaking up the vehicle.
+
+   .. grpc:value:: DEATH_CAUSE_FALL
+
+      A fall on EVA.
+
+   .. grpc:value:: DEATH_CAUSE_ABANDONED
+
+      Left in a vehicle that was abandoned.
+
+.. grpc:service:: CrewEventService
+
+   A kitten's most urgent coming event: its supplies running low, or its condition
+   worsening. Obtained from :grpc:rpc:`VehicleService.GetCrewEvents <krpc.ksa.VehicleService.GetCrewEvents>` or
+   :grpc:rpc:`VehicleService.GetNextCrewEvent <krpc.ksa.VehicleService.GetNextCrewEvent>`.
+
+   .. note::
+
+      As the game's crew clock, an event within a day is the worst stage the kitten reaches
+      in that time, and a later event is the soonest. The event is the game's forecast when it
+      is read from the vehicle. Read it again for a new forecast.
+
+   .. grpc:rpc:: GetKitten (CrewEvent.GetKittenRequest) returns (CrewEvent.GetKittenResponse)
+
+      The kitten.
+
+      :CrewEvent.GetKittenRequest:
+         * ``this`` (:grpc:service:`CrewEvent <krpc.ksa.CrewEventService>`)
+
+      :CrewEvent.GetKittenResponse: ``value`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+   .. grpc:rpc:: GetStage (CrewEvent.GetStageRequest) returns (CrewEvent.GetStageResponse)
+
+      What happens to the kitten.
+
+      :CrewEvent.GetStageRequest:
+         * ``this`` (:grpc:service:`CrewEvent <krpc.ksa.CrewEventService>`)
+
+      :CrewEvent.GetStageResponse: ``value`` (:grpc:enum:`CrewStage <krpc.ksa.CrewStage>`)
+
+   .. grpc:rpc:: GetHazard (CrewEvent.GetHazardRequest) returns (CrewEvent.GetHazardResponse)
+
+      The cause of the event.
+
+      :CrewEvent.GetHazardRequest:
+         * ``this`` (:grpc:service:`CrewEvent <krpc.ksa.CrewEventService>`)
+
+      :CrewEvent.GetHazardResponse: ``value`` (:grpc:enum:`CrewHazard <krpc.ksa.CrewHazard>`)
+
+   .. grpc:rpc:: GetUT (CrewEvent.GetUTRequest) returns (CrewEvent.GetUTResponse)
+
+      The universal time of the event, in seconds.
+
+      :CrewEvent.GetUTRequest:
+         * ``this`` (:grpc:service:`CrewEvent <krpc.ksa.CrewEventService>`)
+
+      :CrewEvent.GetUTResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetTimeTo (CrewEvent.GetTimeToRequest) returns (CrewEvent.GetTimeToResponse)
+
+      The time until the event, in seconds. Zero once its time has passed.
+
+      :CrewEvent.GetTimeToRequest:
+         * ``this`` (:grpc:service:`CrewEvent <krpc.ksa.CrewEventService>`)
+
+      :CrewEvent.GetTimeToResponse: ``value`` (``float``)
+
+.. grpc:enum:: CrewStage
+
+   What happens to a kitten in a crew event. See :grpc:rpc:`CrewEventService.GetStage <krpc.ksa.CrewEventService.GetStage>`.
+
+   .. grpc:value:: CREW_STAGE_LOW
+
+      The supply runs low.
+
+   .. grpc:value:: CREW_STAGE_DEGRADED
+
+      The kitten is weakened, and unable to go on EVA. For radiation, the kitten gets
+      radiation sickness.
+
+   .. grpc:value:: CREW_STAGE_INCAPACITATED
+
+      The kitten is unable to fly the vehicle or move supplies.
+
+   .. grpc:value:: CREW_STAGE_DEAD
+
+      The kitten dies.
+
+.. grpc:enum:: CrewHazard
+
+   The cause of a crew event. See :grpc:rpc:`CrewEventService.GetHazard <krpc.ksa.CrewEventService.GetHazard>`.
+
+   .. grpc:value:: CREW_HAZARD_AIR
+
+      Running out of air.
+
+   .. grpc:value:: CREW_HAZARD_SCRUBBER
+
+      Running out of carbon dioxide scrubber.
+
+   .. grpc:value:: CREW_HAZARD_WATER
+
+      Running out of water.
+
+   .. grpc:value:: CREW_HAZARD_FOOD
+
+      Running out of food.
+
+   .. grpc:value:: CREW_HAZARD_RADIATION
+
+      The radiation dose.
+
 .. grpc:service:: SeatService
 
    A crew seat. Obtained from :grpc:rpc:`PartService.GetSeats <krpc.ksa.PartService.GetSeats>`.
@@ -287,8 +669,9 @@ Crew
 
       .. note::
 
-         A kitten in another seat of the vehicle moves to this one. Throws an exception if
-         the kitten is killed in action, on EVA, or in another vehicle.
+         A kitten in another seat of the vehicle moves to this one, within its habitat zone.
+         Throws an exception if the kitten is killed in action, retired, on EVA, in another
+         vehicle, or incapacitated, or the seat is in another habitat zone.
 
    .. grpc:rpc:: SetKitten (Seat.SetKittenRequest) returns (Seat.SetKittenResponse)
 
@@ -303,5 +686,6 @@ Crew
 
       .. note::
 
-         A kitten in another seat of the vehicle moves to this one. Throws an exception if
-         the kitten is killed in action, on EVA, or in another vehicle.
+         A kitten in another seat of the vehicle moves to this one, within its habitat zone.
+         Throws an exception if the kitten is killed in action, retired, on EVA, in another
+         vehicle, or incapacitated, or the seat is in another habitat zone.

@@ -11,6 +11,10 @@ Debug
    Changes the state of the simulation directly, as the game's debug windows and console
    commands do: teleporting a vehicle, setting its attitude, refilling its tanks.
 
+   .. macro:: KRPC_CLASS_KSA_DEBUG
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Debug_SetCircularOrbit(krpc_connection_t connection, krpc_KSA_Vehicle_t vehicle, krpc_KSA_Body_t body, double altitude)
 
       Move a vehicle onto a circular orbit around a body, and return once it is there.
@@ -37,8 +41,8 @@ Debug
 
        * **vehicle** -- The vehicle.
        * **body** -- The body to orbit.
-       * **semiMajorAxis** -- The semi-major axis, in meters.
-       * **eccentricity** -- The eccentricity.
+       * **semiMajorAxis** -- The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+       * **eccentricity** -- The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
        * **inclination** -- The inclination, in radians.
        * **longitudeOfAscendingNode** -- The longitude of the ascending node, in radians.
        * **argumentOfPeriapsis** -- The argument of periapsis, in radians.
@@ -139,7 +143,7 @@ Debug
 
    .. function:: krpc_error_t krpc_KSA_Debug_FillResources(krpc_connection_t connection, krpc_KSA_Vehicle_t vehicle)
 
-      Fill the propellant, batteries and other consumables of a vehicle, as the game's
+      Fill the propellant and other substances in the tanks of a vehicle, as the game's
       refill command does.
 
       :Parameters:
@@ -148,9 +152,13 @@ Debug
 
    
 
+      .. note::
+
+         The batteries keep their charge.
+
    .. function:: krpc_error_t krpc_KSA_Debug_EmptyResources(krpc_connection_t connection, krpc_KSA_Vehicle_t vehicle)
 
-      Empty the propellant, batteries and other consumables of a vehicle, as the game's
+      Empty the propellant and other substances in the tanks of a vehicle, as the game's
       empty command does.
 
       :Parameters:
@@ -158,6 +166,10 @@ Debug
        * **vehicle** -- The vehicle.
 
    
+
+      .. note::
+
+         The batteries keep their charge.
 
    .. function:: krpc_error_t krpc_KSA_Debug_DuplicateVehicle(krpc_connection_t connection, krpc_KSA_Vehicle_t * returnValue, krpc_KSA_Vehicle_t vehicle, const char * name)
 

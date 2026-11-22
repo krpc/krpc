@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Parts &#8212; kRPC v0.2.0 documentation</title>
+    <title>Parts &#8212; kRPC v0.3.0 documentation</title>
   
   
   
@@ -26,23 +26,25 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5ab7b574" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'java/api/ksa/parts';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/external-links.js?v=e8892020"></script>
@@ -54,7 +56,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.0" />
+  <meta name="docsearch:version" content="0.3.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -102,7 +104,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -206,14 +208,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -248,7 +250,7 @@
   
 
   
-    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -262,7 +264,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -333,14 +335,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -386,8 +388,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -397,6 +401,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -410,8 +419,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -421,6 +432,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -434,8 +450,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -445,6 +463,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -458,8 +481,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -469,6 +494,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -482,8 +512,10 @@
 <li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
@@ -493,6 +525,42 @@
 <li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../js.html">JavaScript</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -506,8 +574,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -517,6 +587,42 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../http.html">HTTP</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -532,8 +638,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -546,6 +654,11 @@
 </ul>
 </details></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 </ul>
@@ -585,7 +698,7 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../../../index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     
@@ -627,110 +740,173 @@ decoupler separates it. Throws an exception once the part no longer exists.</p>
 </div>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getName()">
- <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getName()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getName()" title="Link to this definition">#</a></dt>
 <dd><p>The id of the part’s template.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getTitle()">
- <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getTitle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getTitle()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getTitle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getTitle()" title="Link to this definition">#</a></dt>
 <dd><p>The name of the part, as shown in the game.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getVehicle()">
- <a class="reference internal" href="vehicle.html#krpc.client.services.KSA.Vehicle" title="krpc.client.services.KSA.Vehicle"><span class="pre">Vehicle</span></a> <span class="sig-name descname"><span class="pre">getVehicle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getVehicle()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="vehicle.html#krpc.client.services.KSA.Vehicle" title="krpc.client.services.KSA.Vehicle"><span class="pre">Vehicle</span></a> <span class="sig-name descname"><span class="pre">getVehicle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getVehicle()" title="Link to this definition">#</a></dt>
 <dd><p>The vehicle the part belongs to.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getParent()">
- <a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getParent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getParent()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getParent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getParent()" title="Link to this definition">#</a></dt>
 <dd><p>The part this part is attached to, or <code class="docutils literal notranslate"><span class="pre">null</span></code> for the root part.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getChildren()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getChildren</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getChildren()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getChildren</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getChildren()" title="Link to this definition">#</a></dt>
 <dd><p>The parts attached to this part.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getSequence()">
- <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getSequence</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getSequence()" title="Link to this definition">#</a></dt>
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getSequence</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getSequence()" title="Link to this definition">#</a></dt>
 <dd><p>The number of the sequence that activates the part, or -1 if no sequence does.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getMass()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getMass()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getMass()" title="Link to this definition">#</a></dt>
 <dd><p>The mass of the part, including its propellant, in kilograms.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getDryMass()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDryMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getDryMass()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDryMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getDryMass()" title="Link to this definition">#</a></dt>
 <dd><p>The mass of the part without its propellant, in kilograms.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getResources()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="resources.html#krpc.client.services.KSA.Resource" title="krpc.client.services.KSA.Resource"><span class="pre">Resource</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getResources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getResources()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="resources.html#krpc.client.services.KSA.Resource" title="krpc.client.services.KSA.Resource"><span class="pre">Resource</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getResources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getResources()" title="Link to this definition">#</a></dt>
 <dd><p>The resources the part holds, one for each substance.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getShieldArealDensity()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getShieldArealDensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getShieldArealDensity()" title="Link to this definition">#</a></dt>
+<dd><p>The areal density of the part’s radiation shielding, its hull included, in
+<span class="math notranslate nohighlight">\(\mathrm{kg/m^{2}}\)</span>. Zero for an unshielded part.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getShieldMass()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getShieldMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getShieldMass()" title="Link to this definition">#</a></dt>
+<dd><p>The mass of the shielding material added to the part, in kilograms. Zero when the
+shielding is built into the hull.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getTankCover()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTankCover</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getTankCover()" title="Link to this definition">#</a></dt>
+<dd><p>The fraction of the sky, seen from the part, that the contents of the vehicle’s tanks
+cover, between 0 and 1. The contents shield the part from radiation.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getDoseRate()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDoseRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getDoseRate()" title="Link to this definition">#</a></dt>
+<dd><p>The radiation dose rate inside the part, behind its shielding and the vehicle’s tanks,
+in sieverts per second. Includes any solar particle event under way. A kitten in the
+part’s seats receives this dose rate.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getHighlight()">
+<a class="reference internal" href="#krpc.client.services.KSA.HighlightColor" title="krpc.client.services.KSA.HighlightColor"><span class="pre">HighlightColor</span></a> <span class="sig-name descname"><span class="pre">getHighlight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getHighlight()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Part.setHighlight(HighlightColor)">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setHighlight</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.KSA.HighlightColor" title="krpc.client.services.KSA.HighlightColor"><span class="pre">HighlightColor</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.setHighlight(HighlightColor)" title="Link to this definition">#</a></dt>
+<dd><p>The color the part is highlighted in.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The life support window uses this highlight to pick parts, and replaces it on
+the parts it picks from.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getTanks()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="resources.html#krpc.client.services.KSA.Tank" title="krpc.client.services.KSA.Tank"><span class="pre">Tank</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getTanks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getTanks()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="resources.html#krpc.client.services.KSA.Tank" title="krpc.client.services.KSA.Tank"><span class="pre">Tank</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getTanks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getTanks()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s propellant tanks. Empty if it has none.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getHabitats()">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="life-support.html#krpc.client.services.KSA.Habitat" title="krpc.client.services.KSA.Habitat"><span class="pre">Habitat</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getHabitats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getHabitats()" title="Link to this definition">#</a></dt>
+<dd><p>The part’s habitats.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getBatteries()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="power.html#krpc.client.services.KSA.Battery" title="krpc.client.services.KSA.Battery"><span class="pre">Battery</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getBatteries</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getBatteries()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="power.html#krpc.client.services.KSA.Battery" title="krpc.client.services.KSA.Battery"><span class="pre">Battery</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getBatteries</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getBatteries()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s batteries.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getSolarPanels()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="power.html#krpc.client.services.KSA.SolarPanel" title="krpc.client.services.KSA.SolarPanel"><span class="pre">SolarPanel</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getSolarPanels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getSolarPanels()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="power.html#krpc.client.services.KSA.SolarPanel" title="krpc.client.services.KSA.SolarPanel"><span class="pre">SolarPanel</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getSolarPanels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getSolarPanels()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s solar panels.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getGenerators()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="power.html#krpc.client.services.KSA.Generator" title="krpc.client.services.KSA.Generator"><span class="pre">Generator</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getGenerators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getGenerators()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="power.html#krpc.client.services.KSA.Generator" title="krpc.client.services.KSA.Generator"><span class="pre">Generator</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getGenerators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getGenerators()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s generators.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getPowerConsumers()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="power.html#krpc.client.services.KSA.PowerConsumer" title="krpc.client.services.KSA.PowerConsumer"><span class="pre">PowerConsumer</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getPowerConsumers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getPowerConsumers()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="power.html#krpc.client.services.KSA.PowerConsumer" title="krpc.client.services.KSA.PowerConsumer"><span class="pre">PowerConsumer</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getPowerConsumers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getPowerConsumers()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s power consumers.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getPowerForecast()">
+<a class="reference internal" href="power.html#krpc.client.services.KSA.PowerForecast" title="krpc.client.services.KSA.PowerForecast"><span class="pre">PowerForecast</span></a> <span class="sig-name descname"><span class="pre">getPowerForecast</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getPowerForecast()" title="Link to this definition">#</a></dt>
+<dd><p>The charge, draw and supply of the electrical circuit the part is on.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getAvionics()">
+<a class="reference internal" href="power.html#krpc.client.services.KSA.Avionics" title="krpc.client.services.KSA.Avionics"><span class="pre">Avionics</span></a> <span class="sig-name descname"><span class="pre">getAvionics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getAvionics()" title="Link to this definition">#</a></dt>
+<dd><p>The part’s avionics, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has none. A probe core has avionics.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getLights()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="power.html#krpc.client.services.KSA.Light" title="krpc.client.services.KSA.Light"><span class="pre">Light</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getLights</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getLights()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="power.html#krpc.client.services.KSA.Light" title="krpc.client.services.KSA.Light"><span class="pre">Light</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getLights</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getLights()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s lights.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getDeployables()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.KSA.Deployable" title="krpc.client.services.KSA.Deployable"><span class="pre">Deployable</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getDeployables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getDeployables()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.KSA.Deployable" title="krpc.client.services.KSA.Deployable"><span class="pre">Deployable</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getDeployables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getDeployables()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s deployable sections. A part can have several, such as the doors of a
 service module.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getMagneticScoops()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.KSA.MagneticScoop" title="krpc.client.services.KSA.MagneticScoop"><span class="pre">MagneticScoop</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getMagneticScoops</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getMagneticScoops()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.KSA.MagneticScoop" title="krpc.client.services.KSA.MagneticScoop"><span class="pre">MagneticScoop</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getMagneticScoops</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getMagneticScoops()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s magnetic scoops. Empty if it has none.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.position(ReferenceFrame)">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><span class="pre">Triplet</span><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">position</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.position(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">position</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.position(ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The position of the part’s origin, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -743,7 +919,7 @@ service module.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.velocity(ReferenceFrame)">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><span class="pre">Triplet</span><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.velocity(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.velocity(ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The velocity of the part’s origin, in meters per second.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -756,7 +932,7 @@ service module.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.rotation(ReferenceFrame)">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><span class="pre">Quartet</span><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">rotation</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.rotation(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">rotation</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.rotation(ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The rotation of the part’s axes, relative to the given frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -769,50 +945,86 @@ service module.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getEngine()">
- <a class="reference internal" href="#krpc.client.services.KSA.Engine" title="krpc.client.services.KSA.Engine"><span class="pre">Engine</span></a> <span class="sig-name descname"><span class="pre">getEngine</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getEngine()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.Engine" title="krpc.client.services.KSA.Engine"><span class="pre">Engine</span></a> <span class="sig-name descname"><span class="pre">getEngine</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getEngine()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s engine, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has none.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getGimbals()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.KSA.Gimbal" title="krpc.client.services.KSA.Gimbal"><span class="pre">Gimbal</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getGimbals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getGimbals()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.KSA.Gimbal" title="krpc.client.services.KSA.Gimbal"><span class="pre">Gimbal</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getGimbals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getGimbals()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s gimbals. An engine part can have several, each steering one nozzle.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getRCS()">
- <a class="reference internal" href="#krpc.client.services.KSA.RCS" title="krpc.client.services.KSA.RCS"><span class="pre">RCS</span></a> <span class="sig-name descname"><span class="pre">getRCS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getRCS()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.RCS" title="krpc.client.services.KSA.RCS"><span class="pre">RCS</span></a> <span class="sig-name descname"><span class="pre">getRCS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getRCS()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s RCS thrusters, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has none.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getDecoupler()">
- <a class="reference internal" href="#krpc.client.services.KSA.Decoupler" title="krpc.client.services.KSA.Decoupler"><span class="pre">Decoupler</span></a> <span class="sig-name descname"><span class="pre">getDecoupler</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getDecoupler()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.Decoupler" title="krpc.client.services.KSA.Decoupler"><span class="pre">Decoupler</span></a> <span class="sig-name descname"><span class="pre">getDecoupler</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getDecoupler()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s decoupler, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has none.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getParachute()">
- <a class="reference internal" href="#krpc.client.services.KSA.Parachute" title="krpc.client.services.KSA.Parachute"><span class="pre">Parachute</span></a> <span class="sig-name descname"><span class="pre">getParachute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getParachute()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.Parachute" title="krpc.client.services.KSA.Parachute"><span class="pre">Parachute</span></a> <span class="sig-name descname"><span class="pre">getParachute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getParachute()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s parachute, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has none.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getDockingPort()">
- <a class="reference internal" href="#krpc.client.services.KSA.DockingPort" title="krpc.client.services.KSA.DockingPort"><span class="pre">DockingPort</span></a> <span class="sig-name descname"><span class="pre">getDockingPort</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getDockingPort()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.DockingPort" title="krpc.client.services.KSA.DockingPort"><span class="pre">DockingPort</span></a> <span class="sig-name descname"><span class="pre">getDockingPort</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getDockingPort()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s docking port, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has none.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getSeats()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="crew.html#krpc.client.services.KSA.Seat" title="krpc.client.services.KSA.Seat"><span class="pre">Seat</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getSeats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getSeats()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="crew.html#krpc.client.services.KSA.Seat" title="krpc.client.services.KSA.Seat"><span class="pre">Seat</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getSeats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getSeats()" title="Link to this definition">#</a></dt>
 <dd><p>The part’s crew seats.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Part.getCrew()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="crew.html#krpc.client.services.KSA.Kitten" title="krpc.client.services.KSA.Kitten"><span class="pre">Kitten</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCrew</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getCrew()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="crew.html#krpc.client.services.KSA.Kitten" title="krpc.client.services.KSA.Kitten"><span class="pre">Kitten</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCrew</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Part.getCrew()" title="Link to this definition">#</a></dt>
 <dd><p>The kittens in the part’s seats.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HighlightColor">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">HighlightColor</span></span><a class="headerlink" href="#krpc.client.services.KSA.HighlightColor" title="Link to this definition">#</a></dt>
+<dd><p>The color of a part’s highlight. See <a class="reference internal" href="#krpc.client.services.KSA.Part.getHighlight()" title="krpc.client.services.KSA.Part.getHighlight()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getHighlight()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HighlightColor.NONE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.HighlightColor" title="krpc.client.services.KSA.HighlightColor"><span class="pre">HighlightColor</span></a> <span class="sig-name descname"><span class="pre">NONE</span></span><a class="headerlink" href="#krpc.client.services.KSA.HighlightColor.NONE" title="Link to this definition">#</a></dt>
+<dd><p>Not highlighted.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HighlightColor.GREEN">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.HighlightColor" title="krpc.client.services.KSA.HighlightColor"><span class="pre">HighlightColor</span></a> <span class="sig-name descname"><span class="pre">GREEN</span></span><a class="headerlink" href="#krpc.client.services.KSA.HighlightColor.GREEN" title="Link to this definition">#</a></dt>
+<dd><p>Green.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HighlightColor.YELLOW">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.HighlightColor" title="krpc.client.services.KSA.HighlightColor"><span class="pre">HighlightColor</span></a> <span class="sig-name descname"><span class="pre">YELLOW</span></span><a class="headerlink" href="#krpc.client.services.KSA.HighlightColor.YELLOW" title="Link to this definition">#</a></dt>
+<dd><p>Yellow.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HighlightColor.RED">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.HighlightColor" title="krpc.client.services.KSA.HighlightColor"><span class="pre">HighlightColor</span></a> <span class="sig-name descname"><span class="pre">RED</span></span><a class="headerlink" href="#krpc.client.services.KSA.HighlightColor.RED" title="Link to this definition">#</a></dt>
+<dd><p>Red.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HighlightColor.PURPLE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.HighlightColor" title="krpc.client.services.KSA.HighlightColor"><span class="pre">HighlightColor</span></a> <span class="sig-name descname"><span class="pre">PURPLE</span></span><a class="headerlink" href="#krpc.client.services.KSA.HighlightColor.PURPLE" title="Link to this definition">#</a></dt>
+<dd><p>Purple.</p>
 </dd></dl>
 
 </dd></dl>
@@ -828,65 +1040,132 @@ See <a class="reference internal" href="control.html#krpc.client.services.KSA.Co
 </div>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.getPart()">
- <a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getPart()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getPart()" title="Link to this definition">#</a></dt>
 <dd><p>The part the engine is in.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.getGimbals()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.KSA.Gimbal" title="krpc.client.services.KSA.Gimbal"><span class="pre">Gimbal</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getGimbals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getGimbals()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.KSA.Gimbal" title="krpc.client.services.KSA.Gimbal"><span class="pre">Gimbal</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getGimbals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getGimbals()" title="Link to this definition">#</a></dt>
 <dd><p>The gimbals that steer the engine’s nozzles. Empty if the engine has none.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.getActive()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getActive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getActive()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getActive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getActive()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.setActive(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setActive</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.setActive(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setActive</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.setActive(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the engine is active, as when its sequence is activated. Setting it returns
 once the change has applied.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.getHasPropellant()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getHasPropellant</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getHasPropellant()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getHasPropellant</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getHasPropellant()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the engine has propellant to burn.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.getMinimumThrottle()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinimumThrottle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getMinimumThrottle()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinimumThrottle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getMinimumThrottle()" title="Link to this definition">#</a></dt>
 <dd><p>The lowest throttle the engine runs at, between 0 and 1.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.getPropellants()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getPropellants</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getPropellants()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getPropellants</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getPropellants()" title="Link to this definition">#</a></dt>
 <dd><p>The names of the substances the engine burns. See <a class="reference internal" href="resources.html#krpc.client.services.KSA.Resource.getName()" title="krpc.client.services.KSA.Resource.getName()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Resource.getName()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.getThrust()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getThrust()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getThrust()" title="Link to this definition">#</a></dt>
 <dd><p>The thrust of the engine at its current throttle and the current atmospheric
 pressure, in Newtons. Zero when it is not firing.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.getAvailableThrust()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAvailableThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getAvailableThrust()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAvailableThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getAvailableThrust()" title="Link to this definition">#</a></dt>
 <dd><p>The thrust of the engine at full throttle and the current atmospheric pressure, in
 Newtons. Zero when it is inactive or has no propellant.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.getSpecificImpulse()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpecificImpulse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getSpecificImpulse()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpecificImpulse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getSpecificImpulse()" title="Link to this definition">#</a></dt>
 <dd><p>The specific impulse of the engine at the current atmospheric pressure, in seconds.
 Zero when it is inactive or has no propellant.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.availableThrustAt(float)">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">availableThrustAt</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">pressure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.availableThrustAt(float)" title="Link to this definition">#</a></dt>
+<dd><p>The thrust of the engine at full throttle and the given atmospheric pressure, in
+Newtons. Zero when it is inactive or has no propellant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pressure</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – The atmospheric pressure, in pascals.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.specificImpulseAt(float)">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">specificImpulseAt</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">pressure</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.specificImpulseAt(float)" title="Link to this definition">#</a></dt>
+<dd><p>The specific impulse of the engine at the given atmospheric pressure, in seconds.
+Zero when it is inactive or has no propellant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pressure</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – The atmospheric pressure, in pascals.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.getMaxThrust()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getMaxThrust()" title="Link to this definition">#</a></dt>
+<dd><p>The thrust of the engine at full throttle and the current atmospheric pressure, in
+Newtons, whether or not it is active and has propellant.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.getMaxVacuumThrust()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxVacuumThrust</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getMaxVacuumThrust()" title="Link to this definition">#</a></dt>
+<dd><p>The thrust of the engine at full throttle in a vacuum, in Newtons, whether or not
+it is active and has propellant.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.getChamberPressure()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getChamberPressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getChamberPressure()" title="Link to this definition">#</a></dt>
+<dd><p>The pressure in the engine’s combustion chamber, in pascals. Zero when it is not
+firing.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.getSolid()">
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getSolid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getSolid()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the engine is a solid rocket motor. Once ignited, a solid motor burns at
+full thrust until its grain runs out.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Engine.getGrainMass()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getGrainMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Engine.getGrainMass()" title="Link to this definition">#</a></dt>
+<dd><p>The mass of the propellant grain of a solid rocket motor, in kilograms.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some of the grain is left unburned when the motor burns out. Throws an exception
+if the engine is not a solid rocket motor.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -903,45 +1182,45 @@ The flight computer steers it while an engine it belongs to is <a class="referen
 </div>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Gimbal.getPart()">
- <a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Gimbal.getPart()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Gimbal.getPart()" title="Link to this definition">#</a></dt>
 <dd><p>The part the gimbal is in.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Gimbal.getAngleY()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAngleY</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Gimbal.getAngleY()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAngleY</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Gimbal.getAngleY()" title="Link to this definition">#</a></dt>
 <dd><p>The angle of the gimbal about its y axis, in degrees.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Gimbal.getAngleZ()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAngleZ</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Gimbal.getAngleZ()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAngleZ</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Gimbal.getAngleZ()" title="Link to this definition">#</a></dt>
 <dd><p>The angle of the gimbal about its z axis, in degrees.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Gimbal.getMaxAngleY()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxAngleY</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Gimbal.getMaxAngleY()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxAngleY</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Gimbal.getMaxAngleY()" title="Link to this definition">#</a></dt>
 <dd><p>The largest angle of the gimbal about its y axis, in degrees. Zero if it does not
 turn about that axis.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Gimbal.getMaxAngleZ()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxAngleZ</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Gimbal.getMaxAngleZ()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxAngleZ</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Gimbal.getMaxAngleZ()" title="Link to this definition">#</a></dt>
 <dd><p>The largest angle of the gimbal about its z axis, in degrees. Zero if it does not
 turn about that axis.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Gimbal.getActive()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getActive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Gimbal.getActive()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getActive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Gimbal.getActive()" title="Link to this definition">#</a></dt>
 <dd><p>Whether an engine the gimbal steers is active.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Gimbal.rotation(ReferenceFrame)">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><span class="pre">Quartet</span><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">rotation</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Gimbal.rotation(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">rotation</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Gimbal.rotation(ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The rotation of the gimbal’s mount, whose y and z axes the gimbal turns about.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -964,18 +1243,18 @@ turn about that axis.</p>
 </div>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.RCS.getPart()">
- <a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.RCS.getPart()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.RCS.getPart()" title="Link to this definition">#</a></dt>
 <dd><p>The part the thrusters are in.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.RCS.getActive()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getActive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.RCS.getActive()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getActive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.RCS.getActive()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.RCS.setActive(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setActive</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.RCS.setActive(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setActive</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.RCS.setActive(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the thrusters are active. Setting it returns once the change has applied.</p>
 </dd></dl>
 
@@ -987,25 +1266,25 @@ turn about that axis.</p>
 <dd><p>A decoupler. Obtained from <a class="reference internal" href="#krpc.client.services.KSA.Part.getDecoupler()" title="krpc.client.services.KSA.Part.getDecoupler()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getDecoupler()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Decoupler.getPart()">
- <a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Decoupler.getPart()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Decoupler.getPart()" title="Link to this definition">#</a></dt>
 <dd><p>The part the decoupler is in.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Decoupler.getEnabled()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Decoupler.getEnabled()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Decoupler.getEnabled()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the decoupler can fire.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Decoupler.getDecoupled()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getDecoupled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Decoupler.getDecoupled()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getDecoupled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Decoupler.getDecoupled()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the decoupler has fired, or is attached to nothing.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Decoupler.decouple()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="vehicle.html#krpc.client.services.KSA.Vehicle" title="krpc.client.services.KSA.Vehicle"><span class="pre">Vehicle</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">decouple</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Decoupler.decouple()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="vehicle.html#krpc.client.services.KSA.Vehicle" title="krpc.client.services.KSA.Vehicle"><span class="pre">Vehicle</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">decouple</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Decoupler.decouple()" title="Link to this definition">#</a></dt>
 <dd><p>Fire the decoupler, separating the vehicle into two. Returns once it has fired.
 Throws an exception if the decoupler is disabled or <a class="reference internal" href="#krpc.client.services.KSA.Decoupler.getDecoupled()" title="krpc.client.services.KSA.Decoupler.getDecoupled()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Decoupler.getDecoupled()</span></code></a>.</p>
 <dl class="field-list simple">
@@ -1023,44 +1302,44 @@ Throws an exception if the decoupler is disabled or <a class="reference internal
 <dd><p>A parachute. Obtained from <a class="reference internal" href="#krpc.client.services.KSA.Part.getParachute()" title="krpc.client.services.KSA.Part.getParachute()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getParachute()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Parachute.getPart()">
- <a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Parachute.getPart()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Parachute.getPart()" title="Link to this definition">#</a></dt>
 <dd><p>The part the parachute is in.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Parachute.getState()">
- <a class="reference internal" href="#krpc.client.services.KSA.ParachuteState" title="krpc.client.services.KSA.ParachuteState"><span class="pre">ParachuteState</span></a> <span class="sig-name descname"><span class="pre">getState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Parachute.getState()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.ParachuteState" title="krpc.client.services.KSA.ParachuteState"><span class="pre">ParachuteState</span></a> <span class="sig-name descname"><span class="pre">getState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Parachute.getState()" title="Link to this definition">#</a></dt>
 <dd><p>The state of the parachute.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Parachute.getFill()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getFill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Parachute.getFill()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getFill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Parachute.getFill()" title="Link to this definition">#</a></dt>
 <dd><p>How far the canopy is open, from 0 to 1.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Parachute.getDeployAltitude()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDeployAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Parachute.getDeployAltitude()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDeployAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Parachute.getDeployAltitude()" title="Link to this definition">#</a></dt>
 <dd><p>The height above the terrain at which an armed parachute deploys, in meters.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Parachute.getCanCut()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCanCut</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Parachute.getCanCut()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCanCut</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Parachute.getCanCut()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the parachute can be cut away. Main parachutes cannot.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Parachute.deploy()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">deploy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Parachute.deploy()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">deploy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Parachute.deploy()" title="Link to this definition">#</a></dt>
 <dd><p>Arm the parachute, so that it deploys at <a class="reference internal" href="#krpc.client.services.KSA.Parachute.getDeployAltitude()" title="krpc.client.services.KSA.Parachute.getDeployAltitude()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Parachute.getDeployAltitude()</span></code></a>. Returns once
 it is armed. Throws an exception if it is not stowed.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Parachute.cut()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">cut</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Parachute.cut()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">cut</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Parachute.cut()" title="Link to this definition">#</a></dt>
 <dd><p>Cut the parachute away. Returns once it is cut. Throws an exception if it cannot
 be cut. See <a class="reference internal" href="#krpc.client.services.KSA.Parachute.getCanCut()" title="krpc.client.services.KSA.Parachute.getCanCut()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Parachute.getCanCut()</span></code></a>.</p>
 </dd></dl>
@@ -1133,25 +1412,42 @@ be cut. See <a class="reference internal" href="#krpc.client.services.KSA.Parach
 <dd><p>A docking port. Obtained from <a class="reference internal" href="#krpc.client.services.KSA.Part.getDockingPort()" title="krpc.client.services.KSA.Part.getDockingPort()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getDockingPort()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.DockingPort.getPart()">
- <a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.DockingPort.getPart()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.DockingPort.getPart()" title="Link to this definition">#</a></dt>
 <dd><p>The part the docking port is in.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.DockingPort.getDocked()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getDocked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.DockingPort.getDocked()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getDocked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.DockingPort.getDocked()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the port is docked.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.DockingPort.getDockedPart()">
- <a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getDockedPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.DockingPort.getDockedPart()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getDockedPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.DockingPort.getDockedPart()" title="Link to this definition">#</a></dt>
 <dd><p>The part the port is docked to, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it is not docked.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.DockingPort.getHatchOpen()">
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getHatchOpen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.DockingPort.getHatchOpen()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.DockingPort.setHatchOpen(boolean)">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setHatchOpen</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.DockingPort.setHatchOpen(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether the hatch through the docked ports is open, and opens or closes it.
+An open hatch joins the habitat zones on either side.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The hatch is closed while the port is not docked. Throws an exception when set on a
+port that is not docked.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.DockingPort.undock()">
- <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="vehicle.html#krpc.client.services.KSA.Vehicle" title="krpc.client.services.KSA.Vehicle"><span class="pre">Vehicle</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">undock</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.DockingPort.undock()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="vehicle.html#krpc.client.services.KSA.Vehicle" title="krpc.client.services.KSA.Vehicle"><span class="pre">Vehicle</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">undock</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.DockingPort.undock()" title="Link to this definition">#</a></dt>
 <dd><p>Undock the port, separating the vehicle into two. Returns once it has undocked.
 Throws an exception if the port is not docked.</p>
 <dl class="field-list simple">
@@ -1179,19 +1475,19 @@ in the game does.</p>
 </div>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Deployable.getPart()">
- <a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Deployable.getPart()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Deployable.getPart()" title="Link to this definition">#</a></dt>
 <dd><p>The part the deployable is in.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Deployable.getState()">
- <a class="reference internal" href="#krpc.client.services.KSA.DeployableState" title="krpc.client.services.KSA.DeployableState"><span class="pre">DeployableState</span></a> <span class="sig-name descname"><span class="pre">getState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Deployable.getState()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.DeployableState" title="krpc.client.services.KSA.DeployableState"><span class="pre">DeployableState</span></a> <span class="sig-name descname"><span class="pre">getState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Deployable.getState()" title="Link to this definition">#</a></dt>
 <dd><p>The state of the part.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Deployable.deploy()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">deploy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Deployable.deploy()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">deploy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Deployable.deploy()" title="Link to this definition">#</a></dt>
 <dd><p>Deploy the part. Returns once it has started to move.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1201,7 +1497,7 @@ in the game does.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Deployable.retract()">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">retract</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Deployable.retract()" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">retract</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Deployable.retract()" title="Link to this definition">#</a></dt>
 <dd><p>Retract the part. Returns once it has started to move.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1254,30 +1550,30 @@ in the game does.</p>
 <a class="reference internal" href="#krpc.client.services.KSA.Part.getMagneticScoops()" title="krpc.client.services.KSA.Part.getMagneticScoops()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getMagneticScoops()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.MagneticScoop.getPart()">
- <a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MagneticScoop.getPart()" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MagneticScoop.getPart()" title="Link to this definition">#</a></dt>
 <dd><p>The part the scoop is in.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.MagneticScoop.getActive()">
- <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getActive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MagneticScoop.getActive()" title="Link to this definition">#</a></dt>
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getActive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MagneticScoop.getActive()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.MagneticScoop.setActive(boolean)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setActive</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MagneticScoop.setActive(boolean)" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">setActive</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MagneticScoop.setActive(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the scoop is switched on.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.MagneticScoop.getSubstance()">
- <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getSubstance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MagneticScoop.getSubstance()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getSubstance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MagneticScoop.getSubstance()" title="Link to this definition">#</a></dt>
 <dd><p>The name of the substance the scoop collects. See <a class="reference internal" href="resources.html#krpc.client.services.KSA.Resource.getName()" title="krpc.client.services.KSA.Resource.getName()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Resource.getName()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.MagneticScoop.getCollectionRate()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCollectionRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MagneticScoop.getCollectionRate()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCollectionRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MagneticScoop.getCollectionRate()" title="Link to this definition">#</a></dt>
 <dd><p>The rate the scoop collects gas at, in kilograms per second.</p>
 </dd></dl>
 
@@ -1320,7 +1616,7 @@ in the game does.</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -1346,8 +1642,8 @@ in the game does.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1380,7 +1676,7 @@ in the game does.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

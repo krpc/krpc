@@ -10,3 +10,4 @@ for KSA.
    tutorials/launch-into-orbit
    tutorials/circularize
    tutorials/raise-orbit
+   tutorials/launch-with-kfs

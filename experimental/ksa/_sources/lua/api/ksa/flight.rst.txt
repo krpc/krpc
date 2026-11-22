@@ -16,14 +16,12 @@ Flight
       The altitude above the mean radius of the body, in meters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: surface_altitude: number
 
       The altitude above the terrain or the ocean surface, whichever is higher, in meters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: bedrock_altitude: number
 
@@ -31,7 +29,6 @@ Flight
       the sea floor.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: elevation: number
 
@@ -39,7 +36,6 @@ Flight
       body. Below the sea, this is the height of the sea floor.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: time_to_impact: number
 
@@ -47,7 +43,6 @@ Flight
       Not a number if its trajectory does not hit the surface.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -59,42 +54,36 @@ Flight
       The latitude of the vehicle, in degrees.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: longitude: number
 
       The longitude of the vehicle, in degrees.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. attribute:: biome: string
+   .. attribute:: biome: string | nil
 
       The biome below the vehicle, or ``nil`` if the body has no biomes.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string or ``Types.none``
 
    .. attribute:: speed: number
 
       The speed of the vehicle relative to the surface, in meters per second.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: horizontal_speed: number
 
       The horizontal speed of the vehicle relative to the surface, in meters per second.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: vertical_speed: number
 
       The vertical speed of the vehicle relative to the surface, in meters per second.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: pitch: number
 
@@ -102,7 +91,6 @@ Flight
       A value between -90° and +90°.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: heading: number
 
@@ -110,7 +98,6 @@ Flight
       A value between 0° and 360°.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: roll: number
 
@@ -118,28 +105,75 @@ Flight
       A value between -180° and +180°.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: static_pressure: number
 
       The static atmospheric pressure at the vehicle, in pascals.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: atmosphere_density: number
 
       The density of the atmosphere at the vehicle, in kilograms per cubic meter.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
+
+   .. attribute:: static_air_temperature: number
+
+      The temperature of the atmosphere at the vehicle, in kelvin. Zero outside the
+      atmosphere.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: speed_of_sound: number
+
+      The speed of sound in the atmosphere at the vehicle, in meters per second. Zero
+      outside the atmosphere.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: mach: number
+
+      The speed of the vehicle relative to the surface, as a multiple of the speed of
+      sound. Zero outside the atmosphere.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: outside_air: KSA.OutsideAir
+
+      Whether a kitten can breathe the air outside the vehicle.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: dynamic_pressure: number
 
       The dynamic pressure acting on the vehicle, in pascals.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
+
+   .. attribute:: depth: number
+
+      The depth of the vehicle's center of mass below the ocean surface, in meters. Zero
+      above the surface.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The ocean surface includes its waves.
+
+   .. attribute:: submerged_portion: number
+
+      The fraction of the vehicle's volume below the ocean surface, between 0 and 1.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: buoyant_force: number
+
+      The buoyant force on the vehicle from the ocean and the atmosphere, in newtons. It
+      acts against gravity.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: dose_rate: number
 
@@ -147,7 +181,6 @@ Flight
       particle event under way.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: orbit_average_dose_rate: number
 
@@ -156,7 +189,47 @@ Flight
       magnetosphere, or the orbit dips below the surface.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
+
+   .. attribute:: solar_wind_speed: number
+
+      The speed of the solar wind at the vehicle, in :math:`\mathrm{m/s}`. Zero if no star
+      has a solar wind.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: solar_wind_pressure: number
+
+      The dynamic pressure of the solar wind at the vehicle, in pascals.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: solar_wind_northward_field: number
+
+      The northward component of the magnetic field carried by the solar wind at the
+      vehicle, in teslas. A southward field, a negative value, drives geomagnetic storms.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: proton_flux: number
+
+      The flux of solar energetic protons at the vehicle during a solar particle event, in
+      protons per square centimeter per second per steradian. Zero outside an event.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: radiation_storm_level: number
+
+      The level of the radiation storm at the vehicle, from 0 for none to 5 for the
+      most severe. The S level of the game's space weather window.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: incoming_coronal_mass_ejections: List
+
+      The coronal mass ejections heading for the vehicle, as the game's space weather
+      window lists them.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: g_force: number
 
@@ -164,7 +237,6 @@ Flight
       gravity.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: angle_of_attack: number
 
@@ -173,7 +245,6 @@ Flight
       above the velocity.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: sideslip_angle: number
 
@@ -182,27 +253,93 @@ Flight
       the right of the velocity.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. method:: prograde(reference_frame)
+   .. attribute:: drag: number
+
+      The part of the aerodynamic force along the airflow, in newtons.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: lift: number
+
+      The part of the aerodynamic force across the airflow, in newtons.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: aerodynamic_force(reference_frame: KSA.ReferenceFrame): Tuple
+
+      The aerodynamic force on the vehicle, in newtons.
+
+      :param reference_frame: The reference frame of the force.
+
+      .. note::
+
+         The game computes the force from the surfaces of the vehicle's hull.
+
+   .. method:: aerodynamic_torque(reference_frame: KSA.ReferenceFrame): Tuple
+
+      The aerodynamic torque on the vehicle about its center of mass, in
+      :math:`\mathrm{N \cdot m}`. The vector points along the axis of the torque.
+
+      :param reference_frame: The reference frame of the torque.
+
+   .. method:: simulate_aerodynamic_force_at(body: KSA.Body, position: Tuple, velocity: Tuple, reference_frame: KSA.ReferenceFrame): Tuple
+
+      The aerodynamic force the vehicle would have at a given position and velocity, in
+      its current attitude and rotation, in newtons.
+
+      :param body: The body whose atmosphere the vehicle flies through.
+      :param position: The position, in meters.
+      :param velocity: The velocity, in meters per second.
+      :param reference_frame: The reference frame of the position, velocity and force.
+
+      .. note::
+
+         The atmosphere moves with the body's rotation.
+
+   .. method:: prograde(reference_frame: KSA.ReferenceFrame): Tuple
 
       The unit vector of the vehicle's velocity relative to the surface.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the direction.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the direction.
 
-   .. method:: normal(reference_frame)
+   .. method:: normal(reference_frame: KSA.ReferenceFrame): Tuple
 
       The unit vector normal to the plane of the vehicle's position and its velocity
       relative to the surface.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the direction.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the direction.
 
-   .. method:: radial(reference_frame)
+   .. method:: radial(reference_frame: KSA.ReferenceFrame): Tuple
 
       The unit vector pointing radially outward, perpendicular to :meth:`KSA.Flight.prograde`
       and :meth:`KSA.Flight.normal`.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the direction.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the direction.
+
+
+
+.. class:: OutsideAir
+
+   Whether a kitten can breathe the air outside a vehicle. See
+   :attr:`KSA.Flight.outside_air`.
+
+
+   .. data:: no_atmosphere
+
+      Outside the atmosphere, or at a body with none.
+
+
+   .. data:: no_oxygen
+
+      An atmosphere with no oxygen.
+
+
+   .. data:: too_thin
+
+      An atmosphere whose oxygen pressure is too low to breathe.
+
+
+   .. data:: breathable
+
+      Breathable air.

@@ -153,9 +153,42 @@ Orbit
 
       :Game Scenes: All
 
+   .. property:: double SemiLatusRectum { get; }
+
+      The `semi-latus rectum <https://en.wikipedia.org/wiki/Conic_section#Conic_parameters>`_ of the orbit, in meters.
+
+      :Game Scenes: All
+
+   .. property:: double SpecificAngularMomentum { get; }
+
+      The specific angular momentum of the orbit, in :math:`\mathrm{m^{2}/s}`.
+
+      :Game Scenes: All
+
    .. function:: double TrueAnomalyAtUT(double ut)
 
       The true anomaly at the given time, in radians.
+
+      :parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+      :Game Scenes: All
+
+   .. function:: double MeanAnomalyAtUT(double ut)
+
+      The mean anomaly at the given time, in radians.
+
+      :parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+      :Game Scenes: All
+
+   .. function:: double EccentricAnomalyAtUT(double ut)
+
+      The eccentric anomaly at the given time, in radians. For a hyperbolic orbit, this
+      is the hyperbolic anomaly.
 
       :parameters:
 
@@ -175,10 +208,39 @@ Orbit
 
       :Game Scenes: All
 
+   .. function:: double TrueAnomalyAtRadius(double radius)
+
+      The true anomaly at which the orbit reaches the given distance from the center of
+      the body, in radians, between 0 and :math:`\pi`. Not a number if the orbit
+      never reaches it.
+
+      :parameters:
+
+       * **radius** -- The distance from the center of the body, in meters.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The orbit also reaches the distance at the negative of this anomaly. Zero for a
+         circular orbit at the distance. Throws an exception if the distance is not
+         positive.
+
    .. function:: double RadiusAt(double ut)
 
       The distance from the center of the body being orbited at the given time, in
       meters.
+
+      :parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+      :Game Scenes: All
+
+   .. function:: double SpeedAt(double ut)
+
+      The orbital speed at the given time, in meters per second.
 
       :parameters:
 
@@ -309,6 +371,65 @@ Orbit
       ``null`` if there is none.
 
       :Game Scenes: All
+
+   .. function:: static Orbit CreateFromElements(IConnection connection, Body body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+
+      Create the orbit with the given elements around a body. The angles are those of
+      :type:`Orbit`.
+
+      :parameters:
+
+       * **body** -- The body being orbited.
+       * **semiMajorAxis** -- The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+       * **eccentricity** -- The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
+       * **inclination** -- The inclination, in radians.
+       * **longitudeOfAscendingNode** -- The longitude of the ascending node, in radians.
+       * **argumentOfPeriapsis** -- The argument of periapsis, in radians.
+       * **meanAnomalyAtEpoch** -- The mean anomaly at the epoch, in radians.
+       * **epoch** -- The universal time of the epoch, in seconds.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The orbit is a single conic around *body*, with no
+         :prop:`Orbit.NextOrbit`. It is held until :meth:`Orbit.Remove` is called on it, or
+         the client that created it disconnects.
+
+   .. function:: static Orbit CreateFromPositionAndVelocity(IConnection connection, Body body, System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, double ut, ReferenceFrame referenceFrame)
+
+      Create the orbit around a body through the given position and velocity.
+
+      :parameters:
+
+       * **body** -- The body being orbited.
+       * **position** -- The position, in meters, relative to where the body is now.
+       * **velocity** -- The velocity, in meters per second.
+       * **ut** -- The universal time of the position and velocity, in seconds.
+       * **referenceFrame** -- The reference frame of the position and velocity.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The orbit is a single conic around *body*, with no
+         :prop:`Orbit.NextOrbit`. It is held until :meth:`Orbit.Remove` is called on it, or
+         the client that created it disconnects.
+
+   .. function:: void Remove()
+
+      Remove an orbit created by :meth:`Orbit.CreateFromElements` or
+      :meth:`Orbit.CreateFromPositionAndVelocity`.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the orbit was not created by a client.
 
 
 

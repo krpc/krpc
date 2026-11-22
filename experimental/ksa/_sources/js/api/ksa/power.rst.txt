@@ -1,0 +1,447 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Power
+=====
+
+
+.. class:: Battery
+
+   A battery, which stores electrical energy. Obtained from :meth:`KSA.Part.getBatteries`.
+
+   .. method:: getPart()
+
+      The part the battery is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getStoredEnergy()
+
+      The energy stored in the battery, in joules.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getEnergyCapacity()
+
+      The energy the battery can store, in joules.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+
+
+.. class:: SolarPanel
+
+   A solar panel, which turns sunlight into electrical power. Obtained from :meth:`KSA.Part.getSolarPanels`.
+
+   .. method:: getPart()
+
+      The part the solar panel is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getActive()
+
+      Whether the solar panel can produce power, because it is deployed or does not deploy.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getPower()
+
+      The power the solar panel produces, in watts.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSunAngle()
+
+      The angle between the solar panel's face and the direction to the sun, in degrees.
+      Zero when the panel faces the sun.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getOccluded()
+
+      Whether a body blocks the sunlight to the solar panel.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getDeployable()
+
+      The deployable section that opens the solar panel, or ``null`` for a panel that
+      does not deploy.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Deployable` or ``null``
+   
+
+
+
+.. class:: Generator
+
+   A generator, which produces electrical power. Obtained from :meth:`KSA.Part.getGenerators`.
+
+   .. note::
+
+      A generator runs while its :meth:`KSA.Generator.getEngine` is active, and produces power in
+      proportion to the engine's throttle.
+
+   .. method:: getPart()
+
+      The part the generator is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getEngine()
+
+      The engine that drives the generator, or ``null`` if it has none.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Engine` or ``null``
+   
+
+   .. method:: getActive()
+
+      Whether the generator is producing power.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getPower()
+
+      The power the generator produces, in watts.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+
+
+.. class:: PowerConsumer
+
+   A power consumer, which uses electrical power, such as a light. Obtained from
+   :meth:`KSA.Part.getPowerConsumers`.
+
+   .. method:: getPart()
+
+      The part the power consumer is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getActive()
+
+      Whether the part is using power.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getPower()
+
+      The power the part uses, in watts.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getHasPowerSwitch()
+
+      Whether the part has a power switch, as a probe core does.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getMode()
+               setMode(value)
+
+      The setting of the power switch.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.PowerMode`
+   
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+   .. method:: getStandbyInStorms()
+               setStandbyInStorms(value)
+
+      Whether the part goes on standby, drawing no power, while a radiation storm is under
+      way at the vehicle.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         The game takes a storm of level 1 or worse on the S scale, as
+         :meth:`KSA.Flight.getRadiationStormLevel` gives. Throws an exception if the part has
+         no power switch.
+
+   .. method:: getStatus()
+
+      The power status of the part.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.PowerStatus`
+   
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+
+
+.. class:: PowerMode
+
+   The setting of a power switch. See :meth:`KSA.PowerConsumer.getMode`.
+
+
+   .. attribute:: off
+
+      Switched off.
+
+
+   .. attribute:: auto
+
+      On standby while another control module flies the vehicle, and on when none can.
+
+
+   .. attribute:: on
+
+      Switched on.
+
+
+
+.. class:: PowerStatus
+
+   The power status of a part with a power switch. See :meth:`KSA.PowerConsumer.getStatus`.
+
+
+   .. attribute:: off
+
+      Switched off.
+
+
+   .. attribute:: standby
+
+      On standby, while another control module flies the vehicle or a radiation storm is under way.
+
+
+   .. attribute:: rebooting
+
+      Rebooting after a radiation upset.
+
+
+   .. attribute:: on
+
+      On, with power.
+
+
+   .. attribute:: low
+
+      On, with power for less than five minutes.
+
+
+   .. attribute:: out
+
+      Out of power.
+
+
+   .. attribute:: failed
+
+      Failed from its radiation dose.
+
+
+
+.. class:: PowerForecast
+
+   The charge, draw and supply of the electrical circuit a part is on, and how long its
+   batteries last. Obtained from :meth:`KSA.Part.getPowerForecast`.
+
+   .. note::
+
+      A circuit is the parts joined by connections that carry electricity. This is the
+      forecast the game shows for a probe core.
+
+   .. method:: getHasBattery()
+
+      Whether the circuit has a battery.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getCharge()
+
+      The energy stored in the circuit's batteries, in joules.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getDraw()
+
+      The power the parts on the circuit draw, in watts.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSupply()
+
+      The power the solar panels and generators on the circuit supply, in watts.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getTimeLeft()
+
+      The time until the batteries run out, in seconds. Infinite while the supply meets
+      the draw, and zero when the batteries are empty or there are none.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+
+
+.. class:: Avionics
+
+   The avionics of a probe core, which radiation wears out and upsets. Obtained from
+   :meth:`KSA.Part.getAvionics` or :meth:`KSA.Vehicle.getAvionics`.
+
+   .. note::
+
+      The avionics take a dose only while :func:`KSA.getRadiationEnabled` is true. Switched
+      off or on standby, they take half the dose and no upsets.
+
+   .. method:: getPart()
+
+      The part the avionics are in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getHealth()
+
+      The health of the avionics.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.AvionicsHealth`
+   
+
+   .. method:: getDose()
+
+      The radiation dose the avionics have taken, in grays of silicon.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getTolerance()
+
+      The dose at which the avionics fail, in grays of silicon.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getDoseRate()
+
+      The rate at which the avionics take a dose, in grays of silicon per second,
+      averaged over about an hour. Not a number until the avionics have taken a dose.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getTimeLeft()
+
+      The time until the avionics fail at :meth:`KSA.Avionics.getDoseRate`, in seconds. Infinite
+      while they take no dose, and zero once they have failed.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getRebooting()
+
+      Whether the avionics are rebooting after a radiation upset.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+
+
+.. class:: AvionicsHealth
+
+   The health of avionics. See :meth:`KSA.Avionics.getHealth`.
+
+
+   .. attribute:: ok
+
+      Working.
+
+
+   .. attribute:: worn
+
+      Working, with a dose of at least four fifths of the tolerance.
+
+
+   .. attribute:: failed
+
+      Failed for good, at the tolerance.
+
+
+
+.. class:: Light
+
+   A light. Obtained from :meth:`KSA.Part.getLights`.
+
+   .. note::
+
+      The vehicle's lights switch on and off together, see :meth:`KSA.Control.getLights`.
+      Cabin lights are always on.
+
+   .. method:: getPart()
+
+      The part the light is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getActive()
+
+      Whether the light is on.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``

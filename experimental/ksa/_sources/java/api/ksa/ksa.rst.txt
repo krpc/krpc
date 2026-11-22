@@ -14,15 +14,15 @@ KSA
 
    .. method:: void setActiveVehicle(Vehicle value)
 
-      The vehicle under the player's control, or ``null`` if the player controls a
-      kitten on EVA.
+      The vehicle under the player's control, or ``null`` if there is none or the
+      player controls a kitten on EVA.
 
    
 
       .. note::
 
          Setting it moves the camera to the vehicle, as the switch vehicle key does. See
-         :meth:`getActiveKitten()` for a kitten on EVA.
+         :meth:`KSA.getActiveKitten()` for a kitten on EVA.
 
    .. method:: java.util.List<Vehicle> getVehicles()
 
@@ -43,7 +43,7 @@ KSA
       .. note::
 
          Setting it moves the camera to the kitten. Throws an exception if the kitten is not
-         on EVA. See :meth:`getActiveVehicle()` for a vehicle.
+         on EVA. See :meth:`KSA.getActiveVehicle()` for a vehicle.
 
    .. method:: java.util.Map<String,Kitten> getKittens()
 
@@ -81,6 +81,24 @@ KSA
 
    
 
+      .. note::
+
+         Setting it stops a warp in progress, such as one started by :meth:`KSA.warpTo(double)`.
+
+   .. method:: boolean getLifeSupportEnabled()
+
+
+      Whether the crew use up supplies, as set when the game was created.
+
+   
+
+   .. method:: boolean getRadiationEnabled()
+
+
+      Whether radiation harms the crew, as set when the game was created.
+
+   
+
    .. method:: void warpTo(double ut)
 
       Warp to the given universal time, and return once the warp has finished.
@@ -92,7 +110,7 @@ KSA
       .. note::
 
          Does nothing when the time is in the past. Returns early if the game stops the
-         warp, for example when its menu pauses the game.
+         warp, for example when its menu pauses the game, or a vehicle's supplies run out.
 
    .. method:: java.util.Map<String,VehicleDesign> getVehicleDesigns()
 
@@ -106,7 +124,7 @@ KSA
       Launch a vehicle from a launch site, and make it the active vehicle. Returns once
       the vehicle is on the launch site.
 
-      :param String name: The name of the vehicle design. See :meth:`getVehicleDesigns()`.
+      :param String name: The name of the vehicle design. See :meth:`KSA.getVehicleDesigns()`.
       :param String site: The name of the launch site. See :meth:`Body.getLaunchSites()`.
       :returns: The vehicle. Its name is the vehicle's name, with a number appended if another vehicle has that name.
    
@@ -162,6 +180,35 @@ KSA
       :param float duration: How long to show the message for, in seconds. The game shows a message for at least 2 seconds.
       :param boolean warning: Whether to show the message in the warning color.
    
+
+   .. method:: double raycastDistance(org.javatuples.Triplet<Double,Double,Double> position, org.javatuples.Triplet<Double,Double,Double> direction, ReferenceFrame referenceFrame)
+
+      The distance from a position to the first part of a vehicle along a ray, in
+      meters. Infinite if the ray hits no part.
+
+      :param org.javatuples.Triplet<Double,Double,Double> position: The start of the ray, in meters.
+      :param org.javatuples.Triplet<Double,Double,Double> direction: The direction of the ray.
+      :param ReferenceFrame referenceFrame: The reference frame of the position and direction.
+   
+
+      .. note::
+
+         The ray tests the meshes of the parts, as picking a part with the mouse does.
+         It passes through terrain and kittens on EVA.
+
+   .. method:: Part raycastPart(org.javatuples.Triplet<Double,Double,Double> position, org.javatuples.Triplet<Double,Double,Double> direction, ReferenceFrame referenceFrame)
+
+      The first part of a vehicle along a ray, or ``null`` if the ray hits no part.
+
+      :param org.javatuples.Triplet<Double,Double,Double> position: The start of the ray, in meters.
+      :param org.javatuples.Triplet<Double,Double,Double> direction: The direction of the ray.
+      :param ReferenceFrame referenceFrame: The reference frame of the position and direction.
+   
+
+      .. note::
+
+         The ray tests the meshes of the parts, as picking a part with the mouse does.
+         It passes through terrain and kittens on EVA.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> transformPosition(org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame from, ReferenceFrame to)
 

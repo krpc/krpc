@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Crew &#8212; kRPC v0.2.0 documentation</title>
+    <title>Crew &#8212; kRPC v0.3.0 documentation</title>
   
   
   
@@ -26,35 +26,36 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5ab7b574" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'python/api/ksa/crew';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/external-links.js?v=e8892020"></script>
     <link rel="icon" href="../../../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Body" href="body.html" />
+    <link rel="next" title="Life Support" href="life-support.html" />
     <link rel="prev" title="Power" href="power.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.0" />
+  <meta name="docsearch:version" content="0.3.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -102,7 +103,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -206,14 +207,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -248,7 +249,7 @@
   
 
   
-    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -262,7 +263,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -333,14 +334,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -386,8 +387,10 @@
 <li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
 <li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
@@ -397,6 +400,11 @@
 <li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -410,8 +418,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -421,6 +431,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -434,8 +449,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -445,6 +462,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -458,8 +480,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -469,6 +493,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -482,8 +511,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -493,6 +524,42 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../js.html">JavaScript</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -506,8 +573,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -517,6 +586,42 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../http.html">HTTP</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -532,8 +637,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -546,6 +653,11 @@
 </ul>
 </details></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 </ul>
@@ -585,7 +697,7 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../../../index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     
@@ -687,6 +799,20 @@
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.Kitten.cause_of_death">
+<span class="sig-name descname"><span class="pre">cause_of_death</span></span><a class="headerlink" href="#KSA.Kitten.cause_of_death" title="Link to this definition">#</a></dt>
+<dd><p>What killed the kitten, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if it is alive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KSA.DeathCause" title="KSA.DeathCause"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeathCause</span></code></a> or None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -808,6 +934,47 @@ kitten is not on a mission.</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.Kitten.time_to_radiation_sickness">
+<span class="sig-name descname"><span class="pre">time_to_radiation_sickness</span></span><a class="headerlink" href="#KSA.Kitten.time_to_radiation_sickness" title="Link to this definition">#</a></dt>
+<dd><p>The time until the kitten gets radiation sickness at its current dose rate, in
+seconds. Infinite if it never does, or the kitten already has it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game forecasts it for a kitten on a mission while
+<a class="reference internal" href="ksa.html#KSA.radiation_enabled" title="KSA.radiation_enabled"><code class="xref py py-attr docutils literal notranslate"><span class="pre">radiation_enabled</span></code></a> is true.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.Kitten.time_to_lethal_dose">
+<span class="sig-name descname"><span class="pre">time_to_lethal_dose</span></span><a class="headerlink" href="#KSA.Kitten.time_to_lethal_dose" title="Link to this definition">#</a></dt>
+<dd><p>The time until the kitten takes a lethal radiation dose at its current dose rate, in
+seconds. Infinite if it never does.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game forecasts it for a kitten on a mission while
+<a class="reference internal" href="ksa.html#KSA.radiation_enabled" title="KSA.radiation_enabled"><code class="xref py py-attr docutils literal notranslate"><span class="pre">radiation_enabled</span></code></a> is true, and only within a day of radiation
+sickness.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="KSA.Kitten.time_until_fit_to_fly">
 <span class="sig-name descname"><span class="pre">time_until_fit_to_fly</span></span><a class="headerlink" href="#KSA.Kitten.time_until_fit_to_fly" title="Link to this definition">#</a></dt>
 <dd><p>The time until the kitten has recovered from radiation sickness and can fly, resting
@@ -852,6 +1019,79 @@ resting at home, in seconds.</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.Kitten.worst_condition">
+<span class="sig-name descname"><span class="pre">worst_condition</span></span><a class="headerlink" href="#KSA.Kitten.worst_condition" title="Link to this definition">#</a></dt>
+<dd><p>The kitten’s worst condition across its supplies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KSA.KittenCondition" title="KSA.KittenCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">KittenCondition</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="KSA.Kitten.condition">
+<span class="sig-name descname"><span class="pre">condition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">supply</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Kitten.condition" title="Link to this definition">#</a></dt>
+<dd><p>The effect on the kitten of going without a supply.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>supply</strong> (<a class="reference internal" href="life-support.html#KSA.LifeSupportSupply" title="KSA.LifeSupportSupply"><em>LifeSupportSupply</em></a>) – The supply.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KSA.KittenCondition" title="KSA.KittenCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">KittenCondition</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="KSA.Kitten.time_without">
+<span class="sig-name descname"><span class="pre">time_without</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">supply</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Kitten.time_without" title="Link to this definition">#</a></dt>
+<dd><p>The time the kitten has gone without a supply, in seconds. It counts down again
+once the supply returns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>supply</strong> (<a class="reference internal" href="life-support.html#KSA.LifeSupportSupply" title="KSA.LifeSupportSupply"><em>LifeSupportSupply</em></a>) – The supply.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="KSA.Kitten.time_to_next_condition">
+<span class="sig-name descname"><span class="pre">time_to_next_condition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">supply</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Kitten.time_to_next_condition" title="Link to this definition">#</a></dt>
+<dd><p>The further time the kitten can go without a supply before its condition from the
+supply worsens, in seconds. Infinite once the kitten is dead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>supply</strong> (<a class="reference internal" href="life-support.html#KSA.LifeSupportSupply" title="KSA.LifeSupportSupply"><em>LifeSupportSupply</em></a>) – The supply.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.Kitten.incapacitated">
+<span class="sig-name descname"><span class="pre">incapacitated</span></span><a class="headerlink" href="#KSA.Kitten.incapacitated" title="Link to this definition">#</a></dt>
+<dd><p>Whether the kitten is incapacitated by going without a supply. An incapacitated
+kitten cannot fly the vehicle or move supplies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="KSA.Kitten.on_eva">
 <span class="sig-name descname"><span class="pre">on_eva</span></span><a class="headerlink" href="#KSA.Kitten.on_eva" title="Link to this definition">#</a></dt>
 <dd><p>Whether the kitten is on EVA.</p>
@@ -876,6 +1116,20 @@ EVA. The kitten becomes the controlled kitten, see <a class="reference internal"
 </div>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.Kitten.can_go_on_eva">
+<span class="sig-name descname"><span class="pre">can_go_on_eva</span></span><a class="headerlink" href="#KSA.Kitten.can_go_on_eva" title="Link to this definition">#</a></dt>
+<dd><p>Whether the kitten can go on EVA. See <a class="reference internal" href="#KSA.Kitten.go_on_eva" title="KSA.Kitten.go_on_eva"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Kitten.go_on_eva()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="KSA.Kitten.board">
 <span class="sig-name descname"><span class="pre">board</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Kitten.board" title="Link to this definition">#</a></dt>
@@ -894,6 +1148,21 @@ seat. The vehicle becomes the controlled vehicle.</p>
 <p>Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
 within one meter.</p>
 </div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.Kitten.can_board">
+<span class="sig-name descname"><span class="pre">can_board</span></span><a class="headerlink" href="#KSA.Kitten.can_board" title="Link to this definition">#</a></dt>
+<dd><p>Whether the kitten is on EVA and an EVA hatch with a free seat is in range. See
+<a class="reference internal" href="#KSA.Kitten.board" title="KSA.Kitten.board"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Kitten.board()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -939,6 +1208,117 @@ nor on EVA.</p>
 <dd class="field-even"><p>tuple(float, float, float)</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.Kitten.life_support">
+<span class="sig-name descname"><span class="pre">life_support</span></span><a class="headerlink" href="#KSA.Kitten.life_support" title="Link to this definition">#</a></dt>
+<dd><p>How long the supplies in the kitten’s suit last, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the kitten is
+not on EVA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="life-support.html#KSA.LifeSupport" title="KSA.LifeSupport"><code class="xref py py-class docutils literal notranslate"><span class="pre">LifeSupport</span></code></a> or None</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The suit is filled from the kitten’s habitat zone when it goes on EVA, and what is
+left returns to the zone when it boards.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.Kitten.carried_meals">
+<span class="sig-name descname"><span class="pre">carried_meals</span></span><a class="headerlink" href="#KSA.Kitten.carried_meals" title="Link to this definition">#</a></dt>
+<dd><p>The number of meals the kitten on EVA carries. Throws an exception if the kitten is
+not on EVA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.Kitten.carried_canisters">
+<span class="sig-name descname"><span class="pre">carried_canisters</span></span><a class="headerlink" href="#KSA.Kitten.carried_canisters" title="Link to this definition">#</a></dt>
+<dd><p>The number of carbon dioxide scrubber canisters the kitten on EVA carries. Throws an
+exception if the kitten is not on EVA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="KSA.Kitten.can_carry">
+<span class="sig-name descname"><span class="pre">can_carry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">habitat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Kitten.can_carry" title="Link to this definition">#</a></dt>
+<dd><p>Whether the kitten can take supplies from or stow them in a habitat. See
+<a class="reference internal" href="#KSA.Kitten.take" title="KSA.Kitten.take"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Kitten.take()</span></code></a> and <a class="reference internal" href="#KSA.Kitten.stow" title="KSA.Kitten.stow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Kitten.stow()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>habitat</strong> (<a class="reference internal" href="life-support.html#KSA.Habitat" title="KSA.Habitat"><em>Habitat</em></a>) – The habitat.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="KSA.Kitten.take">
+<span class="sig-name descname"><span class="pre">take</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">habitat</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">meals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">canisters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Kitten.take" title="Link to this definition">#</a></dt>
+<dd><p>Take meals and canisters from a habitat within reach, and return once the kitten
+carries them. Takes fewer when the habitat holds fewer, or the kitten cannot carry
+more.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>habitat</strong> (<a class="reference internal" href="life-support.html#KSA.Habitat" title="KSA.Habitat"><em>Habitat</em></a>) – The habitat, which must store supplies.</p></li>
+<li><p><strong>meals</strong> (<em>int</em>) – The number of meals to take.</p></li>
+<li><p><strong>canisters</strong> (<em>int</em>) – The number of canisters to take.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the kitten is not on EVA or is unwell, life support is
+disabled, or the habitat stores no supplies or is out of reach. See
+<a class="reference internal" href="#KSA.Kitten.can_carry" title="KSA.Kitten.can_carry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Kitten.can_carry()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="KSA.Kitten.stow">
+<span class="sig-name descname"><span class="pre">stow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">habitat</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">meals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">canisters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Kitten.stow" title="Link to this definition">#</a></dt>
+<dd><p>Stow the meals and canisters the kitten carries in a habitat within reach, and
+return once they are stowed. Stows fewer when the kitten carries fewer, or the
+habitat has less room.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>habitat</strong> (<a class="reference internal" href="life-support.html#KSA.Habitat" title="KSA.Habitat"><em>Habitat</em></a>) – The habitat, which must store supplies.</p></li>
+<li><p><strong>meals</strong> (<em>int</em>) – The number of meals to stow.</p></li>
+<li><p><strong>canisters</strong> (<em>int</em>) – The number of canisters to stow.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the kitten is not on EVA or is unwell, life support is
+disabled, or the habitat stores no supplies or is out of reach. See
+<a class="reference internal" href="#KSA.Kitten.can_carry" title="KSA.Kitten.can_carry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Kitten.can_carry()</span></code></a>.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -992,6 +1372,283 @@ nor on EVA.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="KSA.KittenCondition">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">KittenCondition</span></span><a class="headerlink" href="#KSA.KittenCondition" title="Link to this definition">#</a></dt>
+<dd><p>The effect on a kitten of going without a supply. See <a class="reference internal" href="#KSA.Kitten.condition" title="KSA.Kitten.condition"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Kitten.condition()</span></code></a>.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.KittenCondition.healthy">
+<span class="sig-name descname"><span class="pre">healthy</span></span><a class="headerlink" href="#KSA.KittenCondition.healthy" title="Link to this definition">#</a></dt>
+<dd><p>Unaffected.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.KittenCondition.warning">
+<span class="sig-name descname"><span class="pre">warning</span></span><a class="headerlink" href="#KSA.KittenCondition.warning" title="Link to this definition">#</a></dt>
+<dd><p>Going without, with no effect yet.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.KittenCondition.degraded">
+<span class="sig-name descname"><span class="pre">degraded</span></span><a class="headerlink" href="#KSA.KittenCondition.degraded" title="Link to this definition">#</a></dt>
+<dd><p>Weakened, and unable to go on EVA.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.KittenCondition.incapacitated">
+<span class="sig-name descname"><span class="pre">incapacitated</span></span><a class="headerlink" href="#KSA.KittenCondition.incapacitated" title="Link to this definition">#</a></dt>
+<dd><p>Unable to fly the vehicle or move supplies.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.KittenCondition.dead">
+<span class="sig-name descname"><span class="pre">dead</span></span><a class="headerlink" href="#KSA.KittenCondition.dead" title="Link to this definition">#</a></dt>
+<dd><p>Dead.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="KSA.DeathCause">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DeathCause</span></span><a class="headerlink" href="#KSA.DeathCause" title="Link to this definition">#</a></dt>
+<dd><p>What killed a kitten. See <a class="reference internal" href="#KSA.Kitten.cause_of_death" title="KSA.Kitten.cause_of_death"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Kitten.cause_of_death</span></code></a>.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.DeathCause.unknown">
+<span class="sig-name descname"><span class="pre">unknown</span></span><a class="headerlink" href="#KSA.DeathCause.unknown" title="Link to this definition">#</a></dt>
+<dd><p>Not recorded.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.DeathCause.no_oxygen">
+<span class="sig-name descname"><span class="pre">no_oxygen</span></span><a class="headerlink" href="#KSA.DeathCause.no_oxygen" title="Link to this definition">#</a></dt>
+<dd><p>Lack of oxygen.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.DeathCause.no_scrubber">
+<span class="sig-name descname"><span class="pre">no_scrubber</span></span><a class="headerlink" href="#KSA.DeathCause.no_scrubber" title="Link to this definition">#</a></dt>
+<dd><p>Carbon dioxide, with no scrubber canisters left.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.DeathCause.no_water">
+<span class="sig-name descname"><span class="pre">no_water</span></span><a class="headerlink" href="#KSA.DeathCause.no_water" title="Link to this definition">#</a></dt>
+<dd><p>Lack of water.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.DeathCause.no_food">
+<span class="sig-name descname"><span class="pre">no_food</span></span><a class="headerlink" href="#KSA.DeathCause.no_food" title="Link to this definition">#</a></dt>
+<dd><p>Lack of food.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.DeathCause.radiation">
+<span class="sig-name descname"><span class="pre">radiation</span></span><a class="headerlink" href="#KSA.DeathCause.radiation" title="Link to this definition">#</a></dt>
+<dd><p>A lethal radiation dose.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.DeathCause.ground_impact">
+<span class="sig-name descname"><span class="pre">ground_impact</span></span><a class="headerlink" href="#KSA.DeathCause.ground_impact" title="Link to this definition">#</a></dt>
+<dd><p>Hitting the ground.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.DeathCause.ocean_impact">
+<span class="sig-name descname"><span class="pre">ocean_impact</span></span><a class="headerlink" href="#KSA.DeathCause.ocean_impact" title="Link to this definition">#</a></dt>
+<dd><p>Hitting the ocean.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.DeathCause.collision">
+<span class="sig-name descname"><span class="pre">collision</span></span><a class="headerlink" href="#KSA.DeathCause.collision" title="Link to this definition">#</a></dt>
+<dd><p>A collision.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.DeathCause.excessive_g_force">
+<span class="sig-name descname"><span class="pre">excessive_g_force</span></span><a class="headerlink" href="#KSA.DeathCause.excessive_g_force" title="Link to this definition">#</a></dt>
+<dd><p>Excessive acceleration.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.DeathCause.aerodynamic_forces">
+<span class="sig-name descname"><span class="pre">aerodynamic_forces</span></span><a class="headerlink" href="#KSA.DeathCause.aerodynamic_forces" title="Link to this definition">#</a></dt>
+<dd><p>Aerodynamic forces breaking up the vehicle.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.DeathCause.hydrodynamic_forces">
+<span class="sig-name descname"><span class="pre">hydrodynamic_forces</span></span><a class="headerlink" href="#KSA.DeathCause.hydrodynamic_forces" title="Link to this definition">#</a></dt>
+<dd><p>Hydrodynamic forces breaking up the vehicle.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.DeathCause.fall">
+<span class="sig-name descname"><span class="pre">fall</span></span><a class="headerlink" href="#KSA.DeathCause.fall" title="Link to this definition">#</a></dt>
+<dd><p>A fall on EVA.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.DeathCause.abandoned">
+<span class="sig-name descname"><span class="pre">abandoned</span></span><a class="headerlink" href="#KSA.DeathCause.abandoned" title="Link to this definition">#</a></dt>
+<dd><p>Left in a vehicle that was abandoned.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="KSA.CrewEvent">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CrewEvent</span></span><a class="headerlink" href="#KSA.CrewEvent" title="Link to this definition">#</a></dt>
+<dd><p>A kitten’s most urgent coming event: its supplies running low, or its condition
+worsening. Obtained from <a class="reference internal" href="vehicle.html#KSA.Vehicle.crew_events" title="KSA.Vehicle.crew_events"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vehicle.crew_events</span></code></a> or
+<a class="reference internal" href="vehicle.html#KSA.Vehicle.next_crew_event" title="KSA.Vehicle.next_crew_event"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vehicle.next_crew_event</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As the game’s crew clock, an event within a day is the worst stage the kitten reaches
+in that time, and a later event is the soonest. The event is the game’s forecast when it
+is read from the vehicle. Read it again for a new forecast.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.CrewEvent.kitten">
+<span class="sig-name descname"><span class="pre">kitten</span></span><a class="headerlink" href="#KSA.CrewEvent.kitten" title="Link to this definition">#</a></dt>
+<dd><p>The kitten.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KSA.Kitten" title="KSA.Kitten"><code class="xref py py-class docutils literal notranslate"><span class="pre">Kitten</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.CrewEvent.stage">
+<span class="sig-name descname"><span class="pre">stage</span></span><a class="headerlink" href="#KSA.CrewEvent.stage" title="Link to this definition">#</a></dt>
+<dd><p>What happens to the kitten.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KSA.CrewStage" title="KSA.CrewStage"><code class="xref py py-class docutils literal notranslate"><span class="pre">CrewStage</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.CrewEvent.hazard">
+<span class="sig-name descname"><span class="pre">hazard</span></span><a class="headerlink" href="#KSA.CrewEvent.hazard" title="Link to this definition">#</a></dt>
+<dd><p>The cause of the event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KSA.CrewHazard" title="KSA.CrewHazard"><code class="xref py py-class docutils literal notranslate"><span class="pre">CrewHazard</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.CrewEvent.ut">
+<span class="sig-name descname"><span class="pre">ut</span></span><a class="headerlink" href="#KSA.CrewEvent.ut" title="Link to this definition">#</a></dt>
+<dd><p>The universal time of the event, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="KSA.CrewEvent.time_to">
+<span class="sig-name descname"><span class="pre">time_to</span></span><a class="headerlink" href="#KSA.CrewEvent.time_to" title="Link to this definition">#</a></dt>
+<dd><p>The time until the event, in seconds. Zero once its time has passed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="KSA.CrewStage">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CrewStage</span></span><a class="headerlink" href="#KSA.CrewStage" title="Link to this definition">#</a></dt>
+<dd><p>What happens to a kitten in a crew event. See <a class="reference internal" href="#KSA.CrewEvent.stage" title="KSA.CrewEvent.stage"><code class="xref py py-attr docutils literal notranslate"><span class="pre">CrewEvent.stage</span></code></a>.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.CrewStage.low">
+<span class="sig-name descname"><span class="pre">low</span></span><a class="headerlink" href="#KSA.CrewStage.low" title="Link to this definition">#</a></dt>
+<dd><p>The supply runs low.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.CrewStage.degraded">
+<span class="sig-name descname"><span class="pre">degraded</span></span><a class="headerlink" href="#KSA.CrewStage.degraded" title="Link to this definition">#</a></dt>
+<dd><p>The kitten is weakened, and unable to go on EVA. For radiation, the kitten gets
+radiation sickness.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.CrewStage.incapacitated">
+<span class="sig-name descname"><span class="pre">incapacitated</span></span><a class="headerlink" href="#KSA.CrewStage.incapacitated" title="Link to this definition">#</a></dt>
+<dd><p>The kitten is unable to fly the vehicle or move supplies.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.CrewStage.dead">
+<span class="sig-name descname"><span class="pre">dead</span></span><a class="headerlink" href="#KSA.CrewStage.dead" title="Link to this definition">#</a></dt>
+<dd><p>The kitten dies.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="KSA.CrewHazard">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">CrewHazard</span></span><a class="headerlink" href="#KSA.CrewHazard" title="Link to this definition">#</a></dt>
+<dd><p>The cause of a crew event. See <a class="reference internal" href="#KSA.CrewEvent.hazard" title="KSA.CrewEvent.hazard"><code class="xref py py-attr docutils literal notranslate"><span class="pre">CrewEvent.hazard</span></code></a>.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.CrewHazard.air">
+<span class="sig-name descname"><span class="pre">air</span></span><a class="headerlink" href="#KSA.CrewHazard.air" title="Link to this definition">#</a></dt>
+<dd><p>Running out of air.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.CrewHazard.scrubber">
+<span class="sig-name descname"><span class="pre">scrubber</span></span><a class="headerlink" href="#KSA.CrewHazard.scrubber" title="Link to this definition">#</a></dt>
+<dd><p>Running out of carbon dioxide scrubber.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.CrewHazard.water">
+<span class="sig-name descname"><span class="pre">water</span></span><a class="headerlink" href="#KSA.CrewHazard.water" title="Link to this definition">#</a></dt>
+<dd><p>Running out of water.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.CrewHazard.food">
+<span class="sig-name descname"><span class="pre">food</span></span><a class="headerlink" href="#KSA.CrewHazard.food" title="Link to this definition">#</a></dt>
+<dd><p>Running out of food.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="KSA.CrewHazard.radiation">
+<span class="sig-name descname"><span class="pre">radiation</span></span><a class="headerlink" href="#KSA.CrewHazard.radiation" title="Link to this definition">#</a></dt>
+<dd><p>The radiation dose.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="KSA.Seat">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Seat</span></span><a class="headerlink" href="#KSA.Seat" title="Link to this definition">#</a></dt>
 <dd><p>A crew seat. Obtained from <a class="reference internal" href="parts.html#KSA.Part.seats" title="KSA.Part.seats"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Part.seats</span></code></a>.</p>
@@ -1024,8 +1681,9 @@ kitten in the seat. Setting <code class="docutils literal notranslate"><span cla
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>A kitten in another seat of the vehicle moves to this one. Throws an exception if
-the kitten is killed in action, on EVA, or in another vehicle.</p>
+<p>A kitten in another seat of the vehicle moves to this one, within its habitat zone.
+Throws an exception if the kitten is killed in action, retired, on EVA, in another
+vehicle, or incapacitated, or the seat is in another habitat zone.</p>
 </div>
 </dd></dl>
 
@@ -1053,11 +1711,11 @@ the kitten is killed in action, on EVA, or in another vehicle.</p>
       </div>
     </a>
     <a class="right-next"
-       href="body.html"
+       href="life-support.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Body</p>
+        <p class="prev-next-title">Life Support</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1068,7 +1726,7 @@ the kitten is killed in action, on EVA, or in another vehicle.</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -1094,8 +1752,8 @@ the kitten is killed in action, on EVA, or in another vehicle.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1128,7 +1786,7 @@ the kitten is killed in action, on EVA, or in another vehicle.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

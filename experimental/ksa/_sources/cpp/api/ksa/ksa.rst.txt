@@ -7,19 +7,19 @@ KSA
 
 
 .. namespace:: krpc::services
-.. class:: KSA : public krpc::Service
+.. class:: KSA : public krpc::RemoteService
 
    Provides functionality to interact with Kitten Space Agency.
 
-   .. function:: KSA(krpc::Client* client)
+   .. function:: KSA(krpc::Connection& connection)
 
       Construct an instance of this service.
 
    .. function:: std::optional<Vehicle> active_vehicle()
    .. function:: void set_active_vehicle(std::optional<Vehicle> value)
 
-      The vehicle under the player's control, or ``NULL`` if the player controls a
-      kitten on EVA.
+      The vehicle under the player's control, or ``NULL`` if there is none or the
+      player controls a kitten on EVA.
 
    
 
@@ -78,6 +78,22 @@ KSA
 
    
 
+      .. note::
+
+         Setting it stops a warp in progress, such as one started by :func:`warp_to`.
+
+   .. function:: bool life_support_enabled()
+
+      Whether the crew use up supplies, as set when the game was created.
+
+   
+
+   .. function:: bool radiation_enabled()
+
+      Whether radiation harms the crew, as set when the game was created.
+
+   
+
    .. function:: void warp_to(double ut)
 
       Warp to the given universal time, and return once the warp has finished.
@@ -92,7 +108,7 @@ KSA
       .. note::
 
          Does nothing when the time is in the past. Returns early if the game stops the
-         warp, for example when its menu pauses the game.
+         warp, for example when its menu pauses the game, or a vehicle's supplies run out.
 
    .. function:: std::map<std::string, VehicleDesign> vehicle_designs()
 
@@ -179,6 +195,41 @@ KSA
        * **warning** -- Whether to show the message in the warning color.
 
    
+
+   .. function:: double raycast_distance(std::tuple<double, double, double> position, std::tuple<double, double, double> direction, ReferenceFrame reference_frame)
+
+      The distance from a position to the first part of a vehicle along a ray, in
+      meters. Infinite if the ray hits no part.
+
+      :Parameters:
+
+       * **position** -- The start of the ray, in meters.
+       * **direction** -- The direction of the ray.
+       * **reference_frame** -- The reference frame of the position and direction.
+
+   
+
+      .. note::
+
+         The ray tests the meshes of the parts, as picking a part with the mouse does.
+         It passes through terrain and kittens on EVA.
+
+   .. function:: std::optional<Part> raycast_part(std::tuple<double, double, double> position, std::tuple<double, double, double> direction, ReferenceFrame reference_frame)
+
+      The first part of a vehicle along a ray, or ``NULL`` if the ray hits no part.
+
+      :Parameters:
+
+       * **position** -- The start of the ray, in meters.
+       * **direction** -- The direction of the ray.
+       * **reference_frame** -- The reference frame of the position and direction.
+
+   
+
+      .. note::
+
+         The ray tests the meshes of the parts, as picking a part with the mouse does.
+         It passes through terrain and kittens on EVA.
 
    .. function:: std::tuple<double, double, double> transform_position(std::tuple<double, double, double> position, ReferenceFrame from, ReferenceFrame to)
 

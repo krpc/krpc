@@ -8,8 +8,8 @@ Vehicle
 
 .. class:: Vehicle
 
-   A vehicle in the current system. Obtained from :attr:`KSA.active_vehicle <KSA.KSA.active_vehicle>`
-   or :attr:`KSA.vehicles <KSA.KSA.vehicles>`.
+   A vehicle in the current system. Obtained from :attr:`KSA.active_vehicle`
+   or :attr:`KSA.vehicles`.
 
    .. note::
 
@@ -21,7 +21,6 @@ Vehicle
       The name of the vehicle, which is unique in the system.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. method:: destroy()
 
@@ -38,7 +37,6 @@ Vehicle
       Whether the vehicle can be recovered: at rest on the surface of the home planet.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. method:: recover()
 
@@ -55,7 +53,6 @@ Vehicle
       The situation of the vehicle.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Situation`
 
    .. attribute:: on_rails: boolean
 
@@ -64,42 +61,42 @@ Vehicle
       situations.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: is_debris: boolean
 
       Whether the vehicle is debris, such as a spent stage.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: has_launched: boolean
 
       Whether the vehicle has launched.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: launch_time: number
 
       The universal time the vehicle was created, in seconds.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: mass: number
 
       The total mass of the vehicle, including propellant, in kilograms.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
+
+   .. attribute:: dry_mass: number
+
+      The mass of the vehicle's parts, without propellant or supplies, in kilograms.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: propellant_mass: number
 
       The mass of the propellant in the vehicle, in kilograms.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: thrust: number
 
@@ -107,7 +104,6 @@ Vehicle
       pressure, in Newtons.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: available_thrust: number
 
@@ -115,7 +111,6 @@ Vehicle
       current atmospheric pressure, in Newtons.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: specific_impulse: number
 
@@ -123,7 +118,57 @@ Vehicle
       current atmospheric pressure, in seconds. Zero when no engine is active.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
+
+   .. attribute:: moment_of_inertia: Tuple
+
+      The vehicle's moments of inertia about the axes of :attr:`KSA.Vehicle.reference_frame`
+      through its center of mass, in :math:`\mathrm{kg \cdot m^{2}}`.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: inertia_tensor: List
+
+      The vehicle's inertia tensor about its center of mass, along the axes of
+      :attr:`KSA.Vehicle.reference_frame`, in :math:`\mathrm{kg \cdot m^{2}}`, as its three rows.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: available_rcs_torque: Tuple
+
+      The torque the vehicle's RCS thrusters can give about each axis of its control
+      frame, in :math:`\mathrm{N \cdot m}`. Each is the smaller of the torques in the two
+      directions about the axis.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The control frame has the axes of :attr:`KSA.Vehicle.reference_frame`, unless the flight
+         computer steers along the thrust. The thrusters give this torque while
+         :attr:`KSA.Control.rcs` is on.
+
+   .. method:: acceleration(reference_frame: KSA.ReferenceFrame): Tuple
+
+      The vehicle's acceleration from the forces on it other than gravity, in
+      :math:`\mathrm{m/s^{2}}`.
+
+      :param reference_frame: The reference frame of the acceleration.
+
+      .. note::
+
+         The game measures it over the last physics step. Its length divided by standard
+         gravity is :attr:`KSA.Flight.g_force`.
+
+   .. method:: angular_acceleration(reference_frame: KSA.ReferenceFrame): Tuple
+
+      The vehicle's angular acceleration, in :math:`\mathrm{rad/s^{2}}`. The vector points
+      along the axis of rotation.
+
+      :param reference_frame: The reference frame of the angular acceleration.
+
+      .. note::
+
+         The game measures it over the last physics step.
 
    .. attribute:: peak_g_load: number
 
@@ -131,7 +176,6 @@ Vehicle
       multiple of standard gravity. Zero while the vehicle is :attr:`KSA.Vehicle.on_rails`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: max_g_load: number
 
@@ -139,7 +183,6 @@ Vehicle
       gravity. Zero while the vehicle is :attr:`KSA.Vehicle.on_rails`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: peak_dynamic_pressure: number
 
@@ -148,7 +191,6 @@ Vehicle
       vehicle is :attr:`KSA.Vehicle.on_rails`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: max_dynamic_pressure: number
 
@@ -156,126 +198,180 @@ Vehicle
       while the vehicle is :attr:`KSA.Vehicle.on_rails`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: parts: List
 
       The vehicle's parts.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: root_part: KSA.Part
 
       The vehicle's root part, which the other parts are attached to.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
-   .. method:: parts_with_name(name)
+   .. method:: parts_with_name(name: string): List
 
       The vehicle's parts with the given template id. See :attr:`KSA.Part.name`.
 
-      :param string name: The template id.
-      :rtype: List
+      :param name: The template id.
 
    .. attribute:: seats: List
 
       The vehicle's crew seats.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: crew: List
 
       The kittens in the vehicle's seats.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: crew_capacity: number
 
       The number of crew seats in the vehicle.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
+
+   .. attribute:: controllable: boolean
+
+      Whether the vehicle can be flown. A vehicle needs a control module, and a crewed
+      vehicle with every kitten incapacitated also needs a probe core.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: has_control_module: boolean
+
+      Whether the vehicle has a control module, such as a capsule or a probe core.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: control_state: KSA.ControlState
+
+      Whether the vehicle can be flown, or why not.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         This is the reason the game gives when the vehicle does not respond to its controls.
+
+   .. attribute:: crew_events: List
+
+      The most urgent coming event of each kitten in the vehicle, most urgent first.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The order is the game's crew clock's: events within a day come first, the worst
+         first. Empty while :attr:`KSA.life_support_enabled` and
+         :attr:`KSA.radiation_enabled` are both false.
+
+   .. attribute:: next_crew_event: KSA.CrewEvent | nil
+
+      The most urgent of :attr:`KSA.Vehicle.crew_events`, or ``nil`` if there is none.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: life_support: KSA.LifeSupport | nil
+
+      How long the supplies of the vehicle's worst habitat zone last its crew, or
+      ``nil`` if the vehicle has no habitats.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: mission: KSA.Mission | nil
+
+      The mission planned for the vehicle, or ``nil`` if it has none.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: habitat_zones: List
+
+      The vehicle's habitat zones.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: habitats: List
+
+      The vehicle's habitats.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: engines: List
 
       The vehicle's engines.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: rcs: List
 
       The vehicle's RCS thrusters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: decouplers: List
 
       The vehicle's decouplers.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: parachutes: List
 
       The vehicle's parachutes.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: tanks: List
 
       The vehicle's propellant tanks.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: batteries: List
 
       The vehicle's batteries.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: solar_panels: List
 
       The vehicle's solar panels.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: generators: List
 
       The vehicle's generators.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: power_consumers: List
 
       The vehicle's power consumers.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
+
+   .. attribute:: avionics: List
+
+      The avionics of the vehicle's probe cores.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: stored_energy: number
 
       The energy stored in the vehicle's batteries, in joules.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: energy_capacity: number
 
       The energy the vehicle's batteries can store, in joules.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: net_power: number
 
@@ -283,110 +379,96 @@ Vehicle
       parts use, in watts.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: lights: List
 
       The vehicle's lights.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: deployables: List
 
       The vehicle's deployable sections.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: magnetic_scoops: List
 
       The vehicle's magnetic scoops.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: fuel_links: List
 
       The vehicle's fuel links.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: docking_ports: List
 
       The vehicle's docking ports.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: resources: List
 
       The resources the vehicle holds, one for each substance, totaled over its parts.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: delta_v: number
 
       The change in velocity of all the vehicle's sequences, in meters per second.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: sequences: List
 
       The vehicle's sequences, in activation order.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
-   .. attribute:: target_vehicle: KSA.Vehicle
+   .. attribute:: target_vehicle: KSA.Vehicle | nil
 
       The vehicle targeted by this vehicle, or ``nil``. Setting it replaces the
       target, and ``nil`` clears it.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.Vehicle` or ``Types.none``
 
-   .. attribute:: target_body: KSA.Body
+   .. attribute:: target_body: KSA.Body | nil
 
       The body targeted by this vehicle, or ``nil``. Setting it replaces the target,
       and ``nil`` clears it.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.Body` or ``Types.none``
 
       .. note::
 
          Setting a body that orbits nothing, such as the star, throws an exception.
 
-   .. attribute:: target_part: KSA.Part
+   .. attribute:: target_part: KSA.Part | nil
 
       The part targeted by this vehicle, on the vehicle in :attr:`KSA.Vehicle.target_vehicle`,
       or ``nil``. Setting it targets the part and its vehicle, and ``nil`` clears
       the target.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.Part` or ``Types.none``
 
    .. attribute:: burns: List
 
       The vehicle's planned burns, in time order.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
-   .. method:: add_burn(ut, [prograde = 0.0], [normal = 0.0], [radial = 0.0])
+   .. method:: add_burn(ut: number, prograde?: number, normal?: number, radial?: number): KSA.Burn
 
       Plan a burn, and add it to the vehicle's burn plan.
 
-      :param number ut: Universal time of the burn, in seconds.
-      :param number prograde: Change in velocity in the prograde direction, in meters per second.
-      :param number normal: Change in velocity along the orbit normal, in meters per second.
-      :param number radial: Change in velocity radially outward, in meters per second.
+      :param ut: Universal time of the burn, in seconds.
+      :param prograde: Change in velocity in the prograde direction, in meters per second. Defaults to ``0.0``.
+      :param normal: Change in velocity along the orbit normal, in meters per second. Defaults to ``0.0``.
+      :param radial: Change in velocity radially outward, in meters per second. Defaults to ``0.0``.
       :returns: The burn.
-      :rtype: :class:`KSA.Burn`
 
       .. note::
 
@@ -399,28 +481,24 @@ Vehicle
       The current orbit of the vehicle.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Orbit`
 
    .. attribute:: flight: KSA.Flight
 
       Flight telemetry for the vehicle, relative to the surface of the body it orbits.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Flight`
 
    .. attribute:: control: KSA.Control
 
       The controls of the vehicle.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Control`
 
    .. attribute:: auto_pilot: KSA.AutoPilot
 
       The auto-pilot of the vehicle.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.AutoPilot`
 
    .. attribute:: reference_frame: KSA.ReferenceFrame
 
@@ -429,7 +507,6 @@ Vehicle
       the vehicle's control point.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.ReferenceFrame`
 
    .. attribute:: surface_reference_frame: KSA.ReferenceFrame
 
@@ -438,7 +515,6 @@ Vehicle
       The frame rotates with the body.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.ReferenceFrame`
 
    .. attribute:: orbital_reference_frame: KSA.ReferenceFrame
 
@@ -447,44 +523,38 @@ Vehicle
       axis radially outward, perpendicular to the x axis.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.ReferenceFrame`
 
-   .. method:: position(reference_frame)
+   .. method:: position(reference_frame: KSA.ReferenceFrame): Tuple
 
       The position of the vehicle, in meters.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the position.
 
-   .. method:: velocity(reference_frame)
+   .. method:: velocity(reference_frame: KSA.ReferenceFrame): Tuple
 
       The velocity of the vehicle, in meters per second.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the velocity.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the velocity.
 
-   .. method:: direction(reference_frame)
+   .. method:: direction(reference_frame: KSA.ReferenceFrame): Tuple
 
       The unit vector in which the vehicle points, the x axis of
       :attr:`KSA.Vehicle.reference_frame`.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the direction.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the direction.
 
-   .. method:: rotation(reference_frame)
+   .. method:: rotation(reference_frame: KSA.ReferenceFrame): Tuple
 
       The rotation of :attr:`KSA.Vehicle.reference_frame` relative to the given frame.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the rotation.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the rotation.
 
-   .. method:: angular_velocity(reference_frame)
+   .. method:: angular_velocity(reference_frame: KSA.ReferenceFrame): Tuple
 
       The angular velocity of the vehicle, in radians per second. The vector points along
       the axis of rotation, and its length is the rate of rotation.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the angular velocity.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the angular velocity.
 
 
 
@@ -536,10 +606,61 @@ Vehicle
 
 
 
+.. class:: ControlState
+
+   Whether a vehicle can be flown, or why not. See :attr:`KSA.Vehicle.control_state`.
+
+
+   .. data:: controllable
+
+      The vehicle can be flown.
+
+
+   .. data:: no_control_module
+
+      The vehicle has no control module, such as a capsule or a probe core.
+
+
+   .. data:: no_crew
+
+      The capsules have no crew, and no probe core is on.
+
+
+   .. data:: crew_incapacitated
+
+      Every kitten in the capsules is incapacitated, and no probe core is on.
+
+
+   .. data:: probe_core_unpowered
+
+      The probe core has no power.
+
+
+   .. data:: probe_core_off
+
+      The probe core is switched off.
+
+
+   .. data:: probe_core_failed
+
+      The probe core has failed from its radiation dose.
+
+
+   .. data:: probe_core_storm_standby
+
+      The probe core is on standby for a radiation storm.
+
+
+   .. data:: probe_core_rebooting
+
+      The probe core is rebooting after a radiation upset.
+
+
+
 .. class:: VehicleDesign
 
    A vehicle design that can be launched: one of the game's default vehicles, or a vehicle
-   saved by the player in the editor. Obtained from :attr:`KSA.vehicle_designs <KSA.KSA.vehicle_designs>`.
+   saved by the player in the editor. Obtained from :attr:`KSA.vehicle_designs`.
 
    .. note::
 
@@ -550,42 +671,36 @@ Vehicle
       The name of the design, as passed to :meth:`KSA.launch_vehicle`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: is_default: boolean
 
       Whether the design is one of the game's default vehicles.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: part_count: number
 
       The number of parts in the design.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: mass: number
 
       The total mass of the design, including propellant, in kilograms.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: dry_mass: number
 
       The mass of the design without propellant, in kilograms.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: delta_v: number
 
       The change in velocity of all the design's sequences, in meters per second.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 

@@ -69,9 +69,56 @@ Parts
 
    
 
+   .. function:: float shield_areal_density()
+
+      The areal density of the part's radiation shielding, its hull included, in
+      :math:`\mathrm{kg/m^{2}}`. Zero for an unshielded part.
+
+   
+
+   .. function:: float shield_mass()
+
+      The mass of the shielding material added to the part, in kilograms. Zero when the
+      shielding is built into the hull.
+
+   
+
+   .. function:: float tank_cover()
+
+      The fraction of the sky, seen from the part, that the contents of the vehicle's tanks
+      cover, between 0 and 1. The contents shield the part from radiation.
+
+   
+
+   .. function:: float dose_rate()
+
+      The radiation dose rate inside the part, behind its shielding and the vehicle's tanks,
+      in sieverts per second. Includes any solar particle event under way. A kitten in the
+      part's seats receives this dose rate.
+
+   
+
+   .. function:: HighlightColor highlight()
+   .. function:: void set_highlight(HighlightColor value)
+
+      The color the part is highlighted in.
+
+   
+
+      .. note::
+
+         The life support window uses this highlight to pick parts, and replaces it on
+         the parts it picks from.
+
    .. function:: std::vector<Tank> tanks()
 
       The part's propellant tanks. Empty if it has none.
+
+   
+
+   .. function:: std::vector<Habitat> habitats()
+
+      The part's habitats.
 
    
 
@@ -96,6 +143,18 @@ Parts
    .. function:: std::vector<PowerConsumer> power_consumers()
 
       The part's power consumers.
+
+   
+
+   .. function:: PowerForecast power_forecast()
+
+      The charge, draw and supply of the electrical circuit the part is on.
+
+   
+
+   .. function:: std::optional<Avionics> avionics()
+
+      The part's avionics, or ``NULL`` if it has none. A probe core has avionics.
 
    
 
@@ -198,6 +257,38 @@ Parts
 
 
 
+.. namespace:: krpc::services::KSA
+.. enum-struct:: HighlightColor
+
+   The color of a part's highlight. See :func:`Part::highlight`.
+
+
+   .. enumerator:: none
+
+      Not highlighted.
+
+
+   .. enumerator:: green
+
+      Green.
+
+
+   .. enumerator:: yellow
+
+      Yellow.
+
+
+   .. enumerator:: red
+
+      Red.
+
+
+   .. enumerator:: purple
+
+      Purple.
+
+
+
 .. class:: Engine
 
    An engine. Obtained from :func:`Part::engine`.
@@ -265,6 +356,67 @@ Parts
       Zero when it is inactive or has no propellant.
 
    
+
+   .. function:: float available_thrust_at(float pressure)
+
+      The thrust of the engine at full throttle and the given atmospheric pressure, in
+      Newtons. Zero when it is inactive or has no propellant.
+
+      :Parameters:
+
+       * **pressure** -- The atmospheric pressure, in pascals.
+
+   
+
+   .. function:: float specific_impulse_at(float pressure)
+
+      The specific impulse of the engine at the given atmospheric pressure, in seconds.
+      Zero when it is inactive or has no propellant.
+
+      :Parameters:
+
+       * **pressure** -- The atmospheric pressure, in pascals.
+
+   
+
+   .. function:: float max_thrust()
+
+      The thrust of the engine at full throttle and the current atmospheric pressure, in
+      Newtons, whether or not it is active and has propellant.
+
+   
+
+   .. function:: float max_vacuum_thrust()
+
+      The thrust of the engine at full throttle in a vacuum, in Newtons, whether or not
+      it is active and has propellant.
+
+   
+
+   .. function:: float chamber_pressure()
+
+      The pressure in the engine's combustion chamber, in pascals. Zero when it is not
+      firing.
+
+   
+
+   .. function:: bool solid()
+
+      Whether the engine is a solid rocket motor. Once ignited, a solid motor burns at
+      full thrust until its grain runs out.
+
+   
+
+   .. function:: float grain_mass()
+
+      The mass of the propellant grain of a solid rocket motor, in kilograms.
+
+   
+
+      .. note::
+
+         Some of the grain is left unburned when the motor burns out. Throws an exception
+         if the engine is not a solid rocket motor.
 
 
 
@@ -509,6 +661,19 @@ Parts
       The part the port is docked to, or ``NULL`` if it is not docked.
 
    
+
+   .. function:: bool hatch_open()
+   .. function:: void set_hatch_open(bool value)
+
+      Returns whether the hatch through the docked ports is open, and opens or closes it.
+      An open hatch joins the habitat zones on either side.
+
+   
+
+      .. note::
+
+         The hatch is closed while the port is not docked. Throws an exception when set on a
+         port that is not docked.
 
    .. function:: std::vector<Vehicle> undock()
 

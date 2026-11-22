@@ -1,0 +1,662 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Body
+====
+
+
+.. _http-KSA.Body:
+
+.. rubric:: Body
+
+A planet, moon or star. See :http:get:`/ksa/bodies`.
+
+A ``Body`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/body/(id)/name
+
+   The name of the body.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/is-star
+
+   Whether the body is a star.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/mass
+
+   The mass of the body, in kilograms.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/gravitational-parameter
+
+   The standard gravitational parameter of the body, in cubic meters per second squared.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/radius
+
+   The radius of the body, in meters.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/atmosphere-radius
+
+   The radius of the top of the atmosphere, in meters. Zero for a body with no
+   atmosphere.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/has-atmosphere
+
+   Whether the body has an atmosphere.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/sea-level-pressure
+
+   The atmospheric pressure at the body's mean radius, in pascals. Zero for a body
+   with no atmosphere.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/sea-level-density
+
+   The density of the atmosphere at the body's mean radius, in kilograms per cubic
+   meter. Zero for a body with no atmosphere.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/scale-height
+
+   The height over which the atmospheric pressure falls by a factor of ``e`` at
+   sea level, in meters. Zero for a body with no atmosphere.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:post:: /ksa/body/(id)/pressure-at
+
+   The atmospheric pressure at an altitude, in pascals. Zero for a body with no
+   atmosphere.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson double altitude: Altitude above the body's mean radius, in meters.
+   :resjson float value:
+
+
+
+
+
+.. http:post:: /ksa/body/(id)/density-at
+
+   The density of the atmosphere at an altitude, in kilograms per cubic meter. Zero
+   for a body with no atmosphere.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson double altitude: Altitude above the body's mean radius, in meters.
+   :resjson float value:
+
+
+
+
+
+.. http:post:: /ksa/body/(id)/temperature-at
+
+   The temperature of the atmosphere at an altitude, in kelvin. Zero for a body with
+   no atmosphere, or above the atmosphere.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson double altitude: Altitude above the body's mean radius, in meters.
+   :resjson float value:
+
+
+
+
+
+.. http:post:: /ksa/body/(id)/speed-of-sound-at
+
+   The speed of sound in the atmosphere at an altitude, in meters per second. Zero for
+   a body with no atmosphere, or above the atmosphere.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson double altitude: Altitude above the body's mean radius, in meters.
+   :resjson float value:
+
+
+
+
+
+.. http:get:: /ksa/body/(id)/atmosphere-oxygen-fraction
+
+   The fraction of the atmosphere that is oxygen, by volume. Zero for a body with no
+   atmosphere.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/atmosphere-molar-mass
+
+   The mean molar mass of the atmosphere, in kilograms per mole. Zero for a body with
+   no atmosphere.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/has-ocean
+
+   Whether the body has an ocean.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/ocean-density
+
+   The density of the ocean, in kilograms per cubic meter. Zero for a body with no
+   ocean.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/geomagnetic-storm-level
+
+   The level of the geomagnetic storm at the body, from 0 for none to 5 for the most
+   severe. The G level of the game's space weather window. Zero for a body with no
+   magnetosphere.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/dst-index
+
+   The disturbance storm time index of the body, in teslas. It falls below zero in a
+   geomagnetic storm. Zero for a body with no magnetosphere.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/solar-activity
+
+   The activity of a star, from 0 at the minimum of its cycle to 1 at the maximum.
+   Zero for a body that is not a star.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/solar-activity-rising
+
+   Whether the activity of a star is rising toward the maximum of its cycle.
+   False for a body that is not a star, or a star with no cycle.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/time-to-solar-activity-turn
+
+   The time until the activity of a star reaches the maximum or minimum of its cycle,
+   in seconds. Not a number for a body that is not a star, or a star with no cycle.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/coronal-mass-ejections-per-day
+
+   The mean number of coronal mass ejections a star throws out per day, at its
+   current activity. Zero for a body that is not a star.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/active-region-count
+
+   The number of active regions on a star, the sources of its eruptions. Zero for a
+   body that is not a star.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/recent-coronal-mass-ejections
+
+   The fast coronal mass ejections a star threw out in the last three days, as the
+   game's space weather window lists them. Empty for a body that is not a star.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson list<KSA.CoronalMassEjection> value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/surface-gravity
+
+   The acceleration due to gravity at the body's mean radius, in meters per second
+   squared.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/rotational-speed
+
+   The rate at which the body rotates about its axis, in radians per second.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/rotational-period
+
+   The time the body takes to rotate once about its axis, relative to the stars, in
+   seconds. Infinite for a body that does not rotate.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/sphere-of-influence
+
+   The radius of the body's sphere of influence, in meters. Not a number for a body
+   that orbits nothing.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/parent
+
+   The body this body orbits, or ``null`` if it orbits nothing.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson KSA.Body? value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/satellites
+
+   The bodies that orbit this body.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson list<KSA.Body> value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/orbit
+
+   The orbit of the body, or ``null`` if it orbits nothing.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson KSA.Orbit? value:
+
+
+
+
+.. http:post:: /ksa/body/(id)/surface-height
+
+   The height of the terrain or the sea surface, whichever is higher, at a point on
+   the body, in meters above the body's mean radius.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson double latitude: Latitude, in degrees.
+   :reqjson double longitude: Longitude, in degrees.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /ksa/body/(id)/bedrock-height
+
+   The height of the terrain at a point on the body, in meters above the body's mean
+   radius. Below the sea, this is the height of the sea floor.
+
+   .. note::
+
+      Zero for a body with no terrain, such as a gas giant.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson double latitude: Latitude, in degrees.
+   :reqjson double longitude: Longitude, in degrees.
+   :resjson double value:
+
+
+
+
+
+.. http:get:: /ksa/body/(id)/launch-sites
+
+   The names of the launch sites on the body. See :http:post:`/ksa/launch-vehicle`.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson list<string> value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/biomes
+
+   The names of the body's biomes. Empty for a body with no biomes.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson list<string> value:
+
+
+
+
+.. http:post:: /ksa/body/(id)/biome-at
+
+   The biome at a point on the body, or ``null`` if the body has no biomes.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson double latitude: Latitude, in degrees.
+   :reqjson double longitude: Longitude, in degrees.
+   :resjson string? value:
+
+
+
+
+
+.. http:get:: /ksa/body/(id)/reference-frame
+
+   The reference frame fixed to the body, with its origin at the body's center. The
+   z axis points to the north pole, the x axis to latitude and longitude zero, and the
+   y axis to latitude zero and longitude 90 degrees east. The frame rotates with the
+   body.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson KSA.ReferenceFrame value:
+
+
+
+
+.. http:get:: /ksa/body/(id)/non-rotating-reference-frame
+
+   The reference frame with its origin at the body's center that does not rotate. The
+   z axis points to the north pole, and the x and y axes are fixed relative to the
+   stars.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :resjson KSA.ReferenceFrame value:
+
+
+
+
+.. http:post:: /ksa/body/(id)/position
+
+   The position of the center of the body, in meters.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/body/(id)/velocity
+
+   The velocity of the body, in meters per second.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the velocity.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/body/(id)/rotation
+
+   The rotation of :http:get:`/ksa/body/(id)/reference-frame` relative to the given frame.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the rotation.
+   :resjson tuple<double, double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/body/(id)/angular-velocity
+
+   The angular velocity of the body, in radians per second. The vector points along
+   the axis of rotation, and its length is the rate of rotation.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the angular velocity.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/body/(id)/surface-position
+
+   The position of a point on the surface, at the body's mean radius, in meters.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson double latitude: Latitude, in degrees.
+   :reqjson double longitude: Longitude, in degrees.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/body/(id)/latitude-at-position
+
+   The latitude of a position, in degrees.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson tuple<double, double, double> position: Position, in meters.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /ksa/body/(id)/longitude-at-position
+
+   The longitude of a position, in degrees.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson tuple<double, double, double> position: Position, in meters.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /ksa/body/(id)/altitude-at-position
+
+   The altitude of a position above the body's mean radius, in meters.
+
+
+   :param id: The identifier of the :ref:`Body <http-KSA.Body>` object.
+
+   :reqjson tuple<double, double, double> position: Position, in meters.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position.
+   :resjson double value:

@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Computer &#8212; kRPC v0.3.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5ab7b574" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'http/api/kfs/computer';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <link rel="icon" href="../../../_static/logo-mark.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="gRPC" href="../../../grpc.html" />
+    <link rel="prev" title="Service" href="kfs.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="../../../_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../js.html">JavaScript</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../http.html">HTTP</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../kfs.html">kFS API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="kfs.html">Service</a></li>
+<li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../clients.html" class="nav-link">Clients</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../../http.html" class="nav-link">HTTP</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../kfs.html" class="nav-link">kFS API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Computer</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="computer">
+<h1>Computer<a class="headerlink" href="#computer" title="Link to this heading">#</a></h1>
+<p class="rubric" id="http-kfs-computer">Computer</p>
+<p>A vehicle’s flight computer, which runs a kFS program. Obtained from
+<a class="reference internal" href="kfs.html#post--kfs-computer" title="POST /kfs/computer"><code class="xref http http-post docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/kfs/computer</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A program is written in kC, a subset of C, or in kASM. The calls that change the
+computer, and <a class="reference internal" href="#post--kfs-computer-(id)-write-globals" title="POST /kfs/computer/(id)/write-globals"><code class="xref http http-post docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/kfs/computer/(id)/write-globals</span></code></a>, take effect before the computer’s next tick, and
+return once they have. The computer ticks while the game is running and the vehicle is
+in the physics bubble, so until then they wait. The game does not save a program.</p>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">Computer</span></code> object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as <code class="docutils literal notranslate"><span class="pre">(id)</span></code>.</p>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--kfs-computer-(id)-build">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/build</span></span><a class="headerlink" href="#post--kfs-computer-(id)-build" title="Link to this definition">#</a></dt>
+<dd><p>Build a program, without loading it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>files</strong> (<em>dictionary&lt;string, string&gt;</em>) – The source files, by name. A program with a <code class="docutils literal notranslate"><span class="pre">.c</span></code> file is kC, and one with only <code class="docutils literal notranslate"><span class="pre">.kasm</span></code> files is kASM.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KFS.Diagnostic&gt;</em>) – The errors and warnings.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--kfs-computer-(id)-load">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/load</span></span><a class="headerlink" href="#post--kfs-computer-(id)-load" title="Link to this definition">#</a></dt>
+<dd><p>Build a program and load it onto the computer. Throws an exception if the program has
+errors, or the computer rejects it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The program is in standby once loaded. See <a class="reference internal" href="#post--kfs-computer-(id)-start" title="POST /kfs/computer/(id)/start"><code class="xref http http-post docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/kfs/computer/(id)/start</span></code></a>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>files</strong> (<em>dictionary&lt;string, string&gt;</em>) – The source files, by name, as for <a class="reference internal" href="#post--kfs-computer-(id)-build" title="POST /kfs/computer/(id)/build"><code class="xref http http-post docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/kfs/computer/(id)/build</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--kfs-computer-(id)-start">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/start</span></span><a class="headerlink" href="#post--kfs-computer-(id)-start" title="Link to this definition">#</a></dt>
+<dd><p>Start the loaded program. Throws an exception if no program is loaded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--kfs-computer-(id)-reset">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/reset</span></span><a class="headerlink" href="#post--kfs-computer-(id)-reset" title="Link to this definition">#</a></dt>
+<dd><p>Restart the loaded program, as the reset button does. Throws an exception if no
+program is loaded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--kfs-computer-(id)-stop">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/stop</span></span><a class="headerlink" href="#post--kfs-computer-(id)-stop" title="Link to this definition">#</a></dt>
+<dd><p>Stop the program, and give the vehicle back to the pilot. The program stays loaded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--kfs-computer-(id)-kill">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/kill</span></span><a class="headerlink" href="#post--kfs-computer-(id)-kill" title="Link to this definition">#</a></dt>
+<dd><p>Halt the program with the kill switch, and give the vehicle back to the pilot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--kfs-computer-(id)-state">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/state</span></span><a class="headerlink" href="#get--kfs-computer-(id)-state" title="Link to this definition">#</a></dt>
+<dd><p>The state of the computer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KFS.ComputerState</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--kfs-computer-(id)-mode">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/mode</span></span><a class="headerlink" href="#get--kfs-computer-(id)-mode" title="Link to this definition">#</a></dt>
+<dd><p>The control mode the loaded program claims.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KFS.ControlMode</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--kfs-computer-(id)-under-control">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/under-control</span></span><a class="headerlink" href="#get--kfs-computer-(id)-under-control" title="Link to this definition">#</a></dt>
+<dd><p>Whether the program controls the vehicle: it is running, or halted with its last
+commands held.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--kfs-computer-(id)-tick-rate">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/tick-rate</span></span><a class="headerlink" href="#get--kfs-computer-(id)-tick-rate" title="Link to this definition">#</a></dt>
+<dd><p>The ticks per second of the loaded program, or zero if no program is loaded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>int32</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--kfs-computer-(id)-cycles-used">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/cycles-used</span></span><a class="headerlink" href="#get--kfs-computer-(id)-cycles-used" title="Link to this definition">#</a></dt>
+<dd><p>The processor cycles the latest tick used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>int64</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--kfs-computer-(id)-cycle-budget">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/cycle-budget</span></span><a class="headerlink" href="#get--kfs-computer-(id)-cycle-budget" title="Link to this definition">#</a></dt>
+<dd><p>The processor cycles a tick may use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>int64</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--kfs-computer-(id)-overruns">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/overruns</span></span><a class="headerlink" href="#get--kfs-computer-(id)-overruns" title="Link to this definition">#</a></dt>
+<dd><p>The number of ticks that ran past their budget since the program started.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>int64</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--kfs-computer-(id)-trap">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/trap</span></span><a class="headerlink" href="#get--kfs-computer-(id)-trap" title="Link to this definition">#</a></dt>
+<dd><p>The error that halted the program, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if no error halted it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KFS.Trap?</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--kfs-computer-(id)-fault">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/fault</span></span><a class="headerlink" href="#get--kfs-computer-(id)-fault" title="Link to this definition">#</a></dt>
+<dd><p>The game’s error that halted the computer, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if there is none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>string?</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--kfs-computer-(id)-log">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/log</span></span><a class="headerlink" href="#get--kfs-computer-(id)-log" title="Link to this definition">#</a></dt>
+<dd><p>The computer’s console: the lines the program logs, and the computer’s own messages.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The computer keeps the last 4,096 lines, and a program logs at most 10 lines a
+second.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;string&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--kfs-computer-(id)-clear-log">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/clear-log</span></span><a class="headerlink" href="#post--kfs-computer-(id)-clear-log" title="Link to this definition">#</a></dt>
+<dd><p>Clear the computer’s console.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--kfs-computer-(id)-globals">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/globals</span></span><a class="headerlink" href="#get--kfs-computer-(id)-globals" title="Link to this definition">#</a></dt>
+<dd><p>The paths of the loaded program’s global variables, one for each number in them,
+such as <code class="docutils literal notranslate"><span class="pre">command.args[2]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;string&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--kfs-computer-(id)-read-global">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/read-global</span></span><a class="headerlink" href="#post--kfs-computer-(id)-read-global" title="Link to this definition">#</a></dt>
+<dd><p>The value of one of the program’s global variables, as of its latest tick.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>path</strong> (<em>string</em>) – The path of the variable, as in <a class="reference internal" href="#get--kfs-computer-(id)-globals" title="GET /kfs/computer/(id)/globals"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/kfs/computer/(id)/globals</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>double</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--kfs-computer-(id)-write-globals">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/write-globals</span></span><a class="headerlink" href="#post--kfs-computer-(id)-write-globals" title="Link to this definition">#</a></dt>
+<dd><p>Write the program’s global variables. The program sees all of them from the same
+tick.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A value is converted to the variable’s type. Throws an exception if a value does not
+fit, such as a fraction for an integer.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>values</strong> (<em>dictionary&lt;string, double&gt;</em>) – The values, by the paths in <a class="reference internal" href="#get--kfs-computer-(id)-globals" title="GET /kfs/computer/(id)/globals"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/kfs/computer/(id)/globals</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--kfs-computer-(id)-trace-channels">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/trace-channels</span></span><a class="headerlink" href="#get--kfs-computer-(id)-trace-channels" title="Link to this definition">#</a></dt>
+<dd><p>The names of the channels the program has traced to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;string&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--kfs-computer-(id)-trace">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/kfs/computer/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/trace</span></span><a class="headerlink" href="#post--kfs-computer-(id)-trace" title="Link to this definition">#</a></dt>
+<dd><p>The latest value the program traced to a channel. Throws an exception if the program
+has not traced to it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-kfs-computer"><span class="std std-ref">Computer</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>channel</strong> (<em>string</em>) – The name of the channel.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric" id="http-kfs-computerstate">ComputerState</p>
+<p>The state of a flight computer. See <a class="reference internal" href="#get--kfs-computer-(id)-state" title="GET /kfs/computer/(id)/state"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/kfs/computer/(id)/state</span></code></a>.</p>
+<p>Passed and returned as the name of one of its values:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;no_software&quot;</span></code></dt><dd><p>No program is loaded.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;standby&quot;</span></code></dt><dd><p>A program is loaded, and not running.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;boot&quot;</span></code></dt><dd><p>The program is running its initialization.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;running&quot;</span></code></dt><dd><p>The program is running.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;idle&quot;</span></code></dt><dd><p>The program is running, with no task to run.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;halted&quot;</span></code></dt><dd><p>The program has stopped, after a trap, a halt or the kill switch.</p>
+</dd>
+</dl>
+<p class="rubric" id="http-kfs-controlmode">ControlMode</p>
+<p>The control a program has of a vehicle. See <a class="reference internal" href="#get--kfs-computer-(id)-mode" title="GET /kfs/computer/(id)/mode"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/kfs/computer/(id)/mode</span></code></a>.</p>
+<p>Passed and returned as the name of one of its values:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;pilot&quot;</span></code></dt><dd><p>The game’s flight computer flies the vehicle, and the program steers it.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;full_control&quot;</span></code></dt><dd><p>The program commands the thrusters, engines and gimbals itself. A program claims it
+with <code class="docutils literal notranslate"><span class="pre">#pragma</span> <span class="pre">kfs</span> <span class="pre">claim</span> <span class="pre">ALLOCATION</span></code>.</p>
+</dd>
+</dl>
+<p class="rubric" id="http-kfs-diagnostic">Diagnostic</p>
+<p>An error or warning from building a program. See <a class="reference internal" href="#post--kfs-computer-(id)-build" title="POST /kfs/computer/(id)/build"><code class="xref http http-post docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/kfs/computer/(id)/build</span></code></a>.</p>
+<p>Passed and returned as an object with these fields:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">error</span></code> (bool)</dt><dd><p>Whether it is an error. An error stops the program from being built.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">code</span></code> (string)</dt><dd><p>The diagnostic’s code, such as <code class="docutils literal notranslate"><span class="pre">KC-E016</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">file</span></code> (string)</dt><dd><p>The source file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">line</span></code> (int32)</dt><dd><p>The line in the source file, from 1. Zero for the whole file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">column</span></code> (int32)</dt><dd><p>The column in the line, from 1.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">message</span></code> (string)</dt><dd><p>The message.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">hint</span></code> (string?)</dt><dd><p>A hint at the fix, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if there is none.</p>
+</dd>
+</dl>
+<p class="rubric" id="http-kfs-trap">Trap</p>
+<p>The error that halted a program, and where it happened. See <a class="reference internal" href="#get--kfs-computer-(id)-trap" title="GET /kfs/computer/(id)/trap"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/kfs/computer/(id)/trap</span></code></a>.</p>
+<p>Passed and returned as an object with these fields:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">code</span></code> (KFS.TrapCode)</dt><dd><p>The error.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">function</span></code> (string)</dt><dd><p>The function that was running.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">file</span></code> (string?)</dt><dd><p>The source file, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it is not known.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">line</span></code> (int32)</dt><dd><p>The line in the source file, or zero if it is not known.</p>
+</dd>
+</dl>
+<p class="rubric" id="http-kfs-trapcode">TrapCode</p>
+<p>The error that halted a program. See <code class="docutils literal notranslate"><span class="pre">code</span></code>.</p>
+<p>Passed and returned as the name of one of its values:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;illegal_opcode&quot;</span></code></dt><dd><p>An instruction the processor does not have.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;operand_overflow&quot;</span></code></dt><dd><p>The operand stack overflowed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;operand_underflow&quot;</span></code></dt><dd><p>The operand stack underflowed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;return_overflow&quot;</span></code></dt><dd><p>The return stack overflowed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;init_overrun&quot;</span></code></dt><dd><p>The initialization ran past its budget.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;stack_overflow&quot;</span></code></dt><dd><p>The stack overflowed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;null_access&quot;</span></code></dt><dd><p>A read or write through a null pointer.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;bad_address&quot;</span></code></dt><dd><p>A read or write outside memory.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;read_only&quot;</span></code></dt><dd><p>A write to read-only memory.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;misaligned&quot;</span></code></dt><dd><p>A misaligned read or write.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;division_by_zero&quot;</span></code></dt><dd><p>A division by zero.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;bounds&quot;</span></code></dt><dd><p>An array index out of bounds.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;user&quot;</span></code></dt><dd><p>A trap raised by the program.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;bad_jump&quot;</span></code></dt><dd><p>A jump to an invalid address.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;bad_syscall&quot;</span></code></dt><dd><p>A call to a service that does not exist.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;bad_yield&quot;</span></code></dt><dd><p>A task yielded where it may not.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;memory_error&quot;</span></code></dt><dd><p>A memory error, such as a radiation upset.</p>
+</dd>
+</dl>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="kfs.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Service</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../../grpc.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">gRPC</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/http/api/kfs/computer.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026 kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

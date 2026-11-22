@@ -1,0 +1,61 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KSA
+
+Space Weather
+=============
+
+
+.. class:: CoronalMassEjection
+
+   A coronal mass ejection: a cloud of plasma thrown out by a star. One that reaches a body
+   with a magnetosphere can cause a geomagnetic storm. See
+   :attr:`Body.recent_coronal_mass_ejections` and
+   :attr:`Flight.incoming_coronal_mass_ejections`.
+
+   .. attribute:: star
+
+      The star that threw out the ejection.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Body`
+   
+
+   .. attribute:: ut
+
+      The universal time at which the ejection left the star, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: speed
+
+      The speed of the ejection as it leaves the star, in :math:`\mathrm{m/s}`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. method:: arrival_time(vehicle)
+
+      The universal time at which the shock of the ejection is forecast to reach the
+      vehicle, in seconds. Not a number if the ejection misses the vehicle, or has
+      already reached it.
+
+      :param Vehicle vehicle: The vehicle.
+      :rtype: float
+   
+
+      .. note::
+
+         The forecast the game's space weather window shows. It is uncertain by up to
+         :meth:`CoronalMassEjection.arrival_uncertainty`, which shrinks as the ejection nears.
+
+   .. method:: arrival_uncertainty(vehicle)
+
+      The uncertainty of :meth:`CoronalMassEjection.arrival_time`, in seconds. Not a number if the
+      ejection misses the vehicle, or has already reached it.
+
+      :param Vehicle vehicle: The vehicle.
+      :rtype: float

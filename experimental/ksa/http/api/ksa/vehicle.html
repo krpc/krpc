@@ -1,0 +1,2596 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Vehicle &#8212; kRPC v0.3.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5ab7b574" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'http/api/ksa/vehicle';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <link rel="icon" href="../../../_static/logo-mark.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Sequence" href="sequence.html" />
+    <link rel="prev" title="KSA" href="ksa.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="../../../_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../js.html">JavaScript</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../http.html">HTTP</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ksa.html">KSA</a></li>
+<li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../clients.html" class="nav-link">Clients</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../../http.html" class="nav-link">HTTP</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../ksa.html" class="nav-link">KSA API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Vehicle</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="vehicle">
+<h1>Vehicle<a class="headerlink" href="#vehicle" title="Link to this heading">#</a></h1>
+<p class="rubric" id="http-ksa-vehicle">Vehicle</p>
+<p>A vehicle in the current system. Obtained from <a class="reference internal" href="ksa.html#get--ksa-active-vehicle" title="GET /ksa/active-vehicle"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/active-vehicle</span></code></a>
+or <a class="reference internal" href="ksa.html#get--ksa-vehicles" title="GET /ksa/vehicles"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicles</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Docking and undocking replace the vehicles involved, so an object for one of them
+throws an exception afterwards.</p>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">Vehicle</span></code> object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as <code class="docutils literal notranslate"><span class="pre">(id)</span></code>.</p>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-name">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/name</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-name" title="Link to this definition">#</a></dt>
+<dd><p>The name of the vehicle, which is unique in the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>string</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--ksa-vehicle-(id)-name">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/name</span></span><a class="headerlink" href="#put--ksa-vehicle-(id)-name" title="Link to this definition">#</a></dt>
+<dd><p>The name of the vehicle, which is unique in the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>string</em>) – The new value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--ksa-vehicle-(id)-destroy">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/destroy</span></span><a class="headerlink" href="#post--ksa-vehicle-(id)-destroy" title="Link to this definition">#</a></dt>
+<dd><p>Destroy the vehicle, killing its crew, as abandoning the vehicle does. Returns once
+the vehicle is gone.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the vehicle is the active vehicle, the game hands control to a nearby vehicle.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-can-recover">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/can-recover</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-can-recover" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle can be recovered: at rest on the surface of the home planet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--ksa-vehicle-(id)-recover">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/recover</span></span><a class="headerlink" href="#post--ksa-vehicle-(id)-recover" title="Link to this definition">#</a></dt>
+<dd><p>Recover the vehicle, ending its crew’s missions, as the game’s recover button does.
+Returns once the vehicle is gone.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the vehicle cannot be recovered, see <a class="reference internal" href="#get--ksa-vehicle-(id)-can-recover" title="GET /ksa/vehicle/(id)/can-recover"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/can-recover</span></code></a>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-situation">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/situation</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-situation" title="Link to this definition">#</a></dt>
+<dd><p>The situation of the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.Situation</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-on-rails">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/on-rails</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-on-rails" title="Link to this definition">#</a></dt>
+<dd><p>Whether the game moves the vehicle without simulating the forces on it: along its
+orbit, or held on the surface. True in the freefall, landed, floating and bottomed
+situations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-is-debris">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/is-debris</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-is-debris" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle is debris, such as a spent stage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-has-launched">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/has-launched</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-has-launched" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle has launched.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-launch-time">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/launch-time</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-launch-time" title="Link to this definition">#</a></dt>
+<dd><p>The universal time the vehicle was created, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>double</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-mass">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/mass</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-mass" title="Link to this definition">#</a></dt>
+<dd><p>The total mass of the vehicle, including propellant, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-dry-mass">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/dry-mass</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-dry-mass" title="Link to this definition">#</a></dt>
+<dd><p>The mass of the vehicle’s parts, without propellant or supplies, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-propellant-mass">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/propellant-mass</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-propellant-mass" title="Link to this definition">#</a></dt>
+<dd><p>The mass of the propellant in the vehicle, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-thrust">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/thrust</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-thrust" title="Link to this definition">#</a></dt>
+<dd><p>The thrust of the engines at their current throttle and the current atmospheric
+pressure, in Newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-available-thrust">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/available-thrust</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-available-thrust" title="Link to this definition">#</a></dt>
+<dd><p>The thrust of the active engines that have propellant, at full throttle and the
+current atmospheric pressure, in Newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-specific-impulse">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/specific-impulse</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-specific-impulse" title="Link to this definition">#</a></dt>
+<dd><p>The combined specific impulse of the active engines that have propellant, at the
+current atmospheric pressure, in seconds. Zero when no engine is active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-moment-of-inertia">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/moment-of-inertia</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-moment-of-inertia" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s moments of inertia about the axes of <a class="reference internal" href="#get--ksa-vehicle-(id)-reference-frame" title="GET /ksa/vehicle/(id)/reference-frame"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/reference-frame</span></code></a>
+through its center of mass, in <span class="math notranslate nohighlight">\(\mathrm{kg \cdot m^{2}}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>tuple&lt;double, double, double&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-inertia-tensor">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/inertia-tensor</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-inertia-tensor" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s inertia tensor about its center of mass, along the axes of
+<a class="reference internal" href="#get--ksa-vehicle-(id)-reference-frame" title="GET /ksa/vehicle/(id)/reference-frame"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/reference-frame</span></code></a>, in <span class="math notranslate nohighlight">\(\mathrm{kg \cdot m^{2}}\)</span>, as its three rows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;tuple&lt;double, double, double&gt;&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-available-rcs-torque">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/available-rcs-torque</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-available-rcs-torque" title="Link to this definition">#</a></dt>
+<dd><p>The torque the vehicle’s RCS thrusters can give about each axis of its control
+frame, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>. Each is the smaller of the torques in the two
+directions about the axis.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The control frame has the axes of <a class="reference internal" href="#get--ksa-vehicle-(id)-reference-frame" title="GET /ksa/vehicle/(id)/reference-frame"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/reference-frame</span></code></a>, unless the flight
+computer steers along the thrust. The thrusters give this torque while
+<a class="reference internal" href="control.html#get--ksa-control-(id)-rcs" title="GET /ksa/control/(id)/rcs"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/control/(id)/rcs</span></code></a> is on.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>tuple&lt;double, double, double&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--ksa-vehicle-(id)-acceleration">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/acceleration</span></span><a class="headerlink" href="#post--ksa-vehicle-(id)-acceleration" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s acceleration from the forces on it other than gravity, in
+<span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game measures it over the last physics step. Its length divided by standard
+gravity is <a class="reference internal" href="flight.html#get--ksa-flight-(id)-g-force" title="GET /ksa/flight/(id)/g-force"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/flight/(id)/g-force</span></code></a>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>reference_frame</strong> (<em>KSA.ReferenceFrame</em>) – The reference frame of the acceleration.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>tuple&lt;double, double, double&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--ksa-vehicle-(id)-angular-acceleration">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/angular-acceleration</span></span><a class="headerlink" href="#post--ksa-vehicle-(id)-angular-acceleration" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s angular acceleration, in <span class="math notranslate nohighlight">\(\mathrm{rad/s^{2}}\)</span>. The vector points
+along the axis of rotation.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game measures it over the last physics step.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>reference_frame</strong> (<em>KSA.ReferenceFrame</em>) – The reference frame of the angular acceleration.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>tuple&lt;double, double, double&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-peak-g-load">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/peak-g-load</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-peak-g-load" title="Link to this definition">#</a></dt>
+<dd><p>The highest smoothed g-load on the vehicle during the last physics step, as a
+multiple of standard gravity. Zero while the vehicle is <a class="reference internal" href="#get--ksa-vehicle-(id)-on-rails" title="GET /ksa/vehicle/(id)/on-rails"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/on-rails</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-max-g-load">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/max-g-load</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-max-g-load" title="Link to this definition">#</a></dt>
+<dd><p>The g-load the vehicle can take before it breaks up, as a multiple of standard
+gravity. Zero while the vehicle is <a class="reference internal" href="#get--ksa-vehicle-(id)-on-rails" title="GET /ksa/vehicle/(id)/on-rails"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/on-rails</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-peak-dynamic-pressure">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/peak-dynamic-pressure</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-peak-dynamic-pressure" title="Link to this definition">#</a></dt>
+<dd><p>The highest dynamic pressure on the vehicle during the last physics step, in
+pascals. In the sea, this is the dynamic pressure of the water. Zero while the
+vehicle is <a class="reference internal" href="#get--ksa-vehicle-(id)-on-rails" title="GET /ksa/vehicle/(id)/on-rails"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/on-rails</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-max-dynamic-pressure">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/max-dynamic-pressure</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-max-dynamic-pressure" title="Link to this definition">#</a></dt>
+<dd><p>The dynamic pressure the vehicle can take before it breaks up, in pascals. Zero
+while the vehicle is <a class="reference internal" href="#get--ksa-vehicle-(id)-on-rails" title="GET /ksa/vehicle/(id)/on-rails"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/on-rails</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-parts">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/parts</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-parts" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s parts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Part&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-root-part">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/root-part</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-root-part" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s root part, which the other parts are attached to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.Part</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--ksa-vehicle-(id)-parts-with-name">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/parts-with-name</span></span><a class="headerlink" href="#post--ksa-vehicle-(id)-parts-with-name" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s parts with the given template id. See <a class="reference internal" href="parts.html#get--ksa-part-(id)-name" title="GET /ksa/part/(id)/name"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/part/(id)/name</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) – The template id.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Part&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-seats">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/seats</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-seats" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s crew seats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Seat&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-crew">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/crew</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-crew" title="Link to this definition">#</a></dt>
+<dd><p>The kittens in the vehicle’s seats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Kitten&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-crew-capacity">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/crew-capacity</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-crew-capacity" title="Link to this definition">#</a></dt>
+<dd><p>The number of crew seats in the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>int32</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-controllable">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/controllable</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-controllable" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle can be flown. A vehicle needs a control module, and a crewed
+vehicle with every kitten incapacitated also needs a probe core.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-has-control-module">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/has-control-module</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-has-control-module" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle has a control module, such as a capsule or a probe core.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-control-state">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/control-state</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-control-state" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle can be flown, or why not.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the reason the game gives when the vehicle does not respond to its controls.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.ControlState</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-crew-events">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/crew-events</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-crew-events" title="Link to this definition">#</a></dt>
+<dd><p>The most urgent coming event of each kitten in the vehicle, most urgent first.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The order is the game’s crew clock’s: events within a day come first, the worst
+first. Empty while <a class="reference internal" href="ksa.html#get--ksa-life-support-enabled" title="GET /ksa/life-support-enabled"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/life-support-enabled</span></code></a> and
+<a class="reference internal" href="ksa.html#get--ksa-radiation-enabled" title="GET /ksa/radiation-enabled"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/radiation-enabled</span></code></a> are both false.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.CrewEvent&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-next-crew-event">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/next-crew-event</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-next-crew-event" title="Link to this definition">#</a></dt>
+<dd><p>The most urgent of <a class="reference internal" href="#get--ksa-vehicle-(id)-crew-events" title="GET /ksa/vehicle/(id)/crew-events"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/crew-events</span></code></a>, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if there is none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.CrewEvent?</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-life-support">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/life-support</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-life-support" title="Link to this definition">#</a></dt>
+<dd><p>How long the supplies of the vehicle’s worst habitat zone last its crew, or
+<code class="docutils literal notranslate"><span class="pre">null</span></code> if the vehicle has no habitats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.LifeSupport?</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-mission">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/mission</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-mission" title="Link to this definition">#</a></dt>
+<dd><p>The mission planned for the vehicle, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.Mission?</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-habitat-zones">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/habitat-zones</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-habitat-zones" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s habitat zones.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.HabitatZone&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-habitats">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/habitats</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-habitats" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s habitats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Habitat&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-engines">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/engines</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-engines" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s engines.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Engine&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-rcs">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/rcs</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-rcs" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s RCS thrusters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.RCS&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-decouplers">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/decouplers</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-decouplers" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s decouplers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Decoupler&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-parachutes">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/parachutes</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-parachutes" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s parachutes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Parachute&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-tanks">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/tanks</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-tanks" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s propellant tanks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Tank&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-batteries">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/batteries</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-batteries" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s batteries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Battery&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-solar-panels">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/solar-panels</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-solar-panels" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s solar panels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.SolarPanel&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-generators">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/generators</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-generators" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s generators.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Generator&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-power-consumers">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/power-consumers</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-power-consumers" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s power consumers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.PowerConsumer&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-avionics">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/avionics</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-avionics" title="Link to this definition">#</a></dt>
+<dd><p>The avionics of the vehicle’s probe cores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Avionics&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-stored-energy">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/stored-energy</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-stored-energy" title="Link to this definition">#</a></dt>
+<dd><p>The energy stored in the vehicle’s batteries, in joules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-energy-capacity">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/energy-capacity</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-energy-capacity" title="Link to this definition">#</a></dt>
+<dd><p>The energy the vehicle’s batteries can store, in joules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-net-power">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/net-power</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-net-power" title="Link to this definition">#</a></dt>
+<dd><p>The power produced by the vehicle’s solar panels and generators, less the power its
+parts use, in watts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-lights">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/lights</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-lights" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s lights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Light&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-deployables">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/deployables</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-deployables" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s deployable sections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Deployable&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-magnetic-scoops">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/magnetic-scoops</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-magnetic-scoops" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s magnetic scoops.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.MagneticScoop&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-fuel-links">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/fuel-links</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-fuel-links" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s fuel links.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.FuelLink&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-docking-ports">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/docking-ports</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-docking-ports" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s docking ports.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.DockingPort&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-resources">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/resources</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-resources" title="Link to this definition">#</a></dt>
+<dd><p>The resources the vehicle holds, one for each substance, totaled over its parts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Resource&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-delta-v">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/delta-v</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-delta-v" title="Link to this definition">#</a></dt>
+<dd><p>The change in velocity of all the vehicle’s sequences, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-sequences">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/sequences</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-sequences" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s sequences, in activation order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Sequence&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-target-vehicle">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/target-vehicle</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-target-vehicle" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle targeted by this vehicle, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it replaces the
+target, and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.Vehicle?</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--ksa-vehicle-(id)-target-vehicle">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/target-vehicle</span></span><a class="headerlink" href="#put--ksa-vehicle-(id)-target-vehicle" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle targeted by this vehicle, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it replaces the
+target, and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.Vehicle?</em>) – The new value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-target-body">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/target-body</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-target-body" title="Link to this definition">#</a></dt>
+<dd><p>The body targeted by this vehicle, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it replaces the target,
+and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Setting a body that orbits nothing, such as the star, throws an exception.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.Body?</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--ksa-vehicle-(id)-target-body">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/target-body</span></span><a class="headerlink" href="#put--ksa-vehicle-(id)-target-body" title="Link to this definition">#</a></dt>
+<dd><p>The body targeted by this vehicle, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it replaces the target,
+and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Setting a body that orbits nothing, such as the star, throws an exception.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.Body?</em>) – The new value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-target-part">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/target-part</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-target-part" title="Link to this definition">#</a></dt>
+<dd><p>The part targeted by this vehicle, on the vehicle in <a class="reference internal" href="#get--ksa-vehicle-(id)-target-vehicle" title="GET /ksa/vehicle/(id)/target-vehicle"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/target-vehicle</span></code></a>,
+or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it targets the part and its vehicle, and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears
+the target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.Part?</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--ksa-vehicle-(id)-target-part">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/target-part</span></span><a class="headerlink" href="#put--ksa-vehicle-(id)-target-part" title="Link to this definition">#</a></dt>
+<dd><p>The part targeted by this vehicle, on the vehicle in <a class="reference internal" href="#get--ksa-vehicle-(id)-target-vehicle" title="GET /ksa/vehicle/(id)/target-vehicle"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/target-vehicle</span></code></a>,
+or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it targets the part and its vehicle, and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears
+the target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.Part?</em>) – The new value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-burns">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/burns</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-burns" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s planned burns, in time order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>list&lt;KSA.Burn&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--ksa-vehicle-(id)-add-burn">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/add-burn</span></span><a class="headerlink" href="#post--ksa-vehicle-(id)-add-burn" title="Link to this definition">#</a></dt>
+<dd><p>Plan a burn, and add it to the vehicle’s burn plan.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Returns once the flight computer has timed the burn, if it is the next one. Throws
+an exception if the time is in the past, or beyond the vehicle’s predicted
+trajectory.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ut</strong> (<em>double</em>) – Universal time of the burn, in seconds.</p></li>
+<li><p><strong>prograde</strong> (<em>float</em>) – Change in velocity in the prograde direction, in meters per second. Optional, defaults to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
+<li><p><strong>normal</strong> (<em>float</em>) – Change in velocity along the orbit normal, in meters per second. Optional, defaults to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
+<li><p><strong>radial</strong> (<em>float</em>) – Change in velocity radially outward, in meters per second. Optional, defaults to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.Burn</em>) – The burn.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-orbit">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/orbit</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-orbit" title="Link to this definition">#</a></dt>
+<dd><p>The current orbit of the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.Orbit</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-flight">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/flight</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-flight" title="Link to this definition">#</a></dt>
+<dd><p>Flight telemetry for the vehicle, relative to the surface of the body it orbits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.Flight</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-control">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/control</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-control" title="Link to this definition">#</a></dt>
+<dd><p>The controls of the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.Control</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-auto-pilot">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/auto-pilot</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-auto-pilot" title="Link to this definition">#</a></dt>
+<dd><p>The auto-pilot of the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.AutoPilot</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-reference-frame">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/reference-frame</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-reference-frame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame fixed to the vehicle, with its origin at the vehicle’s position.
+The x axis points forward, the y axis to the right and the z axis down, relative to
+the vehicle’s control point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.ReferenceFrame</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-surface-reference-frame">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/surface-reference-frame</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-surface-reference-frame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame with its origin at the vehicle’s position, and axes aligned with
+the surface below it. The x axis points east, the y axis north and the z axis up.
+The frame rotates with the body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.ReferenceFrame</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-(id)-orbital-reference-frame">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/orbital-reference-frame</span></span><a class="headerlink" href="#get--ksa-vehicle-(id)-orbital-reference-frame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame with its origin at the vehicle’s position, and axes aligned with
+its orbit. The x axis points prograde, the y axis along the orbit normal and the z
+axis radially outward, perpendicular to the x axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>KSA.ReferenceFrame</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--ksa-vehicle-(id)-position">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/position</span></span><a class="headerlink" href="#post--ksa-vehicle-(id)-position" title="Link to this definition">#</a></dt>
+<dd><p>The position of the vehicle, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>reference_frame</strong> (<em>KSA.ReferenceFrame</em>) – The reference frame of the position.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>tuple&lt;double, double, double&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--ksa-vehicle-(id)-velocity">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/velocity</span></span><a class="headerlink" href="#post--ksa-vehicle-(id)-velocity" title="Link to this definition">#</a></dt>
+<dd><p>The velocity of the vehicle, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>reference_frame</strong> (<em>KSA.ReferenceFrame</em>) – The reference frame of the velocity.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>tuple&lt;double, double, double&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--ksa-vehicle-(id)-direction">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/direction</span></span><a class="headerlink" href="#post--ksa-vehicle-(id)-direction" title="Link to this definition">#</a></dt>
+<dd><p>The unit vector in which the vehicle points, the x axis of
+<a class="reference internal" href="#get--ksa-vehicle-(id)-reference-frame" title="GET /ksa/vehicle/(id)/reference-frame"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/reference-frame</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>reference_frame</strong> (<em>KSA.ReferenceFrame</em>) – The reference frame of the direction.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>tuple&lt;double, double, double&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--ksa-vehicle-(id)-rotation">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/rotation</span></span><a class="headerlink" href="#post--ksa-vehicle-(id)-rotation" title="Link to this definition">#</a></dt>
+<dd><p>The rotation of <a class="reference internal" href="#get--ksa-vehicle-(id)-reference-frame" title="GET /ksa/vehicle/(id)/reference-frame"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/reference-frame</span></code></a> relative to the given frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>reference_frame</strong> (<em>KSA.ReferenceFrame</em>) – The reference frame of the rotation.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>tuple&lt;double, double, double, double&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--ksa-vehicle-(id)-angular-velocity">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/angular-velocity</span></span><a class="headerlink" href="#post--ksa-vehicle-(id)-angular-velocity" title="Link to this definition">#</a></dt>
+<dd><p>The angular velocity of the vehicle, in radians per second. The vector points along
+the axis of rotation, and its length is the rate of rotation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicle"><span class="std std-ref">Vehicle</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>reference_frame</strong> (<em>KSA.ReferenceFrame</em>) – The reference frame of the angular velocity.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>tuple&lt;double, double, double&gt;</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric" id="http-ksa-situation">Situation</p>
+<p>The situation of a vehicle: its contact with the surface, and whether the game is
+simulating it with physics or propagating it along its orbit.
+See <a class="reference internal" href="#get--ksa-vehicle-(id)-situation" title="GET /ksa/vehicle/(id)/situation"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/situation</span></code></a>.</p>
+<p>Passed and returned as the name of one of its values:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;maneuvering&quot;</span></code></dt><dd><p>No surface contact, simulated with physics.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;freefall&quot;</span></code></dt><dd><p>No surface contact, on rails.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;rolling&quot;</span></code></dt><dd><p>On terrain, simulated with physics.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;landed&quot;</span></code></dt><dd><p>At rest on terrain.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;sailing&quot;</span></code></dt><dd><p>In the ocean, simulated with physics.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;floating&quot;</span></code></dt><dd><p>At rest in the ocean.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;dragging&quot;</span></code></dt><dd><p>On terrain and in the ocean, simulated with physics.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;bottomed&quot;</span></code></dt><dd><p>At rest on terrain and in the ocean.</p>
+</dd>
+</dl>
+<p class="rubric" id="http-ksa-controlstate">ControlState</p>
+<p>Whether a vehicle can be flown, or why not. See <a class="reference internal" href="#get--ksa-vehicle-(id)-control-state" title="GET /ksa/vehicle/(id)/control-state"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle/(id)/control-state</span></code></a>.</p>
+<p>Passed and returned as the name of one of its values:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;controllable&quot;</span></code></dt><dd><p>The vehicle can be flown.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;no_control_module&quot;</span></code></dt><dd><p>The vehicle has no control module, such as a capsule or a probe core.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;no_crew&quot;</span></code></dt><dd><p>The capsules have no crew, and no probe core is on.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;crew_incapacitated&quot;</span></code></dt><dd><p>Every kitten in the capsules is incapacitated, and no probe core is on.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;probe_core_unpowered&quot;</span></code></dt><dd><p>The probe core has no power.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;probe_core_off&quot;</span></code></dt><dd><p>The probe core is switched off.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;probe_core_failed&quot;</span></code></dt><dd><p>The probe core has failed from its radiation dose.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;probe_core_storm_standby&quot;</span></code></dt><dd><p>The probe core is on standby for a radiation storm.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;probe_core_rebooting&quot;</span></code></dt><dd><p>The probe core is rebooting after a radiation upset.</p>
+</dd>
+</dl>
+<p class="rubric" id="http-ksa-vehicledesign">VehicleDesign</p>
+<p>A vehicle design that can be launched: one of the game’s default vehicles, or a vehicle
+saved by the player in the editor. Obtained from <a class="reference internal" href="ksa.html#get--ksa-vehicle-designs" title="GET /ksa/vehicle-designs"><code class="xref http http-get docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/ksa/vehicle-designs</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The mass and delta-v are those the editor shows for the design.</p>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">VehicleDesign</span></code> object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as <code class="docutils literal notranslate"><span class="pre">(id)</span></code>.</p>
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-design-(id)-name">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle-design/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/name</span></span><a class="headerlink" href="#get--ksa-vehicle-design-(id)-name" title="Link to this definition">#</a></dt>
+<dd><p>The name of the design, as passed to <a class="reference internal" href="ksa.html#post--ksa-launch-vehicle" title="POST /ksa/launch-vehicle"><code class="xref http http-post docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/ksa/launch-vehicle</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicledesign"><span class="std std-ref">VehicleDesign</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>string</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-design-(id)-is-default">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle-design/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/is-default</span></span><a class="headerlink" href="#get--ksa-vehicle-design-(id)-is-default" title="Link to this definition">#</a></dt>
+<dd><p>Whether the design is one of the game’s default vehicles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicledesign"><span class="std std-ref">VehicleDesign</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-design-(id)-part-count">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle-design/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/part-count</span></span><a class="headerlink" href="#get--ksa-vehicle-design-(id)-part-count" title="Link to this definition">#</a></dt>
+<dd><p>The number of parts in the design.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicledesign"><span class="std std-ref">VehicleDesign</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>int32</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-design-(id)-mass">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle-design/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/mass</span></span><a class="headerlink" href="#get--ksa-vehicle-design-(id)-mass" title="Link to this definition">#</a></dt>
+<dd><p>The total mass of the design, including propellant, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicledesign"><span class="std std-ref">VehicleDesign</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-design-(id)-dry-mass">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle-design/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/dry-mass</span></span><a class="headerlink" href="#get--ksa-vehicle-design-(id)-dry-mass" title="Link to this definition">#</a></dt>
+<dd><p>The mass of the design without propellant, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicledesign"><span class="std std-ref">VehicleDesign</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--ksa-vehicle-design-(id)-delta-v">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/ksa/vehicle-design/</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">id</span></em><span class="sig-paren">)</span><span class="sig-name descname"><span class="pre">/delta-v</span></span><a class="headerlink" href="#get--ksa-vehicle-design-(id)-delta-v" title="Link to this definition">#</a></dt>
+<dd><p>The change in velocity of all the design’s sequences, in meters per second.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each sequence is computed in the environment chosen for it in the editor, in vacuum
+or at sea level.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The identifier of the <a class="reference internal" href="#http-ksa-vehicledesign"><span class="std std-ref">VehicleDesign</span></a> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ksa.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">KSA</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="sequence.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Sequence</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/http/api/ksa/vehicle.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026 kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

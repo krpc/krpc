@@ -18,6 +18,10 @@ Orbit
       burn's predicted trajectory, and throws an exception while the trajectory is too short to
       reach it.
 
+   .. macro:: KRPC_CLASS_KSA_ORBIT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Orbit_Body(krpc_connection_t connection, krpc_KSA_Body_t * returnValue, krpc_KSA_Orbit_t instance)
 
       The body being orbited.
@@ -153,9 +157,42 @@ Orbit
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Orbit_SemiLatusRectum(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The `semi-latus rectum <https://en.wikipedia.org/wiki/Conic_section#Conic_parameters>`_ of the orbit, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_SpecificAngularMomentum(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The specific angular momentum of the orbit, in :math:`\mathrm{m^{2}/s}`.
+
+   
+
    .. function:: krpc_error_t krpc_KSA_Orbit_TrueAnomalyAtUT(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance, double ut)
 
       The true anomaly at the given time, in radians.
+
+      :Parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_MeanAnomalyAtUT(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance, double ut)
+
+      The mean anomaly at the given time, in radians.
+
+      :Parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_EccentricAnomalyAtUT(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance, double ut)
+
+      The eccentric anomaly at the given time, in radians. For a hyperbolic orbit, this
+      is the hyperbolic anomaly.
 
       :Parameters:
 
@@ -175,10 +212,38 @@ Orbit
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Orbit_TrueAnomalyAtRadius(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance, double radius)
+
+      The true anomaly at which the orbit reaches the given distance from the center of
+      the body, in radians, between 0 and :math:`\pi`. Not a number if the orbit
+      never reaches it.
+
+      :Parameters:
+
+       * **radius** -- The distance from the center of the body, in meters.
+
+   
+
+      .. note::
+
+         The orbit also reaches the distance at the negative of this anomaly. Zero for a
+         circular orbit at the distance. Throws an exception if the distance is not
+         positive.
+
    .. function:: krpc_error_t krpc_KSA_Orbit_RadiusAt(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance, double ut)
 
       The distance from the center of the body being orbited at the given time, in
       meters.
+
+      :Parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_SpeedAt(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance, double ut)
+
+      The orbital speed at the given time, in meters per second.
 
       :Parameters:
 
@@ -306,11 +371,72 @@ Orbit
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Orbit_CreateFromElements(krpc_connection_t connection, krpc_KSA_Orbit_t * returnValue, krpc_KSA_Body_t body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+
+      Create the orbit with the given elements around a body. The angles are those of
+      :type:`krpc_KSA_Orbit_t`.
+
+      :Parameters:
+
+       * **body** -- The body being orbited.
+       * **semiMajorAxis** -- The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+       * **eccentricity** -- The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
+       * **inclination** -- The inclination, in radians.
+       * **longitudeOfAscendingNode** -- The longitude of the ascending node, in radians.
+       * **argumentOfPeriapsis** -- The argument of periapsis, in radians.
+       * **meanAnomalyAtEpoch** -- The mean anomaly at the epoch, in radians.
+       * **epoch** -- The universal time of the epoch, in seconds.
+
+   
+
+      .. note::
+
+         The orbit is a single conic around *body*, with no
+         :func:`krpc_KSA_Orbit_NextOrbit`. It is held until :func:`krpc_KSA_Orbit_Remove` is called on it, or
+         the client that created it disconnects.
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_CreateFromPositionAndVelocity(krpc_connection_t connection, krpc_KSA_Orbit_t * returnValue, krpc_KSA_Body_t body, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_t * velocity, double ut, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      Create the orbit around a body through the given position and velocity.
+
+      :Parameters:
+
+       * **body** -- The body being orbited.
+       * **position** -- The position, in meters, relative to where the body is now.
+       * **velocity** -- The velocity, in meters per second.
+       * **ut** -- The universal time of the position and velocity, in seconds.
+       * **referenceFrame** -- The reference frame of the position and velocity.
+
+   
+
+      .. note::
+
+         The orbit is a single conic around *body*, with no
+         :func:`krpc_KSA_Orbit_NextOrbit`. It is held until :func:`krpc_KSA_Orbit_Remove` is called on it, or
+         the client that created it disconnects.
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_Remove(krpc_connection_t connection, krpc_KSA_Orbit_t instance)
+
+      Remove an orbit created by :func:`krpc_KSA_Orbit_CreateFromElements` or
+      :func:`krpc_KSA_Orbit_CreateFromPositionAndVelocity`.
+
+
+   
+
+      .. note::
+
+         Throws an exception if the orbit was not created by a client.
+
 
 
 .. type:: krpc_KSA_OrbitTransition_t
 
    How an orbit ends. See :func:`krpc_KSA_Orbit_EndTransition`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_ORBITTRANSITION
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_KSA_ORBITTRANSITION_NONE

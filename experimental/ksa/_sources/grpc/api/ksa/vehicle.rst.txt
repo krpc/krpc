@@ -127,6 +127,15 @@ Vehicle
 
       :Vehicle.GetMassResponse: ``value`` (``float``)
 
+   .. grpc:rpc:: GetDryMass (Vehicle.GetDryMassRequest) returns (Vehicle.GetDryMassResponse)
+
+      The mass of the vehicle's parts, without propellant or supplies, in kilograms.
+
+      :Vehicle.GetDryMassRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetDryMassResponse: ``value`` (``float``)
+
    .. grpc:rpc:: GetPropellantMass (Vehicle.GetPropellantMassRequest) returns (Vehicle.GetPropellantMassResponse)
 
       The mass of the propellant in the vehicle, in kilograms.
@@ -165,6 +174,74 @@ Vehicle
          * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
 
       :Vehicle.GetSpecificImpulseResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetMomentOfInertia (Vehicle.GetMomentOfInertiaRequest) returns (Vehicle.GetMomentOfInertiaResponse)
+
+      The vehicle's moments of inertia about the axes of :grpc:rpc:`VehicleService.GetReferenceFrame <krpc.ksa.VehicleService.GetReferenceFrame>`
+      through its center of mass, in :math:`\mathrm{kg \cdot m^{2}}`.
+
+      :Vehicle.GetMomentOfInertiaRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetMomentOfInertiaResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: GetInertiaTensor (Vehicle.GetInertiaTensorRequest) returns (Vehicle.GetInertiaTensorResponse)
+
+      The vehicle's inertia tensor about its center of mass, along the axes of
+      :grpc:rpc:`VehicleService.GetReferenceFrame <krpc.ksa.VehicleService.GetReferenceFrame>`, in :math:`\mathrm{kg \cdot m^{2}}`, as its three rows.
+
+      :Vehicle.GetInertiaTensorRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetInertiaTensorResponse: ``value`` (``repeated`` :grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: GetAvailableRCSTorque (Vehicle.GetAvailableRCSTorqueRequest) returns (Vehicle.GetAvailableRCSTorqueResponse)
+
+      The torque the vehicle's RCS thrusters can give about each axis of its control
+      frame, in :math:`\mathrm{N \cdot m}`. Each is the smaller of the torques in the two
+      directions about the axis.
+
+      :Vehicle.GetAvailableRCSTorqueRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetAvailableRCSTorqueResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      .. note::
+
+         The control frame has the axes of :grpc:rpc:`VehicleService.GetReferenceFrame <krpc.ksa.VehicleService.GetReferenceFrame>`, unless the flight
+         computer steers along the thrust. The thrusters give this torque while
+         :grpc:rpc:`ControlService.GetRCS <krpc.ksa.ControlService.GetRCS>` is on.
+
+   .. grpc:rpc:: Acceleration (Vehicle.AccelerationRequest) returns (Vehicle.AccelerationResponse)
+
+      The vehicle's acceleration from the forces on it other than gravity, in
+      :math:`\mathrm{m/s^{2}}`.
+
+      :Vehicle.AccelerationRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the acceleration.
+
+      :Vehicle.AccelerationResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      .. note::
+
+         The game measures it over the last physics step. Its length divided by standard
+         gravity is :grpc:rpc:`FlightService.GetGForce <krpc.ksa.FlightService.GetGForce>`.
+
+   .. grpc:rpc:: AngularAcceleration (Vehicle.AngularAccelerationRequest) returns (Vehicle.AngularAccelerationResponse)
+
+      The vehicle's angular acceleration, in :math:`\mathrm{rad/s^{2}}`. The vector points
+      along the axis of rotation.
+
+      :Vehicle.AngularAccelerationRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the angular acceleration.
+
+      :Vehicle.AngularAccelerationResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      .. note::
+
+         The game measures it over the last physics step.
 
    .. grpc:rpc:: GetPeakGLoad (Vehicle.GetPeakGLoadRequest) returns (Vehicle.GetPeakGLoadResponse)
 
@@ -262,6 +339,99 @@ Vehicle
 
       :Vehicle.GetCrewCapacityResponse: ``value`` (``sint32``)
 
+   .. grpc:rpc:: GetControllable (Vehicle.GetControllableRequest) returns (Vehicle.GetControllableResponse)
+
+      Whether the vehicle can be flown. A vehicle needs a control module, and a crewed
+      vehicle with every kitten incapacitated also needs a probe core.
+
+      :Vehicle.GetControllableRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetControllableResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetHasControlModule (Vehicle.GetHasControlModuleRequest) returns (Vehicle.GetHasControlModuleResponse)
+
+      Whether the vehicle has a control module, such as a capsule or a probe core.
+
+      :Vehicle.GetHasControlModuleRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetHasControlModuleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetControlState (Vehicle.GetControlStateRequest) returns (Vehicle.GetControlStateResponse)
+
+      Whether the vehicle can be flown, or why not.
+
+      :Vehicle.GetControlStateRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetControlStateResponse: ``value`` (:grpc:enum:`ControlState <krpc.ksa.ControlState>`)
+
+      .. note::
+
+         This is the reason the game gives when the vehicle does not respond to its controls.
+
+   .. grpc:rpc:: GetCrewEvents (Vehicle.GetCrewEventsRequest) returns (Vehicle.GetCrewEventsResponse)
+
+      The most urgent coming event of each kitten in the vehicle, most urgent first.
+
+      :Vehicle.GetCrewEventsRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetCrewEventsResponse: ``value`` (``repeated`` :grpc:service:`CrewEvent <krpc.ksa.CrewEventService>`)
+
+      .. note::
+
+         The order is the game's crew clock's: events within a day come first, the worst
+         first. Empty while :grpc:rpc:`KSAService.GetLifeSupportEnabled <krpc.ksa.KSAService.GetLifeSupportEnabled>` and
+         :grpc:rpc:`KSAService.GetRadiationEnabled <krpc.ksa.KSAService.GetRadiationEnabled>` are both false.
+
+   .. grpc:rpc:: GetNextCrewEvent (Vehicle.GetNextCrewEventRequest) returns (Vehicle.GetNextCrewEventResponse)
+
+      The most urgent of :grpc:rpc:`VehicleService.GetCrewEvents <krpc.ksa.VehicleService.GetCrewEvents>`, or ``null`` if there is none.
+
+      :Vehicle.GetNextCrewEventRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetNextCrewEventResponse: ``value`` (:grpc:service:`CrewEvent <krpc.ksa.CrewEventService>`)
+
+   .. grpc:rpc:: GetLifeSupport (Vehicle.GetLifeSupportRequest) returns (Vehicle.GetLifeSupportResponse)
+
+      How long the supplies of the vehicle's worst habitat zone last its crew, or
+      ``null`` if the vehicle has no habitats.
+
+      :Vehicle.GetLifeSupportRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetLifeSupportResponse: ``value`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+   .. grpc:rpc:: GetMission (Vehicle.GetMissionRequest) returns (Vehicle.GetMissionResponse)
+
+      The mission planned for the vehicle, or ``null`` if it has none.
+
+      :Vehicle.GetMissionRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetMissionResponse: ``value`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+   .. grpc:rpc:: GetHabitatZones (Vehicle.GetHabitatZonesRequest) returns (Vehicle.GetHabitatZonesResponse)
+
+      The vehicle's habitat zones.
+
+      :Vehicle.GetHabitatZonesRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetHabitatZonesResponse: ``value`` (``repeated`` :grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+
+   .. grpc:rpc:: GetHabitats (Vehicle.GetHabitatsRequest) returns (Vehicle.GetHabitatsResponse)
+
+      The vehicle's habitats.
+
+      :Vehicle.GetHabitatsRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetHabitatsResponse: ``value`` (``repeated`` :grpc:service:`Habitat <krpc.ksa.HabitatService>`)
+
    .. grpc:rpc:: GetEngines (Vehicle.GetEnginesRequest) returns (Vehicle.GetEnginesResponse)
 
       The vehicle's engines.
@@ -342,6 +512,15 @@ Vehicle
          * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
 
       :Vehicle.GetPowerConsumersResponse: ``value`` (``repeated`` :grpc:service:`PowerConsumer <krpc.ksa.PowerConsumerService>`)
+
+   .. grpc:rpc:: GetAvionics (Vehicle.GetAvionicsRequest) returns (Vehicle.GetAvionicsResponse)
+
+      The avionics of the vehicle's probe cores.
+
+      :Vehicle.GetAvionicsRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetAvionicsResponse: ``value`` (``repeated`` :grpc:service:`Avionics <krpc.ksa.AvionicsService>`)
 
    .. grpc:rpc:: GetStoredEnergy (Vehicle.GetStoredEnergyRequest) returns (Vehicle.GetStoredEnergyResponse)
 
@@ -702,6 +881,46 @@ Vehicle
    .. grpc:value:: SITUATION_BOTTOMED
 
       At rest on terrain and in the ocean.
+
+.. grpc:enum:: ControlState
+
+   Whether a vehicle can be flown, or why not. See :grpc:rpc:`VehicleService.GetControlState <krpc.ksa.VehicleService.GetControlState>`.
+
+   .. grpc:value:: CONTROL_STATE_CONTROLLABLE
+
+      The vehicle can be flown.
+
+   .. grpc:value:: CONTROL_STATE_NO_CONTROL_MODULE
+
+      The vehicle has no control module, such as a capsule or a probe core.
+
+   .. grpc:value:: CONTROL_STATE_NO_CREW
+
+      The capsules have no crew, and no probe core is on.
+
+   .. grpc:value:: CONTROL_STATE_CREW_INCAPACITATED
+
+      Every kitten in the capsules is incapacitated, and no probe core is on.
+
+   .. grpc:value:: CONTROL_STATE_PROBE_CORE_UNPOWERED
+
+      The probe core has no power.
+
+   .. grpc:value:: CONTROL_STATE_PROBE_CORE_OFF
+
+      The probe core is switched off.
+
+   .. grpc:value:: CONTROL_STATE_PROBE_CORE_FAILED
+
+      The probe core has failed from its radiation dose.
+
+   .. grpc:value:: CONTROL_STATE_PROBE_CORE_STORM_STANDBY
+
+      The probe core is on standby for a radiation storm.
+
+   .. grpc:value:: CONTROL_STATE_PROBE_CORE_REBOOTING
+
+      The probe core is rebooting after a radiation upset.
 
 .. grpc:service:: VehicleDesignService
 

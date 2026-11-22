@@ -1,0 +1,182 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Resources
+=========
+
+
+.. class:: Resource
+
+   A substance held in tanks, such as a propellant, in a part or across a whole vehicle.
+   Obtained from :meth:`KSA.Part.getResources` or :meth:`KSA.Vehicle.getResources`.
+
+   .. method:: getName()
+
+      The name of the substance.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+   
+
+   .. method:: getAmount()
+
+      The mass of the substance held, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMax()
+
+      The mass of the substance the tanks can hold, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+
+
+.. class:: Tank
+
+   A propellant tank. Obtained from :meth:`KSA.Part.getTanks` or :meth:`KSA.Vehicle.getTanks`.
+
+   .. method:: getPart()
+
+      The part the tank is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getVolume()
+
+      The volume of the tank, in cubic meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getRatedPressure()
+
+      The pressure the tank stores gas at, in pascals. Zero if the tank cannot store gas.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getFilledFraction()
+
+      The fraction of the tank's volume that is filled, between 0 and 1.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getPropellantUseEnabled()
+               setPropellantUseEnabled(value)
+
+      Whether engines can draw propellant from the tank.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getTransferMode()
+               setTransferMode(value)
+
+      The direction the tank transfers propellant in.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.TankTransferMode`
+   
+
+      .. note::
+
+         Propellant flows from tanks transferring out to tanks of the same vehicle transferring
+         in, and the transfer draws battery power. Setting a transfer throws an exception if
+         the running version of KSA does not support it.
+
+
+
+.. class:: TankTransferMode
+
+   The direction a tank transfers propellant in. See :meth:`KSA.Tank.getTransferMode`.
+
+
+   .. attribute:: none
+
+      No transfer.
+
+
+   .. attribute:: in
+
+      Into the tank, from tanks transferring out.
+
+
+   .. attribute:: out
+
+      Out of the tank, to tanks transferring in.
+
+
+
+.. class:: FuelLink
+
+   A fuel line between two parts of a vehicle, which lets propellant flow between them.
+   Obtained from :meth:`KSA.Vehicle.getFuelLinks`.
+
+   .. method:: getPartA()
+
+      One of the parts the link joins.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getPartB()
+
+      The other part the link joins.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getFlow()
+               setFlow(value)
+
+      The direction propellant flows through the link.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.FuelLinkFlow`
+   
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether propellant can flow through the link.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+
+
+.. class:: FuelLinkFlow
+
+   The direction propellant flows through a fuel link. See :meth:`KSA.FuelLink.getFlow`.
+
+
+   .. attribute:: aToB
+
+      From :meth:`KSA.FuelLink.getPartA` to :meth:`KSA.FuelLink.getPartB`.
+
+
+   .. attribute:: bToA
+
+      From :meth:`KSA.FuelLink.getPartB` to :meth:`KSA.FuelLink.getPartA`.
+
+
+   .. attribute:: both
+
+      Either way.

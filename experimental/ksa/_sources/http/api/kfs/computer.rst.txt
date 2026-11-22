@@ -1,0 +1,512 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Computer
+========
+
+
+.. _http-KFS.Computer:
+
+.. rubric:: Computer
+
+A vehicle's flight computer, which runs a kFS program. Obtained from
+:http:post:`/kfs/computer`.
+
+.. note::
+
+   A program is written in kC, a subset of C, or in kASM. The calls that change the
+   computer, and :http:post:`/kfs/computer/(id)/write-globals`, take effect before the computer's next tick, and
+   return once they have. The computer ticks while the game is running and the vehicle is
+   in the physics bubble, so until then they wait. The game does not save a program.
+
+
+A ``Computer`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:post:: /kfs/computer/(id)/build
+
+   Build a program, without loading it.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :reqjson dictionary<string, string> files: The source files, by name. A program with a ``.c`` file is kC, and one with only ``.kasm`` files is kASM.
+   :resjson list<KFS.Diagnostic> value: The errors and warnings.
+
+
+
+
+
+.. http:post:: /kfs/computer/(id)/load
+
+   Build a program and load it onto the computer. Throws an exception if the program has
+   errors, or the computer rejects it.
+
+   .. note::
+
+      The program is in standby once loaded. See :http:post:`/kfs/computer/(id)/start`.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :reqjson dictionary<string, string> files: The source files, by name, as for :http:post:`/kfs/computer/(id)/build`.
+
+
+
+
+
+.. http:post:: /kfs/computer/(id)/start
+
+   Start the loaded program. Throws an exception if no program is loaded.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+
+
+
+
+
+.. http:post:: /kfs/computer/(id)/reset
+
+   Restart the loaded program, as the reset button does. Throws an exception if no
+   program is loaded.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+
+
+
+
+
+.. http:post:: /kfs/computer/(id)/stop
+
+   Stop the program, and give the vehicle back to the pilot. The program stays loaded.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+
+
+
+
+
+.. http:post:: /kfs/computer/(id)/kill
+
+   Halt the program with the kill switch, and give the vehicle back to the pilot.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+
+
+
+
+
+.. http:get:: /kfs/computer/(id)/state
+
+   The state of the computer.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :resjson KFS.ComputerState value:
+
+
+
+
+.. http:get:: /kfs/computer/(id)/mode
+
+   The control mode the loaded program claims.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :resjson KFS.ControlMode value:
+
+
+
+
+.. http:get:: /kfs/computer/(id)/under-control
+
+   Whether the program controls the vehicle: it is running, or halted with its last
+   commands held.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /kfs/computer/(id)/tick-rate
+
+   The ticks per second of the loaded program, or zero if no program is loaded.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /kfs/computer/(id)/cycles-used
+
+   The processor cycles the latest tick used.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :resjson int64 value:
+
+
+
+
+.. http:get:: /kfs/computer/(id)/cycle-budget
+
+   The processor cycles a tick may use.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :resjson int64 value:
+
+
+
+
+.. http:get:: /kfs/computer/(id)/overruns
+
+   The number of ticks that ran past their budget since the program started.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :resjson int64 value:
+
+
+
+
+.. http:get:: /kfs/computer/(id)/trap
+
+   The error that halted the program, or ``null`` if no error halted it.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :resjson KFS.Trap? value:
+
+
+
+
+.. http:get:: /kfs/computer/(id)/fault
+
+   The game's error that halted the computer, or ``null`` if there is none.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :resjson string? value:
+
+
+
+
+.. http:get:: /kfs/computer/(id)/log
+
+   The computer's console: the lines the program logs, and the computer's own messages.
+
+   .. note::
+
+      The computer keeps the last 4,096 lines, and a program logs at most 10 lines a
+      second.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :resjson list<string> value:
+
+
+
+
+.. http:post:: /kfs/computer/(id)/clear-log
+
+   Clear the computer's console.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+
+
+
+
+
+.. http:get:: /kfs/computer/(id)/globals
+
+   The paths of the loaded program's global variables, one for each number in them,
+   such as ``command.args[2]``.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :resjson list<string> value:
+
+
+
+
+.. http:post:: /kfs/computer/(id)/read-global
+
+   The value of one of the program's global variables, as of its latest tick.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :reqjson string path: The path of the variable, as in :http:get:`/kfs/computer/(id)/globals`.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /kfs/computer/(id)/write-globals
+
+   Write the program's global variables. The program sees all of them from the same
+   tick.
+
+   .. note::
+
+      A value is converted to the variable's type. Throws an exception if a value does not
+      fit, such as a fraction for an integer.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :reqjson dictionary<string, double> values: The values, by the paths in :http:get:`/kfs/computer/(id)/globals`.
+
+
+
+
+
+.. http:get:: /kfs/computer/(id)/trace-channels
+
+   The names of the channels the program has traced to.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :resjson list<string> value:
+
+
+
+
+.. http:post:: /kfs/computer/(id)/trace
+
+   The latest value the program traced to a channel. Throws an exception if the program
+   has not traced to it.
+
+
+   :param id: The identifier of the :ref:`Computer <http-KFS.Computer>` object.
+
+   :reqjson string channel: The name of the channel.
+   :resjson float value:
+
+
+
+
+
+
+.. _http-KFS.ComputerState:
+
+.. rubric:: ComputerState
+
+The state of a flight computer. See :http:get:`/kfs/computer/(id)/state`.
+
+Passed and returned as the name of one of its values:
+
+
+``"no_software"``
+   No program is loaded.
+
+
+``"standby"``
+   A program is loaded, and not running.
+
+
+``"boot"``
+   The program is running its initialization.
+
+
+``"running"``
+   The program is running.
+
+
+``"idle"``
+   The program is running, with no task to run.
+
+
+``"halted"``
+   The program has stopped, after a trap, a halt or the kill switch.
+
+
+
+.. _http-KFS.ControlMode:
+
+.. rubric:: ControlMode
+
+The control a program has of a vehicle. See :http:get:`/kfs/computer/(id)/mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"pilot"``
+   The game's flight computer flies the vehicle, and the program steers it.
+
+
+``"full_control"``
+   The program commands the thrusters, engines and gimbals itself. A program claims it
+   with ``#pragma kfs claim ALLOCATION``.
+
+
+
+.. _http-KFS.Diagnostic:
+
+.. rubric:: Diagnostic
+
+An error or warning from building a program. See :http:post:`/kfs/computer/(id)/build`.
+
+Passed and returned as an object with these fields:
+
+
+``error`` (bool)
+   Whether it is an error. An error stops the program from being built.
+
+
+``code`` (string)
+   The diagnostic's code, such as ``KC-E016``.
+
+
+``file`` (string)
+   The source file.
+
+
+``line`` (int32)
+   The line in the source file, from 1. Zero for the whole file.
+
+
+``column`` (int32)
+   The column in the line, from 1.
+
+
+``message`` (string)
+   The message.
+
+
+``hint`` (string?)
+   A hint at the fix, or ``null`` if there is none.
+
+
+
+.. _http-KFS.Trap:
+
+.. rubric:: Trap
+
+The error that halted a program, and where it happened. See :http:get:`/kfs/computer/(id)/trap`.
+
+Passed and returned as an object with these fields:
+
+
+``code`` (KFS.TrapCode)
+   The error.
+
+
+``function`` (string)
+   The function that was running.
+
+
+``file`` (string?)
+   The source file, or ``null`` if it is not known.
+
+
+``line`` (int32)
+   The line in the source file, or zero if it is not known.
+
+
+
+.. _http-KFS.TrapCode:
+
+.. rubric:: TrapCode
+
+The error that halted a program. See ``code``.
+
+Passed and returned as the name of one of its values:
+
+
+``"illegal_opcode"``
+   An instruction the processor does not have.
+
+
+``"operand_overflow"``
+   The operand stack overflowed.
+
+
+``"operand_underflow"``
+   The operand stack underflowed.
+
+
+``"return_overflow"``
+   The return stack overflowed.
+
+
+``"init_overrun"``
+   The initialization ran past its budget.
+
+
+``"stack_overflow"``
+   The stack overflowed.
+
+
+``"null_access"``
+   A read or write through a null pointer.
+
+
+``"bad_address"``
+   A read or write outside memory.
+
+
+``"read_only"``
+   A write to read-only memory.
+
+
+``"misaligned"``
+   A misaligned read or write.
+
+
+``"division_by_zero"``
+   A division by zero.
+
+
+``"bounds"``
+   An array index out of bounds.
+
+
+``"user"``
+   A trap raised by the program.
+
+
+``"bad_jump"``
+   A jump to an invalid address.
+
+
+``"bad_syscall"``
+   A call to a service that does not exist.
+
+
+``"bad_yield"``
+   A task yielded where it may not.
+
+
+``"memory_error"``
+   A memory error, such as a radiation upset.

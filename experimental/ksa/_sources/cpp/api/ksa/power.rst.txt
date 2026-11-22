@@ -132,6 +132,232 @@ Power
 
    
 
+   .. function:: bool has_power_switch()
+
+      Whether the part has a power switch, as a probe core does.
+
+   
+
+   .. function:: PowerMode mode()
+   .. function:: void set_mode(PowerMode value)
+
+      The setting of the power switch.
+
+   
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+   .. function:: bool standby_in_storms()
+   .. function:: void set_standby_in_storms(bool value)
+
+      Whether the part goes on standby, drawing no power, while a radiation storm is under
+      way at the vehicle.
+
+   
+
+      .. note::
+
+         The game takes a storm of level 1 or worse on the S scale, as
+         :func:`Flight::radiation_storm_level` gives. Throws an exception if the part has
+         no power switch.
+
+   .. function:: PowerStatus status()
+
+      The power status of the part.
+
+   
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: PowerMode
+
+   The setting of a power switch. See :func:`PowerConsumer::mode`.
+
+
+   .. enumerator:: off
+
+      Switched off.
+
+
+   .. enumerator:: auto_
+
+      On standby while another control module flies the vehicle, and on when none can.
+
+
+   .. enumerator:: on
+
+      Switched on.
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: PowerStatus
+
+   The power status of a part with a power switch. See :func:`PowerConsumer::status`.
+
+
+   .. enumerator:: off
+
+      Switched off.
+
+
+   .. enumerator:: standby
+
+      On standby, while another control module flies the vehicle or a radiation storm is under way.
+
+
+   .. enumerator:: rebooting
+
+      Rebooting after a radiation upset.
+
+
+   .. enumerator:: on
+
+      On, with power.
+
+
+   .. enumerator:: low
+
+      On, with power for less than five minutes.
+
+
+   .. enumerator:: out
+
+      Out of power.
+
+
+   .. enumerator:: failed
+
+      Failed from its radiation dose.
+
+
+
+.. class:: PowerForecast
+
+   The charge, draw and supply of the electrical circuit a part is on, and how long its
+   batteries last. Obtained from :func:`Part::power_forecast`.
+
+   .. note::
+
+      A circuit is the parts joined by connections that carry electricity. This is the
+      forecast the game shows for a probe core.
+
+   .. function:: bool has_battery()
+
+      Whether the circuit has a battery.
+
+   
+
+   .. function:: float charge()
+
+      The energy stored in the circuit's batteries, in joules.
+
+   
+
+   .. function:: float draw()
+
+      The power the parts on the circuit draw, in watts.
+
+   
+
+   .. function:: float supply()
+
+      The power the solar panels and generators on the circuit supply, in watts.
+
+   
+
+   .. function:: float time_left()
+
+      The time until the batteries run out, in seconds. Infinite while the supply meets
+      the draw, and zero when the batteries are empty or there are none.
+
+   
+
+
+
+.. class:: Avionics
+
+   The avionics of a probe core, which radiation wears out and upsets. Obtained from
+   :func:`Part::avionics` or :func:`Vehicle::avionics`.
+
+   .. note::
+
+      The avionics take a dose only while :func:`radiation_enabled` is true. Switched
+      off or on standby, they take half the dose and no upsets.
+
+   .. function:: Part part()
+
+      The part the avionics are in.
+
+   
+
+   .. function:: AvionicsHealth health()
+
+      The health of the avionics.
+
+   
+
+   .. function:: float dose()
+
+      The radiation dose the avionics have taken, in grays of silicon.
+
+   
+
+   .. function:: float tolerance()
+
+      The dose at which the avionics fail, in grays of silicon.
+
+   
+
+   .. function:: float dose_rate()
+
+      The rate at which the avionics take a dose, in grays of silicon per second,
+      averaged over about an hour. Not a number until the avionics have taken a dose.
+
+   
+
+   .. function:: float time_left()
+
+      The time until the avionics fail at :func:`Avionics::dose_rate`, in seconds. Infinite
+      while they take no dose, and zero once they have failed.
+
+   
+
+   .. function:: bool rebooting()
+
+      Whether the avionics are rebooting after a radiation upset.
+
+   
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: AvionicsHealth
+
+   The health of avionics. See :func:`Avionics::health`.
+
+
+   .. enumerator:: ok
+
+      Working.
+
+
+   .. enumerator:: worn
+
+      Working, with a dose of at least four fifths of the tolerance.
+
+
+   .. enumerator:: failed
+
+      Failed for good, at the tolerance.
+
 
 
 .. class:: Light

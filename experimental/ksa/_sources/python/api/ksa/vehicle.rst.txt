@@ -104,6 +104,14 @@ Vehicle
       :rtype: float
    
 
+   .. attribute:: dry_mass
+
+      The mass of the vehicle's parts, without propellant or supplies, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
    .. attribute:: propellant_mass
 
       The mass of the propellant in the vehicle, in kilograms.
@@ -138,6 +146,67 @@ Vehicle
       :Attribute: Read-only, cannot be set
       :rtype: float
    
+
+   .. attribute:: moment_of_inertia
+
+      The vehicle's moments of inertia about the axes of :attr:`Vehicle.reference_frame`
+      through its center of mass, in :math:`\mathrm{kg \cdot m^{2}}`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: inertia_tensor
+
+      The vehicle's inertia tensor about its center of mass, along the axes of
+      :attr:`Vehicle.reference_frame`, in :math:`\mathrm{kg \cdot m^{2}}`, as its three rows.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(tuple(float, float, float))
+   
+
+   .. attribute:: available_rcs_torque
+
+      The torque the vehicle's RCS thrusters can give about each axis of its control
+      frame, in :math:`\mathrm{N \cdot m}`. Each is the smaller of the torques in the two
+      directions about the axis.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+   
+
+      .. note::
+
+         The control frame has the axes of :attr:`Vehicle.reference_frame`, unless the flight
+         computer steers along the thrust. The thrusters give this torque while
+         :attr:`Control.rcs` is on.
+
+   .. method:: acceleration(reference_frame)
+
+      The vehicle's acceleration from the forces on it other than gravity, in
+      :math:`\mathrm{m/s^{2}}`.
+
+      :param ReferenceFrame reference_frame: The reference frame of the acceleration.
+      :rtype: tuple(float, float, float)
+   
+
+      .. note::
+
+         The game measures it over the last physics step. Its length divided by standard
+         gravity is :attr:`Flight.g_force`.
+
+   .. method:: angular_acceleration(reference_frame)
+
+      The vehicle's angular acceleration, in :math:`\mathrm{rad/s^{2}}`. The vector points
+      along the axis of rotation.
+
+      :param ReferenceFrame reference_frame: The reference frame of the angular acceleration.
+      :rtype: tuple(float, float, float)
+   
+
+      .. note::
+
+         The game measures it over the last physics step.
 
    .. attribute:: peak_g_load
 
@@ -224,6 +293,90 @@ Vehicle
       :rtype: int
    
 
+   .. attribute:: controllable
+
+      Whether the vehicle can be flown. A vehicle needs a control module, and a crewed
+      vehicle with every kitten incapacitated also needs a probe core.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: has_control_module
+
+      Whether the vehicle has a control module, such as a capsule or a probe core.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: control_state
+
+      Whether the vehicle can be flown, or why not.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ControlState`
+   
+
+      .. note::
+
+         This is the reason the game gives when the vehicle does not respond to its controls.
+
+   .. attribute:: crew_events
+
+      The most urgent coming event of each kitten in the vehicle, most urgent first.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`CrewEvent`)
+   
+
+      .. note::
+
+         The order is the game's crew clock's: events within a day come first, the worst
+         first. Empty while :attr:`life_support_enabled` and
+         :attr:`radiation_enabled` are both false.
+
+   .. attribute:: next_crew_event
+
+      The most urgent of :attr:`Vehicle.crew_events`, or ``None`` if there is none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`CrewEvent` or None
+   
+
+   .. attribute:: life_support
+
+      How long the supplies of the vehicle's worst habitat zone last its crew, or
+      ``None`` if the vehicle has no habitats.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`LifeSupport` or None
+   
+
+   .. attribute:: mission
+
+      The mission planned for the vehicle, or ``None`` if it has none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Mission` or None
+   
+
+   .. attribute:: habitat_zones
+
+      The vehicle's habitat zones.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`HabitatZone`)
+   
+
+   .. attribute:: habitats
+
+      The vehicle's habitats.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Habitat`)
+   
+
    .. attribute:: engines
 
       The vehicle's engines.
@@ -294,6 +447,14 @@ Vehicle
 
       :Attribute: Read-only, cannot be set
       :rtype: list(:class:`PowerConsumer`)
+   
+
+   .. attribute:: avionics
+
+      The avionics of the vehicle's probe cores.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Avionics`)
    
 
    .. attribute:: stored_energy
@@ -594,6 +755,57 @@ Vehicle
    .. data:: bottomed
 
       At rest on terrain and in the ocean.
+
+
+
+.. class:: ControlState
+
+   Whether a vehicle can be flown, or why not. See :attr:`Vehicle.control_state`.
+
+
+   .. data:: controllable
+
+      The vehicle can be flown.
+
+
+   .. data:: no_control_module
+
+      The vehicle has no control module, such as a capsule or a probe core.
+
+
+   .. data:: no_crew
+
+      The capsules have no crew, and no probe core is on.
+
+
+   .. data:: crew_incapacitated
+
+      Every kitten in the capsules is incapacitated, and no probe core is on.
+
+
+   .. data:: probe_core_unpowered
+
+      The probe core has no power.
+
+
+   .. data:: probe_core_off
+
+      The probe core is switched off.
+
+
+   .. data:: probe_core_failed
+
+      The probe core has failed from its radiation dose.
+
+
+   .. data:: probe_core_storm_standby
+
+      The probe core is on standby for a radiation storm.
+
+
+   .. data:: probe_core_rebooting
+
+      The probe core is rebooting after a radiation upset.
 
 
 

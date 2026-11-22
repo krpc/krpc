@@ -1,0 +1,429 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KFS
+
+Computer
+========
+
+
+.. class:: Computer
+
+   A vehicle's flight computer, which runs a kFS program. Obtained from
+   :meth:`computer`.
+
+   .. note::
+
+      A program is written in kC, a subset of C, or in kASM. The calls that change the
+      computer, and :meth:`Computer.write_globals`, take effect before the computer's next tick, and
+      return once they have. The computer ticks while the game is running and the vehicle is
+      in the physics bubble, so until then they wait. The game does not save a program.
+
+   .. method:: build(files)
+
+      Build a program, without loading it.
+
+      :param dict files: The source files, by name. A program with a ``.c`` file is kC, and one with only ``.kasm`` files is kASM.
+      :returns: The errors and warnings.
+      :rtype: list(:class:`Diagnostic`)
+      :Game Scenes: Flight
+
+   .. method:: load(files)
+
+      Build a program and load it onto the computer. Throws an exception if the program has
+      errors, or the computer rejects it.
+
+      :param dict files: The source files, by name, as for :meth:`Computer.build`.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The program is in standby once loaded. See :meth:`Computer.start`.
+
+   .. method:: start()
+
+      Start the loaded program. Throws an exception if no program is loaded.
+
+      :Game Scenes: Flight
+
+   .. method:: reset()
+
+      Restart the loaded program, as the reset button does. Throws an exception if no
+      program is loaded.
+
+      :Game Scenes: Flight
+
+   .. method:: stop()
+
+      Stop the program, and give the vehicle back to the pilot. The program stays loaded.
+
+      :Game Scenes: Flight
+
+   .. method:: kill()
+
+      Halt the program with the kill switch, and give the vehicle back to the pilot.
+
+      :Game Scenes: Flight
+
+   .. attribute:: state
+
+      The state of the computer.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ComputerState`
+      :Game Scenes: Flight
+
+   .. attribute:: mode
+
+      The control mode the loaded program claims.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ControlMode`
+      :Game Scenes: Flight
+
+   .. attribute:: under_control
+
+      Whether the program controls the vehicle: it is running, or halted with its last
+      commands held.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: tick_rate
+
+      The ticks per second of the loaded program, or zero if no program is loaded.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: cycles_used
+
+      The processor cycles the latest tick used.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: cycle_budget
+
+      The processor cycles a tick may use.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: overruns
+
+      The number of ticks that ran past their budget since the program started.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: trap
+
+      The error that halted the program, or ``None`` if no error halted it.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Trap` or None
+      :Game Scenes: Flight
+
+   .. attribute:: fault
+
+      The game's error that halted the computer, or ``None`` if there is none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str or None
+      :Game Scenes: Flight
+
+   .. attribute:: log
+
+      The computer's console: the lines the program logs, and the computer's own messages.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The computer keeps the last 4,096 lines, and a program logs at most 10 lines a
+         second.
+
+   .. method:: clear_log()
+
+      Clear the computer's console.
+
+      :Game Scenes: Flight
+
+   .. attribute:: globals
+
+      The paths of the loaded program's global variables, one for each number in them,
+      such as ``command.args[2]``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+      :Game Scenes: Flight
+
+   .. method:: read_global(path)
+
+      The value of one of the program's global variables, as of its latest tick.
+
+      :param str path: The path of the variable, as in :attr:`Computer.globals`.
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. method:: write_globals(values)
+
+      Write the program's global variables. The program sees all of them from the same
+      tick.
+
+      :param dict values: The values, by the paths in :attr:`Computer.globals`.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A value is converted to the variable's type. Throws an exception if a value does not
+         fit, such as a fraction for an integer.
+
+   .. attribute:: trace_channels
+
+      The names of the channels the program has traced to.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+      :Game Scenes: Flight
+
+   .. method:: trace(channel)
+
+      The latest value the program traced to a channel. Throws an exception if the program
+      has not traced to it.
+
+      :param str channel: The name of the channel.
+      :rtype: float
+      :Game Scenes: Flight
+
+
+
+.. class:: ComputerState
+
+   The state of a flight computer. See :attr:`Computer.state`.
+
+
+   .. data:: no_software
+
+      No program is loaded.
+
+
+   .. data:: standby
+
+      A program is loaded, and not running.
+
+
+   .. data:: boot
+
+      The program is running its initialization.
+
+
+   .. data:: running
+
+      The program is running.
+
+
+   .. data:: idle
+
+      The program is running, with no task to run.
+
+
+   .. data:: halted
+
+      The program has stopped, after a trap, a halt or the kill switch.
+
+
+
+.. class:: ControlMode
+
+   The control a program has of a vehicle. See :attr:`Computer.mode`.
+
+
+   .. data:: pilot
+
+      The game's flight computer flies the vehicle, and the program steers it.
+
+
+   .. data:: full_control
+
+      The program commands the thrusters, engines and gimbals itself. A program claims it
+      with ``#pragma kfs claim ALLOCATION``.
+
+
+
+.. class:: Diagnostic(error, code, file, line, column, message, hint)
+
+   An error or warning from building a program. See :meth:`Computer.build`.
+
+
+   .. attribute:: error
+
+      Whether it is an error. An error stops the program from being built.
+
+      :rtype: bool
+
+   .. attribute:: code
+
+      The diagnostic's code, such as ``KC-E016``.
+
+      :rtype: str
+
+   .. attribute:: file
+
+      The source file.
+
+      :rtype: str
+
+   .. attribute:: line
+
+      The line in the source file, from 1. Zero for the whole file.
+
+      :rtype: int
+
+   .. attribute:: column
+
+      The column in the line, from 1.
+
+      :rtype: int
+
+   .. attribute:: message
+
+      The message.
+
+      :rtype: str
+
+   .. attribute:: hint
+
+      A hint at the fix, or ``None`` if there is none.
+
+      :rtype: str or None
+
+
+.. class:: Trap(code, function, file, line)
+
+   The error that halted a program, and where it happened. See :attr:`Computer.trap`.
+
+
+   .. attribute:: code
+
+      The error.
+
+      :rtype: :class:`TrapCode`
+
+   .. attribute:: function
+
+      The function that was running.
+
+      :rtype: str
+
+   .. attribute:: file
+
+      The source file, or ``None`` if it is not known.
+
+      :rtype: str or None
+
+   .. attribute:: line
+
+      The line in the source file, or zero if it is not known.
+
+      :rtype: int
+
+
+.. class:: TrapCode
+
+   The error that halted a program. See :attr:`Trap.code`.
+
+
+   .. data:: illegal_opcode
+
+      An instruction the processor does not have.
+
+
+   .. data:: operand_overflow
+
+      The operand stack overflowed.
+
+
+   .. data:: operand_underflow
+
+      The operand stack underflowed.
+
+
+   .. data:: return_overflow
+
+      The return stack overflowed.
+
+
+   .. data:: init_overrun
+
+      The initialization ran past its budget.
+
+
+   .. data:: stack_overflow
+
+      The stack overflowed.
+
+
+   .. data:: null_access
+
+      A read or write through a null pointer.
+
+
+   .. data:: bad_address
+
+      A read or write outside memory.
+
+
+   .. data:: read_only
+
+      A write to read-only memory.
+
+
+   .. data:: misaligned
+
+      A misaligned read or write.
+
+
+   .. data:: division_by_zero
+
+      A division by zero.
+
+
+   .. data:: bounds
+
+      An array index out of bounds.
+
+
+   .. data:: user
+
+      A trap raised by the program.
+
+
+   .. data:: bad_jump
+
+      A jump to an invalid address.
+
+
+   .. data:: bad_syscall
+
+      A call to a service that does not exist.
+
+
+   .. data:: bad_yield
+
+      A task yielded where it may not.
+
+
+   .. data:: memory_error
+
+      A memory error, such as a radiation upset.

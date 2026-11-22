@@ -15,6 +15,10 @@ Parts
       A part keeps its object when the vehicle it belongs to changes, for example when a
       decoupler separates it. Throws an exception once the part no longer exists.
 
+   .. macro:: KRPC_CLASS_KSA_PART
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Part_Name(krpc_connection_t connection, char * * returnValue, krpc_KSA_Part_t instance)
 
       The id of the part's template.
@@ -69,9 +73,56 @@ Parts
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Part_ShieldArealDensity(krpc_connection_t connection, float * returnValue, krpc_KSA_Part_t instance)
+
+      The areal density of the part's radiation shielding, its hull included, in
+      :math:`\mathrm{kg/m^{2}}`. Zero for an unshielded part.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_ShieldMass(krpc_connection_t connection, float * returnValue, krpc_KSA_Part_t instance)
+
+      The mass of the shielding material added to the part, in kilograms. Zero when the
+      shielding is built into the hull.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_TankCover(krpc_connection_t connection, float * returnValue, krpc_KSA_Part_t instance)
+
+      The fraction of the sky, seen from the part, that the contents of the vehicle's tanks
+      cover, between 0 and 1. The contents shield the part from radiation.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_DoseRate(krpc_connection_t connection, float * returnValue, krpc_KSA_Part_t instance)
+
+      The radiation dose rate inside the part, behind its shielding and the vehicle's tanks,
+      in sieverts per second. Includes any solar particle event under way. A kitten in the
+      part's seats receives this dose rate.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Highlight(krpc_connection_t connection, krpc_KSA_HighlightColor_t * returnValue, krpc_KSA_Part_t instance)
+   .. function:: krpc_error_t krpc_KSA_Part_set_Highlight(krpc_connection_t connection, krpc_KSA_Part_t instance, krpc_KSA_HighlightColor_t value)
+
+      The color the part is highlighted in.
+
+   
+
+      .. note::
+
+         The life support window uses this highlight to pick parts, and replaces it on
+         the parts it picks from.
+
    .. function:: krpc_error_t krpc_KSA_Part_Tanks(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
 
       The part's propellant tanks. Empty if it has none.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Habitats(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's habitats.
 
    
 
@@ -96,6 +147,18 @@ Parts
    .. function:: krpc_error_t krpc_KSA_Part_PowerConsumers(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
 
       The part's power consumers.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_PowerForecast(krpc_connection_t connection, krpc_KSA_PowerForecast_t * returnValue, krpc_KSA_Part_t instance)
+
+      The charge, draw and supply of the electrical circuit the part is on.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Avionics(krpc_connection_t connection, krpc_KSA_Avionics_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's avionics, or ``nullptr`` if it has none. A probe core has avionics.
 
    
 
@@ -198,6 +261,42 @@ Parts
 
 
 
+.. type:: krpc_KSA_HighlightColor_t
+
+   The color of a part's highlight. See :func:`krpc_KSA_Part_Highlight`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_HIGHLIGHTCOLOR
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_HIGHLIGHTCOLOR_NONE
+
+      Not highlighted.
+
+
+   .. macro:: KRPC_KSA_HIGHLIGHTCOLOR_GREEN
+
+      Green.
+
+
+   .. macro:: KRPC_KSA_HIGHLIGHTCOLOR_YELLOW
+
+      Yellow.
+
+
+   .. macro:: KRPC_KSA_HIGHLIGHTCOLOR_RED
+
+      Red.
+
+
+   .. macro:: KRPC_KSA_HIGHLIGHTCOLOR_PURPLE
+
+      Purple.
+
+
+
 .. type:: krpc_KSA_Engine_t
 
    An engine. Obtained from :func:`krpc_KSA_Part_Engine`.
@@ -206,6 +305,10 @@ Parts
 
       An active engine fires when the vehicle's engines are on, at the vehicle's throttle.
       See :func:`krpc_KSA_Control_EngineOn` and :func:`krpc_KSA_Control_Throttle`.
+
+   .. macro:: KRPC_CLASS_KSA_ENGINE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Engine_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Engine_t instance)
 
@@ -266,6 +369,67 @@ Parts
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Engine_AvailableThrustAt(krpc_connection_t connection, float * returnValue, krpc_KSA_Engine_t instance, float pressure)
+
+      The thrust of the engine at full throttle and the given atmospheric pressure, in
+      Newtons. Zero when it is inactive or has no propellant.
+
+      :Parameters:
+
+       * **pressure** -- The atmospheric pressure, in pascals.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Engine_SpecificImpulseAt(krpc_connection_t connection, float * returnValue, krpc_KSA_Engine_t instance, float pressure)
+
+      The specific impulse of the engine at the given atmospheric pressure, in seconds.
+      Zero when it is inactive or has no propellant.
+
+      :Parameters:
+
+       * **pressure** -- The atmospheric pressure, in pascals.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Engine_MaxThrust(krpc_connection_t connection, float * returnValue, krpc_KSA_Engine_t instance)
+
+      The thrust of the engine at full throttle and the current atmospheric pressure, in
+      Newtons, whether or not it is active and has propellant.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Engine_MaxVacuumThrust(krpc_connection_t connection, float * returnValue, krpc_KSA_Engine_t instance)
+
+      The thrust of the engine at full throttle in a vacuum, in Newtons, whether or not
+      it is active and has propellant.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Engine_ChamberPressure(krpc_connection_t connection, float * returnValue, krpc_KSA_Engine_t instance)
+
+      The pressure in the engine's combustion chamber, in pascals. Zero when it is not
+      firing.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Engine_Solid(krpc_connection_t connection, bool * returnValue, krpc_KSA_Engine_t instance)
+
+      Whether the engine is a solid rocket motor. Once ignited, a solid motor burns at
+      full thrust until its grain runs out.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Engine_GrainMass(krpc_connection_t connection, float * returnValue, krpc_KSA_Engine_t instance)
+
+      The mass of the propellant grain of a solid rocket motor, in kilograms.
+
+   
+
+      .. note::
+
+         Some of the grain is left unburned when the motor burns out. Throws an exception
+         if the engine is not a solid rocket motor.
+
 
 
 .. type:: krpc_KSA_Gimbal_t
@@ -277,6 +441,10 @@ Parts
 
       A gimbal turns about the y and z axes of its mount, which :func:`krpc_KSA_Gimbal_Rotation` gives.
       The flight computer steers it while an engine it belongs to is :func:`krpc_KSA_Gimbal_Active`.
+
+   .. macro:: KRPC_CLASS_KSA_GIMBAL
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Gimbal_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Gimbal_t instance)
 
@@ -336,6 +504,10 @@ Parts
 
       Active thrusters fire when the vehicle's RCS is on. See :func:`krpc_KSA_Control_RCS`.
 
+   .. macro:: KRPC_CLASS_KSA_RCS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_RCS_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_RCS_t instance)
 
       The part the thrusters are in.
@@ -354,6 +526,10 @@ Parts
 .. type:: krpc_KSA_Decoupler_t
 
    A decoupler. Obtained from :func:`krpc_KSA_Part_Decoupler`.
+
+   .. macro:: KRPC_CLASS_KSA_DECOUPLER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Decoupler_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Decoupler_t instance)
 
@@ -387,6 +563,10 @@ Parts
 .. type:: krpc_KSA_Parachute_t
 
    A parachute. Obtained from :func:`krpc_KSA_Part_Parachute`.
+
+   .. macro:: KRPC_CLASS_KSA_PARACHUTE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Parachute_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Parachute_t instance)
 
@@ -440,6 +620,11 @@ Parts
 
    The state of a parachute. See :func:`krpc_KSA_Parachute_State`.
 
+   .. macro:: KRPC_ENUMERATION_KSA_PARACHUTESTATE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_KSA_PARACHUTESTATE_STOWED
 
@@ -491,6 +676,10 @@ Parts
 
    A docking port. Obtained from :func:`krpc_KSA_Part_DockingPort`.
 
+   .. macro:: KRPC_CLASS_KSA_DOCKINGPORT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_DockingPort_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_DockingPort_t instance)
 
       The part the docking port is in.
@@ -508,6 +697,19 @@ Parts
       The part the port is docked to, or ``nullptr`` if it is not docked.
 
    
+
+   .. function:: krpc_error_t krpc_KSA_DockingPort_HatchOpen(krpc_connection_t connection, bool * returnValue, krpc_KSA_DockingPort_t instance)
+   .. function:: krpc_error_t krpc_KSA_DockingPort_set_HatchOpen(krpc_connection_t connection, krpc_KSA_DockingPort_t instance, bool value)
+
+      Returns whether the hatch through the docked ports is open, and opens or closes it.
+      An open hatch joins the habitat zones on either side.
+
+   
+
+      .. note::
+
+         The hatch is closed while the port is not docked. Throws an exception when set on a
+         port that is not docked.
 
    .. function:: krpc_error_t krpc_KSA_DockingPort_Undock(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_DockingPort_t instance)
 
@@ -533,6 +735,10 @@ Parts
 
       Deploying or retracting a part moves its symmetric copies with it, as the part's menu
       in the game does.
+
+   .. macro:: KRPC_CLASS_KSA_DEPLOYABLE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Deployable_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Deployable_t instance)
 
@@ -574,6 +780,11 @@ Parts
 
    The state of a deployable part. See :func:`krpc_KSA_Deployable_State`.
 
+   .. macro:: KRPC_ENUMERATION_KSA_DEPLOYABLESTATE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_KSA_DEPLOYABLESTATE_DEPLOYED
 
@@ -605,6 +816,10 @@ Parts
 
    A magnetic scoop, which collects gas from space into the vehicle's tanks. Obtained from
    :func:`krpc_KSA_Part_MagneticScoops`.
+
+   .. macro:: KRPC_CLASS_KSA_MAGNETICSCOOP
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_MagneticScoop_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_MagneticScoop_t instance)
 

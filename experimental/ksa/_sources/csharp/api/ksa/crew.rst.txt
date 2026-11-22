@@ -41,6 +41,12 @@ Crew
 
       :Game Scenes: All
 
+   .. property:: DeathCause? CauseOfDeath { get; }
+
+      What killed the kitten, or ``null`` if it is alive.
+
+      :Game Scenes: All
+
    .. property:: int MissionCount { get; }
 
       The number of missions the kitten has flown, including the current one.
@@ -93,6 +99,33 @@ Crew
 
       :Game Scenes: All
 
+   .. property:: float TimeToRadiationSickness { get; }
+
+      The time until the kitten gets radiation sickness at its current dose rate, in
+      seconds. Infinite if it never does, or the kitten already has it.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The game forecasts it for a kitten on a mission while
+         :prop:`KSA.RadiationEnabled <KSA.KSA.RadiationEnabled>` is true.
+
+   .. property:: float TimeToLethalDose { get; }
+
+      The time until the kitten takes a lethal radiation dose at its current dose rate, in
+      seconds. Infinite if it never does.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The game forecasts it for a kitten on a mission while
+         :prop:`KSA.RadiationEnabled <KSA.KSA.RadiationEnabled>` is true, and only within a day of radiation
+         sickness.
+
    .. property:: float TimeUntilFitToFly { get; }
 
       The time until the kitten has recovered from radiation sickness and can fly, resting
@@ -110,6 +143,51 @@ Crew
    .. property:: bool Retired { get; }
 
       Whether the kitten has retired, having reached its lifetime radiation dose limit.
+
+      :Game Scenes: All
+
+   .. property:: KittenCondition WorstCondition { get; }
+
+      The kitten's worst condition across its supplies.
+
+      :Game Scenes: All
+
+   .. function:: KittenCondition Condition(LifeSupportSupply supply)
+
+      The effect on the kitten of going without a supply.
+
+      :parameters:
+
+       * **supply** -- The supply.
+
+      :Game Scenes: All
+
+   .. function:: float TimeWithout(LifeSupportSupply supply)
+
+      The time the kitten has gone without a supply, in seconds. It counts down again
+      once the supply returns.
+
+      :parameters:
+
+       * **supply** -- The supply.
+
+      :Game Scenes: All
+
+   .. function:: float TimeToNextCondition(LifeSupportSupply supply)
+
+      The further time the kitten can go without a supply before its condition from the
+      supply worsens, in seconds. Infinite once the kitten is dead.
+
+      :parameters:
+
+       * **supply** -- The supply.
+
+      :Game Scenes: All
+
+   .. property:: bool Incapacitated { get; }
+
+      Whether the kitten is incapacitated by going without a supply. An incapacitated
+      kitten cannot fly the vehicle or move supplies.
 
       :Game Scenes: All
 
@@ -132,6 +210,12 @@ Crew
 
          Throws an exception if the kitten is not in a seat, or the vehicle has no EVA hatch.
 
+   .. property:: bool CanGoOnEva { get; }
+
+      Whether the kitten can go on EVA. See :meth:`Kitten.GoOnEva`.
+
+      :Game Scenes: All
+
    .. function:: Vehicle Board()
 
       Board the nearest vehicle with a free seat, and return once the kitten is in the
@@ -146,6 +230,13 @@ Crew
 
          Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
          within one meter.
+
+   .. property:: bool CanBoard { get; }
+
+      Whether the kitten is on EVA and an EVA hatch with a free seat is in range. See
+      :meth:`Kitten.Board`.
+
+      :Game Scenes: All
 
    .. property:: LocomotionMode LocomotionMode { get; }
 
@@ -175,6 +266,86 @@ Crew
        * **referenceFrame** -- The reference frame of the velocity.
 
       :Game Scenes: All
+
+   .. property:: LifeSupport LifeSupport { get; }
+
+      How long the supplies in the kitten's suit last, or ``null`` if the kitten is
+      not on EVA.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The suit is filled from the kitten's habitat zone when it goes on EVA, and what is
+         left returns to the zone when it boards.
+
+   .. property:: int CarriedMeals { get; }
+
+      The number of meals the kitten on EVA carries. Throws an exception if the kitten is
+      not on EVA.
+
+      :Game Scenes: All
+
+   .. property:: int CarriedCanisters { get; }
+
+      The number of carbon dioxide scrubber canisters the kitten on EVA carries. Throws an
+      exception if the kitten is not on EVA.
+
+      :Game Scenes: All
+
+   .. function:: bool CanCarry(Habitat habitat)
+
+      Whether the kitten can take supplies from or stow them in a habitat. See
+      :meth:`Kitten.Take` and :meth:`Kitten.Stow`.
+
+      :parameters:
+
+       * **habitat** -- The habitat.
+
+      :Game Scenes: All
+
+   .. function:: void Take(Habitat habitat, int meals = 0, int canisters = 0)
+
+      Take meals and canisters from a habitat within reach, and return once the kitten
+      carries them. Takes fewer when the habitat holds fewer, or the kitten cannot carry
+      more.
+
+      :parameters:
+
+       * **habitat** -- The habitat, which must store supplies.
+       * **meals** -- The number of meals to take.
+       * **canisters** -- The number of canisters to take.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA or is unwell, life support is
+         disabled, or the habitat stores no supplies or is out of reach. See
+         :meth:`Kitten.CanCarry`.
+
+   .. function:: void Stow(Habitat habitat, int meals = 0, int canisters = 0)
+
+      Stow the meals and canisters the kitten carries in a habitat within reach, and
+      return once they are stowed. Stows fewer when the kitten carries fewer, or the
+      habitat has less room.
+
+      :parameters:
+
+       * **habitat** -- The habitat, which must store supplies.
+       * **meals** -- The number of meals to stow.
+       * **canisters** -- The number of canisters to stow.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA or is unwell, life support is
+         disabled, or the habitat stores no supplies or is out of reach. See
+         :meth:`Kitten.CanCarry`.
 
 
 
@@ -219,6 +390,215 @@ Crew
 
 
 
+.. enum:: KittenCondition
+
+   The effect on a kitten of going without a supply. See :meth:`Kitten.Condition`.
+
+
+   .. enumerator:: Healthy
+
+      Unaffected.
+
+
+   .. enumerator:: Warning
+
+      Going without, with no effect yet.
+
+
+   .. enumerator:: Degraded
+
+      Weakened, and unable to go on EVA.
+
+
+   .. enumerator:: Incapacitated
+
+      Unable to fly the vehicle or move supplies.
+
+
+   .. enumerator:: Dead
+
+      Dead.
+
+
+
+.. enum:: DeathCause
+
+   What killed a kitten. See :prop:`Kitten.CauseOfDeath`.
+
+
+   .. enumerator:: Unknown
+
+      Not recorded.
+
+
+   .. enumerator:: NoOxygen
+
+      Lack of oxygen.
+
+
+   .. enumerator:: NoScrubber
+
+      Carbon dioxide, with no scrubber canisters left.
+
+
+   .. enumerator:: NoWater
+
+      Lack of water.
+
+
+   .. enumerator:: NoFood
+
+      Lack of food.
+
+
+   .. enumerator:: Radiation
+
+      A lethal radiation dose.
+
+
+   .. enumerator:: GroundImpact
+
+      Hitting the ground.
+
+
+   .. enumerator:: OceanImpact
+
+      Hitting the ocean.
+
+
+   .. enumerator:: Collision
+
+      A collision.
+
+
+   .. enumerator:: ExcessiveGForce
+
+      Excessive acceleration.
+
+
+   .. enumerator:: AerodynamicForces
+
+      Aerodynamic forces breaking up the vehicle.
+
+
+   .. enumerator:: HydrodynamicForces
+
+      Hydrodynamic forces breaking up the vehicle.
+
+
+   .. enumerator:: Fall
+
+      A fall on EVA.
+
+
+   .. enumerator:: Abandoned
+
+      Left in a vehicle that was abandoned.
+
+
+
+.. class:: CrewEvent
+
+   A kitten's most urgent coming event: its supplies running low, or its condition
+   worsening. Obtained from :prop:`Vehicle.CrewEvents` or
+   :prop:`Vehicle.NextCrewEvent`.
+
+   .. note::
+
+      As the game's crew clock, an event within a day is the worst stage the kitten reaches
+      in that time, and a later event is the soonest. The event is the game's forecast when it
+      is read from the vehicle. Read it again for a new forecast.
+
+   .. property:: Kitten Kitten { get; }
+
+      The kitten.
+
+      :Game Scenes: All
+
+   .. property:: CrewStage Stage { get; }
+
+      What happens to the kitten.
+
+      :Game Scenes: All
+
+   .. property:: CrewHazard Hazard { get; }
+
+      The cause of the event.
+
+      :Game Scenes: All
+
+   .. property:: double UT { get; }
+
+      The universal time of the event, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float TimeTo { get; }
+
+      The time until the event, in seconds. Zero once its time has passed.
+
+      :Game Scenes: All
+
+
+
+.. enum:: CrewStage
+
+   What happens to a kitten in a crew event. See :prop:`CrewEvent.Stage`.
+
+
+   .. enumerator:: Low
+
+      The supply runs low.
+
+
+   .. enumerator:: Degraded
+
+      The kitten is weakened, and unable to go on EVA. For radiation, the kitten gets
+      radiation sickness.
+
+
+   .. enumerator:: Incapacitated
+
+      The kitten is unable to fly the vehicle or move supplies.
+
+
+   .. enumerator:: Dead
+
+      The kitten dies.
+
+
+
+.. enum:: CrewHazard
+
+   The cause of a crew event. See :prop:`CrewEvent.Hazard`.
+
+
+   .. enumerator:: Air
+
+      Running out of air.
+
+
+   .. enumerator:: Scrubber
+
+      Running out of carbon dioxide scrubber.
+
+
+   .. enumerator:: Water
+
+      Running out of water.
+
+
+   .. enumerator:: Food
+
+      Running out of food.
+
+
+   .. enumerator:: Radiation
+
+      The radiation dose.
+
+
+
 .. class:: Seat
 
    A crew seat. Obtained from :prop:`Part.Seats`.
@@ -239,5 +619,6 @@ Crew
 
       .. note::
 
-         A kitten in another seat of the vehicle moves to this one. Throws an exception if
-         the kitten is killed in action, on EVA, or in another vehicle.
+         A kitten in another seat of the vehicle moves to this one, within its habitat zone.
+         Throws an exception if the kitten is killed in action, retired, on EVA, in another
+         vehicle, or incapacitated, or the seat is in another habitat zone.

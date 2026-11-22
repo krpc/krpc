@@ -1,0 +1,222 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Debug
+=====
+
+
+.. class:: Debug
+
+   Changes the state of the simulation directly, as the game's debug windows and console
+   commands do: teleporting a vehicle, setting its attitude, refilling its tanks.
+
+   .. function:: setCircularOrbit(vehicle, body, altitude)
+
+      Move a vehicle onto a circular orbit around a body, and return once it is there.
+
+      :param vehicle: The vehicle.
+      :type vehicle: :class:`KSA.Vehicle`
+      :param body: The body to orbit.
+      :type body: :class:`KSA.Body`
+      :param altitude: The altitude of the orbit above the mean radius, in meters.
+      :type altitude: ``number``
+   
+
+      .. note::
+
+         Throws an exception if the game cannot compute the vehicle's trajectory on the
+         orbit.
+
+   .. function:: setOrbit(vehicle, body, semiMajorAxis, eccentricity, inclination, longitudeOfAscendingNode, argumentOfPeriapsis, meanAnomalyAtEpoch, epoch)
+
+      Move a vehicle onto the orbit with the given elements, and return once it is there.
+      The angles are those of :class:`KSA.Orbit`.
+
+      :param vehicle: The vehicle.
+      :type vehicle: :class:`KSA.Vehicle`
+      :param body: The body to orbit.
+      :type body: :class:`KSA.Body`
+      :param semiMajorAxis: The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+      :type semiMajorAxis: ``number``
+      :param eccentricity: The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
+      :type eccentricity: ``number``
+      :param inclination: The inclination, in radians.
+      :type inclination: ``number``
+      :param longitudeOfAscendingNode: The longitude of the ascending node, in radians.
+      :type longitudeOfAscendingNode: ``number``
+      :param argumentOfPeriapsis: The argument of periapsis, in radians.
+      :type argumentOfPeriapsis: ``number``
+      :param meanAnomalyAtEpoch: The mean anomaly at the epoch, in radians.
+      :type meanAnomalyAtEpoch: ``number``
+      :param epoch: The universal time of the epoch, in seconds.
+      :type epoch: ``number``
+   
+
+      .. note::
+
+         Throws an exception if the game cannot compute the vehicle's trajectory on the
+         orbit.
+
+   .. function:: setLanded(vehicle, body, latitude, longitude)
+
+      Place a vehicle on the surface of a body, as the game's teleport window does, and
+      return once it is there.
+
+      :param vehicle: The vehicle.
+      :type vehicle: :class:`KSA.Vehicle`
+      :param body: The body to land on.
+      :type body: :class:`KSA.Body`
+      :param latitude: The latitude, in degrees.
+      :type latitude: ``number``
+      :param longitude: The longitude, in degrees.
+      :type longitude: ``number``
+   
+
+      .. note::
+
+         Throws an exception if the body has no surface.
+
+   .. function:: setPosition(vehicle, position, referenceFrame)
+
+      Move a vehicle to the given position, keeping its velocity, and return once it is
+      there.
+
+      :param vehicle: The vehicle.
+      :type vehicle: :class:`KSA.Vehicle`
+      :param position: The position of the vehicle, in meters.
+      :type position: ``[number, number, number]``
+      :param referenceFrame: The reference frame of the position.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+   
+
+      .. note::
+
+         This is the inverse of :meth:`KSA.Vehicle.position`. The vehicle keeps orbiting
+         the same body.
+
+   .. function:: setVelocity(vehicle, velocity, referenceFrame)
+
+      Set the velocity of a vehicle, keeping its position, and return once it is set.
+
+      :param vehicle: The vehicle.
+      :type vehicle: :class:`KSA.Vehicle`
+      :param velocity: The velocity of the vehicle, in meters per second.
+      :type velocity: ``[number, number, number]``
+      :param referenceFrame: The reference frame of the velocity.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+   
+
+      .. note::
+
+         This is the inverse of :meth:`KSA.Vehicle.velocity`. The vehicle keeps orbiting
+         the same body.
+
+   .. function:: setRotation(vehicle, rotation, referenceFrame)
+
+      Set the rotation of a vehicle, and return once it is set.
+
+      :param vehicle: The vehicle.
+      :type vehicle: :class:`KSA.Vehicle`
+      :param rotation: The rotation of the vehicle, as a quaternion of the form ``(x, y, z, w)``.
+      :type rotation: ``[number, number, number, number]``
+      :param referenceFrame: The reference frame of the rotation.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+   
+
+      .. note::
+
+         This is the inverse of :meth:`KSA.Vehicle.rotation`.
+
+   .. function:: setAngularVelocity(vehicle, angularVelocity, referenceFrame)
+
+      Set the angular velocity of a vehicle, and return once it is set.
+
+      :param vehicle: The vehicle.
+      :type vehicle: :class:`KSA.Vehicle`
+      :param angularVelocity: The angular velocity, in radians per second. The vector points along the axis of rotation, and its length is the rate.
+      :type angularVelocity: ``[number, number, number]``
+      :param referenceFrame: The reference frame of the angular velocity.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+   
+
+      .. note::
+
+         This is the inverse of :meth:`KSA.Vehicle.angularVelocity`.
+
+   .. function:: fillResources(vehicle)
+
+      Fill the propellant and other substances in the tanks of a vehicle, as the game's
+      refill command does.
+
+      :param vehicle: The vehicle.
+      :type vehicle: :class:`KSA.Vehicle`
+   
+
+      .. note::
+
+         The batteries keep their charge.
+
+   .. function:: emptyResources(vehicle)
+
+      Empty the propellant and other substances in the tanks of a vehicle, as the game's
+      empty command does.
+
+      :param vehicle: The vehicle.
+      :type vehicle: :class:`KSA.Vehicle`
+   
+
+      .. note::
+
+         The batteries keep their charge.
+
+   .. function:: duplicateVehicle(vehicle, name)
+
+      Create a copy of a vehicle beside it, as the game's duplicate command does, and
+      return once it is created.
+
+      :param vehicle: The vehicle to copy.
+      :type vehicle: :class:`KSA.Vehicle`
+      :param name: The name of the copy.
+      :type name: ``string``
+      :returns: The copy.
+      :rtype: :class:`KSA.Vehicle`
+   
+
+      .. note::
+
+         Throws an exception if the name is in use.
+
+   .. function:: explodeVehicle(vehicle)
+
+      Destroy a vehicle in an explosion, as the game's explode command does, and return
+      once the vehicle is gone. Its crew are killed.
+
+      :param vehicle: The vehicle.
+      :type vehicle: :class:`KSA.Vehicle`
+   
+
+   .. function:: showVelocityArrows(visible)
+
+      Show or hide the game's debug arrows for the velocities of the vehicles.
+
+      :param visible: Whether to show the arrows.
+      :type visible: ``boolean``
+   
+
+   .. function:: runCommand(command)
+
+      Run a command in the game's console, as typed in the console.
+
+      :param command: The command and its arguments.
+      :type command: ``string``
+      :returns: The console output of the command, one line per message.
+      :rtype: ``Array`` of ``string``
+   
+
+      .. note::
+
+         Most commands write their messages to the game's log, not the returned output.
+         Throws an exception if the console has no such command, or the arguments are not
+         valid.

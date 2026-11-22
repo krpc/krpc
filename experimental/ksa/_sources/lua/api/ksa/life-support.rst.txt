@@ -1,0 +1,581 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KSA
+
+Life Support
+============
+
+
+.. class:: LifeSupport
+
+   How long the supplies of a vehicle, a habitat zone or a kitten's suit last. Obtained
+   from :attr:`KSA.Vehicle.life_support`, :attr:`KSA.HabitatZone.life_support` or
+   :attr:`KSA.Kitten.life_support`.
+
+   .. note::
+
+      The times count down only while :attr:`KSA.life_support_enabled` is true. Air
+      lasts forever in breathable air outside the vehicle.
+
+   .. attribute:: kittens: number
+
+      The number of kittens the supplies are shared between.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: air_mass: number
+
+      The mass of oxygen in the crew's tanks, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: water_mass: number
+
+      The mass of water in the crew's tanks, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: meals: number
+
+      The number of meals.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: air_time: number
+
+      The time the air lasts, in seconds. Infinite with no crew, or in breathable air.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: scrubber_time: number
+
+      The time the carbon dioxide scrubbers last, in seconds. Infinite with no crew.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: water_time: number
+
+      The time the water lasts, in seconds. Infinite with no crew.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: food_time: number
+
+      The time the food lasts, in seconds. Infinite with no crew.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: time: number
+
+      The time until the first supply runs out, in seconds. A suit counts its air and
+      scrubber only. Infinite with no crew.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: limiting_supply: KSA.LifeSupportSupply
+
+      The supply that runs out first. Air when every time is infinite, as with no crew.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: level: KSA.LifeSupportLevel
+
+      How long the supplies last, as the game's life support gauge shows it.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: time_to_next_level: number
+
+      The time until :attr:`KSA.LifeSupport.level` next changes, in seconds. Infinite with no crew.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+.. class:: LifeSupportLevel
+
+   How long the crew's supplies last. See :attr:`KSA.LifeSupport.level`.
+
+
+   .. data:: ok
+
+      More than a day of supplies, or no crew.
+
+
+   .. data:: low
+
+      A day of supplies or less.
+
+
+   .. data:: critical
+
+      An hour of supplies or less.
+
+
+   .. data:: out
+
+      A supply has run out.
+
+
+
+.. class:: LifeSupportSupply
+
+   A supply the crew needs. See :attr:`KSA.LifeSupport.limiting_supply`.
+
+
+   .. data:: air
+
+      Oxygen to breathe.
+
+
+   .. data:: scrubber
+
+      Lithium hydroxide canisters, which scrub carbon dioxide from the air.
+
+
+   .. data:: water
+
+      Drinking water.
+
+
+   .. data:: food
+
+      Meals.
+
+
+
+.. class:: HabitatZone
+
+   The connected habitable parts of a vehicle, which share their crew's supplies.
+   Obtained from :attr:`KSA.Vehicle.habitat_zones` or :attr:`KSA.Habitat.zone`.
+
+   .. note::
+
+      Parts join a zone through connections the crew can pass, such as an open docking
+      port hatch.
+
+   .. attribute:: vehicle: KSA.Vehicle
+
+      The vehicle the zone is in.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: parts: List
+
+      The parts in the zone.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: habitats: List
+
+      The habitats in the zone.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: seats: List
+
+      The crew seats in the zone.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: crew: List
+
+      The kittens in the zone's seats.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: linked_zones: List
+
+      The zones that join this one when closed docking port hatches between them open.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: hatches_to(zone: KSA.HabitatZone): List
+
+      The closed docking port hatches that join this zone to a linked zone when they
+      open.
+
+      :param zone: A zone in :attr:`KSA.HabitatZone.linked_zones`.
+
+      .. note::
+
+         Throws an exception if the zone is not linked to this one.
+
+   .. attribute:: habitable_volume: number
+
+      The volume the crew can live in, in cubic meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: storage_volume: number
+
+      The volume for stored supplies, in cubic meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: life_support: KSA.LifeSupport
+
+      How long the zone's supplies last its crew.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: mission_supplies: KSA.MissionSupplies | nil
+
+      Whether the zone's supplies last its crew through the vehicle's mission. ``nil``
+      without a feasible mission with time left, or while
+      :attr:`KSA.life_support_enabled` is false.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: planned_kittens(leg: KSA.MissionLeg): number
+
+      The number of kittens planned in the zone for a leg of the vehicle's mission. The
+      plan defaults to the kittens seated in the zone.
+
+      :param leg: The leg.
+
+
+
+.. class:: Mission
+
+   The mission planned for a vehicle in the editor's life support window. Obtained from
+   :attr:`KSA.Vehicle.mission`.
+
+   .. note::
+
+      The game times the legs of the mission from the plan, and checks the supplies of each
+      habitat zone against them. See :attr:`KSA.HabitatZone.mission_supplies`.
+
+   .. attribute:: destination: KSA.MissionDestination
+
+      Where the mission goes.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: body: KSA.Body | nil
+
+      The body the mission goes to, or ``nil`` if it has no destination. For a low
+      orbit, this is the home body.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: arrival: KSA.MissionArrival
+
+      What the mission does at its destination.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: trip: KSA.MissionTrip
+
+      Whether the mission comes back.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: stay: number
+
+      The time planned at the destination, in seconds.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The game rounds a stay before a return up to the next transfer window home. See
+         :attr:`KSA.Mission.stay_time`.
+
+   .. attribute:: custom: boolean
+
+      Whether the mission has a length set by the player, in place of legs timed from
+      its destination. See :attr:`KSA.Mission.custom_length`.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: custom_length: number
+
+      The length of a mission with :attr:`KSA.Mission.custom` set, in seconds.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: feasible: boolean
+
+      Whether the game can time the legs of the mission. A mission with no destination,
+      or a flyby with no way back, cannot be timed.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The leg times are zero when this is false.
+
+   .. attribute:: out_time: number
+
+      The planned time of the way out, in seconds.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: stay_time: number
+
+      The planned time at the destination, in seconds.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: back_time: number
+
+      The planned time of the way back, in seconds. Zero for a one way trip.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: return_wait: number
+
+      The time from arriving at the destination until the next transfer window home, in
+      seconds. Zero when there is no wait.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: total_time: number
+
+      The planned length of the mission, in seconds.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: time_left: number
+
+      The time left in the mission as planned, counted from the vehicle's launch, in
+      seconds.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: arrival_ut: number
+
+      The universal time the vehicle arrived at the destination body, in seconds. Not a
+      number until it has.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         The game records the arrival for a mission to another body.
+
+   .. attribute:: departure_ut: number
+
+      The universal time the vehicle left the destination body, in seconds. Not a number
+      until it has.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+.. class:: MissionDestination
+
+   Where a mission goes. See :attr:`KSA.Mission.destination`.
+
+
+   .. data:: none
+
+      No destination.
+
+
+   .. data:: low_orbit
+
+      A low orbit around the home body.
+
+
+   .. data:: body
+
+      Another body, given by :attr:`KSA.Mission.body`.
+
+
+
+.. class:: MissionArrival
+
+   What a mission does at its destination. See :attr:`KSA.Mission.arrival`.
+
+
+   .. data:: flyby
+
+      Flies past it.
+
+
+   .. data:: orbit
+
+      Orbits it.
+
+
+   .. data:: land
+
+      Lands on it.
+
+
+
+.. class:: MissionTrip
+
+   Whether a mission comes back. See :attr:`KSA.Mission.trip`.
+
+
+   .. data:: return
+
+      Goes and comes back.
+
+
+   .. data:: one_way
+
+      Goes and stays.
+
+
+
+.. class:: MissionLeg
+
+   A leg of a mission. See :meth:`KSA.HabitatZone.planned_kittens`.
+
+
+   .. data:: out
+
+      The way out.
+
+
+   .. data:: stay
+
+      The stay at the destination.
+
+
+   .. data:: back
+
+      The way back.
+
+
+
+.. class:: MissionSupplies
+
+   Whether the supplies of a habitat zone last its crew through the vehicle's mission, as
+   the life support window shows it. Obtained from :attr:`KSA.HabitatZone.mission_supplies`.
+
+   .. note::
+
+      The check takes the legs left in the mission as planned, counted from the vehicle's
+      launch, and the kittens planned for each leg. The times are from now.
+
+   .. attribute:: verdict: KSA.MissionSupplyVerdict
+
+      Whether the supplies last the mission.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: short_by: number
+
+      The time by which the first supply to run out falls short of the end of the
+      mission, in seconds. Zero when the supplies last.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: first_supply: KSA.LifeSupportSupply
+
+      The supply that runs out first.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: time_left(supply: KSA.LifeSupportSupply): number
+
+      The time until a supply runs out with the crew planned for each leg, in seconds.
+      Infinite if it lasts the mission.
+
+      :param supply: The supply.
+
+      .. note::
+
+         Air lasts while the vehicle is in breathable air.
+
+   .. attribute:: end: number
+
+      The time until the zone has no crew left in the mission, in seconds.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+.. class:: MissionSupplyVerdict
+
+   Whether a habitat zone has the supplies for a mission. See :attr:`KSA.MissionSupplies.verdict`.
+
+
+   .. data:: unused
+
+      The zone has no crew during the mission.
+
+
+   .. data:: enough
+
+      The supplies last the mission.
+
+
+   .. data:: short
+
+      A supply runs out before the end of the mission.
+
+
+
+.. class:: Habitat
+
+   A habitable or storage space in a part, which holds meals and carbon dioxide scrubber
+   canisters. Obtained from :attr:`KSA.Part.habitats`.
+
+   .. attribute:: part: KSA.Part
+
+      The part the habitat is in.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: zone: KSA.HabitatZone
+
+      The habitat zone the habitat is in.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: habitable_volume: number
+
+      The volume the crew can live in, in cubic meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: storage_volume: number
+
+      The volume for stored supplies, in cubic meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: meals: number
+
+      The number of meals in the habitat.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: canisters: number
+
+      The number of carbon dioxide scrubber canisters in the habitat.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: meal_capacity: number
+
+      The number of meals the habitat holds when full.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: canister_capacity: number
+
+      The number of carbon dioxide scrubber canisters the habitat holds when full.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: transfer(to: KSA.Habitat, meals?: number, canisters?: number)
+
+      Moves meals and canisters to another habitat in the same zone. Moves fewer when
+      this habitat holds fewer, or the other has less room.
+
+      :param to: The habitat to move the supplies to.
+      :param meals: The number of meals to move. Defaults to ``0``.
+      :param canisters: The number of canisters to move. Defaults to ``0``.
+
+      .. note::
+
+         A kitten in the zone moves the supplies. Throws an exception if life support is
+         disabled, the habitats are in different zones, or the zone has no crew able to
+         move them.

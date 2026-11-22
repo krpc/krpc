@@ -1,0 +1,697 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Orbit
+=====
+
+
+.. _http-KSA.Orbit:
+
+.. rubric:: Orbit
+
+An orbit. Obtained from :http:get:`/ksa/vehicle/(id)/orbit`, :http:get:`/ksa/body/(id)/orbit`,
+:http:get:`/ksa/burn/(id)/orbit` or :http:get:`/ksa/orbit/(id)/next-orbit`.
+
+.. note::
+
+   An orbit follows the game's prediction as the trajectory changes. A predicted orbit, from
+   :http:get:`/ksa/orbit/(id)/next-orbit` or :http:get:`/ksa/burn/(id)/orbit`, is a position in the vehicle's or the
+   burn's predicted trajectory, and throws an exception while the trajectory is too short to
+   reach it.
+
+
+A ``Orbit`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/orbit/(id)/body
+
+   The body being orbited.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson KSA.Body value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/apoapsis
+
+   The apoapsis of the orbit, in meters, from the center of the body being orbited.
+   Not a number for a parabolic or hyperbolic orbit.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/periapsis
+
+   The periapsis of the orbit, in meters, from the center of the body being orbited.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/apoapsis-altitude
+
+   The apoapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/periapsis-altitude
+
+   The periapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/semi-major-axis
+
+   The semi-major axis of the orbit, in meters. Negative for a hyperbolic orbit.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/semi-minor-axis
+
+   The semi-minor axis of the orbit, in meters. Not a number for a parabolic or
+   hyperbolic orbit.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/speed
+
+   The current orbital speed, in meters per second.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/radius
+
+   The current distance from the center of the body being orbited, in meters.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/period
+
+   The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/mean-motion
+
+   The mean angular motion of the orbit, in radians per second.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/specific-energy
+
+   The specific orbital energy, the sum of the kinetic and potential energy per unit
+   mass, in joules per kilogram. Negative for an elliptical orbit.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/time-to-apoapsis
+
+   The time until the next apoapsis, in seconds. Not a number for a parabolic or
+   hyperbolic orbit.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/time-to-periapsis
+
+   The time until the next periapsis, in seconds. Negative once a parabolic or
+   hyperbolic orbit has passed it.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/eccentricity
+
+   The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+   of the orbit.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/inclination
+
+   The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+   of the orbit, in radians, against the equator of the body being orbited.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/longitude-of-ascending-node
+
+   The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/argument-of-periapsis
+
+   The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/true-anomaly
+
+   The current `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_,
+   in radians.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/mean-anomaly
+
+   The current `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_,
+   in radians.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/eccentric-anomaly
+
+   The current `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_, in radians. For a hyperbolic orbit, this is the hyperbolic anomaly.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/semi-latus-rectum
+
+   The `semi-latus rectum <https://en.wikipedia.org/wiki/Conic_section#Conic_parameters>`_ of the orbit, in meters.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/specific-angular-momentum
+
+   The specific angular momentum of the orbit, in :math:`\mathrm{m^{2}/s}`.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:post:: /ksa/orbit/(id)/true-anomaly-at-ut
+
+   The true anomaly at the given time, in radians.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :reqjson double ut: Universal time, in seconds.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /ksa/orbit/(id)/mean-anomaly-at-ut
+
+   The mean anomaly at the given time, in radians.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :reqjson double ut: Universal time, in seconds.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /ksa/orbit/(id)/eccentric-anomaly-at-ut
+
+   The eccentric anomaly at the given time, in radians. For a hyperbolic orbit, this
+   is the hyperbolic anomaly.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :reqjson double ut: Universal time, in seconds.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /ksa/orbit/(id)/ut-at-true-anomaly
+
+   The next universal time, from now, at which the orbit reaches the given true
+   anomaly, in seconds. Not a number if it never does, such as beyond the asymptote of
+   a hyperbolic orbit.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :reqjson double true_anomaly: True anomaly, in radians.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /ksa/orbit/(id)/true-anomaly-at-radius
+
+   The true anomaly at which the orbit reaches the given distance from the center of
+   the body, in radians, between 0 and :math:`\pi`. Not a number if the orbit
+   never reaches it.
+
+   .. note::
+
+      The orbit also reaches the distance at the negative of this anomaly. Zero for a
+      circular orbit at the distance. Throws an exception if the distance is not
+      positive.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :reqjson double radius: The distance from the center of the body, in meters.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /ksa/orbit/(id)/radius-at
+
+   The distance from the center of the body being orbited at the given time, in
+   meters.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :reqjson double ut: Universal time, in seconds.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /ksa/orbit/(id)/speed-at
+
+   The orbital speed at the given time, in meters per second.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :reqjson double ut: Universal time, in seconds.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /ksa/orbit/(id)/position-at
+
+   The position on the orbit at the given time, in meters, relative to where the body
+   being orbited is now.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :reqjson double ut: Universal time, in seconds.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/orbit/(id)/velocity-at
+
+   The orbital velocity at the given time, in meters per second, relative to the body
+   being orbited and along the axes of the given frame.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :reqjson double ut: Universal time, in seconds.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the velocity.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/orbit/(id)/relative-inclination
+
+   The inclination of the orbit relative to another orbit, in radians.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :reqjson KSA.Orbit orbit: The other orbit.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /ksa/orbit/(id)/true-anomaly-at-an
+
+   The true anomaly of the ascending node with another orbit, in radians.
+
+   .. note::
+
+      Throws an exception if the orbits are around different bodies.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :reqjson KSA.Orbit orbit: The other orbit.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /ksa/orbit/(id)/true-anomaly-at-dn
+
+   The true anomaly of the descending node with another orbit, in radians.
+
+   .. note::
+
+      Throws an exception if the orbits are around different bodies.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :reqjson KSA.Orbit orbit: The other orbit.
+   :resjson double value:
+
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/time-of-closest-approach
+
+   The universal time of the closest approach on this orbit to the vehicle's target,
+   in seconds. Not a number if there is none.
+
+   .. note::
+
+      Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+      worker thread, so a new target shows here shortly after it is set.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/distance-at-closest-approach
+
+   The distance at the closest approach on this orbit to the vehicle's target, in
+   meters. Not a number if there is none.
+
+   .. note::
+
+      Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+      worker thread, so a new target shows here shortly after it is set.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/start-ut
+
+   The universal time at which this orbit starts, in seconds. Not a number for the
+   orbit of a body.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/end-ut
+
+   The universal time at which this orbit ends, in seconds. Infinite for an orbit that
+   does not end, such as the orbit of a body.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/end-transition
+
+   How the orbit ends.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson KSA.OrbitTransition value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/time-to-soi-change
+
+   The time until the orbit enters or leaves a sphere of influence, in seconds. Not a
+   number if it does neither.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/orbit/(id)/next-orbit
+
+   The orbit that follows this one after it enters or leaves a sphere of influence, or
+   ``null`` if there is none.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+   :resjson KSA.Orbit? value:
+
+
+
+
+.. http:post:: /ksa/orbit/create-from-elements
+
+   Create the orbit with the given elements around a body. The angles are those of
+   :ref:`Orbit <http-KSA.Orbit>`.
+
+   .. note::
+
+      The orbit is a single conic around *body*, with no
+      :http:get:`/ksa/orbit/(id)/next-orbit`. It is held until :http:post:`/ksa/orbit/(id)/remove` is called on it, or
+      the client that created it disconnects.
+
+
+   :reqjson KSA.Body body: The body being orbited.
+   :reqjson double semi_major_axis: The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+   :reqjson double eccentricity: The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
+   :reqjson double inclination: The inclination, in radians.
+   :reqjson double longitude_of_ascending_node: The longitude of the ascending node, in radians.
+   :reqjson double argument_of_periapsis: The argument of periapsis, in radians.
+   :reqjson double mean_anomaly_at_epoch: The mean anomaly at the epoch, in radians.
+   :reqjson double epoch: The universal time of the epoch, in seconds.
+   :resjson KSA.Orbit value:
+
+
+
+
+
+.. http:post:: /ksa/orbit/create-from-position-and-velocity
+
+   Create the orbit around a body through the given position and velocity.
+
+   .. note::
+
+      The orbit is a single conic around *body*, with no
+      :http:get:`/ksa/orbit/(id)/next-orbit`. It is held until :http:post:`/ksa/orbit/(id)/remove` is called on it, or
+      the client that created it disconnects.
+
+
+   :reqjson KSA.Body body: The body being orbited.
+   :reqjson tuple<double, double, double> position: The position, in meters, relative to where the body is now.
+   :reqjson tuple<double, double, double> velocity: The velocity, in meters per second.
+   :reqjson double ut: The universal time of the position and velocity, in seconds.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position and velocity.
+   :resjson KSA.Orbit value:
+
+
+
+
+
+.. http:post:: /ksa/orbit/(id)/remove
+
+   Remove an orbit created by :http:post:`/ksa/orbit/create-from-elements` or
+   :http:post:`/ksa/orbit/create-from-position-and-velocity`.
+
+   .. note::
+
+      Throws an exception if the orbit was not created by a client.
+
+
+   :param id: The identifier of the :ref:`Orbit <http-KSA.Orbit>` object.
+
+
+
+
+
+
+
+.. _http-KSA.OrbitTransition:
+
+.. rubric:: OrbitTransition
+
+How an orbit ends. See :http:get:`/ksa/orbit/(id)/end-transition`.
+
+Passed and returned as the name of one of its values:
+
+
+``"none"``
+   The orbit does not end.
+
+
+``"encounter"``
+   The orbit enters the sphere of influence of another body.
+
+
+``"escape"``
+   The orbit leaves the sphere of influence of the body being orbited.
+
+
+``"impact"``
+   The orbit hits the surface of the body being orbited.
+
+
+``"burn"``
+   The orbit ends at a planned burn.

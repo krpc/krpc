@@ -15,7 +15,12 @@ Auto-Pilot
 
       The auto-pilot points the vehicle in the direction set by :func:`krpc_KSA_AutoPilot_Mode`, once
       engaged. It is the game's own flight computer, so the game's flight computer
-      controls change the same settings.
+      controls change the same settings. Changing a setting throws an exception while a kFS
+      program controls the vehicle.
+
+   .. macro:: KRPC_CLASS_KSA_AUTOPILOT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_AutoPilot_Engage(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance)
 
@@ -168,6 +173,11 @@ Auto-Pilot
 
    The direction the auto-pilot points the vehicle in.
    See :func:`krpc_KSA_AutoPilot_Mode`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_AUTOPILOTMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_KSA_AUTOPILOTMODE_ATTITUDE

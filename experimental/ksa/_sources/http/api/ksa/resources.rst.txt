@@ -1,0 +1,288 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Resources
+=========
+
+
+.. _http-KSA.Resource:
+
+.. rubric:: Resource
+
+A substance held in tanks, such as a propellant, in a part or across a whole vehicle.
+Obtained from :http:get:`/ksa/part/(id)/resources` or :http:get:`/ksa/vehicle/(id)/resources`.
+
+A ``Resource`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/resource/(id)/name
+
+   The name of the substance.
+
+
+   :param id: The identifier of the :ref:`Resource <http-KSA.Resource>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /ksa/resource/(id)/amount
+
+   The mass of the substance held, in kilograms.
+
+
+   :param id: The identifier of the :ref:`Resource <http-KSA.Resource>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/resource/(id)/max
+
+   The mass of the substance the tanks can hold, in kilograms.
+
+
+   :param id: The identifier of the :ref:`Resource <http-KSA.Resource>` object.
+
+   :resjson float value:
+
+
+
+
+
+.. _http-KSA.Tank:
+
+.. rubric:: Tank
+
+A propellant tank. Obtained from :http:get:`/ksa/part/(id)/tanks` or :http:get:`/ksa/vehicle/(id)/tanks`.
+
+A ``Tank`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/tank/(id)/part
+
+   The part the tank is in.
+
+
+   :param id: The identifier of the :ref:`Tank <http-KSA.Tank>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/tank/(id)/volume
+
+   The volume of the tank, in cubic meters.
+
+
+   :param id: The identifier of the :ref:`Tank <http-KSA.Tank>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/tank/(id)/rated-pressure
+
+   The pressure the tank stores gas at, in pascals. Zero if the tank cannot store gas.
+
+
+   :param id: The identifier of the :ref:`Tank <http-KSA.Tank>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/tank/(id)/filled-fraction
+
+   The fraction of the tank's volume that is filled, between 0 and 1.
+
+
+   :param id: The identifier of the :ref:`Tank <http-KSA.Tank>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/tank/(id)/propellant-use-enabled
+
+   Whether engines can draw propellant from the tank.
+
+
+   :param id: The identifier of the :ref:`Tank <http-KSA.Tank>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/tank/(id)/propellant-use-enabled
+
+   Whether engines can draw propellant from the tank.
+
+
+   :param id: The identifier of the :ref:`Tank <http-KSA.Tank>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/tank/(id)/transfer-mode
+
+   The direction the tank transfers propellant in.
+
+   .. note::
+
+      Propellant flows from tanks transferring out to tanks of the same vehicle transferring
+      in, and the transfer draws battery power. Setting a transfer throws an exception if
+      the running version of KSA does not support it.
+
+
+   :param id: The identifier of the :ref:`Tank <http-KSA.Tank>` object.
+
+   :resjson KSA.TankTransferMode value:
+
+.. http:put:: /ksa/tank/(id)/transfer-mode
+
+   The direction the tank transfers propellant in.
+
+   .. note::
+
+      Propellant flows from tanks transferring out to tanks of the same vehicle transferring
+      in, and the transfer draws battery power. Setting a transfer throws an exception if
+      the running version of KSA does not support it.
+
+
+   :param id: The identifier of the :ref:`Tank <http-KSA.Tank>` object.
+
+   :reqjson KSA.TankTransferMode value: The new value.
+
+
+
+
+
+.. _http-KSA.TankTransferMode:
+
+.. rubric:: TankTransferMode
+
+The direction a tank transfers propellant in. See :http:get:`/ksa/tank/(id)/transfer-mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"none"``
+   No transfer.
+
+
+``"in"``
+   Into the tank, from tanks transferring out.
+
+
+``"out"``
+   Out of the tank, to tanks transferring in.
+
+
+
+.. _http-KSA.FuelLink:
+
+.. rubric:: FuelLink
+
+A fuel line between two parts of a vehicle, which lets propellant flow between them.
+Obtained from :http:get:`/ksa/vehicle/(id)/fuel-links`.
+
+A ``FuelLink`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/fuel-link/(id)/part-a
+
+   One of the parts the link joins.
+
+
+   :param id: The identifier of the :ref:`FuelLink <http-KSA.FuelLink>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/fuel-link/(id)/part-b
+
+   The other part the link joins.
+
+
+   :param id: The identifier of the :ref:`FuelLink <http-KSA.FuelLink>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/fuel-link/(id)/flow
+
+   The direction propellant flows through the link.
+
+
+   :param id: The identifier of the :ref:`FuelLink <http-KSA.FuelLink>` object.
+
+   :resjson KSA.FuelLinkFlow value:
+
+.. http:put:: /ksa/fuel-link/(id)/flow
+
+   The direction propellant flows through the link.
+
+
+   :param id: The identifier of the :ref:`FuelLink <http-KSA.FuelLink>` object.
+
+   :reqjson KSA.FuelLinkFlow value: The new value.
+
+
+
+
+.. http:get:: /ksa/fuel-link/(id)/enabled
+
+   Whether propellant can flow through the link.
+
+
+   :param id: The identifier of the :ref:`FuelLink <http-KSA.FuelLink>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/fuel-link/(id)/enabled
+
+   Whether propellant can flow through the link.
+
+
+   :param id: The identifier of the :ref:`FuelLink <http-KSA.FuelLink>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+
+.. _http-KSA.FuelLinkFlow:
+
+.. rubric:: FuelLinkFlow
+
+The direction propellant flows through a fuel link. See :http:get:`/ksa/fuel-link/(id)/flow`.
+
+Passed and returned as the name of one of its values:
+
+
+``"a_to_b"``
+   From :http:get:`/ksa/fuel-link/(id)/part-a` to :http:get:`/ksa/fuel-link/(id)/part-b`.
+
+
+``"b_to_a"``
+   From :http:get:`/ksa/fuel-link/(id)/part-b` to :http:get:`/ksa/fuel-link/(id)/part-a`.
+
+
+``"both"``
+   Either way.

@@ -1,0 +1,48 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KFS
+   :no-index:
+
+Service
+=======
+
+
+.. module:: KFS
+
+Provides access to kFS, the game's flight software: programs that run on a vehicle's
+flight computer.
+
+.. note::
+
+   kFS is a prototype in the game, and is off until it is turned on, by setting
+   :func:`KFS.getAvailable` or with the game's ``kfs on`` console command. This service
+   follows the prototype, and changes with it.
+
+
+
+.. function:: getAvailable()
+              setAvailable(value)
+
+   Returns whether kFS is on, and turns it on or off.
+
+   :Property: Can be read or written
+   :rtype: ``boolean``
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      Turning it off stops every program, and gives each vehicle back to the pilot, as the
+      game's ``kfs off`` console command does.
+
+
+
+
+.. function:: computer(vehicle)
+
+   The flight computer of a vehicle. Throws an exception if kFS is off.
+
+   :param vehicle: The vehicle.
+   :type vehicle: :class:`KSA.Vehicle`
+   :rtype: :class:`KFS.Computer`
+   :Game Scenes: Flight

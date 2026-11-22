@@ -16,6 +16,10 @@ Vehicle
       Docking and undocking replace the vehicles involved, so an object for one of them
       throws an exception afterwards.
 
+   .. macro:: KRPC_CLASS_KSA_VEHICLE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Vehicle_Name(krpc_connection_t connection, char * * returnValue, krpc_KSA_Vehicle_t instance)
    .. function:: krpc_error_t krpc_KSA_Vehicle_set_Name(krpc_connection_t connection, krpc_KSA_Vehicle_t instance, const char * value)
 
@@ -91,6 +95,12 @@ Vehicle
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Vehicle_DryMass(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The mass of the vehicle's parts, without propellant or supplies, in kilograms.
+
+   
+
    .. function:: krpc_error_t krpc_KSA_Vehicle_PropellantMass(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
 
       The mass of the propellant in the vehicle, in kilograms.
@@ -117,6 +127,65 @@ Vehicle
       current atmospheric pressure, in seconds. Zero when no engine is active.
 
    
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_MomentOfInertia(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's moments of inertia about the axes of :func:`krpc_KSA_Vehicle_ReferenceFrame`
+      through its center of mass, in :math:`\mathrm{kg \cdot m^{2}}`.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_InertiaTensor(krpc_connection_t connection, krpc_list_tuple_double_double_double_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's inertia tensor about its center of mass, along the axes of
+      :func:`krpc_KSA_Vehicle_ReferenceFrame`, in :math:`\mathrm{kg \cdot m^{2}}`, as its three rows.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_AvailableRCSTorque(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The torque the vehicle's RCS thrusters can give about each axis of its control
+      frame, in :math:`\mathrm{N \cdot m}`. Each is the smaller of the torques in the two
+      directions about the axis.
+
+   
+
+      .. note::
+
+         The control frame has the axes of :func:`krpc_KSA_Vehicle_ReferenceFrame`, unless the flight
+         computer steers along the thrust. The thrusters give this torque while
+         :func:`krpc_KSA_Control_RCS` is on.
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Acceleration(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Vehicle_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The vehicle's acceleration from the forces on it other than gravity, in
+      :math:`\mathrm{m/s^{2}}`.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the acceleration.
+
+   
+
+      .. note::
+
+         The game measures it over the last physics step. Its length divided by standard
+         gravity is :func:`krpc_KSA_Flight_GForce`.
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_AngularAcceleration(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Vehicle_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The vehicle's angular acceleration, in :math:`\mathrm{rad/s^{2}}`. The vector points
+      along the axis of rotation.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the angular acceleration.
+
+   
+
+      .. note::
+
+         The game measures it over the last physics step.
 
    .. function:: krpc_error_t krpc_KSA_Vehicle_PeakGLoad(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
 
@@ -187,6 +256,72 @@ Vehicle
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Controllable(krpc_connection_t connection, bool * returnValue, krpc_KSA_Vehicle_t instance)
+
+      Whether the vehicle can be flown. A vehicle needs a control module, and a crewed
+      vehicle with every kitten incapacitated also needs a probe core.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_HasControlModule(krpc_connection_t connection, bool * returnValue, krpc_KSA_Vehicle_t instance)
+
+      Whether the vehicle has a control module, such as a capsule or a probe core.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_ControlState(krpc_connection_t connection, krpc_KSA_ControlState_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      Whether the vehicle can be flown, or why not.
+
+   
+
+      .. note::
+
+         This is the reason the game gives when the vehicle does not respond to its controls.
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_CrewEvents(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The most urgent coming event of each kitten in the vehicle, most urgent first.
+
+   
+
+      .. note::
+
+         The order is the game's crew clock's: events within a day come first, the worst
+         first. Empty while :func:`krpc_KSA_LifeSupportEnabled` and
+         :func:`krpc_KSA_RadiationEnabled` are both false.
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_NextCrewEvent(krpc_connection_t connection, krpc_KSA_CrewEvent_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The most urgent of :func:`krpc_KSA_Vehicle_CrewEvents`, or ``nullptr`` if there is none.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_LifeSupport(krpc_connection_t connection, krpc_KSA_LifeSupport_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      How long the supplies of the vehicle's worst habitat zone last its crew, or
+      ``nullptr`` if the vehicle has no habitats.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Mission(krpc_connection_t connection, krpc_KSA_Mission_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The mission planned for the vehicle, or ``nullptr`` if it has none.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_HabitatZones(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's habitat zones.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Habitats(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's habitats.
+
+   
+
    .. function:: krpc_error_t krpc_KSA_Vehicle_Engines(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
 
       The vehicle's engines.
@@ -238,6 +373,12 @@ Vehicle
    .. function:: krpc_error_t krpc_KSA_Vehicle_PowerConsumers(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
 
       The vehicle's power consumers.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Avionics(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The avionics of the vehicle's probe cores.
 
    
 
@@ -471,6 +612,11 @@ Vehicle
    simulating it with physics or propagating it along its orbit.
    See :func:`krpc_KSA_Vehicle_Situation`.
 
+   .. macro:: KRPC_ENUMERATION_KSA_SITUATION
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_KSA_SITUATION_MANEUVERING
 
@@ -513,6 +659,62 @@ Vehicle
 
 
 
+.. type:: krpc_KSA_ControlState_t
+
+   Whether a vehicle can be flown, or why not. See :func:`krpc_KSA_Vehicle_ControlState`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_CONTROLSTATE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_CONTROLSTATE_CONTROLLABLE
+
+      The vehicle can be flown.
+
+
+   .. macro:: KRPC_KSA_CONTROLSTATE_NOCONTROLMODULE
+
+      The vehicle has no control module, such as a capsule or a probe core.
+
+
+   .. macro:: KRPC_KSA_CONTROLSTATE_NOCREW
+
+      The capsules have no crew, and no probe core is on.
+
+
+   .. macro:: KRPC_KSA_CONTROLSTATE_CREWINCAPACITATED
+
+      Every kitten in the capsules is incapacitated, and no probe core is on.
+
+
+   .. macro:: KRPC_KSA_CONTROLSTATE_PROBECOREUNPOWERED
+
+      The probe core has no power.
+
+
+   .. macro:: KRPC_KSA_CONTROLSTATE_PROBECOREOFF
+
+      The probe core is switched off.
+
+
+   .. macro:: KRPC_KSA_CONTROLSTATE_PROBECOREFAILED
+
+      The probe core has failed from its radiation dose.
+
+
+   .. macro:: KRPC_KSA_CONTROLSTATE_PROBECORESTORMSTANDBY
+
+      The probe core is on standby for a radiation storm.
+
+
+   .. macro:: KRPC_KSA_CONTROLSTATE_PROBECOREREBOOTING
+
+      The probe core is rebooting after a radiation upset.
+
+
+
 .. type:: krpc_KSA_VehicleDesign_t
 
    A vehicle design that can be launched: one of the game's default vehicles, or a vehicle
@@ -521,6 +723,10 @@ Vehicle
    .. note::
 
       The mass and delta-v are those the editor shows for the design.
+
+   .. macro:: KRPC_CLASS_KSA_VEHICLEDESIGN
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_VehicleDesign_Name(krpc_connection_t connection, char * * returnValue, krpc_KSA_VehicleDesign_t instance)
 

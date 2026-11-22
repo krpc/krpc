@@ -1,0 +1,445 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Flight
+======
+
+
+.. class:: Flight
+
+   Flight telemetry for a vehicle, relative to the surface of the body it orbits.
+   Obtained from :meth:`KSA.Vehicle.getFlight`.
+
+   .. method:: getMeanAltitude()
+
+      The altitude above the mean radius of the body, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getSurfaceAltitude()
+
+      The altitude above the terrain or the ocean surface, whichever is higher, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getBedrockAltitude()
+
+      The altitude above the terrain, in meters. Over the sea, this is the altitude above
+      the sea floor.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getElevation()
+
+      The height of the terrain below the vehicle, in meters above the mean radius of the
+      body. Below the sea, this is the height of the sea floor.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getTimeToImpact()
+
+      The time until the vehicle hits the surface on its current trajectory, in seconds.
+      Not a number if its trajectory does not hit the surface.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game predicts the trajectory on a worker thread, so a change to it shows here
+         shortly after.
+
+   .. method:: getLatitude()
+
+      The latitude of the vehicle, in degrees.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getLongitude()
+
+      The longitude of the vehicle, in degrees.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getBiome()
+
+      The biome below the vehicle, or ``null`` if the body has no biomes.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string`` or ``null``
+      :Game Scenes: Flight
+
+   .. method:: getSpeed()
+
+      The speed of the vehicle relative to the surface, in meters per second.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getHorizontalSpeed()
+
+      The horizontal speed of the vehicle relative to the surface, in meters per second.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getVerticalSpeed()
+
+      The vertical speed of the vehicle relative to the surface, in meters per second.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getPitch()
+
+      The pitch of the vehicle relative to the horizon, in degrees.
+      A value between -90° and +90°.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getHeading()
+
+      The heading of the vehicle (its angle relative to north), in degrees.
+      A value between 0° and 360°.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getRoll()
+
+      The roll of the vehicle relative to the horizon, in degrees.
+      A value between -180° and +180°.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getStaticPressure()
+
+      The static atmospheric pressure at the vehicle, in pascals.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getAtmosphereDensity()
+
+      The density of the atmosphere at the vehicle, in kilograms per cubic meter.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getStaticAirTemperature()
+
+      The temperature of the atmosphere at the vehicle, in kelvin. Zero outside the
+      atmosphere.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getSpeedOfSound()
+
+      The speed of sound in the atmosphere at the vehicle, in meters per second. Zero
+      outside the atmosphere.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getMach()
+
+      The speed of the vehicle relative to the surface, as a multiple of the speed of
+      sound. Zero outside the atmosphere.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getOutsideAir()
+
+      Whether a kitten can breathe the air outside the vehicle.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.OutsideAir`
+      :Game Scenes: Flight
+
+   .. method:: getDynamicPressure()
+
+      The dynamic pressure acting on the vehicle, in pascals.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getDepth()
+
+      The depth of the vehicle's center of mass below the ocean surface, in meters. Zero
+      above the surface.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The ocean surface includes its waves.
+
+   .. method:: getSubmergedPortion()
+
+      The fraction of the vehicle's volume below the ocean surface, between 0 and 1.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getBuoyantForce()
+
+      The buoyant force on the vehicle from the ocean and the atmosphere, in newtons. It
+      acts against gravity.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getDoseRate()
+
+      The radiation dose rate at the vehicle, in sieverts per second. Includes any solar
+      particle event under way.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getOrbitAverageDoseRate()
+
+      The radiation dose rate averaged over the vehicle's orbit, in sieverts per second.
+      Includes any solar particle event under way. Not a number if the body has no
+      magnetosphere, or the orbit dips below the surface.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getSolarWindSpeed()
+
+      The speed of the solar wind at the vehicle, in :math:`\mathrm{m/s}`. Zero if no star
+      has a solar wind.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getSolarWindPressure()
+
+      The dynamic pressure of the solar wind at the vehicle, in pascals.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getSolarWindNorthwardField()
+
+      The northward component of the magnetic field carried by the solar wind at the
+      vehicle, in teslas. A southward field, a negative value, drives geomagnetic storms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getProtonFlux()
+
+      The flux of solar energetic protons at the vehicle during a solar particle event, in
+      protons per square centimeter per second per steradian. Zero outside an event.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getRadiationStormLevel()
+
+      The level of the radiation storm at the vehicle, from 0 for none to 5 for the
+      most severe. The S level of the game's space weather window.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getIncomingCoronalMassEjections()
+
+      The coronal mass ejections heading for the vehicle, as the game's space weather
+      window lists them.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.CoronalMassEjection`
+      :Game Scenes: Flight
+
+   .. method:: getGForce()
+
+      The acceleration of the vehicle, excluding gravity, in multiples of standard
+      gravity.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getAngleOfAttack()
+
+      The angle between the direction the vehicle points in and its velocity relative to
+      the surface, in the vehicle's pitch plane, in degrees. Positive when the nose is
+      above the velocity.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getSideslipAngle()
+
+      The angle between the direction the vehicle points in and its velocity relative to
+      the surface, in the vehicle's yaw plane, in degrees. Positive when the nose is to
+      the right of the velocity.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getDrag()
+
+      The part of the aerodynamic force along the airflow, in newtons.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getLift()
+
+      The part of the aerodynamic force across the airflow, in newtons.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: aerodynamicForce(referenceFrame)
+
+      The aerodynamic force on the vehicle, in newtons.
+
+      :param referenceFrame: The reference frame of the force.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game computes the force from the surfaces of the vehicle's hull.
+
+   .. method:: aerodynamicTorque(referenceFrame)
+
+      The aerodynamic torque on the vehicle about its center of mass, in
+      :math:`\mathrm{N \cdot m}`. The vector points along the axis of the torque.
+
+      :param referenceFrame: The reference frame of the torque.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: simulateAerodynamicForceAt(body, position, velocity, referenceFrame)
+
+      The aerodynamic force the vehicle would have at a given position and velocity, in
+      its current attitude and rotation, in newtons.
+
+      :param body: The body whose atmosphere the vehicle flies through.
+      :type body: :class:`KSA.Body`
+      :param position: The position, in meters.
+      :type position: ``[number, number, number]``
+      :param velocity: The velocity, in meters per second.
+      :type velocity: ``[number, number, number]``
+      :param referenceFrame: The reference frame of the position, velocity and force.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The atmosphere moves with the body's rotation.
+
+   .. method:: prograde(referenceFrame)
+
+      The unit vector of the vehicle's velocity relative to the surface.
+
+      :param referenceFrame: The reference frame of the direction.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: normal(referenceFrame)
+
+      The unit vector normal to the plane of the vehicle's position and its velocity
+      relative to the surface.
+
+      :param referenceFrame: The reference frame of the direction.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+   .. method:: radial(referenceFrame)
+
+      The unit vector pointing radially outward, perpendicular to :meth:`KSA.Flight.prograde`
+      and :meth:`KSA.Flight.normal`.
+
+      :param referenceFrame: The reference frame of the direction.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+      :Game Scenes: Flight
+
+
+
+.. class:: OutsideAir
+
+   Whether a kitten can breathe the air outside a vehicle. See
+   :meth:`KSA.Flight.getOutsideAir`.
+
+
+   .. attribute:: noAtmosphere
+
+      Outside the atmosphere, or at a body with none.
+
+
+   .. attribute:: noOxygen
+
+      An atmosphere with no oxygen.
+
+
+   .. attribute:: tooThin
+
+      An atmosphere whose oxygen pressure is too low to breathe.
+
+
+   .. attribute:: breathable
+
+      Breathable air.

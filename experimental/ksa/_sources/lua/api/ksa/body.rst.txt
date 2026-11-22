@@ -8,42 +8,37 @@ Body
 
 .. class:: Body
 
-   A planet, moon or star. See :attr:`KSA.bodies <KSA.KSA.bodies>`.
+   A planet, moon or star. See :attr:`KSA.bodies`.
 
    .. attribute:: name: string
 
       The name of the body.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: is_star: boolean
 
       Whether the body is a star.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: mass: number
 
       The mass of the body, in kilograms.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: gravitational_parameter: number
 
       The standard gravitational parameter of the body, in cubic meters per second squared.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: radius: number
 
       The radius of the body, in meters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: atmosphere_radius: number
 
@@ -51,14 +46,12 @@ Body
       atmosphere.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: has_atmosphere: boolean
 
       Whether the body has an atmosphere.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: sea_level_pressure: number
 
@@ -66,7 +59,6 @@ Body
       with no atmosphere.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: sea_level_density: number
 
@@ -74,38 +66,61 @@ Body
       meter. Zero for a body with no atmosphere.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: scale_height: number
 
-      The height over which the atmospheric pressure falls by a factor of ``e``, in
-      meters. Zero for a body with no atmosphere.
+      The height over which the atmospheric pressure falls by a factor of ``e`` at
+      sea level, in meters. Zero for a body with no atmosphere.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. method:: pressure_at(altitude)
+   .. method:: pressure_at(altitude: number): number
 
       The atmospheric pressure at an altitude, in pascals. Zero for a body with no
       atmosphere.
 
-      :param number altitude: Altitude above the body's mean radius, in meters.
-      :rtype: number
+      :param altitude: Altitude above the body's mean radius, in meters.
 
-   .. method:: density_at(altitude)
+   .. method:: density_at(altitude: number): number
 
       The density of the atmosphere at an altitude, in kilograms per cubic meter. Zero
       for a body with no atmosphere.
 
-      :param number altitude: Altitude above the body's mean radius, in meters.
-      :rtype: number
+      :param altitude: Altitude above the body's mean radius, in meters.
+
+   .. method:: temperature_at(altitude: number): number
+
+      The temperature of the atmosphere at an altitude, in kelvin. Zero for a body with
+      no atmosphere, or above the atmosphere.
+
+      :param altitude: Altitude above the body's mean radius, in meters.
+
+   .. method:: speed_of_sound_at(altitude: number): number
+
+      The speed of sound in the atmosphere at an altitude, in meters per second. Zero for
+      a body with no atmosphere, or above the atmosphere.
+
+      :param altitude: Altitude above the body's mean radius, in meters.
+
+   .. attribute:: atmosphere_oxygen_fraction: number
+
+      The fraction of the atmosphere that is oxygen, by volume. Zero for a body with no
+      atmosphere.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: atmosphere_molar_mass: number
+
+      The mean molar mass of the atmosphere, in kilograms per mole. Zero for a body with
+      no atmosphere.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: has_ocean: boolean
 
       Whether the body has an ocean.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: ocean_density: number
 
@@ -113,7 +128,63 @@ Body
       ocean.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
+
+   .. attribute:: geomagnetic_storm_level: number
+
+      The level of the geomagnetic storm at the body, from 0 for none to 5 for the most
+      severe. The G level of the game's space weather window. Zero for a body with no
+      magnetosphere.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: dst_index: number
+
+      The disturbance storm time index of the body, in teslas. It falls below zero in a
+      geomagnetic storm. Zero for a body with no magnetosphere.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: solar_activity: number
+
+      The activity of a star, from 0 at the minimum of its cycle to 1 at the maximum.
+      Zero for a body that is not a star.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: solar_activity_rising: boolean
+
+      Whether the activity of a star is rising toward the maximum of its cycle.
+      False for a body that is not a star, or a star with no cycle.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: time_to_solar_activity_turn: number
+
+      The time until the activity of a star reaches the maximum or minimum of its cycle,
+      in seconds. Not a number for a body that is not a star, or a star with no cycle.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: coronal_mass_ejections_per_day: number
+
+      The mean number of coronal mass ejections a star throws out per day, at its
+      current activity. Zero for a body that is not a star.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: active_region_count: number
+
+      The number of active regions on a star, the sources of its eruptions. Zero for a
+      body that is not a star.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: recent_coronal_mass_ejections: List
+
+      The fast coronal mass ejections a star threw out in the last three days, as the
+      game's space weather window lists them. Empty for a body that is not a star.
+
+      :Attribute: Read-only, cannot be set
 
    .. attribute:: surface_gravity: number
 
@@ -121,14 +192,12 @@ Body
       squared.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: rotational_speed: number
 
       The rate at which the body rotates about its axis, in radians per second.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: rotational_period: number
 
@@ -136,7 +205,6 @@ Body
       seconds. Infinite for a body that does not rotate.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: sphere_of_influence: number
 
@@ -144,46 +212,40 @@ Body
       that orbits nothing.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. attribute:: parent: KSA.Body
+   .. attribute:: parent: KSA.Body | nil
 
       The body this body orbits, or ``nil`` if it orbits nothing.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Body` or ``Types.none``
 
    .. attribute:: satellites: List
 
       The bodies that orbit this body.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
-   .. attribute:: orbit: KSA.Orbit
+   .. attribute:: orbit: KSA.Orbit | nil
 
       The orbit of the body, or ``nil`` if it orbits nothing.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Orbit` or ``Types.none``
 
-   .. method:: surface_height(latitude, longitude)
+   .. method:: surface_height(latitude: number, longitude: number): number
 
       The height of the terrain or the sea surface, whichever is higher, at a point on
       the body, in meters above the body's mean radius.
 
-      :param number latitude: Latitude, in degrees.
-      :param number longitude: Longitude, in degrees.
-      :rtype: number
+      :param latitude: Latitude, in degrees.
+      :param longitude: Longitude, in degrees.
 
-   .. method:: bedrock_height(latitude, longitude)
+   .. method:: bedrock_height(latitude: number, longitude: number): number
 
       The height of the terrain at a point on the body, in meters above the body's mean
       radius. Below the sea, this is the height of the sea floor.
 
-      :param number latitude: Latitude, in degrees.
-      :param number longitude: Longitude, in degrees.
-      :rtype: number
+      :param latitude: Latitude, in degrees.
+      :param longitude: Longitude, in degrees.
 
       .. note::
 
@@ -194,22 +256,19 @@ Body
       The names of the launch sites on the body. See :meth:`KSA.launch_vehicle`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
    .. attribute:: biomes: List
 
       The names of the body's biomes. Empty for a body with no biomes.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
 
-   .. method:: biome_at(latitude, longitude)
+   .. method:: biome_at(latitude: number, longitude: number): string | nil
 
       The biome at a point on the body, or ``nil`` if the body has no biomes.
 
-      :param number latitude: Latitude, in degrees.
-      :param number longitude: Longitude, in degrees.
-      :rtype: string or ``Types.none``
+      :param latitude: Latitude, in degrees.
+      :param longitude: Longitude, in degrees.
 
    .. attribute:: reference_frame: KSA.ReferenceFrame
 
@@ -219,7 +278,6 @@ Body
       body.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.ReferenceFrame`
 
    .. attribute:: non_rotating_reference_frame: KSA.ReferenceFrame
 
@@ -228,66 +286,57 @@ Body
       stars.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.ReferenceFrame`
 
-   .. method:: position(reference_frame)
+   .. method:: position(reference_frame: KSA.ReferenceFrame): Tuple
 
       The position of the center of the body, in meters.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the position.
 
-   .. method:: velocity(reference_frame)
+   .. method:: velocity(reference_frame: KSA.ReferenceFrame): Tuple
 
       The velocity of the body, in meters per second.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the velocity.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the velocity.
 
-   .. method:: rotation(reference_frame)
+   .. method:: rotation(reference_frame: KSA.ReferenceFrame): Tuple
 
       The rotation of :attr:`KSA.Body.reference_frame` relative to the given frame.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the rotation.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the rotation.
 
-   .. method:: angular_velocity(reference_frame)
+   .. method:: angular_velocity(reference_frame: KSA.ReferenceFrame): Tuple
 
       The angular velocity of the body, in radians per second. The vector points along
       the axis of rotation, and its length is the rate of rotation.
 
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the angular velocity.
-      :rtype: Tuple
+      :param reference_frame: The reference frame of the angular velocity.
 
-   .. method:: surface_position(latitude, longitude, reference_frame)
+   .. method:: surface_position(latitude: number, longitude: number, reference_frame: KSA.ReferenceFrame): Tuple
 
       The position of a point on the surface, at the body's mean radius, in meters.
 
-      :param number latitude: Latitude, in degrees.
-      :param number longitude: Longitude, in degrees.
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
-      :rtype: Tuple
+      :param latitude: Latitude, in degrees.
+      :param longitude: Longitude, in degrees.
+      :param reference_frame: The reference frame of the position.
 
-   .. method:: latitude_at_position(position, reference_frame)
+   .. method:: latitude_at_position(position: Tuple, reference_frame: KSA.ReferenceFrame): number
 
       The latitude of a position, in degrees.
 
-      :param Tuple position: Position, in meters.
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
-      :rtype: number
+      :param position: Position, in meters.
+      :param reference_frame: The reference frame of the position.
 
-   .. method:: longitude_at_position(position, reference_frame)
+   .. method:: longitude_at_position(position: Tuple, reference_frame: KSA.ReferenceFrame): number
 
       The longitude of a position, in degrees.
 
-      :param Tuple position: Position, in meters.
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
-      :rtype: number
+      :param position: Position, in meters.
+      :param reference_frame: The reference frame of the position.
 
-   .. method:: altitude_at_position(position, reference_frame)
+   .. method:: altitude_at_position(position: Tuple, reference_frame: KSA.ReferenceFrame): number
 
       The altitude of a position above the body's mean radius, in meters.
 
-      :param Tuple position: Position, in meters.
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
-      :rtype: number
+      :param position: Position, in meters.
+      :param reference_frame: The reference frame of the position.

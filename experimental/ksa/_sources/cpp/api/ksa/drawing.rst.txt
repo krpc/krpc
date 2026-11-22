@@ -15,7 +15,7 @@ Drawing
       The objects are drawn every frame until removed, and are removed when the client that
       added them disconnects. Lines are drawn at the game's fixed gizmo width.
 
-   .. function:: static Line add_line(Client& connection, std::tuple<double, double, double> start, std::tuple<double, double, double> end, ReferenceFrame reference_frame, bool visible = true)
+   .. function:: static Line add_line(krpc::Connection& connection, std::tuple<double, double, double> start, std::tuple<double, double, double> end, ReferenceFrame reference_frame, bool visible = true)
 
       Draw a line between two positions.
 
@@ -28,7 +28,7 @@ Drawing
 
    
 
-   .. function:: static Line add_direction(Client& connection, std::tuple<double, double, double> direction, ReferenceFrame reference_frame, float length = 1e+01f, bool visible = true)
+   .. function:: static Line add_direction(krpc::Connection& connection, std::tuple<double, double, double> direction, ReferenceFrame reference_frame, float length = 1e+01f, bool visible = true)
 
       Draw a line from the origin of a reference frame in a direction.
 
@@ -41,7 +41,7 @@ Drawing
 
    
 
-   .. function:: static Polyline add_polyline(Client& connection, std::vector<std::tuple<double, double, double>> vertices, ReferenceFrame reference_frame, bool closed = false, bool visible = true)
+   .. function:: static Polyline add_polyline(krpc::Connection& connection, std::vector<std::tuple<double, double, double>> vertices, ReferenceFrame reference_frame, bool closed = false, bool visible = true)
 
       Draw a line through a list of positions.
 
@@ -54,7 +54,7 @@ Drawing
 
    
 
-   .. function:: static Circle add_circle(Client& connection, std::tuple<double, double, double> center, std::tuple<double, double, double> normal, float radius, ReferenceFrame reference_frame, bool visible = true)
+   .. function:: static Circle add_circle(krpc::Connection& connection, std::tuple<double, double, double> center, std::tuple<double, double, double> normal, float radius, ReferenceFrame reference_frame, bool visible = true)
 
       Draw a circle.
 
@@ -68,7 +68,7 @@ Drawing
 
    
 
-   .. function:: static Arc add_arc(Client& connection, std::tuple<double, double, double> center, std::tuple<double, double, double> normal, std::tuple<double, double, double> start_direction, float angle, float radius, ReferenceFrame reference_frame, bool visible = true)
+   .. function:: static Arc add_arc(krpc::Connection& connection, std::tuple<double, double, double> center, std::tuple<double, double, double> normal, std::tuple<double, double, double> start_direction, float angle, float radius, ReferenceFrame reference_frame, bool visible = true)
 
       Draw an arc of a circle.
 
@@ -84,7 +84,7 @@ Drawing
 
    
 
-   .. function:: static Box add_box(Client& connection, std::tuple<double, double, double> center, std::tuple<double, double, double> size, std::tuple<double, double, double, double> rotation, ReferenceFrame reference_frame, bool visible = true)
+   .. function:: static Box add_box(krpc::Connection& connection, std::tuple<double, double, double> center, std::tuple<double, double, double> size, std::tuple<double, double, double, double> rotation, ReferenceFrame reference_frame, bool visible = true)
 
       Draw the edges of a box.
 
@@ -98,7 +98,7 @@ Drawing
 
    
 
-   .. function:: static Sphere add_sphere(Client& connection, std::tuple<double, double, double> center, float radius, ReferenceFrame reference_frame, bool visible = true)
+   .. function:: static Sphere add_sphere(krpc::Connection& connection, std::tuple<double, double, double> center, float radius, ReferenceFrame reference_frame, bool visible = true)
 
       Draw a solid sphere.
 
@@ -111,7 +111,7 @@ Drawing
 
    
 
-   .. function:: static Text add_text(Client& connection, std::string text, std::tuple<double, double, double> position, ReferenceFrame reference_frame, float size = 16.0f, bool visible = true)
+   .. function:: static Text add_text(krpc::Connection& connection, std::string text, std::tuple<double, double, double> position, ReferenceFrame reference_frame, float size = 16.0f, bool visible = true)
 
       Draw text over the scene, centered on a position.
 
@@ -125,7 +125,7 @@ Drawing
 
    
 
-   .. function:: static void clear(Client& connection, bool client_only = false)
+   .. function:: static void clear(krpc::Connection& connection, bool client_only = false)
 
       Remove the drawing objects.
 

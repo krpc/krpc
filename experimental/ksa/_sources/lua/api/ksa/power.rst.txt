@@ -15,21 +15,18 @@ Power
       The part the battery is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: stored_energy: number
 
       The energy stored in the battery, in joules.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: energy_capacity: number
 
       The energy the battery can store, in joules.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
 
 
@@ -42,21 +39,18 @@ Power
       The part the solar panel is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: active: boolean
 
       Whether the solar panel can produce power, because it is deployed or does not deploy.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: power: number
 
       The power the solar panel produces, in watts.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: sun_angle: number
 
@@ -64,22 +58,19 @@ Power
       Zero when the panel faces the sun.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: occluded: boolean
 
       Whether a body blocks the sunlight to the solar panel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
-   .. attribute:: deployable: KSA.Deployable
+   .. attribute:: deployable: KSA.Deployable | nil
 
       The deployable section that opens the solar panel, or ``nil`` for a panel that
       does not deploy.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Deployable` or ``Types.none``
 
 
 
@@ -97,28 +88,24 @@ Power
       The part the generator is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
-   .. attribute:: engine: KSA.Engine
+   .. attribute:: engine: KSA.Engine | nil
 
       The engine that drives the generator, or ``nil`` if it has none.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Engine` or ``Types.none``
 
    .. attribute:: active: boolean
 
       Whether the generator is producing power.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: power: number
 
       The power the generator produces, in watts.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
 
 
@@ -132,21 +119,239 @@ Power
       The part the power consumer is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: active: boolean
 
       Whether the part is using power.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean
 
    .. attribute:: power: number
 
       The power the part uses, in watts.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
+
+   .. attribute:: has_power_switch: boolean
+
+      Whether the part has a power switch, as a probe core does.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: mode: KSA.PowerMode
+
+      The setting of the power switch.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+   .. attribute:: standby_in_storms: boolean
+
+      Whether the part goes on standby, drawing no power, while a radiation storm is under
+      way at the vehicle.
+
+      :Attribute: Can be read or written
+
+      .. note::
+
+         The game takes a storm of level 1 or worse on the S scale, as
+         :attr:`KSA.Flight.radiation_storm_level` gives. Throws an exception if the part has
+         no power switch.
+
+   .. attribute:: status: KSA.PowerStatus
+
+      The power status of the part.
+
+      :Attribute: Read-only, cannot be set
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+
+
+.. class:: PowerMode
+
+   The setting of a power switch. See :attr:`KSA.PowerConsumer.mode`.
+
+
+   .. data:: off
+
+      Switched off.
+
+
+   .. data:: auto
+
+      On standby while another control module flies the vehicle, and on when none can.
+
+
+   .. data:: on
+
+      Switched on.
+
+
+
+.. class:: PowerStatus
+
+   The power status of a part with a power switch. See :attr:`KSA.PowerConsumer.status`.
+
+
+   .. data:: off
+
+      Switched off.
+
+
+   .. data:: standby
+
+      On standby, while another control module flies the vehicle or a radiation storm is under way.
+
+
+   .. data:: rebooting
+
+      Rebooting after a radiation upset.
+
+
+   .. data:: on
+
+      On, with power.
+
+
+   .. data:: low
+
+      On, with power for less than five minutes.
+
+
+   .. data:: out
+
+      Out of power.
+
+
+   .. data:: failed
+
+      Failed from its radiation dose.
+
+
+
+.. class:: PowerForecast
+
+   The charge, draw and supply of the electrical circuit a part is on, and how long its
+   batteries last. Obtained from :attr:`KSA.Part.power_forecast`.
+
+   .. note::
+
+      A circuit is the parts joined by connections that carry electricity. This is the
+      forecast the game shows for a probe core.
+
+   .. attribute:: has_battery: boolean
+
+      Whether the circuit has a battery.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: charge: number
+
+      The energy stored in the circuit's batteries, in joules.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: draw: number
+
+      The power the parts on the circuit draw, in watts.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: supply: number
+
+      The power the solar panels and generators on the circuit supply, in watts.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: time_left: number
+
+      The time until the batteries run out, in seconds. Infinite while the supply meets
+      the draw, and zero when the batteries are empty or there are none.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+.. class:: Avionics
+
+   The avionics of a probe core, which radiation wears out and upsets. Obtained from
+   :attr:`KSA.Part.avionics` or :attr:`KSA.Vehicle.avionics`.
+
+   .. note::
+
+      The avionics take a dose only while :attr:`KSA.radiation_enabled` is true. Switched
+      off or on standby, they take half the dose and no upsets.
+
+   .. attribute:: part: KSA.Part
+
+      The part the avionics are in.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: health: KSA.AvionicsHealth
+
+      The health of the avionics.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: dose: number
+
+      The radiation dose the avionics have taken, in grays of silicon.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: tolerance: number
+
+      The dose at which the avionics fail, in grays of silicon.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: dose_rate: number
+
+      The rate at which the avionics take a dose, in grays of silicon per second,
+      averaged over about an hour. Not a number until the avionics have taken a dose.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: time_left: number
+
+      The time until the avionics fail at :attr:`KSA.Avionics.dose_rate`, in seconds. Infinite
+      while they take no dose, and zero once they have failed.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: rebooting: boolean
+
+      Whether the avionics are rebooting after a radiation upset.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+.. class:: AvionicsHealth
+
+   The health of avionics. See :attr:`KSA.Avionics.health`.
+
+
+   .. data:: ok
+
+      Working.
+
+
+   .. data:: worn
+
+      Working, with a dose of at least four fifths of the tolerance.
+
+
+   .. data:: failed
+
+      Failed for good, at the tolerance.
 
 
 
@@ -164,11 +369,9 @@ Power
       The part the light is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: active: boolean
 
       Whether the light is on.
 
       :Attribute: Read-only, cannot be set
-      :rtype: boolean

@@ -11,6 +11,10 @@ Resources
    A substance held in tanks, such as a propellant, in a part or across a whole vehicle.
    Obtained from :func:`krpc_KSA_Part_Resources` or :func:`krpc_KSA_Vehicle_Resources`.
 
+   .. macro:: KRPC_CLASS_KSA_RESOURCE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Resource_Name(krpc_connection_t connection, char * * returnValue, krpc_KSA_Resource_t instance)
 
       The name of the substance.
@@ -34,6 +38,10 @@ Resources
 .. type:: krpc_KSA_Tank_t
 
    A propellant tank. Obtained from :func:`krpc_KSA_Part_Tanks` or :func:`krpc_KSA_Vehicle_Tanks`.
+
+   .. macro:: KRPC_CLASS_KSA_TANK
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Tank_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Tank_t instance)
 
@@ -85,6 +93,11 @@ Resources
 
    The direction a tank transfers propellant in. See :func:`krpc_KSA_Tank_TransferMode`.
 
+   .. macro:: KRPC_ENUMERATION_KSA_TANKTRANSFERMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
 
    .. macro:: KRPC_KSA_TANKTRANSFERMODE_NONE
 
@@ -106,6 +119,10 @@ Resources
 
    A fuel line between two parts of a vehicle, which lets propellant flow between them.
    Obtained from :func:`krpc_KSA_Vehicle_FuelLinks`.
+
+   .. macro:: KRPC_CLASS_KSA_FUELLINK
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_FuelLink_PartA(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_FuelLink_t instance)
 
@@ -138,6 +155,11 @@ Resources
 .. type:: krpc_KSA_FuelLinkFlow_t
 
    The direction propellant flows through a fuel link. See :func:`krpc_KSA_FuelLink_Flow`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_FUELLINKFLOW
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_KSA_FUELLINKFLOW_ATOB

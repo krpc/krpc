@@ -15,6 +15,10 @@ Drawing
       The objects are drawn every frame until removed, and are removed when the client that
       added them disconnects. Lines are drawn at the game's fixed gizmo width.
 
+   .. macro:: KRPC_CLASS_KSA_DRAWING
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Drawing_AddLine(krpc_connection_t connection, krpc_KSA_Line_t * returnValue, const krpc_tuple_double_double_double_t * start, const krpc_tuple_double_double_double_t * end, krpc_KSA_ReferenceFrame_t referenceFrame, bool visible)
 
       Draw a line between two positions.
@@ -141,6 +145,10 @@ Drawing
 
    A line. Created using :func:`krpc_KSA_Drawing_AddLine` or :func:`krpc_KSA_Drawing_AddDirection`.
 
+   .. macro:: KRPC_CLASS_KSA_LINE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Line_Start(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Line_t instance)
    .. function:: krpc_error_t krpc_KSA_Line_set_Start(krpc_connection_t connection, krpc_KSA_Line_t instance, const krpc_tuple_double_double_double_t * value)
 
@@ -189,6 +197,10 @@ Drawing
 
    A line through a list of points. Created using :func:`krpc_KSA_Drawing_AddPolyline`.
 
+   .. macro:: KRPC_CLASS_KSA_POLYLINE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Polyline_Vertices(krpc_connection_t connection, krpc_list_tuple_double_double_double_t * returnValue, krpc_KSA_Polyline_t instance)
    .. function:: krpc_error_t krpc_KSA_Polyline_set_Vertices(krpc_connection_t connection, krpc_KSA_Polyline_t instance, const krpc_list_tuple_double_double_double_t * value)
 
@@ -236,6 +248,10 @@ Drawing
 .. type:: krpc_KSA_Circle_t
 
    A circle. Created using :func:`krpc_KSA_Drawing_AddCircle`.
+
+   .. macro:: KRPC_CLASS_KSA_CIRCLE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Circle_Center(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Circle_t instance)
    .. function:: krpc_error_t krpc_KSA_Circle_set_Center(krpc_connection_t connection, krpc_KSA_Circle_t instance, const krpc_tuple_double_double_double_t * value)
@@ -291,6 +307,10 @@ Drawing
 .. type:: krpc_KSA_Arc_t
 
    An arc of a circle. Created using :func:`krpc_KSA_Drawing_AddArc`.
+
+   .. macro:: KRPC_CLASS_KSA_ARC
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Arc_Center(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Arc_t instance)
    .. function:: krpc_error_t krpc_KSA_Arc_set_Center(krpc_connection_t connection, krpc_KSA_Arc_t instance, const krpc_tuple_double_double_double_t * value)
@@ -365,6 +385,10 @@ Drawing
 
    The edges of a box. Created using :func:`krpc_KSA_Drawing_AddBox`.
 
+   .. macro:: KRPC_CLASS_KSA_BOX
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Box_Center(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Box_t instance)
    .. function:: krpc_error_t krpc_KSA_Box_set_Center(krpc_connection_t connection, krpc_KSA_Box_t instance, const krpc_tuple_double_double_double_t * value)
 
@@ -420,6 +444,10 @@ Drawing
 
    A solid sphere. Created using :func:`krpc_KSA_Drawing_AddSphere`.
 
+   .. macro:: KRPC_CLASS_KSA_SPHERE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Sphere_Center(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Sphere_t instance)
    .. function:: krpc_error_t krpc_KSA_Sphere_set_Center(krpc_connection_t connection, krpc_KSA_Sphere_t instance, const krpc_tuple_double_double_double_t * value)
 
@@ -471,6 +499,10 @@ Drawing
    .. note::
 
       The text is hidden with the game's UI.
+
+   .. macro:: KRPC_CLASS_KSA_TEXT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Text_Content(krpc_connection_t connection, char * * returnValue, krpc_KSA_Text_t instance)
    .. function:: krpc_error_t krpc_KSA_Text_set_Content(krpc_connection_t connection, krpc_KSA_Text_t instance, const char * value)

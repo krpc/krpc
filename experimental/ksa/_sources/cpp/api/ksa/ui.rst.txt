@@ -15,7 +15,7 @@ UI
       The windows are removed when the client that added them disconnects. For messages on
       the screen, see :func:`show_message`.
 
-   .. function:: static Window add_window(Client& connection, std::string title, bool visible = true)
+   .. function:: static Window add_window(krpc::Connection& connection, std::string title, bool visible = true)
 
       Add a window, with no widgets.
 
@@ -26,7 +26,7 @@ UI
 
    
 
-   .. function:: static void clear(Client& connection, bool client_only = false)
+   .. function:: static void clear(krpc::Connection& connection, bool client_only = false)
 
       Remove the windows.
 

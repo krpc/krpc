@@ -1,0 +1,482 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Computer
+========
+
+
+.. type:: krpc_KFS_Computer_t
+
+   A vehicle's flight computer, which runs a kFS program. Obtained from
+   :func:`krpc_KFS_Computer`.
+
+   .. note::
+
+      A program is written in kC, a subset of C, or in kASM. The calls that change the
+      computer, and :func:`krpc_KFS_Computer_WriteGlobals`, take effect before the computer's next tick, and
+      return once they have. The computer ticks while the game is running and the vehicle is
+      in the physics bubble, so until then they wait. The game does not save a program.
+
+   .. macro:: KRPC_CLASS_KFS_COMPUTER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_KFS_Computer_Build(krpc_connection_t connection, krpc_list_KFS_Diagnostic_t * returnValue, krpc_KFS_Computer_t instance, const krpc_dictionary_string_string_t * files)
+
+      Build a program, without loading it.
+
+      :Parameters:
+
+       * **files** -- The source files, by name. A program with a ``.c`` file is kC, and one with only ``.kasm`` files is kASM.
+
+      :returns: The errors and warnings.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_Load(krpc_connection_t connection, krpc_KFS_Computer_t instance, const krpc_dictionary_string_string_t * files)
+
+      Build a program and load it onto the computer. Throws an exception if the program has
+      errors, or the computer rejects it.
+
+      :Parameters:
+
+       * **files** -- The source files, by name, as for :func:`krpc_KFS_Computer_Build`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The program is in standby once loaded. See :func:`krpc_KFS_Computer_Start`.
+
+   .. function:: krpc_error_t krpc_KFS_Computer_Start(krpc_connection_t connection, krpc_KFS_Computer_t instance)
+
+      Start the loaded program. Throws an exception if no program is loaded.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_Reset(krpc_connection_t connection, krpc_KFS_Computer_t instance)
+
+      Restart the loaded program, as the reset button does. Throws an exception if no
+      program is loaded.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_Stop(krpc_connection_t connection, krpc_KFS_Computer_t instance)
+
+      Stop the program, and give the vehicle back to the pilot. The program stays loaded.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_Kill(krpc_connection_t connection, krpc_KFS_Computer_t instance)
+
+      Halt the program with the kill switch, and give the vehicle back to the pilot.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_State(krpc_connection_t connection, krpc_KFS_ComputerState_t * returnValue, krpc_KFS_Computer_t instance)
+
+      The state of the computer.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_Mode(krpc_connection_t connection, krpc_KFS_ControlMode_t * returnValue, krpc_KFS_Computer_t instance)
+
+      The control mode the loaded program claims.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_UnderControl(krpc_connection_t connection, bool * returnValue, krpc_KFS_Computer_t instance)
+
+      Whether the program controls the vehicle: it is running, or halted with its last
+      commands held.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_TickRate(krpc_connection_t connection, int32_t * returnValue, krpc_KFS_Computer_t instance)
+
+      The ticks per second of the loaded program, or zero if no program is loaded.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_CyclesUsed(krpc_connection_t connection, int64_t * returnValue, krpc_KFS_Computer_t instance)
+
+      The processor cycles the latest tick used.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_CycleBudget(krpc_connection_t connection, int64_t * returnValue, krpc_KFS_Computer_t instance)
+
+      The processor cycles a tick may use.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_Overruns(krpc_connection_t connection, int64_t * returnValue, krpc_KFS_Computer_t instance)
+
+      The number of ticks that ran past their budget since the program started.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_Trap(krpc_connection_t connection, krpc_KFS_Trap_t * returnValue, bool * returnValueIsNull, krpc_KFS_Computer_t instance)
+
+      The error that halted the program, or ``nullptr`` if no error halted it.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_Fault(krpc_connection_t connection, char * * returnValue, bool * returnValueIsNull, krpc_KFS_Computer_t instance)
+
+      The game's error that halted the computer, or ``nullptr`` if there is none.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_Log(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_KFS_Computer_t instance)
+
+      The computer's console: the lines the program logs, and the computer's own messages.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The computer keeps the last 4,096 lines, and a program logs at most 10 lines a
+         second.
+
+   .. function:: krpc_error_t krpc_KFS_Computer_ClearLog(krpc_connection_t connection, krpc_KFS_Computer_t instance)
+
+      Clear the computer's console.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_Globals(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_KFS_Computer_t instance)
+
+      The paths of the loaded program's global variables, one for each number in them,
+      such as ``command.args[2]``.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_ReadGlobal(krpc_connection_t connection, double * returnValue, krpc_KFS_Computer_t instance, const char * path)
+
+      The value of one of the program's global variables, as of its latest tick.
+
+      :Parameters:
+
+       * **path** -- The path of the variable, as in :func:`krpc_KFS_Computer_Globals`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_WriteGlobals(krpc_connection_t connection, krpc_KFS_Computer_t instance, const krpc_dictionary_string_double_t * values)
+
+      Write the program's global variables. The program sees all of them from the same
+      tick.
+
+      :Parameters:
+
+       * **values** -- The values, by the paths in :func:`krpc_KFS_Computer_Globals`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A value is converted to the variable's type. Throws an exception if a value does not
+         fit, such as a fraction for an integer.
+
+   .. function:: krpc_error_t krpc_KFS_Computer_TraceChannels(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_KFS_Computer_t instance)
+
+      The names of the channels the program has traced to.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KFS_Computer_Trace(krpc_connection_t connection, float * returnValue, krpc_KFS_Computer_t instance, const char * channel)
+
+      The latest value the program traced to a channel. Throws an exception if the program
+      has not traced to it.
+
+      :Parameters:
+
+       * **channel** -- The name of the channel.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: krpc_KFS_ComputerState_t
+
+   The state of a flight computer. See :func:`krpc_KFS_Computer_State`.
+
+   .. macro:: KRPC_ENUMERATION_KFS_COMPUTERSTATE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KFS_COMPUTERSTATE_NOSOFTWARE
+
+      No program is loaded.
+
+
+   .. macro:: KRPC_KFS_COMPUTERSTATE_STANDBY
+
+      A program is loaded, and not running.
+
+
+   .. macro:: KRPC_KFS_COMPUTERSTATE_BOOT
+
+      The program is running its initialization.
+
+
+   .. macro:: KRPC_KFS_COMPUTERSTATE_RUNNING
+
+      The program is running.
+
+
+   .. macro:: KRPC_KFS_COMPUTERSTATE_IDLE
+
+      The program is running, with no task to run.
+
+
+   .. macro:: KRPC_KFS_COMPUTERSTATE_HALTED
+
+      The program has stopped, after a trap, a halt or the kill switch.
+
+
+
+.. type:: krpc_KFS_ControlMode_t
+
+   The control a program has of a vehicle. See :func:`krpc_KFS_Computer_Mode`.
+
+   .. macro:: KRPC_ENUMERATION_KFS_CONTROLMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KFS_CONTROLMODE_PILOT
+
+      The game's flight computer flies the vehicle, and the program steers it.
+
+
+   .. macro:: KRPC_KFS_CONTROLMODE_FULLCONTROL
+
+      The program commands the thrusters, engines and gimbals itself. A program claims it
+      with ``#pragma kfs claim ALLOCATION``.
+
+
+
+.. type:: krpc_KFS_Diagnostic_t
+
+   An error or warning from building a program. See :func:`krpc_KFS_Computer_Build`.
+
+   .. macro:: KRPC_STRUCT_KFS_DIAGNOSTIC
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
+
+   .. member:: bool error
+
+      Whether it is an error. An error stops the program from being built.
+
+      .. macro:: KRPC_FIELD_KFS_DIAGNOSTIC_ERROR
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: char * code
+
+      The diagnostic's code, such as ``KC-E016``.
+
+      .. macro:: KRPC_FIELD_KFS_DIAGNOSTIC_CODE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: char * file
+
+      The source file.
+
+      .. macro:: KRPC_FIELD_KFS_DIAGNOSTIC_FILE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: int32_t line
+
+      The line in the source file, from 1. Zero for the whole file.
+
+      .. macro:: KRPC_FIELD_KFS_DIAGNOSTIC_LINE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: int32_t column
+
+      The column in the line, from 1.
+
+      .. macro:: KRPC_FIELD_KFS_DIAGNOSTIC_COLUMN
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: char * message
+
+      The message.
+
+      .. macro:: KRPC_FIELD_KFS_DIAGNOSTIC_MESSAGE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: krpc_nullable_string_t hint
+
+      A hint at the fix, or ``nullptr`` if there is none.
+
+      .. macro:: KRPC_FIELD_KFS_DIAGNOSTIC_HINT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+
+.. type:: krpc_KFS_Trap_t
+
+   The error that halted a program, and where it happened. See :func:`krpc_KFS_Computer_Trap`.
+
+   .. macro:: KRPC_STRUCT_KFS_TRAP
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
+
+   .. member:: krpc_KFS_TrapCode_t code
+
+      The error.
+
+      .. macro:: KRPC_FIELD_KFS_TRAP_CODE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: char * function
+
+      The function that was running.
+
+      .. macro:: KRPC_FIELD_KFS_TRAP_FUNCTION
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: krpc_nullable_string_t file
+
+      The source file, or ``nullptr`` if it is not known.
+
+      .. macro:: KRPC_FIELD_KFS_TRAP_FILE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: int32_t line
+
+      The line in the source file, or zero if it is not known.
+
+      .. macro:: KRPC_FIELD_KFS_TRAP_LINE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+
+.. type:: krpc_KFS_TrapCode_t
+
+   The error that halted a program. See :member:`krpc_KFS_Trap_t.code`.
+
+   .. macro:: KRPC_ENUMERATION_KFS_TRAPCODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_ILLEGALOPCODE
+
+      An instruction the processor does not have.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_OPERANDOVERFLOW
+
+      The operand stack overflowed.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_OPERANDUNDERFLOW
+
+      The operand stack underflowed.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_RETURNOVERFLOW
+
+      The return stack overflowed.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_INITOVERRUN
+
+      The initialization ran past its budget.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_STACKOVERFLOW
+
+      The stack overflowed.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_NULLACCESS
+
+      A read or write through a null pointer.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_BADADDRESS
+
+      A read or write outside memory.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_READONLY
+
+      A write to read-only memory.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_MISALIGNED
+
+      A misaligned read or write.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_DIVISIONBYZERO
+
+      A division by zero.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_BOUNDS
+
+      An array index out of bounds.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_USER
+
+      A trap raised by the program.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_BADJUMP
+
+      A jump to an invalid address.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_BADSYSCALL
+
+      A call to a service that does not exist.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_BADYIELD
+
+      A task yielded where it may not.
+
+
+   .. macro:: KRPC_KFS_TRAPCODE_MEMORYERROR
+
+      A memory error, such as a radiation upset.

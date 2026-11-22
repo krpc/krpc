@@ -15,7 +15,8 @@ Auto-Pilot
 
       The auto-pilot points the vehicle in the direction set by :meth:`AutoPilot.getMode()`, once
       engaged. It is the game's own flight computer, so the game's flight computer
-      controls change the same settings.
+      controls change the same settings. Changing a setting throws an exception while a kFS
+      program controls the vehicle.
 
    .. method:: void engage()
 
@@ -52,8 +53,8 @@ Auto-Pilot
 
       .. note::
 
-         Setting :meth:`AutoPilotMode.ATTITUDE` targets the vehicle's current pitch,
-         heading and roll. Setting :meth:`AutoPilotMode.OTHER` throws an exception.
+         Setting :field:`AutoPilotMode.ATTITUDE` targets the vehicle's current pitch,
+         heading and roll. Setting :field:`AutoPilotMode.OTHER` throws an exception.
 
    .. method:: float getTargetPitch()
 
@@ -66,7 +67,7 @@ Auto-Pilot
 
       .. note::
 
-         Setting it sets :meth:`AutoPilot.getMode()` to :meth:`AutoPilotMode.ATTITUDE`.
+         Setting it sets :meth:`AutoPilot.getMode()` to :field:`AutoPilotMode.ATTITUDE`.
          Returns NaN in any other mode.
 
    .. method:: float getTargetHeading()
@@ -80,7 +81,7 @@ Auto-Pilot
 
       .. note::
 
-         Setting it sets :meth:`AutoPilot.getMode()` to :meth:`AutoPilotMode.ATTITUDE`.
+         Setting it sets :meth:`AutoPilot.getMode()` to :field:`AutoPilotMode.ATTITUDE`.
          Returns NaN in any other mode.
 
    .. method:: float getTargetRoll()
@@ -94,14 +95,14 @@ Auto-Pilot
 
       .. note::
 
-         Setting a number sets :meth:`AutoPilot.getMode()` to :meth:`AutoPilotMode.ATTITUDE`.
+         Setting a number sets :meth:`AutoPilot.getMode()` to :field:`AutoPilotMode.ATTITUDE`.
          Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
-         :meth:`AutoPilotMode.ATTITUDE`.
+         :field:`AutoPilotMode.ATTITUDE`.
 
    .. method:: void targetPitchAndHeading(float pitch, float heading)
 
       Set the target pitch and heading, and the mode to
-      :meth:`AutoPilotMode.ATTITUDE`.
+      :field:`AutoPilotMode.ATTITUDE`.
 
       :param float pitch: Target pitch, in degrees, between -90° and +90°.
       :param float heading: Target heading, in degrees, between 0° and 360°.
@@ -110,7 +111,7 @@ Auto-Pilot
    .. method:: void targetDirection(org.javatuples.Triplet<Double,Double,Double> direction, ReferenceFrame referenceFrame)
 
       Point the vehicle in a direction, and set the mode to
-      :meth:`AutoPilotMode.ATTITUDE`. Sets :meth:`AutoPilot.getTargetPitch()` and
+      :field:`AutoPilotMode.ATTITUDE`. Sets :meth:`AutoPilot.getTargetPitch()` and
       :meth:`AutoPilot.getTargetHeading()` to the direction at the time of the call, so the target
       stays fixed relative to the surface.
 
@@ -158,7 +159,7 @@ Auto-Pilot
 
          The flight computer clears it when the burn completes, and removes the burn if
          another follows it. The engines fire only at normal speed, so warp to shortly before
-         the burn with :meth:`warpTo(double)`. Setting it with no burn planned throws an
+         the burn with :meth:`KSA.warpTo(double)`. Setting it with no burn planned throws an
          exception.
 
 
@@ -187,7 +188,7 @@ Auto-Pilot
 
    .. field:: public AutoPilotMode RETROGRADE
 
-      The opposite of :meth:`AutoPilotMode.PROGRADE`.
+      The opposite of :field:`AutoPilotMode.PROGRADE`.
 
 
    .. field:: public AutoPilotMode NORMAL
@@ -197,7 +198,7 @@ Auto-Pilot
 
    .. field:: public AutoPilotMode ANTI_NORMAL
 
-      The opposite of :meth:`AutoPilotMode.NORMAL`.
+      The opposite of :field:`AutoPilotMode.NORMAL`.
 
 
    .. field:: public AutoPilotMode RADIAL_OUT
@@ -217,7 +218,7 @@ Auto-Pilot
 
    .. field:: public AutoPilotMode SURFACE_RETROGRADE
 
-      The opposite of :meth:`AutoPilotMode.SURFACE_PROGRADE`.
+      The opposite of :field:`AutoPilotMode.SURFACE_PROGRADE`.
 
 
    .. field:: public AutoPilotMode OTHER

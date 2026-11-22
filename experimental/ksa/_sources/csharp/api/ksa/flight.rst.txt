@@ -119,9 +119,61 @@ Flight
 
       :Game Scenes: Flight
 
+   .. property:: float StaticAirTemperature { get; }
+
+      The temperature of the atmosphere at the vehicle, in kelvin. Zero outside the
+      atmosphere.
+
+      :Game Scenes: Flight
+
+   .. property:: float SpeedOfSound { get; }
+
+      The speed of sound in the atmosphere at the vehicle, in meters per second. Zero
+      outside the atmosphere.
+
+      :Game Scenes: Flight
+
+   .. property:: float Mach { get; }
+
+      The speed of the vehicle relative to the surface, as a multiple of the speed of
+      sound. Zero outside the atmosphere.
+
+      :Game Scenes: Flight
+
+   .. property:: OutsideAir OutsideAir { get; }
+
+      Whether a kitten can breathe the air outside the vehicle.
+
+      :Game Scenes: Flight
+
    .. property:: float DynamicPressure { get; }
 
       The dynamic pressure acting on the vehicle, in pascals.
+
+      :Game Scenes: Flight
+
+   .. property:: double Depth { get; }
+
+      The depth of the vehicle's center of mass below the ocean surface, in meters. Zero
+      above the surface.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The ocean surface includes its waves.
+
+   .. property:: float SubmergedPortion { get; }
+
+      The fraction of the vehicle's volume below the ocean surface, between 0 and 1.
+
+      :Game Scenes: Flight
+
+   .. property:: float BuoyantForce { get; }
+
+      The buoyant force on the vehicle from the ocean and the atmosphere, in newtons. It
+      acts against gravity.
 
       :Game Scenes: Flight
 
@@ -137,6 +189,47 @@ Flight
       The radiation dose rate averaged over the vehicle's orbit, in sieverts per second.
       Includes any solar particle event under way. Not a number if the body has no
       magnetosphere, or the orbit dips below the surface.
+
+      :Game Scenes: Flight
+
+   .. property:: float SolarWindSpeed { get; }
+
+      The speed of the solar wind at the vehicle, in :math:`\mathrm{m/s}`. Zero if no star
+      has a solar wind.
+
+      :Game Scenes: Flight
+
+   .. property:: float SolarWindPressure { get; }
+
+      The dynamic pressure of the solar wind at the vehicle, in pascals.
+
+      :Game Scenes: Flight
+
+   .. property:: float SolarWindNorthwardField { get; }
+
+      The northward component of the magnetic field carried by the solar wind at the
+      vehicle, in teslas. A southward field, a negative value, drives geomagnetic storms.
+
+      :Game Scenes: Flight
+
+   .. property:: float ProtonFlux { get; }
+
+      The flux of solar energetic protons at the vehicle during a solar particle event, in
+      protons per square centimeter per second per steradian. Zero outside an event.
+
+      :Game Scenes: Flight
+
+   .. property:: int RadiationStormLevel { get; }
+
+      The level of the radiation storm at the vehicle, from 0 for none to 5 for the
+      most severe. The S level of the game's space weather window.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Collections.Generic.IList<CoronalMassEjection> IncomingCoronalMassEjections { get; }
+
+      The coronal mass ejections heading for the vehicle, as the game's space weather
+      window lists them.
 
       :Game Scenes: Flight
 
@@ -162,6 +255,63 @@ Flight
       the right of the velocity.
 
       :Game Scenes: Flight
+
+   .. property:: float Drag { get; }
+
+      The part of the aerodynamic force along the airflow, in newtons.
+
+      :Game Scenes: Flight
+
+   .. property:: float Lift { get; }
+
+      The part of the aerodynamic force across the airflow, in newtons.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Tuple<double,double,double> AerodynamicForce(ReferenceFrame referenceFrame)
+
+      The aerodynamic force on the vehicle, in newtons.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the force.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game computes the force from the surfaces of the vehicle's hull.
+
+   .. function:: System.Tuple<double,double,double> AerodynamicTorque(ReferenceFrame referenceFrame)
+
+      The aerodynamic torque on the vehicle about its center of mass, in
+      :math:`\mathrm{N \cdot m}`. The vector points along the axis of the torque.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the torque.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Tuple<double,double,double> SimulateAerodynamicForceAt(Body body, System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, ReferenceFrame referenceFrame)
+
+      The aerodynamic force the vehicle would have at a given position and velocity, in
+      its current attitude and rotation, in newtons.
+
+      :parameters:
+
+       * **body** -- The body whose atmosphere the vehicle flies through.
+       * **position** -- The position, in meters.
+       * **velocity** -- The velocity, in meters per second.
+       * **referenceFrame** -- The reference frame of the position, velocity and force.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The atmosphere moves with the body's rotation.
 
    .. function:: System.Tuple<double,double,double> Prograde(ReferenceFrame referenceFrame)
 
@@ -194,3 +344,30 @@ Flight
        * **referenceFrame** -- The reference frame of the direction.
 
       :Game Scenes: Flight
+
+
+
+.. enum:: OutsideAir
+
+   Whether a kitten can breathe the air outside a vehicle. See
+   :prop:`Flight.OutsideAir`.
+
+
+   .. enumerator:: NoAtmosphere
+
+      Outside the atmosphere, or at a body with none.
+
+
+   .. enumerator:: NoOxygen
+
+      An atmosphere with no oxygen.
+
+
+   .. enumerator:: TooThin
+
+      An atmosphere whose oxygen pressure is too low to breathe.
+
+
+   .. enumerator:: Breathable
+
+      Breathable air.

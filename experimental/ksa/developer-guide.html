@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Developer Guide &#8212; kRPC v0.2.0 documentation</title>
+    <title>Developer Guide &#8212; kRPC v0.3.0 documentation</title>
   
   
   
@@ -26,23 +26,24 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9c64f2e8" />
+    <link rel="stylesheet" type="text/css" href="_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5ab7b574" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/documentation_options.js?v=e259d695"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'developer-guide';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="_static/external-links.js?v=e8892020"></script>
@@ -50,11 +51,11 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Changelog" href="changelog.html" />
-    <link rel="prev" title="Messages" href="grpc/api/messages.html" />
+    <link rel="prev" title="Computer" href="grpc/api/kfs/computer.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.0" />
+  <meta name="docsearch:version" content="0.3.0" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -102,7 +103,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -206,14 +207,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -248,7 +249,7 @@
   
 
   
-    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -262,7 +263,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -333,14 +334,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -412,7 +413,7 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Developer Guide</span></li>
@@ -434,55 +435,131 @@
                   
   <section id="developer-guide">
 <h1>Developer Guide<a class="headerlink" href="#developer-guide" title="Link to this heading">#</a></h1>
-<p>kRPC for KSA lives in the <code class="docutils literal notranslate"><span class="pre">experimental/ksa</span></code> folder of the <a class="reference external" href="https://github.com/krpc/krpc/tree/main/experimental/ksa">kRPC repository</a>. Its scripts build the mod, the
-client stubs and this documentation, and run the tests in the game. They need Python 3, the
-.NET 10 SDK, <code class="docutils literal notranslate"><span class="pre">zip</span></code>, and KSA installed in <code class="docutils literal notranslate"><span class="pre">KSA_DIR</span></code>, which defaults to <code class="docutils literal notranslate"><span class="pre">../KSA</span></code> beside the
-repository. Set <code class="docutils literal notranslate"><span class="pre">KSA_DIR</span></code> to build and test against another install.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>These scripts are temporary. kRPC for KSA will move to the Bazel build that the rest of the
-repository uses.</p>
-</div>
+<p>kRPC for KSA lives in the <code class="docutils literal notranslate"><span class="pre">experimental/ksa</span></code> folder of the <a class="reference external" href="https://github.com/krpc/krpc/tree/main/experimental/ksa">kRPC repository</a>. It builds with Bazel, as the rest
+of the repository does, against KSA installed in <code class="docutils literal notranslate"><span class="pre">KSA_DIR</span></code>. Set <code class="docutils literal notranslate"><span class="pre">KSA_DIR</span></code> to the absolute
+path of the install, and <code class="docutils literal notranslate"><span class="pre">STARMAP_DIR</span></code> to the absolute path of a StarMap install. The game
+runs only from the StarMap release pinned as <code class="docutils literal notranslate"><span class="pre">starmap_version</span></code> in <code class="docutils literal notranslate"><span class="pre">config.bzl</span></code>. Without
+<code class="docutils literal notranslate"><span class="pre">KSA_DIR</span></code>, the build skips the KSA targets.</p>
+<section id="layout">
+<h2>Layout<a class="headerlink" href="#layout" title="Link to this heading">#</a></h2>
+<p>The folders mirror those at the root of the repository:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">server/</span></code> - the StarMap entry point, <code class="docutils literal notranslate"><span class="pre">Addon.cs</span></code>, which holds all the StarMap and game
+lifecycle code, with the server windows. <code class="docutils literal notranslate"><span class="pre">server/grpc/</span></code> is the gRPC server.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">service/KSA/</span></code> - the <code class="docutils literal notranslate"><span class="pre">KSA</span></code> service, its in-game tests, its service definitions and the
+client stubs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">service/KFS/</span></code> - the same for the <code class="docutils literal notranslate"><span class="pre">KFS</span></code> service, which runs programs on kFS, the game’s
+flight software.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">doc/</span></code> - this documentation. The pages are in <code class="docutils literal notranslate"><span class="pre">doc/src/</span></code>, and the templates of the
+generated API pages in <code class="docutils literal notranslate"><span class="pre">doc/api/</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tools/build/</span></code> - the <code class="docutils literal notranslate"><span class="pre">&#64;ksa</span></code> repository of the KSA install, and the rules for the mod.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tools/game/</span></code> - the in-game test harness, and the install, run and test targets.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tools/grpc/</span></code> - the generators of the <code class="docutils literal notranslate"><span class="pre">.proto</span></code> files and the gRPC API pages.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tools/release/</span></code> - the release scripts, the readme of the release archive, and the script
+that publishes this documentation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tools/TestingTools/</span></code> - the <code class="docutils literal notranslate"><span class="pre">TestingTools</span></code> service, its server settings and test
+vehicles, installed only for the tests.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">config.bzl</span></code> - the versions of the mod, the kRPC clients, KSA and StarMap.</p></li>
+</ul>
+</section>
 <section id="building">
 <h2>Building<a class="headerlink" href="#building" title="Link to this heading">#</a></h2>
-<p>Build the mod and the client stubs:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>experimental/ksa/build.sh<span class="w">            </span><span class="c1"># build into bin/kRPC</span>
-experimental/ksa/build.sh<span class="w"> </span>--install<span class="w">  </span><span class="c1"># also install it into the KSA mods folder</span>
+<p>Build the mod and the client stubs, and install the mod into the KSA mods folder:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>build<span class="w"> </span>//experimental/ksa/...
+bazel<span class="w"> </span>run<span class="w"> </span>//experimental/ksa/tools/game:install
 </pre></div>
 </div>
-<p>The build uses the kRPC 0.7.0 release from PyPI. Its <code class="docutils literal notranslate"><span class="pre">krpctools</span></code> package provides
-<code class="docutils literal notranslate"><span class="pre">KRPC.Core.dll</span></code>, the <code class="docutils literal notranslate"><span class="pre">ServiceDefinitions</span></code> tool, which checks the service’s documentation,
-and <code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span></code>, which generates the stubs.</p>
+<p>The mod builds against the <code class="docutils literal notranslate"><span class="pre">KRPC.Core</span></code> of the repository. The build checks the service’s
+documentation, generates the stubs with <code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span></code>, and compiles the example scripts
+against them. Without a KSA install, <code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">build</span> <span class="pre">//...</span></code> skips these targets.</p>
+<p>The install target puts the mod into <code class="docutils literal notranslate"><span class="pre">&lt;Documents&gt;/My</span> <span class="pre">Games/Kitten</span> <span class="pre">Space</span> <span class="pre">Agency/mods</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">KSA_MODS_DIR</span></code>, and enables it. <code class="docutils literal notranslate"><span class="pre">--</span> <span class="pre">--testing</span></code> adds the <code class="docutils literal notranslate"><span class="pre">TestingTools</span></code> service, and
+replaces the settings in the game’s user folder with the test settings.</p>
+</section>
+<section id="running">
+<h2>Running<a class="headerlink" href="#running" title="Link to this heading">#</a></h2>
+<p>Install the mod with <code class="docutils literal notranslate"><span class="pre">TestingTools</span></code>, and launch KSA through StarMap:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//experimental/ksa/tools/game:run-ksa
+</pre></div>
+</div>
+<p>StarMap runs from <code class="docutils literal notranslate"><span class="pre">STARMAP_DIR</span></code>. Its release targets Windows, so on Linux it runs with
+<code class="docutils literal notranslate"><span class="pre">dotnet</span></code>, with the KSA folder on <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code>. The game’s output goes to
+<code class="docutils literal notranslate"><span class="pre">experimental/ksa/bin/ksa.log</span></code>.</p>
+<p>KSA opens a configuration window before it loads. Untick “Always Show” in it so that the
+tests run unattended.</p>
+</section>
+<section id="server">
+<h2>Server<a class="headerlink" href="#server" title="Link to this heading">#</a></h2>
+<p>The server runs once per frame, in a Harmony prefix on <code class="docutils literal notranslate"><span class="pre">Universe.ExecuteNextVehicleSolvers</span></code>.
+That point is on the main thread, after the frame’s solver results and input are applied. The
+vehicle solver runs on a worker thread from there until the next frame.</p>
 </section>
 <section id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">#</a></h2>
-<p>The tests are Python scripts that drive a live game, run with pytest:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>experimental/ksa/test.sh<span class="w">                        </span><span class="c1"># launch KSA, run every test, quit</span>
-experimental/ksa/test.sh<span class="w"> </span>test/test_orbit.py<span class="w"> </span>-v<span class="w">  </span><span class="c1"># one file</span>
-experimental/ksa/test.sh<span class="w"> </span>-m<span class="w"> </span><span class="s2">"not slow"</span><span class="w">          </span><span class="c1"># skip the test that flies to orbit</span>
-experimental/ksa/test.sh<span class="w"> </span>--no-launch<span class="w">            </span><span class="c1"># against a game started with run-ksa.sh</span>
+<p>The tests that need no game are the linters, type checks and docs checks:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span><span class="nb">test</span><span class="w"> </span>//experimental/ksa:test
 </pre></div>
 </div>
-<p>The harness launches KSA through StarMap when no server is running, and quits it at the end.
-Each test class starts from a save of the game’s start state. The <code class="docutils literal notranslate"><span class="pre">TestingTools</span></code> service,
-installed only for the tests, registers test vehicles and quits the game.</p>
+<p><code class="docutils literal notranslate"><span class="pre">//:test</span></code> and CI run them too. Without <code class="docutils literal notranslate"><span class="pre">KSA_DIR</span></code>, the suite skips the tests that compile
+against KSA.</p>
+<p>The in-game tests are Python scripts that drive a live game, run with pytest. Arguments after
+<code class="docutils literal notranslate"><span class="pre">--</span></code> go to pytest:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//experimental/ksa/tools/game:test-ksa<span class="w">                       </span><span class="c1"># launch KSA, run every test</span>
+bazel<span class="w"> </span>run<span class="w"> </span>//experimental/ksa/tools/game:test-ksa<span class="w"> </span>--<span class="w"> </span>-k<span class="w"> </span>test_rename<span class="w">     </span><span class="c1"># by name</span>
+bazel<span class="w"> </span>run<span class="w"> </span>//experimental/ksa/tools/game:test-ksa<span class="w"> </span>--<span class="w"> </span>-m<span class="w"> </span><span class="s2">"not slow"</span><span class="w">      </span><span class="c1"># skip the tutorial flights</span>
+bazel<span class="w"> </span>run<span class="w"> </span>//experimental/ksa/tools/game:run-ksa<span class="w">                        </span><span class="c1"># run KSA on its own</span>
+bazel<span class="w"> </span>run<span class="w"> </span>//experimental/ksa/tools/game:test-ksa<span class="w"> </span>--<span class="w"> </span>--no-launch<span class="w">        </span><span class="c1"># against that game</span>
+</pre></div>
+</div>
+<p>The harness is the one the kRPC in-game tests use. It installs the mod with the
+<code class="docutils literal notranslate"><span class="pre">TestingTools</span></code> service, launches KSA through StarMap when no server is running, and quits
+it at the end. Each test class starts from a save of the game’s start state.</p>
+<ul class="simple">
+<li><p>A launched game is saved as <code class="docutils literal notranslate"><span class="pre">krpctest</span></code> once it has loaded. <code class="docutils literal notranslate"><span class="pre">--no-launch</span></code> needs that
+save from an earlier run.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TestingTools.RegisterVehicle</span></code> adds a vehicle from <code class="docutils literal notranslate"><span class="pre">tools/TestingTools/vehicles</span></code> to the
+game’s default vehicles.</p></li>
+</ul>
+<section id="documentation-examples">
+<h3>Documentation Examples<a class="headerlink" href="#documentation-examples" title="Link to this heading">#</a></h3>
+<p>The tests in <code class="docutils literal notranslate"><span class="pre">doc/test/</span></code> run the example programs in <code class="docutils literal notranslate"><span class="pre">doc/src/scripts/</span></code> against the game, in
+every language. Each test is marked <code class="docutils literal notranslate"><span class="pre">example</span></code> and its language, and the tutorial flights
+<code class="docutils literal notranslate"><span class="pre">slow</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//experimental/ksa/tools/game:test-ksa<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>experimental/ksa/doc/test<span class="w"> </span>-m<span class="w"> </span><span class="s2">"python and not slow"</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">doc/test/examples.py</span></code> declares how each example runs, and which game setup it starts from,
+such as the save or the Rocket on the launch pad. <code class="docutils literal notranslate"><span class="pre">doc/test/unsupported.txt</span></code> lists the
+examples the tests cannot run. <code class="docutils literal notranslate"><span class="pre">//experimental/ksa/doc:test</span></code> checks that every example is
+declared or listed, so a new example needs an entry. The tests build on the kRPC documentation
+example tests, in <code class="docutils literal notranslate"><span class="pre">tools/doc_examples/</span></code>.</p>
+</section>
 </section>
 <section id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h2>
-<p>Build this documentation into <code class="docutils literal notranslate"><span class="pre">bin/docs</span></code>, after <code class="docutils literal notranslate"><span class="pre">build.sh</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>experimental/ksa/docs.sh<span class="w">           </span><span class="c1"># build the HTML</span>
-experimental/ksa/docs.sh<span class="w"> </span>--serve<span class="w">   </span><span class="c1"># also serve it on http://127.0.0.1:8000</span>
+<p>Build this documentation, or serve it on <a class="reference external" href="http://localhost:8080">http://localhost:8080</a> with rebuild on edit:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>build<span class="w"> </span>//experimental/ksa/doc:html
+bazel<span class="w"> </span>run<span class="w"> </span>//experimental/ksa/doc:serve
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> generates the API pages from the service definitions. <code class="docutils literal notranslate"><span class="pre">doc/order.txt</span></code> orders
-the members, and lists every one of them.</p>
+the members, and lists every one of them, which <code class="docutils literal notranslate"><span class="pre">//experimental/ksa/doc:check-documented</span></code>
+checks.</p>
+<p>The examples are held to the kRPC documentation’s formatting and lint, with its 76-column limit,
+and the pages to its spelling check. <code class="docutils literal notranslate"><span class="pre">doc/dictionary.txt</span></code> adds the words of these pages to its
+word list. <code class="docutils literal notranslate"><span class="pre">//experimental/ksa/doc:linkcheck</span></code> checks the external links, and is in no suite.</p>
+<p><code class="docutils literal notranslate"><span class="pre">tools/release/publish-docs.sh</span></code> commits the documentation to the <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code> branch, under
+<code class="docutils literal notranslate"><span class="pre">experimental/ksa/</span></code>. <code class="docutils literal notranslate"><span class="pre">--push</span></code> pushes the commit.</p>
 </section>
 <section id="releasing">
 <h2>Releasing<a class="headerlink" href="#releasing" title="Link to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">release.sh</span></code> builds the release archive into <code class="docutils literal notranslate"><span class="pre">bin/release</span></code>, with its checksum. The archive
-holds the <code class="docutils literal notranslate"><span class="pre">kRPC</span></code> mod folder, the client stubs, the example scripts, a readme and the
-licenses. The mod folder sits at the top, with its own copy of the licenses, so that the Borea
-mod manager installs it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">build</span> <span class="pre">//experimental/ksa:release</span></code> builds the release archive. It holds the <code class="docutils literal notranslate"><span class="pre">kRPC</span></code>
+mod folder, the client stubs, a readme and the licenses. The mod folder
+sits at the top, with its own copy of the licenses, so that the Borea mod manager installs it.
+The mod is under the LGPL v3, as <code class="docutils literal notranslate"><span class="pre">KRPC.Core</span></code> is.</p>
+<p><a class="reference external" href="https://github.com/krpc/krpc/blob/main/experimental/ksa/Release-Guide.md">Release-Guide.md</a>
+lists the steps of a release, which the scripts in <code class="docutils literal notranslate"><span class="pre">tools/release/</span></code> carry out.</p>
 </section>
 </section>
 
@@ -497,12 +574,12 @@ mod manager installs it.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="grpc/api/messages.html"
+       href="grpc/api/kfs/computer.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Messages</p>
+        <p class="prev-next-title">Computer</p>
       </div>
     </a>
     <a class="right-next"
@@ -521,7 +598,7 @@ mod manager installs it.</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -533,8 +610,14 @@ mod manager installs it.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#layout">Layout</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building">Building</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running">Running</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server">Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation-examples">Documentation Examples</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#releasing">Releasing</a></li>
 </ul>
@@ -562,8 +645,8 @@ mod manager installs it.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -596,7 +679,7 @@ mod manager installs it.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

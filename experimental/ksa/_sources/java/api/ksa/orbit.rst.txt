@@ -174,6 +174,20 @@ Orbit
 
    
 
+   .. method:: double getSemiLatusRectum()
+
+
+      The `semi-latus rectum <https://en.wikipedia.org/wiki/Conic_section#Conic_parameters>`_ of the orbit, in meters.
+
+   
+
+   .. method:: double getSpecificAngularMomentum()
+
+
+      The specific angular momentum of the orbit, in :math:`\mathrm{m^{2}/s}`.
+
+   
+
    .. method:: double trueAnomalyAtUT(double ut)
 
       The true anomaly at the given time, in radians.
@@ -181,7 +195,22 @@ Orbit
       :param double ut: Universal time, in seconds.
    
 
-   .. method:: double uTAtTrueAnomaly(double trueAnomaly)
+   .. method:: double meanAnomalyAtUT(double ut)
+
+      The mean anomaly at the given time, in radians.
+
+      :param double ut: Universal time, in seconds.
+   
+
+   .. method:: double eccentricAnomalyAtUT(double ut)
+
+      The eccentric anomaly at the given time, in radians. For a hyperbolic orbit, this
+      is the hyperbolic anomaly.
+
+      :param double ut: Universal time, in seconds.
+   
+
+   .. method:: double utAtTrueAnomaly(double trueAnomaly)
 
       The next universal time, from now, at which the orbit reaches the given true
       anomaly, in seconds. Not a number if it never does, such as beyond the asymptote of
@@ -190,10 +219,32 @@ Orbit
       :param double trueAnomaly: True anomaly, in radians.
    
 
+   .. method:: double trueAnomalyAtRadius(double radius)
+
+      The true anomaly at which the orbit reaches the given distance from the center of
+      the body, in radians, between 0 and :math:`\pi`. Not a number if the orbit
+      never reaches it.
+
+      :param double radius: The distance from the center of the body, in meters.
+   
+
+      .. note::
+
+         The orbit also reaches the distance at the negative of this anomaly. Zero for a
+         circular orbit at the distance. Throws an exception if the distance is not
+         positive.
+
    .. method:: double radiusAt(double ut)
 
       The distance from the center of the body being orbited at the given time, in
       meters.
+
+      :param double ut: Universal time, in seconds.
+   
+
+   .. method:: double speedAt(double ut)
+
+      The orbital speed at the given time, in meters per second.
 
       :param double ut: Universal time, in seconds.
    
@@ -309,6 +360,55 @@ Orbit
       ``null`` if there is none.
 
    
+
+   .. method:: static Orbit createFromElements(Connection connection, Body body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+
+      Create the orbit with the given elements around a body. The angles are those of
+      :type:`Orbit`.
+
+      :param Body body: The body being orbited.
+      :param double semiMajorAxis: The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+      :param double eccentricity: The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
+      :param double inclination: The inclination, in radians.
+      :param double longitudeOfAscendingNode: The longitude of the ascending node, in radians.
+      :param double argumentOfPeriapsis: The argument of periapsis, in radians.
+      :param double meanAnomalyAtEpoch: The mean anomaly at the epoch, in radians.
+      :param double epoch: The universal time of the epoch, in seconds.
+   
+
+      .. note::
+
+         The orbit is a single conic around *body*, with no
+         :meth:`Orbit.getNextOrbit()`. It is held until :meth:`Orbit.remove()` is called on it, or
+         the client that created it disconnects.
+
+   .. method:: static Orbit createFromPositionAndVelocity(Connection connection, Body body, org.javatuples.Triplet<Double,Double,Double> position, org.javatuples.Triplet<Double,Double,Double> velocity, double ut, ReferenceFrame referenceFrame)
+
+      Create the orbit around a body through the given position and velocity.
+
+      :param Body body: The body being orbited.
+      :param org.javatuples.Triplet<Double,Double,Double> position: The position, in meters, relative to where the body is now.
+      :param org.javatuples.Triplet<Double,Double,Double> velocity: The velocity, in meters per second.
+      :param double ut: The universal time of the position and velocity, in seconds.
+      :param ReferenceFrame referenceFrame: The reference frame of the position and velocity.
+   
+
+      .. note::
+
+         The orbit is a single conic around *body*, with no
+         :meth:`Orbit.getNextOrbit()`. It is held until :meth:`Orbit.remove()` is called on it, or
+         the client that created it disconnects.
+
+   .. method:: void remove()
+
+      Remove an orbit created by :meth:`Orbit.createFromElements(Body, double, double, double, double, double, double, double)` or
+      :meth:`Orbit.createFromPositionAndVelocity(Body, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, double, ReferenceFrame)`.
+
+   
+
+      .. note::
+
+         Throws an exception if the orbit was not created by a client.
 
 
 

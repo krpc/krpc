@@ -1,0 +1,68 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Space Weather
+=============
+
+.. grpc:service:: CoronalMassEjectionService
+
+   A coronal mass ejection: a cloud of plasma thrown out by a star. One that reaches a body
+   with a magnetosphere can cause a geomagnetic storm. See
+   :grpc:rpc:`BodyService.GetRecentCoronalMassEjections <krpc.ksa.BodyService.GetRecentCoronalMassEjections>` and
+   :grpc:rpc:`FlightService.GetIncomingCoronalMassEjections <krpc.ksa.FlightService.GetIncomingCoronalMassEjections>`.
+
+   .. grpc:rpc:: GetStar (CoronalMassEjection.GetStarRequest) returns (CoronalMassEjection.GetStarResponse)
+
+      The star that threw out the ejection.
+
+      :CoronalMassEjection.GetStarRequest:
+         * ``this`` (:grpc:service:`CoronalMassEjection <krpc.ksa.CoronalMassEjectionService>`)
+
+      :CoronalMassEjection.GetStarResponse: ``value`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+   .. grpc:rpc:: GetUT (CoronalMassEjection.GetUTRequest) returns (CoronalMassEjection.GetUTResponse)
+
+      The universal time at which the ejection left the star, in seconds.
+
+      :CoronalMassEjection.GetUTRequest:
+         * ``this`` (:grpc:service:`CoronalMassEjection <krpc.ksa.CoronalMassEjectionService>`)
+
+      :CoronalMassEjection.GetUTResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetSpeed (CoronalMassEjection.GetSpeedRequest) returns (CoronalMassEjection.GetSpeedResponse)
+
+      The speed of the ejection as it leaves the star, in :math:`\mathrm{m/s}`.
+
+      :CoronalMassEjection.GetSpeedRequest:
+         * ``this`` (:grpc:service:`CoronalMassEjection <krpc.ksa.CoronalMassEjectionService>`)
+
+      :CoronalMassEjection.GetSpeedResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: ArrivalTime (CoronalMassEjection.ArrivalTimeRequest) returns (CoronalMassEjection.ArrivalTimeResponse)
+
+      The universal time at which the shock of the ejection is forecast to reach the
+      vehicle, in seconds. Not a number if the ejection misses the vehicle, or has
+      already reached it.
+
+      :CoronalMassEjection.ArrivalTimeRequest:
+         * ``this`` (:grpc:service:`CoronalMassEjection <krpc.ksa.CoronalMassEjectionService>`)
+         * ``vehicle`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle.
+
+      :CoronalMassEjection.ArrivalTimeResponse: ``value`` (``double``)
+
+      .. note::
+
+         The forecast the game's space weather window shows. It is uncertain by up to
+         :grpc:rpc:`CoronalMassEjectionService.ArrivalUncertainty <krpc.ksa.CoronalMassEjectionService.ArrivalUncertainty>`, which shrinks as the ejection nears.
+
+   .. grpc:rpc:: ArrivalUncertainty (CoronalMassEjection.ArrivalUncertaintyRequest) returns (CoronalMassEjection.ArrivalUncertaintyResponse)
+
+      The uncertainty of :grpc:rpc:`CoronalMassEjectionService.ArrivalTime <krpc.ksa.CoronalMassEjectionService.ArrivalTime>`, in seconds. Not a number if the
+      ejection misses the vehicle, or has already reached it.
+
+      :CoronalMassEjection.ArrivalUncertaintyRequest:
+         * ``this`` (:grpc:service:`CoronalMassEjection <krpc.ksa.CoronalMassEjectionService>`)
+         * ``vehicle`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle.
+
+      :CoronalMassEjection.ArrivalUncertaintyResponse: ``value`` (``float``)

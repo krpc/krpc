@@ -173,6 +173,283 @@ Power
 
       :PowerConsumer.GetPowerResponse: ``value`` (``float``)
 
+   .. grpc:rpc:: GetHasPowerSwitch (PowerConsumer.GetHasPowerSwitchRequest) returns (PowerConsumer.GetHasPowerSwitchResponse)
+
+      Whether the part has a power switch, as a probe core does.
+
+      :PowerConsumer.GetHasPowerSwitchRequest:
+         * ``this`` (:grpc:service:`PowerConsumer <krpc.ksa.PowerConsumerService>`)
+
+      :PowerConsumer.GetHasPowerSwitchResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetMode (PowerConsumer.GetModeRequest) returns (PowerConsumer.GetModeResponse)
+
+      The setting of the power switch.
+
+      :PowerConsumer.GetModeRequest:
+         * ``this`` (:grpc:service:`PowerConsumer <krpc.ksa.PowerConsumerService>`)
+
+      :PowerConsumer.GetModeResponse: ``value`` (:grpc:enum:`PowerMode <krpc.ksa.PowerMode>`)
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+   .. grpc:rpc:: SetMode (PowerConsumer.SetModeRequest) returns (PowerConsumer.SetModeResponse)
+
+      The setting of the power switch.
+
+      :PowerConsumer.SetModeRequest:
+         * ``this`` (:grpc:service:`PowerConsumer <krpc.ksa.PowerConsumerService>`)
+         * ``value`` (:grpc:enum:`PowerMode <krpc.ksa.PowerMode>`)
+
+      :PowerConsumer.SetModeResponse: Empty
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+   .. grpc:rpc:: GetStandbyInStorms (PowerConsumer.GetStandbyInStormsRequest) returns (PowerConsumer.GetStandbyInStormsResponse)
+
+      Whether the part goes on standby, drawing no power, while a radiation storm is under
+      way at the vehicle.
+
+      :PowerConsumer.GetStandbyInStormsRequest:
+         * ``this`` (:grpc:service:`PowerConsumer <krpc.ksa.PowerConsumerService>`)
+
+      :PowerConsumer.GetStandbyInStormsResponse: ``value`` (``bool``)
+
+      .. note::
+
+         The game takes a storm of level 1 or worse on the S scale, as
+         :grpc:rpc:`FlightService.GetRadiationStormLevel <krpc.ksa.FlightService.GetRadiationStormLevel>` gives. Throws an exception if the part has
+         no power switch.
+
+   .. grpc:rpc:: SetStandbyInStorms (PowerConsumer.SetStandbyInStormsRequest) returns (PowerConsumer.SetStandbyInStormsResponse)
+
+      Whether the part goes on standby, drawing no power, while a radiation storm is under
+      way at the vehicle.
+
+      :PowerConsumer.SetStandbyInStormsRequest:
+         * ``this`` (:grpc:service:`PowerConsumer <krpc.ksa.PowerConsumerService>`)
+         * ``value`` (``bool``)
+
+      :PowerConsumer.SetStandbyInStormsResponse: Empty
+
+      .. note::
+
+         The game takes a storm of level 1 or worse on the S scale, as
+         :grpc:rpc:`FlightService.GetRadiationStormLevel <krpc.ksa.FlightService.GetRadiationStormLevel>` gives. Throws an exception if the part has
+         no power switch.
+
+   .. grpc:rpc:: GetStatus (PowerConsumer.GetStatusRequest) returns (PowerConsumer.GetStatusResponse)
+
+      The power status of the part.
+
+      :PowerConsumer.GetStatusRequest:
+         * ``this`` (:grpc:service:`PowerConsumer <krpc.ksa.PowerConsumerService>`)
+
+      :PowerConsumer.GetStatusResponse: ``value`` (:grpc:enum:`PowerStatus <krpc.ksa.PowerStatus>`)
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+.. grpc:enum:: PowerMode
+
+   The setting of a power switch. See :grpc:rpc:`PowerConsumerService.GetMode <krpc.ksa.PowerConsumerService.GetMode>`.
+
+   .. grpc:value:: POWER_MODE_OFF
+
+      Switched off.
+
+   .. grpc:value:: POWER_MODE_AUTO
+
+      On standby while another control module flies the vehicle, and on when none can.
+
+   .. grpc:value:: POWER_MODE_ON
+
+      Switched on.
+
+.. grpc:enum:: PowerStatus
+
+   The power status of a part with a power switch. See :grpc:rpc:`PowerConsumerService.GetStatus <krpc.ksa.PowerConsumerService.GetStatus>`.
+
+   .. grpc:value:: POWER_STATUS_OFF
+
+      Switched off.
+
+   .. grpc:value:: POWER_STATUS_STANDBY
+
+      On standby, while another control module flies the vehicle or a radiation storm is under way.
+
+   .. grpc:value:: POWER_STATUS_REBOOTING
+
+      Rebooting after a radiation upset.
+
+   .. grpc:value:: POWER_STATUS_ON
+
+      On, with power.
+
+   .. grpc:value:: POWER_STATUS_LOW
+
+      On, with power for less than five minutes.
+
+   .. grpc:value:: POWER_STATUS_OUT
+
+      Out of power.
+
+   .. grpc:value:: POWER_STATUS_FAILED
+
+      Failed from its radiation dose.
+
+.. grpc:service:: PowerForecastService
+
+   The charge, draw and supply of the electrical circuit a part is on, and how long its
+   batteries last. Obtained from :grpc:rpc:`PartService.GetPowerForecast <krpc.ksa.PartService.GetPowerForecast>`.
+
+   .. note::
+
+      A circuit is the parts joined by connections that carry electricity. This is the
+      forecast the game shows for a probe core.
+
+   .. grpc:rpc:: GetHasBattery (PowerForecast.GetHasBatteryRequest) returns (PowerForecast.GetHasBatteryResponse)
+
+      Whether the circuit has a battery.
+
+      :PowerForecast.GetHasBatteryRequest:
+         * ``this`` (:grpc:service:`PowerForecast <krpc.ksa.PowerForecastService>`)
+
+      :PowerForecast.GetHasBatteryResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetCharge (PowerForecast.GetChargeRequest) returns (PowerForecast.GetChargeResponse)
+
+      The energy stored in the circuit's batteries, in joules.
+
+      :PowerForecast.GetChargeRequest:
+         * ``this`` (:grpc:service:`PowerForecast <krpc.ksa.PowerForecastService>`)
+
+      :PowerForecast.GetChargeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetDraw (PowerForecast.GetDrawRequest) returns (PowerForecast.GetDrawResponse)
+
+      The power the parts on the circuit draw, in watts.
+
+      :PowerForecast.GetDrawRequest:
+         * ``this`` (:grpc:service:`PowerForecast <krpc.ksa.PowerForecastService>`)
+
+      :PowerForecast.GetDrawResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSupply (PowerForecast.GetSupplyRequest) returns (PowerForecast.GetSupplyResponse)
+
+      The power the solar panels and generators on the circuit supply, in watts.
+
+      :PowerForecast.GetSupplyRequest:
+         * ``this`` (:grpc:service:`PowerForecast <krpc.ksa.PowerForecastService>`)
+
+      :PowerForecast.GetSupplyResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetTimeLeft (PowerForecast.GetTimeLeftRequest) returns (PowerForecast.GetTimeLeftResponse)
+
+      The time until the batteries run out, in seconds. Infinite while the supply meets
+      the draw, and zero when the batteries are empty or there are none.
+
+      :PowerForecast.GetTimeLeftRequest:
+         * ``this`` (:grpc:service:`PowerForecast <krpc.ksa.PowerForecastService>`)
+
+      :PowerForecast.GetTimeLeftResponse: ``value`` (``float``)
+
+.. grpc:service:: AvionicsService
+
+   The avionics of a probe core, which radiation wears out and upsets. Obtained from
+   :grpc:rpc:`PartService.GetAvionics <krpc.ksa.PartService.GetAvionics>` or :grpc:rpc:`VehicleService.GetAvionics <krpc.ksa.VehicleService.GetAvionics>`.
+
+   .. note::
+
+      The avionics take a dose only while :grpc:rpc:`KSAService.GetRadiationEnabled <krpc.ksa.KSAService.GetRadiationEnabled>` is true. Switched
+      off or on standby, they take half the dose and no upsets.
+
+   .. grpc:rpc:: GetPart (Avionics.GetPartRequest) returns (Avionics.GetPartResponse)
+
+      The part the avionics are in.
+
+      :Avionics.GetPartRequest:
+         * ``this`` (:grpc:service:`Avionics <krpc.ksa.AvionicsService>`)
+
+      :Avionics.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetHealth (Avionics.GetHealthRequest) returns (Avionics.GetHealthResponse)
+
+      The health of the avionics.
+
+      :Avionics.GetHealthRequest:
+         * ``this`` (:grpc:service:`Avionics <krpc.ksa.AvionicsService>`)
+
+      :Avionics.GetHealthResponse: ``value`` (:grpc:enum:`AvionicsHealth <krpc.ksa.AvionicsHealth>`)
+
+   .. grpc:rpc:: GetDose (Avionics.GetDoseRequest) returns (Avionics.GetDoseResponse)
+
+      The radiation dose the avionics have taken, in grays of silicon.
+
+      :Avionics.GetDoseRequest:
+         * ``this`` (:grpc:service:`Avionics <krpc.ksa.AvionicsService>`)
+
+      :Avionics.GetDoseResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetTolerance (Avionics.GetToleranceRequest) returns (Avionics.GetToleranceResponse)
+
+      The dose at which the avionics fail, in grays of silicon.
+
+      :Avionics.GetToleranceRequest:
+         * ``this`` (:grpc:service:`Avionics <krpc.ksa.AvionicsService>`)
+
+      :Avionics.GetToleranceResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetDoseRate (Avionics.GetDoseRateRequest) returns (Avionics.GetDoseRateResponse)
+
+      The rate at which the avionics take a dose, in grays of silicon per second,
+      averaged over about an hour. Not a number until the avionics have taken a dose.
+
+      :Avionics.GetDoseRateRequest:
+         * ``this`` (:grpc:service:`Avionics <krpc.ksa.AvionicsService>`)
+
+      :Avionics.GetDoseRateResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetTimeLeft (Avionics.GetTimeLeftRequest) returns (Avionics.GetTimeLeftResponse)
+
+      The time until the avionics fail at :grpc:rpc:`AvionicsService.GetDoseRate <krpc.ksa.AvionicsService.GetDoseRate>`, in seconds. Infinite
+      while they take no dose, and zero once they have failed.
+
+      :Avionics.GetTimeLeftRequest:
+         * ``this`` (:grpc:service:`Avionics <krpc.ksa.AvionicsService>`)
+
+      :Avionics.GetTimeLeftResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetRebooting (Avionics.GetRebootingRequest) returns (Avionics.GetRebootingResponse)
+
+      Whether the avionics are rebooting after a radiation upset.
+
+      :Avionics.GetRebootingRequest:
+         * ``this`` (:grpc:service:`Avionics <krpc.ksa.AvionicsService>`)
+
+      :Avionics.GetRebootingResponse: ``value`` (``bool``)
+
+.. grpc:enum:: AvionicsHealth
+
+   The health of avionics. See :grpc:rpc:`AvionicsService.GetHealth <krpc.ksa.AvionicsService.GetHealth>`.
+
+   .. grpc:value:: AVIONICS_HEALTH_OK
+
+      Working.
+
+   .. grpc:value:: AVIONICS_HEALTH_WORN
+
+      Working, with a dose of at least four fifths of the tolerance.
+
+   .. grpc:value:: AVIONICS_HEALTH_FAILED
+
+      Failed for good, at the tolerance.
+
 .. grpc:service:: LightService
 
    A light. Obtained from :grpc:rpc:`PartService.GetLights <krpc.ksa.PartService.GetLights>`.

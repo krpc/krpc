@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Life Support &#8212; kRPC v0.3.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5ab7b574" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'java/api/ksa/life-support';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <link rel="icon" href="../../../_static/logo-mark.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Body" href="body.html" />
+    <link rel="prev" title="Crew" href="crew.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="../../../_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../java.html">Java</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../js.html">JavaScript</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../http.html">HTTP</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../clients.html" class="nav-link">Clients</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../../java.html" class="nav-link">Java</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../ksa.html" class="nav-link">KSA API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Life Support</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="life-support">
+<span id="package-krpc.client.services.KSA"></span><h1>Life Support<a class="headerlink" href="#life-support" title="Link to this heading">#</a></h1>
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupport">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">LifeSupport</span></span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupport" title="Link to this definition">#</a></dt>
+<dd><p>How long the supplies of a vehicle, a habitat zone or a kitten’s suit last. Obtained
+from <a class="reference internal" href="vehicle.html#krpc.client.services.KSA.Vehicle.getLifeSupport()" title="krpc.client.services.KSA.Vehicle.getLifeSupport()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vehicle.getLifeSupport()</span></code></a>, <a class="reference internal" href="#krpc.client.services.KSA.HabitatZone.getLifeSupport()" title="krpc.client.services.KSA.HabitatZone.getLifeSupport()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">HabitatZone.getLifeSupport()</span></code></a> or
+<a class="reference internal" href="crew.html#krpc.client.services.KSA.Kitten.getLifeSupport()" title="krpc.client.services.KSA.Kitten.getLifeSupport()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Kitten.getLifeSupport()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The times count down only while <a class="reference internal" href="ksa.html#krpc.client.services.KSA.KSA.getLifeSupportEnabled()" title="krpc.client.services.KSA.KSA.getLifeSupportEnabled()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">KSA.getLifeSupportEnabled()</span></code></a> is true. Air
+lasts forever in breathable air outside the vehicle.</p>
+</div>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupport.getKittens()">
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getKittens</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupport.getKittens()" title="Link to this definition">#</a></dt>
+<dd><p>The number of kittens the supplies are shared between.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupport.getAirMass()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAirMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupport.getAirMass()" title="Link to this definition">#</a></dt>
+<dd><p>The mass of oxygen in the crew’s tanks, in kilograms.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupport.getWaterMass()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getWaterMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupport.getWaterMass()" title="Link to this definition">#</a></dt>
+<dd><p>The mass of water in the crew’s tanks, in kilograms.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupport.getMeals()">
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getMeals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupport.getMeals()" title="Link to this definition">#</a></dt>
+<dd><p>The number of meals.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupport.getAirTime()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAirTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupport.getAirTime()" title="Link to this definition">#</a></dt>
+<dd><p>The time the air lasts, in seconds. Infinite with no crew, or in breathable air.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupport.getScrubberTime()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getScrubberTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupport.getScrubberTime()" title="Link to this definition">#</a></dt>
+<dd><p>The time the carbon dioxide scrubbers last, in seconds. Infinite with no crew.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupport.getWaterTime()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getWaterTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupport.getWaterTime()" title="Link to this definition">#</a></dt>
+<dd><p>The time the water lasts, in seconds. Infinite with no crew.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupport.getFoodTime()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getFoodTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupport.getFoodTime()" title="Link to this definition">#</a></dt>
+<dd><p>The time the food lasts, in seconds. Infinite with no crew.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupport.getTime()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupport.getTime()" title="Link to this definition">#</a></dt>
+<dd><p>The time until the first supply runs out, in seconds. A suit counts its air and
+scrubber only. Infinite with no crew.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupport.getLimitingSupply()">
+<a class="reference internal" href="#krpc.client.services.KSA.LifeSupportSupply" title="krpc.client.services.KSA.LifeSupportSupply"><span class="pre">LifeSupportSupply</span></a> <span class="sig-name descname"><span class="pre">getLimitingSupply</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupport.getLimitingSupply()" title="Link to this definition">#</a></dt>
+<dd><p>The supply that runs out first. Air when every time is infinite, as with no crew.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupport.getLevel()">
+<a class="reference internal" href="#krpc.client.services.KSA.LifeSupportLevel" title="krpc.client.services.KSA.LifeSupportLevel"><span class="pre">LifeSupportLevel</span></a> <span class="sig-name descname"><span class="pre">getLevel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupport.getLevel()" title="Link to this definition">#</a></dt>
+<dd><p>How long the supplies last, as the game’s life support gauge shows it.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupport.getTimeToNextLevel()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTimeToNextLevel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupport.getTimeToNextLevel()" title="Link to this definition">#</a></dt>
+<dd><p>The time until <a class="reference internal" href="#krpc.client.services.KSA.LifeSupport.getLevel()" title="krpc.client.services.KSA.LifeSupport.getLevel()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">LifeSupport.getLevel()</span></code></a> next changes, in seconds. Infinite with no crew.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupportLevel">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">LifeSupportLevel</span></span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupportLevel" title="Link to this definition">#</a></dt>
+<dd><p>How long the crew’s supplies last. See <a class="reference internal" href="#krpc.client.services.KSA.LifeSupport.getLevel()" title="krpc.client.services.KSA.LifeSupport.getLevel()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">LifeSupport.getLevel()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupportLevel.OK">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.LifeSupportLevel" title="krpc.client.services.KSA.LifeSupportLevel"><span class="pre">LifeSupportLevel</span></a> <span class="sig-name descname"><span class="pre">OK</span></span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupportLevel.OK" title="Link to this definition">#</a></dt>
+<dd><p>More than a day of supplies, or no crew.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupportLevel.LOW">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.LifeSupportLevel" title="krpc.client.services.KSA.LifeSupportLevel"><span class="pre">LifeSupportLevel</span></a> <span class="sig-name descname"><span class="pre">LOW</span></span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupportLevel.LOW" title="Link to this definition">#</a></dt>
+<dd><p>A day of supplies or less.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupportLevel.CRITICAL">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.LifeSupportLevel" title="krpc.client.services.KSA.LifeSupportLevel"><span class="pre">LifeSupportLevel</span></a> <span class="sig-name descname"><span class="pre">CRITICAL</span></span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupportLevel.CRITICAL" title="Link to this definition">#</a></dt>
+<dd><p>An hour of supplies or less.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupportLevel.OUT">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.LifeSupportLevel" title="krpc.client.services.KSA.LifeSupportLevel"><span class="pre">LifeSupportLevel</span></a> <span class="sig-name descname"><span class="pre">OUT</span></span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupportLevel.OUT" title="Link to this definition">#</a></dt>
+<dd><p>A supply has run out.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupportSupply">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">LifeSupportSupply</span></span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupportSupply" title="Link to this definition">#</a></dt>
+<dd><p>A supply the crew needs. See <a class="reference internal" href="#krpc.client.services.KSA.LifeSupport.getLimitingSupply()" title="krpc.client.services.KSA.LifeSupport.getLimitingSupply()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">LifeSupport.getLimitingSupply()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupportSupply.AIR">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.LifeSupportSupply" title="krpc.client.services.KSA.LifeSupportSupply"><span class="pre">LifeSupportSupply</span></a> <span class="sig-name descname"><span class="pre">AIR</span></span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupportSupply.AIR" title="Link to this definition">#</a></dt>
+<dd><p>Oxygen to breathe.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupportSupply.SCRUBBER">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.LifeSupportSupply" title="krpc.client.services.KSA.LifeSupportSupply"><span class="pre">LifeSupportSupply</span></a> <span class="sig-name descname"><span class="pre">SCRUBBER</span></span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupportSupply.SCRUBBER" title="Link to this definition">#</a></dt>
+<dd><p>Lithium hydroxide canisters, which scrub carbon dioxide from the air.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupportSupply.WATER">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.LifeSupportSupply" title="krpc.client.services.KSA.LifeSupportSupply"><span class="pre">LifeSupportSupply</span></a> <span class="sig-name descname"><span class="pre">WATER</span></span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupportSupply.WATER" title="Link to this definition">#</a></dt>
+<dd><p>Drinking water.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.LifeSupportSupply.FOOD">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.LifeSupportSupply" title="krpc.client.services.KSA.LifeSupportSupply"><span class="pre">LifeSupportSupply</span></a> <span class="sig-name descname"><span class="pre">FOOD</span></span><a class="headerlink" href="#krpc.client.services.KSA.LifeSupportSupply.FOOD" title="Link to this definition">#</a></dt>
+<dd><p>Meals.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HabitatZone">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">HabitatZone</span></span><a class="headerlink" href="#krpc.client.services.KSA.HabitatZone" title="Link to this definition">#</a></dt>
+<dd><p>The connected habitable parts of a vehicle, which share their crew’s supplies.
+Obtained from <a class="reference internal" href="vehicle.html#krpc.client.services.KSA.Vehicle.getHabitatZones()" title="krpc.client.services.KSA.Vehicle.getHabitatZones()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vehicle.getHabitatZones()</span></code></a> or <a class="reference internal" href="#krpc.client.services.KSA.Habitat.getZone()" title="krpc.client.services.KSA.Habitat.getZone()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Habitat.getZone()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Parts join a zone through connections the crew can pass, such as an open docking
+port hatch.</p>
+</div>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HabitatZone.getVehicle()">
+<a class="reference internal" href="vehicle.html#krpc.client.services.KSA.Vehicle" title="krpc.client.services.KSA.Vehicle"><span class="pre">Vehicle</span></a> <span class="sig-name descname"><span class="pre">getVehicle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.HabitatZone.getVehicle()" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle the zone is in.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HabitatZone.getParts()">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="parts.html#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getParts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.HabitatZone.getParts()" title="Link to this definition">#</a></dt>
+<dd><p>The parts in the zone.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HabitatZone.getHabitats()">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.KSA.Habitat" title="krpc.client.services.KSA.Habitat"><span class="pre">Habitat</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getHabitats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.HabitatZone.getHabitats()" title="Link to this definition">#</a></dt>
+<dd><p>The habitats in the zone.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HabitatZone.getSeats()">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="crew.html#krpc.client.services.KSA.Seat" title="krpc.client.services.KSA.Seat"><span class="pre">Seat</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getSeats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.HabitatZone.getSeats()" title="Link to this definition">#</a></dt>
+<dd><p>The crew seats in the zone.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HabitatZone.getCrew()">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="crew.html#krpc.client.services.KSA.Kitten" title="krpc.client.services.KSA.Kitten"><span class="pre">Kitten</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCrew</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.HabitatZone.getCrew()" title="Link to this definition">#</a></dt>
+<dd><p>The kittens in the zone’s seats.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HabitatZone.getLinkedZones()">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.KSA.HabitatZone" title="krpc.client.services.KSA.HabitatZone"><span class="pre">HabitatZone</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getLinkedZones</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.HabitatZone.getLinkedZones()" title="Link to this definition">#</a></dt>
+<dd><p>The zones that join this one when closed docking port hatches between them open.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HabitatZone.hatchesTo(HabitatZone)">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="parts.html#krpc.client.services.KSA.DockingPort" title="krpc.client.services.KSA.DockingPort"><span class="pre">DockingPort</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">hatchesTo</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.KSA.HabitatZone" title="krpc.client.services.KSA.HabitatZone"><span class="pre">HabitatZone</span></a><em> <span class="pre">zone</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.HabitatZone.hatchesTo(HabitatZone)" title="Link to this definition">#</a></dt>
+<dd><p>The closed docking port hatches that join this zone to a linked zone when they
+open.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zone</strong> (<span><a class="reference internal" href="#krpc.client.services.KSA.HabitatZone" title="krpc.client.services.KSA.HabitatZone"><code class="xref java java-type docutils literal notranslate"><span class="pre">HabitatZone</span></code></a></span>) – A zone in <a class="reference internal" href="#krpc.client.services.KSA.HabitatZone.getLinkedZones()" title="krpc.client.services.KSA.HabitatZone.getLinkedZones()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">HabitatZone.getLinkedZones()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the zone is not linked to this one.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HabitatZone.getHabitableVolume()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getHabitableVolume</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.HabitatZone.getHabitableVolume()" title="Link to this definition">#</a></dt>
+<dd><p>The volume the crew can live in, in cubic meters.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HabitatZone.getStorageVolume()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStorageVolume</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.HabitatZone.getStorageVolume()" title="Link to this definition">#</a></dt>
+<dd><p>The volume for stored supplies, in cubic meters.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HabitatZone.getLifeSupport()">
+<a class="reference internal" href="#krpc.client.services.KSA.LifeSupport" title="krpc.client.services.KSA.LifeSupport"><span class="pre">LifeSupport</span></a> <span class="sig-name descname"><span class="pre">getLifeSupport</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.HabitatZone.getLifeSupport()" title="Link to this definition">#</a></dt>
+<dd><p>How long the zone’s supplies last its crew.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HabitatZone.getMissionSupplies()">
+<a class="reference internal" href="#krpc.client.services.KSA.MissionSupplies" title="krpc.client.services.KSA.MissionSupplies"><span class="pre">MissionSupplies</span></a> <span class="sig-name descname"><span class="pre">getMissionSupplies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.HabitatZone.getMissionSupplies()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the zone’s supplies last its crew through the vehicle’s mission. <code class="docutils literal notranslate"><span class="pre">null</span></code>
+without a feasible mission with time left, or while
+<a class="reference internal" href="ksa.html#krpc.client.services.KSA.KSA.getLifeSupportEnabled()" title="krpc.client.services.KSA.KSA.getLifeSupportEnabled()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">KSA.getLifeSupportEnabled()</span></code></a> is false.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.HabitatZone.plannedKittens(MissionLeg)">
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">plannedKittens</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.KSA.MissionLeg" title="krpc.client.services.KSA.MissionLeg"><span class="pre">MissionLeg</span></a><em> <span class="pre">leg</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.HabitatZone.plannedKittens(MissionLeg)" title="Link to this definition">#</a></dt>
+<dd><p>The number of kittens planned in the zone for a leg of the vehicle’s mission. The
+plan defaults to the kittens seated in the zone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>leg</strong> (<span><a class="reference internal" href="#krpc.client.services.KSA.MissionLeg" title="krpc.client.services.KSA.MissionLeg"><code class="xref java java-type docutils literal notranslate"><span class="pre">MissionLeg</span></code></a></span>) – The leg.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Mission</span></span><a class="headerlink" href="#krpc.client.services.KSA.Mission" title="Link to this definition">#</a></dt>
+<dd><p>The mission planned for a vehicle in the editor’s life support window. Obtained from
+<a class="reference internal" href="vehicle.html#krpc.client.services.KSA.Vehicle.getMission()" title="krpc.client.services.KSA.Vehicle.getMission()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vehicle.getMission()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game times the legs of the mission from the plan, and checks the supplies of each
+habitat zone against them. See <a class="reference internal" href="#krpc.client.services.KSA.HabitatZone.getMissionSupplies()" title="krpc.client.services.KSA.HabitatZone.getMissionSupplies()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">HabitatZone.getMissionSupplies()</span></code></a>.</p>
+</div>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getDestination()">
+<a class="reference internal" href="#krpc.client.services.KSA.MissionDestination" title="krpc.client.services.KSA.MissionDestination"><span class="pre">MissionDestination</span></a> <span class="sig-name descname"><span class="pre">getDestination</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getDestination()" title="Link to this definition">#</a></dt>
+<dd><p>Where the mission goes.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getBody()">
+<a class="reference internal" href="body.html#krpc.client.services.KSA.Body" title="krpc.client.services.KSA.Body"><span class="pre">Body</span></a> <span class="sig-name descname"><span class="pre">getBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getBody()" title="Link to this definition">#</a></dt>
+<dd><p>The body the mission goes to, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has no destination. For a low
+orbit, this is the home body.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getArrival()">
+<a class="reference internal" href="#krpc.client.services.KSA.MissionArrival" title="krpc.client.services.KSA.MissionArrival"><span class="pre">MissionArrival</span></a> <span class="sig-name descname"><span class="pre">getArrival</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getArrival()" title="Link to this definition">#</a></dt>
+<dd><p>What the mission does at its destination.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getTrip()">
+<a class="reference internal" href="#krpc.client.services.KSA.MissionTrip" title="krpc.client.services.KSA.MissionTrip"><span class="pre">MissionTrip</span></a> <span class="sig-name descname"><span class="pre">getTrip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getTrip()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the mission comes back.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getStay()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStay</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getStay()" title="Link to this definition">#</a></dt>
+<dd><p>The time planned at the destination, in seconds.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game rounds a stay before a return up to the next transfer window home. See
+<a class="reference internal" href="#krpc.client.services.KSA.Mission.getStayTime()" title="krpc.client.services.KSA.Mission.getStayTime()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Mission.getStayTime()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getCustom()">
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCustom</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getCustom()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the mission has a length set by the player, in place of legs timed from
+its destination. See <a class="reference internal" href="#krpc.client.services.KSA.Mission.getCustomLength()" title="krpc.client.services.KSA.Mission.getCustomLength()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Mission.getCustomLength()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getCustomLength()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCustomLength</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getCustomLength()" title="Link to this definition">#</a></dt>
+<dd><p>The length of a mission with <a class="reference internal" href="#krpc.client.services.KSA.Mission.getCustom()" title="krpc.client.services.KSA.Mission.getCustom()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Mission.getCustom()</span></code></a> set, in seconds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getFeasible()">
+<span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getFeasible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getFeasible()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the game can time the legs of the mission. A mission with no destination,
+or a flyby with no way back, cannot be timed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The leg times are zero when this is false.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getOutTime()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getOutTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getOutTime()" title="Link to this definition">#</a></dt>
+<dd><p>The planned time of the way out, in seconds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getStayTime()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStayTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getStayTime()" title="Link to this definition">#</a></dt>
+<dd><p>The planned time at the destination, in seconds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getBackTime()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getBackTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getBackTime()" title="Link to this definition">#</a></dt>
+<dd><p>The planned time of the way back, in seconds. Zero for a one way trip.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getReturnWait()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getReturnWait</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getReturnWait()" title="Link to this definition">#</a></dt>
+<dd><p>The time from arriving at the destination until the next transfer window home, in
+seconds. Zero when there is no wait.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getTotalTime()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTotalTime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getTotalTime()" title="Link to this definition">#</a></dt>
+<dd><p>The planned length of the mission, in seconds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getTimeLeft()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTimeLeft</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getTimeLeft()" title="Link to this definition">#</a></dt>
+<dd><p>The time left in the mission as planned, counted from the vehicle’s launch, in
+seconds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getArrivalUT()">
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getArrivalUT</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getArrivalUT()" title="Link to this definition">#</a></dt>
+<dd><p>The universal time the vehicle arrived at the destination body, in seconds. Not a
+number until it has.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game records the arrival for a mission to another body.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Mission.getDepartureUT()">
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDepartureUT</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Mission.getDepartureUT()" title="Link to this definition">#</a></dt>
+<dd><p>The universal time the vehicle left the destination body, in seconds. Not a number
+until it has.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionDestination">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">MissionDestination</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionDestination" title="Link to this definition">#</a></dt>
+<dd><p>Where a mission goes. See <a class="reference internal" href="#krpc.client.services.KSA.Mission.getDestination()" title="krpc.client.services.KSA.Mission.getDestination()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Mission.getDestination()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionDestination.NONE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.MissionDestination" title="krpc.client.services.KSA.MissionDestination"><span class="pre">MissionDestination</span></a> <span class="sig-name descname"><span class="pre">NONE</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionDestination.NONE" title="Link to this definition">#</a></dt>
+<dd><p>No destination.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionDestination.LOW_ORBIT">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.MissionDestination" title="krpc.client.services.KSA.MissionDestination"><span class="pre">MissionDestination</span></a> <span class="sig-name descname"><span class="pre">LOW_ORBIT</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionDestination.LOW_ORBIT" title="Link to this definition">#</a></dt>
+<dd><p>A low orbit around the home body.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionDestination.BODY">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.MissionDestination" title="krpc.client.services.KSA.MissionDestination"><span class="pre">MissionDestination</span></a> <span class="sig-name descname"><span class="pre">BODY</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionDestination.BODY" title="Link to this definition">#</a></dt>
+<dd><p>Another body, given by <a class="reference internal" href="#krpc.client.services.KSA.Mission.getBody()" title="krpc.client.services.KSA.Mission.getBody()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Mission.getBody()</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionArrival">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">MissionArrival</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionArrival" title="Link to this definition">#</a></dt>
+<dd><p>What a mission does at its destination. See <a class="reference internal" href="#krpc.client.services.KSA.Mission.getArrival()" title="krpc.client.services.KSA.Mission.getArrival()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Mission.getArrival()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionArrival.FLYBY">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.MissionArrival" title="krpc.client.services.KSA.MissionArrival"><span class="pre">MissionArrival</span></a> <span class="sig-name descname"><span class="pre">FLYBY</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionArrival.FLYBY" title="Link to this definition">#</a></dt>
+<dd><p>Flies past it.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionArrival.ORBIT">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.MissionArrival" title="krpc.client.services.KSA.MissionArrival"><span class="pre">MissionArrival</span></a> <span class="sig-name descname"><span class="pre">ORBIT</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionArrival.ORBIT" title="Link to this definition">#</a></dt>
+<dd><p>Orbits it.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionArrival.LAND">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.MissionArrival" title="krpc.client.services.KSA.MissionArrival"><span class="pre">MissionArrival</span></a> <span class="sig-name descname"><span class="pre">LAND</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionArrival.LAND" title="Link to this definition">#</a></dt>
+<dd><p>Lands on it.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionTrip">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">MissionTrip</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionTrip" title="Link to this definition">#</a></dt>
+<dd><p>Whether a mission comes back. See <a class="reference internal" href="#krpc.client.services.KSA.Mission.getTrip()" title="krpc.client.services.KSA.Mission.getTrip()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Mission.getTrip()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionTrip.RETURN">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.MissionTrip" title="krpc.client.services.KSA.MissionTrip"><span class="pre">MissionTrip</span></a> <span class="sig-name descname"><span class="pre">RETURN</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionTrip.RETURN" title="Link to this definition">#</a></dt>
+<dd><p>Goes and comes back.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionTrip.ONE_WAY">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.MissionTrip" title="krpc.client.services.KSA.MissionTrip"><span class="pre">MissionTrip</span></a> <span class="sig-name descname"><span class="pre">ONE_WAY</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionTrip.ONE_WAY" title="Link to this definition">#</a></dt>
+<dd><p>Goes and stays.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionLeg">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">MissionLeg</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionLeg" title="Link to this definition">#</a></dt>
+<dd><p>A leg of a mission. See <a class="reference internal" href="#krpc.client.services.KSA.HabitatZone.plannedKittens(MissionLeg)" title="krpc.client.services.KSA.HabitatZone.plannedKittens(MissionLeg)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">HabitatZone.plannedKittens(MissionLeg)</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionLeg.OUT">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.MissionLeg" title="krpc.client.services.KSA.MissionLeg"><span class="pre">MissionLeg</span></a> <span class="sig-name descname"><span class="pre">OUT</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionLeg.OUT" title="Link to this definition">#</a></dt>
+<dd><p>The way out.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionLeg.STAY">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.MissionLeg" title="krpc.client.services.KSA.MissionLeg"><span class="pre">MissionLeg</span></a> <span class="sig-name descname"><span class="pre">STAY</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionLeg.STAY" title="Link to this definition">#</a></dt>
+<dd><p>The stay at the destination.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionLeg.BACK">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.MissionLeg" title="krpc.client.services.KSA.MissionLeg"><span class="pre">MissionLeg</span></a> <span class="sig-name descname"><span class="pre">BACK</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionLeg.BACK" title="Link to this definition">#</a></dt>
+<dd><p>The way back.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionSupplies">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">MissionSupplies</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionSupplies" title="Link to this definition">#</a></dt>
+<dd><p>Whether the supplies of a habitat zone last its crew through the vehicle’s mission, as
+the life support window shows it. Obtained from <a class="reference internal" href="#krpc.client.services.KSA.HabitatZone.getMissionSupplies()" title="krpc.client.services.KSA.HabitatZone.getMissionSupplies()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">HabitatZone.getMissionSupplies()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The check takes the legs left in the mission as planned, counted from the vehicle’s
+launch, and the kittens planned for each leg. The times are from now.</p>
+</div>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionSupplies.getVerdict()">
+<a class="reference internal" href="#krpc.client.services.KSA.MissionSupplyVerdict" title="krpc.client.services.KSA.MissionSupplyVerdict"><span class="pre">MissionSupplyVerdict</span></a> <span class="sig-name descname"><span class="pre">getVerdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MissionSupplies.getVerdict()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the supplies last the mission.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionSupplies.getShortBy()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getShortBy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MissionSupplies.getShortBy()" title="Link to this definition">#</a></dt>
+<dd><p>The time by which the first supply to run out falls short of the end of the
+mission, in seconds. Zero when the supplies last.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionSupplies.getFirstSupply()">
+<a class="reference internal" href="#krpc.client.services.KSA.LifeSupportSupply" title="krpc.client.services.KSA.LifeSupportSupply"><span class="pre">LifeSupportSupply</span></a> <span class="sig-name descname"><span class="pre">getFirstSupply</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MissionSupplies.getFirstSupply()" title="Link to this definition">#</a></dt>
+<dd><p>The supply that runs out first.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionSupplies.timeLeft(LifeSupportSupply)">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">timeLeft</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.KSA.LifeSupportSupply" title="krpc.client.services.KSA.LifeSupportSupply"><span class="pre">LifeSupportSupply</span></a><em> <span class="pre">supply</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MissionSupplies.timeLeft(LifeSupportSupply)" title="Link to this definition">#</a></dt>
+<dd><p>The time until a supply runs out with the crew planned for each leg, in seconds.
+Infinite if it lasts the mission.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>supply</strong> (<span><a class="reference internal" href="#krpc.client.services.KSA.LifeSupportSupply" title="krpc.client.services.KSA.LifeSupportSupply"><code class="xref java java-type docutils literal notranslate"><span class="pre">LifeSupportSupply</span></code></a></span>) – The supply.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Air lasts while the vehicle is in breathable air.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionSupplies.getEnd()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getEnd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.MissionSupplies.getEnd()" title="Link to this definition">#</a></dt>
+<dd><p>The time until the zone has no crew left in the mission, in seconds.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionSupplyVerdict">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">MissionSupplyVerdict</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionSupplyVerdict" title="Link to this definition">#</a></dt>
+<dd><p>Whether a habitat zone has the supplies for a mission. See <a class="reference internal" href="#krpc.client.services.KSA.MissionSupplies.getVerdict()" title="krpc.client.services.KSA.MissionSupplies.getVerdict()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">MissionSupplies.getVerdict()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionSupplyVerdict.UNUSED">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.MissionSupplyVerdict" title="krpc.client.services.KSA.MissionSupplyVerdict"><span class="pre">MissionSupplyVerdict</span></a> <span class="sig-name descname"><span class="pre">UNUSED</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionSupplyVerdict.UNUSED" title="Link to this definition">#</a></dt>
+<dd><p>The zone has no crew during the mission.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionSupplyVerdict.ENOUGH">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.MissionSupplyVerdict" title="krpc.client.services.KSA.MissionSupplyVerdict"><span class="pre">MissionSupplyVerdict</span></a> <span class="sig-name descname"><span class="pre">ENOUGH</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionSupplyVerdict.ENOUGH" title="Link to this definition">#</a></dt>
+<dd><p>The supplies last the mission.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.MissionSupplyVerdict.SHORT">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.MissionSupplyVerdict" title="krpc.client.services.KSA.MissionSupplyVerdict"><span class="pre">MissionSupplyVerdict</span></a> <span class="sig-name descname"><span class="pre">SHORT</span></span><a class="headerlink" href="#krpc.client.services.KSA.MissionSupplyVerdict.SHORT" title="Link to this definition">#</a></dt>
+<dd><p>A supply runs out before the end of the mission.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Habitat">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Habitat</span></span><a class="headerlink" href="#krpc.client.services.KSA.Habitat" title="Link to this definition">#</a></dt>
+<dd><p>A habitable or storage space in a part, which holds meals and carbon dioxide scrubber
+canisters. Obtained from <a class="reference internal" href="parts.html#krpc.client.services.KSA.Part.getHabitats()" title="krpc.client.services.KSA.Part.getHabitats()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getHabitats()</span></code></a>.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Habitat.getPart()">
+<a class="reference internal" href="parts.html#krpc.client.services.KSA.Part" title="krpc.client.services.KSA.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Habitat.getPart()" title="Link to this definition">#</a></dt>
+<dd><p>The part the habitat is in.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Habitat.getZone()">
+<a class="reference internal" href="#krpc.client.services.KSA.HabitatZone" title="krpc.client.services.KSA.HabitatZone"><span class="pre">HabitatZone</span></a> <span class="sig-name descname"><span class="pre">getZone</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Habitat.getZone()" title="Link to this definition">#</a></dt>
+<dd><p>The habitat zone the habitat is in.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Habitat.getHabitableVolume()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getHabitableVolume</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Habitat.getHabitableVolume()" title="Link to this definition">#</a></dt>
+<dd><p>The volume the crew can live in, in cubic meters.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Habitat.getStorageVolume()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStorageVolume</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Habitat.getStorageVolume()" title="Link to this definition">#</a></dt>
+<dd><p>The volume for stored supplies, in cubic meters.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Habitat.getMeals()">
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getMeals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Habitat.getMeals()" title="Link to this definition">#</a></dt>
+<dd><p>The number of meals in the habitat.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Habitat.getCanisters()">
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getCanisters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Habitat.getCanisters()" title="Link to this definition">#</a></dt>
+<dd><p>The number of carbon dioxide scrubber canisters in the habitat.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Habitat.getMealCapacity()">
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getMealCapacity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Habitat.getMealCapacity()" title="Link to this definition">#</a></dt>
+<dd><p>The number of meals the habitat holds when full.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Habitat.getCanisterCapacity()">
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getCanisterCapacity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Habitat.getCanisterCapacity()" title="Link to this definition">#</a></dt>
+<dd><p>The number of carbon dioxide scrubber canisters the habitat holds when full.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Habitat.transfer(Habitat, int, int)">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">transfer</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.KSA.Habitat" title="krpc.client.services.KSA.Habitat"><span class="pre">Habitat</span></a><em> <span class="pre">to</span></em>, <span class="pre">int</span><em> <span class="pre">meals</span></em>, <span class="pre">int</span><em> <span class="pre">canisters</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Habitat.transfer(Habitat, int, int)" title="Link to this definition">#</a></dt>
+<dd><p>Moves meals and canisters to another habitat in the same zone. Moves fewer when
+this habitat holds fewer, or the other has less room.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>to</strong> (<span><a class="reference internal" href="#krpc.client.services.KSA.Habitat" title="krpc.client.services.KSA.Habitat"><code class="xref java java-type docutils literal notranslate"><span class="pre">Habitat</span></code></a></span>) – The habitat to move the supplies to.</p></li>
+<li><p><strong>meals</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The number of meals to move.</p></li>
+<li><p><strong>canisters</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The number of canisters to move.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A kitten in the zone moves the supplies. Throws an exception if life support is
+disabled, the habitats are in different zones, or the zone has no crew able to
+move them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="crew.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Crew</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="body.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Body</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/java/api/ksa/life-support.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026 kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

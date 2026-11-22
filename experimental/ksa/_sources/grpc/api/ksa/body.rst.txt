@@ -95,8 +95,8 @@ Body
 
    .. grpc:rpc:: GetScaleHeight (Body.GetScaleHeightRequest) returns (Body.GetScaleHeightResponse)
 
-      The height over which the atmospheric pressure falls by a factor of ``e``, in
-      meters. Zero for a body with no atmosphere.
+      The height over which the atmospheric pressure falls by a factor of ``e`` at
+      sea level, in meters. Zero for a body with no atmosphere.
 
       :Body.GetScaleHeightRequest:
          * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
@@ -125,6 +125,48 @@ Body
 
       :Body.DensityAtResponse: ``value`` (``float``)
 
+   .. grpc:rpc:: TemperatureAt (Body.TemperatureAtRequest) returns (Body.TemperatureAtResponse)
+
+      The temperature of the atmosphere at an altitude, in kelvin. Zero for a body with
+      no atmosphere, or above the atmosphere.
+
+      :Body.TemperatureAtRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``altitude`` (``double``): Altitude above the body's mean radius, in meters.
+
+      :Body.TemperatureAtResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: SpeedOfSoundAt (Body.SpeedOfSoundAtRequest) returns (Body.SpeedOfSoundAtResponse)
+
+      The speed of sound in the atmosphere at an altitude, in meters per second. Zero for
+      a body with no atmosphere, or above the atmosphere.
+
+      :Body.SpeedOfSoundAtRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``altitude`` (``double``): Altitude above the body's mean radius, in meters.
+
+      :Body.SpeedOfSoundAtResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetAtmosphereOxygenFraction (Body.GetAtmosphereOxygenFractionRequest) returns (Body.GetAtmosphereOxygenFractionResponse)
+
+      The fraction of the atmosphere that is oxygen, by volume. Zero for a body with no
+      atmosphere.
+
+      :Body.GetAtmosphereOxygenFractionRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetAtmosphereOxygenFractionResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetAtmosphereMolarMass (Body.GetAtmosphereMolarMassRequest) returns (Body.GetAtmosphereMolarMassResponse)
+
+      The mean molar mass of the atmosphere, in kilograms per mole. Zero for a body with
+      no atmosphere.
+
+      :Body.GetAtmosphereMolarMassRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetAtmosphereMolarMassResponse: ``value`` (``float``)
+
    .. grpc:rpc:: GetHasOcean (Body.GetHasOceanRequest) returns (Body.GetHasOceanResponse)
 
       Whether the body has an ocean.
@@ -143,6 +185,87 @@ Body
          * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
 
       :Body.GetOceanDensityResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetGeomagneticStormLevel (Body.GetGeomagneticStormLevelRequest) returns (Body.GetGeomagneticStormLevelResponse)
+
+      The level of the geomagnetic storm at the body, from 0 for none to 5 for the most
+      severe. The G level of the game's space weather window. Zero for a body with no
+      magnetosphere.
+
+      :Body.GetGeomagneticStormLevelRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetGeomagneticStormLevelResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetDstIndex (Body.GetDstIndexRequest) returns (Body.GetDstIndexResponse)
+
+      The disturbance storm time index of the body, in teslas. It falls below zero in a
+      geomagnetic storm. Zero for a body with no magnetosphere.
+
+      :Body.GetDstIndexRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetDstIndexResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSolarActivity (Body.GetSolarActivityRequest) returns (Body.GetSolarActivityResponse)
+
+      The activity of a star, from 0 at the minimum of its cycle to 1 at the maximum.
+      Zero for a body that is not a star.
+
+      :Body.GetSolarActivityRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetSolarActivityResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSolarActivityRising (Body.GetSolarActivityRisingRequest) returns (Body.GetSolarActivityRisingResponse)
+
+      Whether the activity of a star is rising toward the maximum of its cycle.
+      False for a body that is not a star, or a star with no cycle.
+
+      :Body.GetSolarActivityRisingRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetSolarActivityRisingResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetTimeToSolarActivityTurn (Body.GetTimeToSolarActivityTurnRequest) returns (Body.GetTimeToSolarActivityTurnResponse)
+
+      The time until the activity of a star reaches the maximum or minimum of its cycle,
+      in seconds. Not a number for a body that is not a star, or a star with no cycle.
+
+      :Body.GetTimeToSolarActivityTurnRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetTimeToSolarActivityTurnResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetCoronalMassEjectionsPerDay (Body.GetCoronalMassEjectionsPerDayRequest) returns (Body.GetCoronalMassEjectionsPerDayResponse)
+
+      The mean number of coronal mass ejections a star throws out per day, at its
+      current activity. Zero for a body that is not a star.
+
+      :Body.GetCoronalMassEjectionsPerDayRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetCoronalMassEjectionsPerDayResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetActiveRegionCount (Body.GetActiveRegionCountRequest) returns (Body.GetActiveRegionCountResponse)
+
+      The number of active regions on a star, the sources of its eruptions. Zero for a
+      body that is not a star.
+
+      :Body.GetActiveRegionCountRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetActiveRegionCountResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetRecentCoronalMassEjections (Body.GetRecentCoronalMassEjectionsRequest) returns (Body.GetRecentCoronalMassEjectionsResponse)
+
+      The fast coronal mass ejections a star threw out in the last three days, as the
+      game's space weather window lists them. Empty for a body that is not a star.
+
+      :Body.GetRecentCoronalMassEjectionsRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetRecentCoronalMassEjectionsResponse: ``value`` (``repeated`` :grpc:service:`CoronalMassEjection <krpc.ksa.CoronalMassEjectionService>`)
 
    .. grpc:rpc:: GetSurfaceGravity (Body.GetSurfaceGravityRequest) returns (Body.GetSurfaceGravityResponse)
 

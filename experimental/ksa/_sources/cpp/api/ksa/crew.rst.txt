@@ -41,6 +41,12 @@ Crew
 
    
 
+   .. function:: std::optional<DeathCause> cause_of_death()
+
+      What killed the kitten, or ``NULL`` if it is alive.
+
+   
+
    .. function:: int32_t mission_count()
 
       The number of missions the kitten has flown, including the current one.
@@ -93,6 +99,31 @@ Crew
 
    
 
+   .. function:: float time_to_radiation_sickness()
+
+      The time until the kitten gets radiation sickness at its current dose rate, in
+      seconds. Infinite if it never does, or the kitten already has it.
+
+   
+
+      .. note::
+
+         The game forecasts it for a kitten on a mission while
+         :func:`radiation_enabled` is true.
+
+   .. function:: float time_to_lethal_dose()
+
+      The time until the kitten takes a lethal radiation dose at its current dose rate, in
+      seconds. Infinite if it never does.
+
+   
+
+      .. note::
+
+         The game forecasts it for a kitten on a mission while
+         :func:`radiation_enabled` is true, and only within a day of radiation
+         sickness.
+
    .. function:: float time_until_fit_to_fly()
 
       The time until the kitten has recovered from radiation sickness and can fly, resting
@@ -110,6 +141,51 @@ Crew
    .. function:: bool retired()
 
       Whether the kitten has retired, having reached its lifetime radiation dose limit.
+
+   
+
+   .. function:: KittenCondition worst_condition()
+
+      The kitten's worst condition across its supplies.
+
+   
+
+   .. function:: KittenCondition condition(LifeSupportSupply supply)
+
+      The effect on the kitten of going without a supply.
+
+      :Parameters:
+
+       * **supply** -- The supply.
+
+   
+
+   .. function:: float time_without(LifeSupportSupply supply)
+
+      The time the kitten has gone without a supply, in seconds. It counts down again
+      once the supply returns.
+
+      :Parameters:
+
+       * **supply** -- The supply.
+
+   
+
+   .. function:: float time_to_next_condition(LifeSupportSupply supply)
+
+      The further time the kitten can go without a supply before its condition from the
+      supply worsens, in seconds. Infinite once the kitten is dead.
+
+      :Parameters:
+
+       * **supply** -- The supply.
+
+   
+
+   .. function:: bool incapacitated()
+
+      Whether the kitten is incapacitated by going without a supply. An incapacitated
+      kitten cannot fly the vehicle or move supplies.
 
    
 
@@ -131,6 +207,12 @@ Crew
 
          Throws an exception if the kitten is not in a seat, or the vehicle has no EVA hatch.
 
+   .. function:: bool can_go_on_eva()
+
+      Whether the kitten can go on EVA. See :func:`Kitten::go_on_eva`.
+
+   
+
    .. function:: Vehicle board()
 
       Board the nearest vehicle with a free seat, and return once the kitten is in the
@@ -144,6 +226,13 @@ Crew
 
          Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
          within one meter.
+
+   .. function:: bool can_board()
+
+      Whether the kitten is on EVA and an EVA hatch with a free seat is in range. See
+      :func:`Kitten::board`.
+
+   
 
    .. function:: LocomotionMode locomotion_mode()
 
@@ -173,6 +262,83 @@ Crew
        * **reference_frame** -- The reference frame of the velocity.
 
    
+
+   .. function:: std::optional<LifeSupport> life_support()
+
+      How long the supplies in the kitten's suit last, or ``NULL`` if the kitten is
+      not on EVA.
+
+   
+
+      .. note::
+
+         The suit is filled from the kitten's habitat zone when it goes on EVA, and what is
+         left returns to the zone when it boards.
+
+   .. function:: int32_t carried_meals()
+
+      The number of meals the kitten on EVA carries. Throws an exception if the kitten is
+      not on EVA.
+
+   
+
+   .. function:: int32_t carried_canisters()
+
+      The number of carbon dioxide scrubber canisters the kitten on EVA carries. Throws an
+      exception if the kitten is not on EVA.
+
+   
+
+   .. function:: bool can_carry(Habitat habitat)
+
+      Whether the kitten can take supplies from or stow them in a habitat. See
+      :func:`Kitten::take` and :func:`Kitten::stow`.
+
+      :Parameters:
+
+       * **habitat** -- The habitat.
+
+   
+
+   .. function:: void take(Habitat habitat, int32_t meals = 0, int32_t canisters = 0)
+
+      Take meals and canisters from a habitat within reach, and return once the kitten
+      carries them. Takes fewer when the habitat holds fewer, or the kitten cannot carry
+      more.
+
+      :Parameters:
+
+       * **habitat** -- The habitat, which must store supplies.
+       * **meals** -- The number of meals to take.
+       * **canisters** -- The number of canisters to take.
+
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA or is unwell, life support is
+         disabled, or the habitat stores no supplies or is out of reach. See
+         :func:`Kitten::can_carry`.
+
+   .. function:: void stow(Habitat habitat, int32_t meals = 0, int32_t canisters = 0)
+
+      Stow the meals and canisters the kitten carries in a habitat within reach, and
+      return once they are stowed. Stows fewer when the kitten carries fewer, or the
+      habitat has less room.
+
+      :Parameters:
+
+       * **habitat** -- The habitat, which must store supplies.
+       * **meals** -- The number of meals to stow.
+       * **canisters** -- The number of canisters to stow.
+
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA or is unwell, life support is
+         disabled, or the habitat stores no supplies or is out of reach. See
+         :func:`Kitten::can_carry`.
 
 
 
@@ -218,6 +384,219 @@ Crew
 
 
 
+.. namespace:: krpc::services::KSA
+.. enum-struct:: KittenCondition
+
+   The effect on a kitten of going without a supply. See :func:`Kitten::condition`.
+
+
+   .. enumerator:: healthy
+
+      Unaffected.
+
+
+   .. enumerator:: warning
+
+      Going without, with no effect yet.
+
+
+   .. enumerator:: degraded
+
+      Weakened, and unable to go on EVA.
+
+
+   .. enumerator:: incapacitated
+
+      Unable to fly the vehicle or move supplies.
+
+
+   .. enumerator:: dead
+
+      Dead.
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: DeathCause
+
+   What killed a kitten. See :func:`Kitten::cause_of_death`.
+
+
+   .. enumerator:: unknown
+
+      Not recorded.
+
+
+   .. enumerator:: no_oxygen
+
+      Lack of oxygen.
+
+
+   .. enumerator:: no_scrubber
+
+      Carbon dioxide, with no scrubber canisters left.
+
+
+   .. enumerator:: no_water
+
+      Lack of water.
+
+
+   .. enumerator:: no_food
+
+      Lack of food.
+
+
+   .. enumerator:: radiation
+
+      A lethal radiation dose.
+
+
+   .. enumerator:: ground_impact
+
+      Hitting the ground.
+
+
+   .. enumerator:: ocean_impact
+
+      Hitting the ocean.
+
+
+   .. enumerator:: collision
+
+      A collision.
+
+
+   .. enumerator:: excessive_g_force
+
+      Excessive acceleration.
+
+
+   .. enumerator:: aerodynamic_forces
+
+      Aerodynamic forces breaking up the vehicle.
+
+
+   .. enumerator:: hydrodynamic_forces
+
+      Hydrodynamic forces breaking up the vehicle.
+
+
+   .. enumerator:: fall
+
+      A fall on EVA.
+
+
+   .. enumerator:: abandoned
+
+      Left in a vehicle that was abandoned.
+
+
+
+.. class:: CrewEvent
+
+   A kitten's most urgent coming event: its supplies running low, or its condition
+   worsening. Obtained from :func:`Vehicle::crew_events` or
+   :func:`Vehicle::next_crew_event`.
+
+   .. note::
+
+      As the game's crew clock, an event within a day is the worst stage the kitten reaches
+      in that time, and a later event is the soonest. The event is the game's forecast when it
+      is read from the vehicle. Read it again for a new forecast.
+
+   .. function:: Kitten kitten()
+
+      The kitten.
+
+   
+
+   .. function:: CrewStage stage()
+
+      What happens to the kitten.
+
+   
+
+   .. function:: CrewHazard hazard()
+
+      The cause of the event.
+
+   
+
+   .. function:: double ut()
+
+      The universal time of the event, in seconds.
+
+   
+
+   .. function:: float time_to()
+
+      The time until the event, in seconds. Zero once its time has passed.
+
+   
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: CrewStage
+
+   What happens to a kitten in a crew event. See :func:`CrewEvent::stage`.
+
+
+   .. enumerator:: low
+
+      The supply runs low.
+
+
+   .. enumerator:: degraded
+
+      The kitten is weakened, and unable to go on EVA. For radiation, the kitten gets
+      radiation sickness.
+
+
+   .. enumerator:: incapacitated
+
+      The kitten is unable to fly the vehicle or move supplies.
+
+
+   .. enumerator:: dead
+
+      The kitten dies.
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: CrewHazard
+
+   The cause of a crew event. See :func:`CrewEvent::hazard`.
+
+
+   .. enumerator:: air
+
+      Running out of air.
+
+
+   .. enumerator:: scrubber
+
+      Running out of carbon dioxide scrubber.
+
+
+   .. enumerator:: water
+
+      Running out of water.
+
+
+   .. enumerator:: food
+
+      Running out of food.
+
+
+   .. enumerator:: radiation
+
+      The radiation dose.
+
+
+
 .. class:: Seat
 
    A crew seat. Obtained from :func:`Part::seats`.
@@ -238,5 +617,6 @@ Crew
 
       .. note::
 
-         A kitten in another seat of the vehicle moves to this one. Throws an exception if
-         the kitten is killed in action, on EVA, or in another vehicle.
+         A kitten in another seat of the vehicle moves to this one, within its habitat zone.
+         Throws an exception if the kitten is killed in action, retired, on EVA, in another
+         vehicle, or incapacitated, or the seat is in another habitat zone.

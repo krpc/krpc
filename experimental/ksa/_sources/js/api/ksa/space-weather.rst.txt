@@ -1,0 +1,64 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Space Weather
+=============
+
+
+.. class:: CoronalMassEjection
+
+   A coronal mass ejection: a cloud of plasma thrown out by a star. One that reaches a body
+   with a magnetosphere can cause a geomagnetic storm. See
+   :meth:`KSA.Body.getRecentCoronalMassEjections` and
+   :meth:`KSA.Flight.getIncomingCoronalMassEjections`.
+
+   .. method:: getStar()
+
+      The star that threw out the ejection.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Body`
+   
+
+   .. method:: getUT()
+
+      The universal time at which the ejection left the star, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSpeed()
+
+      The speed of the ejection as it leaves the star, in :math:`\mathrm{m/s}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: arrivalTime(vehicle)
+
+      The universal time at which the shock of the ejection is forecast to reach the
+      vehicle, in seconds. Not a number if the ejection misses the vehicle, or has
+      already reached it.
+
+      :param vehicle: The vehicle.
+      :type vehicle: :class:`KSA.Vehicle`
+      :rtype: ``number``
+   
+
+      .. note::
+
+         The forecast the game's space weather window shows. It is uncertain by up to
+         :meth:`KSA.CoronalMassEjection.arrivalUncertainty`, which shrinks as the ejection nears.
+
+   .. method:: arrivalUncertainty(vehicle)
+
+      The uncertainty of :meth:`KSA.CoronalMassEjection.arrivalTime`, in seconds. Not a number if the
+      ejection misses the vehicle, or has already reached it.
+
+      :param vehicle: The vehicle.
+      :type vehicle: :class:`KSA.Vehicle`
+      :rtype: ``number``

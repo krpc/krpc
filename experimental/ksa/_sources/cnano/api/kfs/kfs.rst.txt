@@ -1,0 +1,44 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Service
+=======
+
+
+Provides access to kFS, the game's flight software: programs that run on a vehicle's
+flight computer.
+
+.. note::
+
+   kFS is a prototype in the game, and is off until it is turned on, by setting
+   :func:`krpc_KFS_Available` or with the game's ``kfs on`` console command. This service
+   follows the prototype, and changes with it.
+
+
+
+.. function:: krpc_error_t krpc_KFS_Available(krpc_connection_t connection, bool * returnValue)
+.. function:: krpc_error_t krpc_KFS_set_Available(krpc_connection_t connection, bool value)
+
+   Returns whether kFS is on, and turns it on or off.
+
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      Turning it off stops every program, and gives each vehicle back to the pilot, as the
+      game's ``kfs off`` console command does.
+
+
+
+
+.. function:: krpc_error_t krpc_KFS_Computer(krpc_connection_t connection, krpc_KFS_Computer_t * returnValue, krpc_KSA_Vehicle_t vehicle)
+
+   The flight computer of a vehicle. Throws an exception if kFS is off.
+
+   :Parameters:
+
+    * **vehicle** -- The vehicle.
+
+   :Game Scenes: Flight

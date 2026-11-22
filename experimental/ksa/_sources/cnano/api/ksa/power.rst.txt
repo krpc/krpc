@@ -10,6 +10,10 @@ Power
 
    A battery, which stores electrical energy. Obtained from :func:`krpc_KSA_Part_Batteries`.
 
+   .. macro:: KRPC_CLASS_KSA_BATTERY
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Battery_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Battery_t instance)
 
       The part the battery is in.
@@ -33,6 +37,10 @@ Power
 .. type:: krpc_KSA_SolarPanel_t
 
    A solar panel, which turns sunlight into electrical power. Obtained from :func:`krpc_KSA_Part_SolarPanels`.
+
+   .. macro:: KRPC_CLASS_KSA_SOLARPANEL
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_SolarPanel_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_SolarPanel_t instance)
 
@@ -83,6 +91,10 @@ Power
       A generator runs while its :func:`krpc_KSA_Generator_Engine` is active, and produces power in
       proportion to the engine's throttle.
 
+   .. macro:: KRPC_CLASS_KSA_GENERATOR
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Generator_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Generator_t instance)
 
       The part the generator is in.
@@ -114,6 +126,10 @@ Power
    A power consumer, which uses electrical power, such as a light. Obtained from
    :func:`krpc_KSA_Part_PowerConsumers`.
 
+   .. macro:: KRPC_CLASS_KSA_POWERCONSUMER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_PowerConsumer_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_PowerConsumer_t instance)
 
       The part the power consumer is in.
@@ -132,6 +148,252 @@ Power
 
    
 
+   .. function:: krpc_error_t krpc_KSA_PowerConsumer_HasPowerSwitch(krpc_connection_t connection, bool * returnValue, krpc_KSA_PowerConsumer_t instance)
+
+      Whether the part has a power switch, as a probe core does.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_PowerConsumer_Mode(krpc_connection_t connection, krpc_KSA_PowerMode_t * returnValue, krpc_KSA_PowerConsumer_t instance)
+   .. function:: krpc_error_t krpc_KSA_PowerConsumer_set_Mode(krpc_connection_t connection, krpc_KSA_PowerConsumer_t instance, krpc_KSA_PowerMode_t value)
+
+      The setting of the power switch.
+
+   
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+   .. function:: krpc_error_t krpc_KSA_PowerConsumer_StandbyInStorms(krpc_connection_t connection, bool * returnValue, krpc_KSA_PowerConsumer_t instance)
+   .. function:: krpc_error_t krpc_KSA_PowerConsumer_set_StandbyInStorms(krpc_connection_t connection, krpc_KSA_PowerConsumer_t instance, bool value)
+
+      Whether the part goes on standby, drawing no power, while a radiation storm is under
+      way at the vehicle.
+
+   
+
+      .. note::
+
+         The game takes a storm of level 1 or worse on the S scale, as
+         :func:`krpc_KSA_Flight_RadiationStormLevel` gives. Throws an exception if the part has
+         no power switch.
+
+   .. function:: krpc_error_t krpc_KSA_PowerConsumer_Status(krpc_connection_t connection, krpc_KSA_PowerStatus_t * returnValue, krpc_KSA_PowerConsumer_t instance)
+
+      The power status of the part.
+
+   
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+
+
+.. type:: krpc_KSA_PowerMode_t
+
+   The setting of a power switch. See :func:`krpc_KSA_PowerConsumer_Mode`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_POWERMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_POWERMODE_OFF
+
+      Switched off.
+
+
+   .. macro:: KRPC_KSA_POWERMODE_AUTO
+
+      On standby while another control module flies the vehicle, and on when none can.
+
+
+   .. macro:: KRPC_KSA_POWERMODE_ON
+
+      Switched on.
+
+
+
+.. type:: krpc_KSA_PowerStatus_t
+
+   The power status of a part with a power switch. See :func:`krpc_KSA_PowerConsumer_Status`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_POWERSTATUS
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_POWERSTATUS_OFF
+
+      Switched off.
+
+
+   .. macro:: KRPC_KSA_POWERSTATUS_STANDBY
+
+      On standby, while another control module flies the vehicle or a radiation storm is under way.
+
+
+   .. macro:: KRPC_KSA_POWERSTATUS_REBOOTING
+
+      Rebooting after a radiation upset.
+
+
+   .. macro:: KRPC_KSA_POWERSTATUS_ON
+
+      On, with power.
+
+
+   .. macro:: KRPC_KSA_POWERSTATUS_LOW
+
+      On, with power for less than five minutes.
+
+
+   .. macro:: KRPC_KSA_POWERSTATUS_OUT
+
+      Out of power.
+
+
+   .. macro:: KRPC_KSA_POWERSTATUS_FAILED
+
+      Failed from its radiation dose.
+
+
+
+.. type:: krpc_KSA_PowerForecast_t
+
+   The charge, draw and supply of the electrical circuit a part is on, and how long its
+   batteries last. Obtained from :func:`krpc_KSA_Part_PowerForecast`.
+
+   .. note::
+
+      A circuit is the parts joined by connections that carry electricity. This is the
+      forecast the game shows for a probe core.
+
+   .. macro:: KRPC_CLASS_KSA_POWERFORECAST
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_KSA_PowerForecast_HasBattery(krpc_connection_t connection, bool * returnValue, krpc_KSA_PowerForecast_t instance)
+
+      Whether the circuit has a battery.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_PowerForecast_Charge(krpc_connection_t connection, float * returnValue, krpc_KSA_PowerForecast_t instance)
+
+      The energy stored in the circuit's batteries, in joules.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_PowerForecast_Draw(krpc_connection_t connection, float * returnValue, krpc_KSA_PowerForecast_t instance)
+
+      The power the parts on the circuit draw, in watts.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_PowerForecast_Supply(krpc_connection_t connection, float * returnValue, krpc_KSA_PowerForecast_t instance)
+
+      The power the solar panels and generators on the circuit supply, in watts.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_PowerForecast_TimeLeft(krpc_connection_t connection, float * returnValue, krpc_KSA_PowerForecast_t instance)
+
+      The time until the batteries run out, in seconds. Infinite while the supply meets
+      the draw, and zero when the batteries are empty or there are none.
+
+   
+
+
+
+.. type:: krpc_KSA_Avionics_t
+
+   The avionics of a probe core, which radiation wears out and upsets. Obtained from
+   :func:`krpc_KSA_Part_Avionics` or :func:`krpc_KSA_Vehicle_Avionics`.
+
+   .. note::
+
+      The avionics take a dose only while :func:`krpc_KSA_RadiationEnabled` is true. Switched
+      off or on standby, they take half the dose and no upsets.
+
+   .. macro:: KRPC_CLASS_KSA_AVIONICS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_KSA_Avionics_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Avionics_t instance)
+
+      The part the avionics are in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Avionics_Health(krpc_connection_t connection, krpc_KSA_AvionicsHealth_t * returnValue, krpc_KSA_Avionics_t instance)
+
+      The health of the avionics.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Avionics_Dose(krpc_connection_t connection, float * returnValue, krpc_KSA_Avionics_t instance)
+
+      The radiation dose the avionics have taken, in grays of silicon.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Avionics_Tolerance(krpc_connection_t connection, float * returnValue, krpc_KSA_Avionics_t instance)
+
+      The dose at which the avionics fail, in grays of silicon.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Avionics_DoseRate(krpc_connection_t connection, float * returnValue, krpc_KSA_Avionics_t instance)
+
+      The rate at which the avionics take a dose, in grays of silicon per second,
+      averaged over about an hour. Not a number until the avionics have taken a dose.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Avionics_TimeLeft(krpc_connection_t connection, float * returnValue, krpc_KSA_Avionics_t instance)
+
+      The time until the avionics fail at :func:`krpc_KSA_Avionics_DoseRate`, in seconds. Infinite
+      while they take no dose, and zero once they have failed.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Avionics_Rebooting(krpc_connection_t connection, bool * returnValue, krpc_KSA_Avionics_t instance)
+
+      Whether the avionics are rebooting after a radiation upset.
+
+   
+
+
+
+.. type:: krpc_KSA_AvionicsHealth_t
+
+   The health of avionics. See :func:`krpc_KSA_Avionics_Health`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_AVIONICSHEALTH
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_AVIONICSHEALTH_OK
+
+      Working.
+
+
+   .. macro:: KRPC_KSA_AVIONICSHEALTH_WORN
+
+      Working, with a dose of at least four fifths of the tolerance.
+
+
+   .. macro:: KRPC_KSA_AVIONICSHEALTH_FAILED
+
+      Failed for good, at the tolerance.
+
 
 
 .. type:: krpc_KSA_Light_t
@@ -142,6 +404,10 @@ Power
 
       The vehicle's lights switch on and off together, see :func:`krpc_KSA_Control_Lights`.
       Cabin lights are always on.
+
+   .. macro:: KRPC_CLASS_KSA_LIGHT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Light_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Light_t instance)
 

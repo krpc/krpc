@@ -8,19 +8,18 @@ Camera
 
 .. class:: Camera
 
-   The game's main camera. Obtained from :attr:`KSA.camera <KSA.KSA.camera>`.
+   The game's main camera. Obtained from :attr:`KSA.camera`.
 
    .. attribute:: mode: KSA.CameraMode
 
       The mode of the camera.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.CameraMode`
 
       .. note::
 
-         Setting :attr:`KSA.CameraMode.iva` while the camera is not focused on a vehicle
-         with a crew seat sets :attr:`KSA.CameraMode.orbit` instead, as the game does. A
+         Setting :data:`KSA.CameraMode.iva` while the camera is not focused on a vehicle
+         with a crew seat sets :data:`KSA.CameraMode.orbit` instead, as the game does. A
          change of mode releases the active vehicle's held rotation and translation inputs.
 
    .. attribute:: azimuth: number
@@ -29,7 +28,6 @@ Camera
       in any mode other than orbit and map.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: elevation: number
 
@@ -37,7 +35,6 @@ Camera
       90. Throws an exception in any mode other than orbit and map.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: distance: number
 
@@ -45,7 +42,6 @@ Camera
       in any mode other than orbit and map.
 
       :Attribute: Can be read or written
-      :rtype: number
 
       .. note::
 
@@ -57,35 +53,31 @@ Camera
       The camera's vertical field of view, in degrees, between 15 and 120.
 
       :Attribute: Can be read or written
-      :rtype: number
 
-   .. attribute:: focused_vehicle: KSA.Vehicle
+   .. attribute:: focused_vehicle: KSA.Vehicle | nil
 
       Returns the vehicle the camera is focused on, or ``nil`` if it is focused on
       something else, and sets the focus to a vehicle.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.Vehicle` or ``Types.none``
 
       .. note::
 
          Setting the focus leaves the active vehicle as it is.
 
-   .. attribute:: focused_body: KSA.Body
+   .. attribute:: focused_body: KSA.Body | nil
 
       Returns the body the camera is focused on, or ``nil`` if it is focused on
       something else, and sets the focus to a body.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.Body` or ``Types.none``
 
-   .. attribute:: focused_kitten: KSA.Kitten
+   .. attribute:: focused_kitten: KSA.Kitten | nil
 
       Returns the kitten on EVA the camera is focused on, or ``nil`` if it is focused
       on something else, and sets the focus to a kitten on EVA.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.Kitten` or ``Types.none``
 
       .. note::
 

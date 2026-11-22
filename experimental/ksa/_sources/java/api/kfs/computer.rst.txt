@@ -1,0 +1,400 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KFS
+
+Computer
+========
+
+
+.. type:: public class Computer
+
+   A vehicle's flight computer, which runs a kFS program. Obtained from
+   :meth:`KFS.computer(KSA.Vehicle)`.
+
+   .. note::
+
+      A program is written in kC, a subset of C, or in kASM. The calls that change the
+      computer, and :meth:`Computer.writeGlobals(java.util.Map<String,Double>)`, take effect before the computer's next tick, and
+      return once they have. The computer ticks while the game is running and the vehicle is
+      in the physics bubble, so until then they wait. The game does not save a program.
+
+   .. method:: java.util.List<Diagnostic> build(java.util.Map<String,String> files)
+
+      Build a program, without loading it.
+
+      :param java.util.Map<String,String> files: The source files, by name. A program with a ``.c`` file is kC, and one with only ``.kasm`` files is kASM.
+      :returns: The errors and warnings.
+      :Game Scenes: Flight
+
+   .. method:: void load(java.util.Map<String,String> files)
+
+      Build a program and load it onto the computer. Throws an exception if the program has
+      errors, or the computer rejects it.
+
+      :param java.util.Map<String,String> files: The source files, by name, as for :meth:`Computer.build(java.util.Map<String,String>)`.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The program is in standby once loaded. See :meth:`Computer.start()`.
+
+   .. method:: void start()
+
+      Start the loaded program. Throws an exception if no program is loaded.
+
+      :Game Scenes: Flight
+
+   .. method:: void reset()
+
+      Restart the loaded program, as the reset button does. Throws an exception if no
+      program is loaded.
+
+      :Game Scenes: Flight
+
+   .. method:: void stop()
+
+      Stop the program, and give the vehicle back to the pilot. The program stays loaded.
+
+      :Game Scenes: Flight
+
+   .. method:: void kill()
+
+      Halt the program with the kill switch, and give the vehicle back to the pilot.
+
+      :Game Scenes: Flight
+
+   .. method:: ComputerState getState()
+
+
+      The state of the computer.
+
+      :Game Scenes: Flight
+
+   .. method:: ControlMode getMode()
+
+
+      The control mode the loaded program claims.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getUnderControl()
+
+
+      Whether the program controls the vehicle: it is running, or halted with its last
+      commands held.
+
+      :Game Scenes: Flight
+
+   .. method:: int getTickRate()
+
+
+      The ticks per second of the loaded program, or zero if no program is loaded.
+
+      :Game Scenes: Flight
+
+   .. method:: long getCyclesUsed()
+
+
+      The processor cycles the latest tick used.
+
+      :Game Scenes: Flight
+
+   .. method:: long getCycleBudget()
+
+
+      The processor cycles a tick may use.
+
+      :Game Scenes: Flight
+
+   .. method:: long getOverruns()
+
+
+      The number of ticks that ran past their budget since the program started.
+
+      :Game Scenes: Flight
+
+   .. method:: Trap getTrap()
+
+
+      The error that halted the program, or ``null`` if no error halted it.
+
+      :Game Scenes: Flight
+
+   .. method:: String getFault()
+
+
+      The game's error that halted the computer, or ``null`` if there is none.
+
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<String> getLog()
+
+
+      The computer's console: the lines the program logs, and the computer's own messages.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The computer keeps the last 4,096 lines, and a program logs at most 10 lines a
+         second.
+
+   .. method:: void clearLog()
+
+      Clear the computer's console.
+
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<String> getGlobals()
+
+
+      The paths of the loaded program's global variables, one for each number in them,
+      such as ``command.args[2]``.
+
+      :Game Scenes: Flight
+
+   .. method:: double readGlobal(String path)
+
+      The value of one of the program's global variables, as of its latest tick.
+
+      :param String path: The path of the variable, as in :meth:`Computer.getGlobals()`.
+      :Game Scenes: Flight
+
+   .. method:: void writeGlobals(java.util.Map<String,Double> values)
+
+      Write the program's global variables. The program sees all of them from the same
+      tick.
+
+      :param java.util.Map<String,Double> values: The values, by the paths in :meth:`Computer.getGlobals()`.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A value is converted to the variable's type. Throws an exception if a value does not
+         fit, such as a fraction for an integer.
+
+   .. method:: java.util.List<String> getTraceChannels()
+
+
+      The names of the channels the program has traced to.
+
+      :Game Scenes: Flight
+
+   .. method:: float trace(String channel)
+
+      The latest value the program traced to a channel. Throws an exception if the program
+      has not traced to it.
+
+      :param String channel: The name of the channel.
+      :Game Scenes: Flight
+
+
+
+.. type:: public enum ComputerState
+
+   The state of a flight computer. See :meth:`Computer.getState()`.
+
+
+   .. field:: public ComputerState NO_SOFTWARE
+
+      No program is loaded.
+
+
+   .. field:: public ComputerState STANDBY
+
+      A program is loaded, and not running.
+
+
+   .. field:: public ComputerState BOOT
+
+      The program is running its initialization.
+
+
+   .. field:: public ComputerState RUNNING
+
+      The program is running.
+
+
+   .. field:: public ComputerState IDLE
+
+      The program is running, with no task to run.
+
+
+   .. field:: public ComputerState HALTED
+
+      The program has stopped, after a trap, a halt or the kill switch.
+
+
+
+.. type:: public enum ControlMode
+
+   The control a program has of a vehicle. See :meth:`Computer.getMode()`.
+
+
+   .. field:: public ControlMode PILOT
+
+      The game's flight computer flies the vehicle, and the program steers it.
+
+
+   .. field:: public ControlMode FULL_CONTROL
+
+      The program commands the thrusters, engines and gimbals itself. A program claims it
+      with ``#pragma kfs claim ALLOCATION``.
+
+
+
+.. type:: public class Diagnostic
+
+   An error or warning from building a program. See :meth:`Computer.build(java.util.Map<String,String>)`.
+
+   .. constructor:: public Diagnostic(boolean error, String code, String file, int line, int column, String message, String hint)
+
+      Construct a Diagnostic from the values of its fields.
+
+
+   .. method:: boolean getError()
+
+      Whether it is an error. An error stops the program from being built.
+
+   .. method:: String getCode()
+
+      The diagnostic's code, such as ``KC-E016``.
+
+   .. method:: String getFile()
+
+      The source file.
+
+   .. method:: int getLine()
+
+      The line in the source file, from 1. Zero for the whole file.
+
+   .. method:: int getColumn()
+
+      The column in the line, from 1.
+
+   .. method:: String getMessage()
+
+      The message.
+
+   .. method:: String getHint()
+
+      A hint at the fix, or ``null`` if there is none.
+
+
+.. type:: public class Trap
+
+   The error that halted a program, and where it happened. See :meth:`Computer.getTrap()`.
+
+   .. constructor:: public Trap(TrapCode code, String function, String file, int line)
+
+      Construct a Trap from the values of its fields.
+
+
+   .. method:: TrapCode getCode()
+
+      The error.
+
+   .. method:: String getFunction()
+
+      The function that was running.
+
+   .. method:: String getFile()
+
+      The source file, or ``null`` if it is not known.
+
+   .. method:: int getLine()
+
+      The line in the source file, or zero if it is not known.
+
+
+.. type:: public enum TrapCode
+
+   The error that halted a program. See :meth:`Trap.getCode()`.
+
+
+   .. field:: public TrapCode ILLEGAL_OPCODE
+
+      An instruction the processor does not have.
+
+
+   .. field:: public TrapCode OPERAND_OVERFLOW
+
+      The operand stack overflowed.
+
+
+   .. field:: public TrapCode OPERAND_UNDERFLOW
+
+      The operand stack underflowed.
+
+
+   .. field:: public TrapCode RETURN_OVERFLOW
+
+      The return stack overflowed.
+
+
+   .. field:: public TrapCode INIT_OVERRUN
+
+      The initialization ran past its budget.
+
+
+   .. field:: public TrapCode STACK_OVERFLOW
+
+      The stack overflowed.
+
+
+   .. field:: public TrapCode NULL_ACCESS
+
+      A read or write through a null pointer.
+
+
+   .. field:: public TrapCode BAD_ADDRESS
+
+      A read or write outside memory.
+
+
+   .. field:: public TrapCode READ_ONLY
+
+      A write to read-only memory.
+
+
+   .. field:: public TrapCode MISALIGNED
+
+      A misaligned read or write.
+
+
+   .. field:: public TrapCode DIVISION_BY_ZERO
+
+      A division by zero.
+
+
+   .. field:: public TrapCode BOUNDS
+
+      An array index out of bounds.
+
+
+   .. field:: public TrapCode USER
+
+      A trap raised by the program.
+
+
+   .. field:: public TrapCode BAD_JUMP
+
+      A jump to an invalid address.
+
+
+   .. field:: public TrapCode BAD_SYSCALL
+
+      A call to a service that does not exist.
+
+
+   .. field:: public TrapCode BAD_YIELD
+
+      A task yielded where it may not.
+
+
+   .. field:: public TrapCode MEMORY_ERROR
+
+      A memory error, such as a radiation upset.

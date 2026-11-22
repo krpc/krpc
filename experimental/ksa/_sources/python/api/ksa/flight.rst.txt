@@ -151,9 +151,75 @@ Flight
       :rtype: float
       :Game Scenes: Flight
 
+   .. attribute:: static_air_temperature
+
+      The temperature of the atmosphere at the vehicle, in kelvin. Zero outside the
+      atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: speed_of_sound
+
+      The speed of sound in the atmosphere at the vehicle, in meters per second. Zero
+      outside the atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: mach
+
+      The speed of the vehicle relative to the surface, as a multiple of the speed of
+      sound. Zero outside the atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: outside_air
+
+      Whether a kitten can breathe the air outside the vehicle.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`OutsideAir`
+      :Game Scenes: Flight
+
    .. attribute:: dynamic_pressure
 
       The dynamic pressure acting on the vehicle, in pascals.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: depth
+
+      The depth of the vehicle's center of mass below the ocean surface, in meters. Zero
+      above the surface.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The ocean surface includes its waves.
+
+   .. attribute:: submerged_portion
+
+      The fraction of the vehicle's volume below the ocean surface, between 0 and 1.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: buoyant_force
+
+      The buoyant force on the vehicle from the ocean and the atmosphere, in newtons. It
+      acts against gravity.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -176,6 +242,59 @@ Flight
 
       :Attribute: Read-only, cannot be set
       :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: solar_wind_speed
+
+      The speed of the solar wind at the vehicle, in :math:`\mathrm{m/s}`. Zero if no star
+      has a solar wind.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: solar_wind_pressure
+
+      The dynamic pressure of the solar wind at the vehicle, in pascals.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: solar_wind_northward_field
+
+      The northward component of the magnetic field carried by the solar wind at the
+      vehicle, in teslas. A southward field, a negative value, drives geomagnetic storms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: proton_flux
+
+      The flux of solar energetic protons at the vehicle during a solar particle event, in
+      protons per square centimeter per second per steradian. Zero outside an event.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: radiation_storm_level
+
+      The level of the radiation storm at the vehicle, from 0 for none to 5 for the
+      most severe. The S level of the game's space weather window.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: incoming_coronal_mass_ejections
+
+      The coronal mass ejections heading for the vehicle, as the game's space weather
+      window lists them.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`CoronalMassEjection`)
       :Game Scenes: Flight
 
    .. attribute:: g_force
@@ -207,6 +326,61 @@ Flight
       :rtype: float
       :Game Scenes: Flight
 
+   .. attribute:: drag
+
+      The part of the aerodynamic force along the airflow, in newtons.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: lift
+
+      The part of the aerodynamic force across the airflow, in newtons.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. method:: aerodynamic_force(reference_frame)
+
+      The aerodynamic force on the vehicle, in newtons.
+
+      :param ReferenceFrame reference_frame: The reference frame of the force.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game computes the force from the surfaces of the vehicle's hull.
+
+   .. method:: aerodynamic_torque(reference_frame)
+
+      The aerodynamic torque on the vehicle about its center of mass, in
+      :math:`\mathrm{N \cdot m}`. The vector points along the axis of the torque.
+
+      :param ReferenceFrame reference_frame: The reference frame of the torque.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. method:: simulate_aerodynamic_force_at(body, position, velocity, reference_frame)
+
+      The aerodynamic force the vehicle would have at a given position and velocity, in
+      its current attitude and rotation, in newtons.
+
+      :param Body body: The body whose atmosphere the vehicle flies through.
+      :param tuple position: The position, in meters.
+      :param tuple velocity: The velocity, in meters per second.
+      :param ReferenceFrame reference_frame: The reference frame of the position, velocity and force.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The atmosphere moves with the body's rotation.
+
    .. method:: prograde(reference_frame)
 
       The unit vector of the vehicle's velocity relative to the surface.
@@ -232,3 +406,30 @@ Flight
       :param ReferenceFrame reference_frame: The reference frame of the direction.
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight
+
+
+
+.. class:: OutsideAir
+
+   Whether a kitten can breathe the air outside a vehicle. See
+   :attr:`Flight.outside_air`.
+
+
+   .. data:: no_atmosphere
+
+      Outside the atmosphere, or at a body with none.
+
+
+   .. data:: no_oxygen
+
+      An atmosphere with no oxygen.
+
+
+   .. data:: too_thin
+
+      An atmosphere whose oxygen pressure is too low to breathe.
+
+
+   .. data:: breathable
+
+      Breathable air.

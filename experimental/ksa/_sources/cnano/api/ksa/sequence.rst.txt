@@ -17,6 +17,10 @@ Sequence
       assumes the sequences activate in order, each once the one before has burned its
       propellant.
 
+   .. macro:: KRPC_CLASS_KSA_SEQUENCE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Sequence_Number(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Sequence_t instance)
 
       The number of the sequence, as shown in the game.

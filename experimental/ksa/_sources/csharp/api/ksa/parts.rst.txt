@@ -69,9 +69,56 @@ Parts
 
       :Game Scenes: All
 
+   .. property:: float ShieldArealDensity { get; }
+
+      The areal density of the part's radiation shielding, its hull included, in
+      :math:`\mathrm{kg/m^{2}}`. Zero for an unshielded part.
+
+      :Game Scenes: All
+
+   .. property:: float ShieldMass { get; }
+
+      The mass of the shielding material added to the part, in kilograms. Zero when the
+      shielding is built into the hull.
+
+      :Game Scenes: All
+
+   .. property:: float TankCover { get; }
+
+      The fraction of the sky, seen from the part, that the contents of the vehicle's tanks
+      cover, between 0 and 1. The contents shield the part from radiation.
+
+      :Game Scenes: All
+
+   .. property:: float DoseRate { get; }
+
+      The radiation dose rate inside the part, behind its shielding and the vehicle's tanks,
+      in sieverts per second. Includes any solar particle event under way. A kitten in the
+      part's seats receives this dose rate.
+
+      :Game Scenes: All
+
+   .. property:: HighlightColor Highlight { get; set; }
+
+      The color the part is highlighted in.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The life support window uses this highlight to pick parts, and replaces it on
+         the parts it picks from.
+
    .. property:: System.Collections.Generic.IList<Tank> Tanks { get; }
 
       The part's propellant tanks. Empty if it has none.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Habitat> Habitats { get; }
+
+      The part's habitats.
 
       :Game Scenes: All
 
@@ -96,6 +143,18 @@ Parts
    .. property:: System.Collections.Generic.IList<PowerConsumer> PowerConsumers { get; }
 
       The part's power consumers.
+
+      :Game Scenes: All
+
+   .. property:: PowerForecast PowerForecast { get; }
+
+      The charge, draw and supply of the electrical circuit the part is on.
+
+      :Game Scenes: All
+
+   .. property:: Avionics Avionics { get; }
+
+      The part's avionics, or ``null`` if it has none. A probe core has avionics.
 
       :Game Scenes: All
 
@@ -198,6 +257,37 @@ Parts
 
 
 
+.. enum:: HighlightColor
+
+   The color of a part's highlight. See :prop:`Part.Highlight`.
+
+
+   .. enumerator:: None
+
+      Not highlighted.
+
+
+   .. enumerator:: Green
+
+      Green.
+
+
+   .. enumerator:: Yellow
+
+      Yellow.
+
+
+   .. enumerator:: Red
+
+      Red.
+
+
+   .. enumerator:: Purple
+
+      Purple.
+
+
+
 .. class:: Engine
 
    An engine. Obtained from :prop:`Part.Engine`.
@@ -264,6 +354,68 @@ Parts
       Zero when it is inactive or has no propellant.
 
       :Game Scenes: All
+
+   .. function:: float AvailableThrustAt(float pressure)
+
+      The thrust of the engine at full throttle and the given atmospheric pressure, in
+      Newtons. Zero when it is inactive or has no propellant.
+
+      :parameters:
+
+       * **pressure** -- The atmospheric pressure, in pascals.
+
+      :Game Scenes: All
+
+   .. function:: float SpecificImpulseAt(float pressure)
+
+      The specific impulse of the engine at the given atmospheric pressure, in seconds.
+      Zero when it is inactive or has no propellant.
+
+      :parameters:
+
+       * **pressure** -- The atmospheric pressure, in pascals.
+
+      :Game Scenes: All
+
+   .. property:: float MaxThrust { get; }
+
+      The thrust of the engine at full throttle and the current atmospheric pressure, in
+      Newtons, whether or not it is active and has propellant.
+
+      :Game Scenes: All
+
+   .. property:: float MaxVacuumThrust { get; }
+
+      The thrust of the engine at full throttle in a vacuum, in Newtons, whether or not
+      it is active and has propellant.
+
+      :Game Scenes: All
+
+   .. property:: float ChamberPressure { get; }
+
+      The pressure in the engine's combustion chamber, in pascals. Zero when it is not
+      firing.
+
+      :Game Scenes: All
+
+   .. property:: bool Solid { get; }
+
+      Whether the engine is a solid rocket motor. Once ignited, a solid motor burns at
+      full thrust until its grain runs out.
+
+      :Game Scenes: All
+
+   .. property:: float GrainMass { get; }
+
+      The mass of the propellant grain of a solid rocket motor, in kilograms.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Some of the grain is left unburned when the motor burns out. Throws an exception
+         if the engine is not a solid rocket motor.
 
 
 
@@ -506,6 +658,19 @@ Parts
       The part the port is docked to, or ``null`` if it is not docked.
 
       :Game Scenes: All
+
+   .. property:: bool HatchOpen { get; set; }
+
+      Returns whether the hatch through the docked ports is open, and opens or closes it.
+      An open hatch joins the habitat zones on either side.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The hatch is closed while the port is not docked. Throws an exception when set on a
+         port that is not docked.
 
    .. function:: System.Collections.Generic.IList<Vehicle> Undock()
 

@@ -142,4 +142,4 @@ Control
 
       .. note::
 
-         Throws an exception if the vehicle is not the :meth:`getActiveVehicle()`.
+         Throws an exception if the vehicle is not the :meth:`KSA.getActiveVehicle()`.

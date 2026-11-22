@@ -1,0 +1,359 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Auto-Pilot
+==========
+
+
+.. _http-KSA.AutoPilot:
+
+.. rubric:: AutoPilot
+
+The vehicle's flight computer, which steers the vehicle with its reaction control
+thrusters and engine gimbals. Obtained from :http:get:`/ksa/vehicle/(id)/auto-pilot`.
+
+.. note::
+
+   The auto-pilot points the vehicle in the direction set by :http:get:`/ksa/auto-pilot/(id)/mode`, once
+   engaged. It is the game's own flight computer, so the game's flight computer
+   controls change the same settings. Changing a setting throws an exception while a kFS
+   program controls the vehicle.
+
+
+A ``AutoPilot`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:post:: /ksa/auto-pilot/(id)/engage
+
+   Engage the auto-pilot.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+
+
+
+
+
+.. http:post:: /ksa/auto-pilot/(id)/disengage
+
+   Disengage the auto-pilot.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+
+
+
+
+
+.. http:get:: /ksa/auto-pilot/(id)/engaged
+
+   Whether the auto-pilot is engaged.
+
+   .. note::
+
+      The same setting as :http:get:`/ksa/control/(id)/stabilization`.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/auto-pilot/(id)/mode
+
+   The direction the auto-pilot points the vehicle in.
+
+   .. note::
+
+      Setting ``"attitude"`` targets the vehicle's current pitch,
+      heading and roll. Setting ``"other"`` throws an exception.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :resjson KSA.AutoPilotMode value:
+
+.. http:put:: /ksa/auto-pilot/(id)/mode
+
+   The direction the auto-pilot points the vehicle in.
+
+   .. note::
+
+      Setting ``"attitude"`` targets the vehicle's current pitch,
+      heading and roll. Setting ``"other"`` throws an exception.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :reqjson KSA.AutoPilotMode value: The new value.
+
+
+
+
+.. http:get:: /ksa/auto-pilot/(id)/target-pitch
+
+   The target pitch, in degrees, between -90° and +90°.
+
+   .. note::
+
+      Setting it sets :http:get:`/ksa/auto-pilot/(id)/mode` to ``"attitude"``.
+      Returns NaN in any other mode.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/auto-pilot/(id)/target-pitch
+
+   The target pitch, in degrees, between -90° and +90°.
+
+   .. note::
+
+      Setting it sets :http:get:`/ksa/auto-pilot/(id)/mode` to ``"attitude"``.
+      Returns NaN in any other mode.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/auto-pilot/(id)/target-heading
+
+   The target heading, in degrees, between 0° and 360°.
+
+   .. note::
+
+      Setting it sets :http:get:`/ksa/auto-pilot/(id)/mode` to ``"attitude"``.
+      Returns NaN in any other mode.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/auto-pilot/(id)/target-heading
+
+   The target heading, in degrees, between 0° and 360°.
+
+   .. note::
+
+      Setting it sets :http:get:`/ksa/auto-pilot/(id)/mode` to ``"attitude"``.
+      Returns NaN in any other mode.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/auto-pilot/(id)/target-roll
+
+   The target roll, in degrees. NaN when the auto-pilot does not control roll.
+
+   .. note::
+
+      Setting a number sets :http:get:`/ksa/auto-pilot/(id)/mode` to ``"attitude"``.
+      Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
+      ``"attitude"``.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/auto-pilot/(id)/target-roll
+
+   The target roll, in degrees. NaN when the auto-pilot does not control roll.
+
+   .. note::
+
+      Setting a number sets :http:get:`/ksa/auto-pilot/(id)/mode` to ``"attitude"``.
+      Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
+      ``"attitude"``.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:post:: /ksa/auto-pilot/(id)/target-pitch-and-heading
+
+   Set the target pitch and heading, and the mode to
+   ``"attitude"``.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :reqjson float pitch: Target pitch, in degrees, between -90° and +90°.
+   :reqjson float heading: Target heading, in degrees, between 0° and 360°.
+
+
+
+
+
+.. http:post:: /ksa/auto-pilot/(id)/target-direction
+
+   Point the vehicle in a direction, and set the mode to
+   ``"attitude"``. Sets :http:get:`/ksa/auto-pilot/(id)/target-pitch` and
+   :http:get:`/ksa/auto-pilot/(id)/target-heading` to the direction at the time of the call, so the target
+   stays fixed relative to the surface.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :reqjson tuple<double, double, double> direction: The direction to point in.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the direction.
+
+
+
+
+
+.. http:get:: /ksa/auto-pilot/(id)/error
+
+   The angle between the direction the vehicle points in and the target direction,
+   in degrees. NaN when the auto-pilot is not engaged.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/auto-pilot/(id)/roll-error
+
+   The angle between the vehicle's roll and the target roll, in degrees.
+   NaN when the auto-pilot is not engaged.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:post:: /ksa/auto-pilot/(id)/wait
+
+   Wait until the vehicle points in the target direction, and has the target roll
+   if it has one. Returns when the errors are within twice the flight computer's
+   angle deadband, which defaults to 1°.
+   Throws an exception if the auto-pilot is not engaged.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+
+
+
+
+
+.. http:get:: /ksa/auto-pilot/(id)/auto-burn
+
+   Whether the flight computer executes the next burn in
+   :http:get:`/ksa/vehicle/(id)/burns`. It points the vehicle along the burn, fires the
+   engines at :http:get:`/ksa/burn/(id)/ignition-time`, and stops once the burn is complete.
+
+   .. note::
+
+      The flight computer clears it when the burn completes, and removes the burn if
+      another follows it. The engines fire only at normal speed, so warp to shortly before
+      the burn with :http:post:`/ksa/warp-to`. Setting it with no burn planned throws an
+      exception.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/auto-pilot/(id)/auto-burn
+
+   Whether the flight computer executes the next burn in
+   :http:get:`/ksa/vehicle/(id)/burns`. It points the vehicle along the burn, fires the
+   engines at :http:get:`/ksa/burn/(id)/ignition-time`, and stops once the burn is complete.
+
+   .. note::
+
+      The flight computer clears it when the burn completes, and removes the burn if
+      another follows it. The engines fire only at normal speed, so warp to shortly before
+      the burn with :http:post:`/ksa/warp-to`. Setting it with no burn planned throws an
+      exception.
+
+
+   :param id: The identifier of the :ref:`AutoPilot <http-KSA.AutoPilot>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+
+.. _http-KSA.AutoPilotMode:
+
+.. rubric:: AutoPilotMode
+
+The direction the auto-pilot points the vehicle in.
+See :http:get:`/ksa/auto-pilot/(id)/mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"attitude"``
+   The pitch, heading and roll set by :http:get:`/ksa/auto-pilot/(id)/target-pitch`,
+   :http:get:`/ksa/auto-pilot/(id)/target-heading` and :http:get:`/ksa/auto-pilot/(id)/target-roll`.
+
+
+``"hold"``
+   Holds the vehicle's rotation at zero, relative to the stars.
+
+
+``"prograde"``
+   The direction of the vehicle's orbital velocity.
+
+
+``"retrograde"``
+   The opposite of ``"prograde"``.
+
+
+``"normal"``
+   Normal to the orbital plane, along the orbit's angular momentum.
+
+
+``"anti_normal"``
+   The opposite of ``"normal"``.
+
+
+``"radial_out"``
+   Away from the center of the body being orbited.
+
+
+``"radial_in"``
+   Toward the center of the body being orbited.
+
+
+``"surface_prograde"``
+   The direction of the vehicle's velocity relative to the surface.
+
+
+``"surface_retrograde"``
+   The opposite of ``"surface_prograde"``.
+
+
+``"other"``
+   A target set in the game, which the API does not cover.

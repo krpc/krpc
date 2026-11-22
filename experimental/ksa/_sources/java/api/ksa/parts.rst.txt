@@ -78,10 +78,63 @@ Parts
 
    
 
+   .. method:: float getShieldArealDensity()
+
+
+      The areal density of the part's radiation shielding, its hull included, in
+      :math:`\mathrm{kg/m^{2}}`. Zero for an unshielded part.
+
+   
+
+   .. method:: float getShieldMass()
+
+
+      The mass of the shielding material added to the part, in kilograms. Zero when the
+      shielding is built into the hull.
+
+   
+
+   .. method:: float getTankCover()
+
+
+      The fraction of the sky, seen from the part, that the contents of the vehicle's tanks
+      cover, between 0 and 1. The contents shield the part from radiation.
+
+   
+
+   .. method:: float getDoseRate()
+
+
+      The radiation dose rate inside the part, behind its shielding and the vehicle's tanks,
+      in sieverts per second. Includes any solar particle event under way. A kitten in the
+      part's seats receives this dose rate.
+
+   
+
+   .. method:: HighlightColor getHighlight()
+
+   .. method:: void setHighlight(HighlightColor value)
+
+      The color the part is highlighted in.
+
+   
+
+      .. note::
+
+         The life support window uses this highlight to pick parts, and replaces it on
+         the parts it picks from.
+
    .. method:: java.util.List<Tank> getTanks()
 
 
       The part's propellant tanks. Empty if it has none.
+
+   
+
+   .. method:: java.util.List<Habitat> getHabitats()
+
+
+      The part's habitats.
 
    
 
@@ -110,6 +163,20 @@ Parts
 
 
       The part's power consumers.
+
+   
+
+   .. method:: PowerForecast getPowerForecast()
+
+
+      The charge, draw and supply of the electrical circuit the part is on.
+
+   
+
+   .. method:: Avionics getAvionics()
+
+
+      The part's avionics, or ``null`` if it has none. A probe core has avionics.
 
    
 
@@ -214,6 +281,37 @@ Parts
 
 
 
+.. type:: public enum HighlightColor
+
+   The color of a part's highlight. See :meth:`Part.getHighlight()`.
+
+
+   .. field:: public HighlightColor NONE
+
+      Not highlighted.
+
+
+   .. field:: public HighlightColor GREEN
+
+      Green.
+
+
+   .. field:: public HighlightColor YELLOW
+
+      Yellow.
+
+
+   .. field:: public HighlightColor RED
+
+      Red.
+
+
+   .. field:: public HighlightColor PURPLE
+
+      Purple.
+
+
+
 .. type:: public class Engine
 
    An engine. Obtained from :meth:`Part.getEngine()`.
@@ -290,6 +388,66 @@ Parts
       Zero when it is inactive or has no propellant.
 
    
+
+   .. method:: float availableThrustAt(float pressure)
+
+      The thrust of the engine at full throttle and the given atmospheric pressure, in
+      Newtons. Zero when it is inactive or has no propellant.
+
+      :param float pressure: The atmospheric pressure, in pascals.
+   
+
+   .. method:: float specificImpulseAt(float pressure)
+
+      The specific impulse of the engine at the given atmospheric pressure, in seconds.
+      Zero when it is inactive or has no propellant.
+
+      :param float pressure: The atmospheric pressure, in pascals.
+   
+
+   .. method:: float getMaxThrust()
+
+
+      The thrust of the engine at full throttle and the current atmospheric pressure, in
+      Newtons, whether or not it is active and has propellant.
+
+   
+
+   .. method:: float getMaxVacuumThrust()
+
+
+      The thrust of the engine at full throttle in a vacuum, in Newtons, whether or not
+      it is active and has propellant.
+
+   
+
+   .. method:: float getChamberPressure()
+
+
+      The pressure in the engine's combustion chamber, in pascals. Zero when it is not
+      firing.
+
+   
+
+   .. method:: boolean getSolid()
+
+
+      Whether the engine is a solid rocket motor. Once ignited, a solid motor burns at
+      full thrust until its grain runs out.
+
+   
+
+   .. method:: float getGrainMass()
+
+
+      The mass of the propellant grain of a solid rocket motor, in kilograms.
+
+   
+
+      .. note::
+
+         Some of the grain is left unburned when the motor burns out. Throws an exception
+         if the engine is not a solid rocket motor.
 
 
 
@@ -546,6 +704,20 @@ Parts
       The part the port is docked to, or ``null`` if it is not docked.
 
    
+
+   .. method:: boolean getHatchOpen()
+
+   .. method:: void setHatchOpen(boolean value)
+
+      Returns whether the hatch through the docked ports is open, and opens or closes it.
+      An open hatch joins the habitat zones on either side.
+
+   
+
+      .. note::
+
+         The hatch is closed while the port is not docked. Throws an exception when set on a
+         port that is not docked.
 
    .. method:: java.util.List<Vehicle> undock()
 

@@ -11,18 +11,17 @@ KSA
 Provides functionality to interact with Kitten Space Agency.
 
 
-.. attribute:: active_vehicle: KSA.Vehicle
+.. attribute:: active_vehicle: KSA.Vehicle | nil
 
-   The vehicle under the player's control, or ``nil`` if the player controls a
-   kitten on EVA.
+   The vehicle under the player's control, or ``nil`` if there is none or the
+   player controls a kitten on EVA.
 
    :Attribute: Can be read or written
-   :rtype: :class:`KSA.Vehicle` or ``Types.none``
 
    .. note::
 
       Setting it moves the camera to the vehicle, as the switch vehicle key does. See
-      :attr:`KSA.active_kitten <KSA.KSA.active_kitten>` for a kitten on EVA.
+      :attr:`KSA.active_kitten` for a kitten on EVA.
 
 
 
@@ -32,23 +31,21 @@ Provides functionality to interact with Kitten Space Agency.
    The vehicles in the current system, excluding kittens on EVA.
 
    :Attribute: Read-only, cannot be set
-   :rtype: List
 
 
 
 
-.. attribute:: active_kitten: KSA.Kitten
+.. attribute:: active_kitten: KSA.Kitten | nil
 
    The kitten on EVA under the player's control, or ``nil`` if the player
    controls a vehicle.
 
    :Attribute: Can be read or written
-   :rtype: :class:`KSA.Kitten` or ``Types.none``
 
    .. note::
 
       Setting it moves the camera to the kitten. Throws an exception if the kitten is not
-      on EVA. See :attr:`KSA.active_vehicle <KSA.KSA.active_vehicle>` for a vehicle.
+      on EVA. See :attr:`KSA.active_vehicle` for a vehicle.
 
 
 
@@ -58,7 +55,6 @@ Provides functionality to interact with Kitten Space Agency.
    The kittens in the agency's roster, including those killed in action, keyed by name.
 
    :Attribute: Read-only, cannot be set
-   :rtype: Map
 
 
 
@@ -68,7 +64,6 @@ Provides functionality to interact with Kitten Space Agency.
    The game's main camera.
 
    :Attribute: Read-only, cannot be set
-   :rtype: :class:`KSA.Camera`
 
 
 
@@ -78,7 +73,6 @@ Provides functionality to interact with Kitten Space Agency.
    The planets, moons and stars in the current system, keyed by name.
 
    :Attribute: Read-only, cannot be set
-   :rtype: Map
 
 
 
@@ -88,7 +82,6 @@ Provides functionality to interact with Kitten Space Agency.
    The universal time, in seconds.
 
    :Attribute: Read-only, cannot be set
-   :rtype: number
 
 
 
@@ -98,22 +91,43 @@ Provides functionality to interact with Kitten Space Agency.
    The simulation speed, as a multiple of real time. Zero when paused.
 
    :Attribute: Can be read or written
-   :rtype: number
+
+   .. note::
+
+      Setting it stops a warp in progress, such as one started by :meth:`KSA.warp_to`.
 
 
 
 
-.. staticmethod:: warp_to(ut)
+.. attribute:: life_support_enabled: boolean
+
+   Whether the crew use up supplies, as set when the game was created.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. attribute:: radiation_enabled: boolean
+
+   Whether radiation harms the crew, as set when the game was created.
+
+   :Attribute: Read-only, cannot be set
+
+
+
+
+.. staticmethod:: warp_to(ut: number)
 
    Warp to the given universal time, and return once the warp has finished.
    The game slows the warp down to normal speed toward the end.
 
-   :param number ut: The universal time to warp to, in seconds.
+   :param ut: The universal time to warp to, in seconds.
 
    .. note::
 
       Does nothing when the time is in the past. Returns early if the game stops the
-      warp, for example when its menu pauses the game.
+      warp, for example when its menu pauses the game, or a vehicle's supplies run out.
 
 
 
@@ -123,20 +137,18 @@ Provides functionality to interact with Kitten Space Agency.
    The vehicle designs that can be launched, keyed by name.
 
    :Attribute: Read-only, cannot be set
-   :rtype: Map
 
 
 
 
-.. staticmethod:: launch_vehicle(name, site)
+.. staticmethod:: launch_vehicle(name: string, site: string): KSA.Vehicle
 
    Launch a vehicle from a launch site, and make it the active vehicle. Returns once
    the vehicle is on the launch site.
 
-   :param string name: The name of the vehicle design. See :attr:`KSA.vehicle_designs <KSA.KSA.vehicle_designs>`.
-   :param string site: The name of the launch site. See :attr:`KSA.Body.launch_sites`.
+   :param name: The name of the vehicle design. See :attr:`KSA.vehicle_designs`.
+   :param site: The name of the launch site. See :attr:`KSA.Body.launch_sites`.
    :returns: The vehicle. Its name is the vehicle's name, with a number appended if another vehicle has that name.
-   :rtype: :class:`KSA.Vehicle`
 
    .. note::
 
@@ -146,30 +158,29 @@ Provides functionality to interact with Kitten Space Agency.
 
 
 
-.. staticmethod:: save_exists(name)
+.. staticmethod:: save_exists(name: string): boolean
 
    Whether a save with the given name exists.
 
-   :param string name: Name of the save.
-   :rtype: boolean
+   :param name: Name of the save.
 
 
 
 
-.. staticmethod:: save(name)
+.. staticmethod:: save(name: string)
 
    Save the game, replacing any save with the same name.
 
-   :param string name: Name of the save.
+   :param name: Name of the save.
 
 
 
 
-.. staticmethod:: load(name)
+.. staticmethod:: load(name: string)
 
    Load a save, and return once it has loaded. The game is paused after loading.
 
-   :param string name: Name of the save.
+   :param name: Name of the save.
 
    .. note::
 
@@ -178,14 +189,13 @@ Provides functionality to interact with Kitten Space Agency.
 
 
 
-.. staticmethod:: take_screenshot([scale = 1], [ui = false])
+.. staticmethod:: take_screenshot(scale?: number, ui?: boolean): string
 
    Save a screenshot, as the screenshot key does, and return once the file is written.
 
-   :param number scale: The size of the image, as a multiple of the window size, from 1 to 8. The game reduces it to fit the graphics memory.
-   :param boolean ui: Whether to include the game's windows. The image is then the size of the window.
+   :param scale: The size of the image, as a multiple of the window size, from 1 to 8. The game reduces it to fit the graphics memory. Defaults to ``1``.
+   :param ui: Whether to include the game's windows. The image is then the size of the window. Defaults to ``false``.
    :returns: The path of the PNG file, in the game's screenshots folder.
-   :rtype: string
 
    .. note::
 
@@ -194,64 +204,93 @@ Provides functionality to interact with Kitten Space Agency.
 
 
 
-.. staticmethod:: show_message(text, [duration = 5.0], [warning = false])
+.. staticmethod:: show_message(text: string, duration?: number, warning?: boolean)
 
    Show a message in the middle of the screen.
 
-   :param string text: The message.
-   :param number duration: How long to show the message for, in seconds. The game shows a message for at least 2 seconds.
-   :param boolean warning: Whether to show the message in the warning color.
+   :param text: The message.
+   :param duration: How long to show the message for, in seconds. The game shows a message for at least 2 seconds. Defaults to ``5.0``.
+   :param warning: Whether to show the message in the warning color. Defaults to ``false``.
 
 
 
 
-.. staticmethod:: transform_position(position, from, to)
+.. staticmethod:: raycast_distance(position: Tuple, direction: Tuple, reference_frame: KSA.ReferenceFrame): number
+
+   The distance from a position to the first part of a vehicle along a ray, in
+   meters. Infinite if the ray hits no part.
+
+   :param position: The start of the ray, in meters.
+   :param direction: The direction of the ray.
+   :param reference_frame: The reference frame of the position and direction.
+
+   .. note::
+
+      The ray tests the meshes of the parts, as picking a part with the mouse does.
+      It passes through terrain and kittens on EVA.
+
+
+
+
+.. staticmethod:: raycast_part(position: Tuple, direction: Tuple, reference_frame: KSA.ReferenceFrame): KSA.Part | nil
+
+   The first part of a vehicle along a ray, or ``nil`` if the ray hits no part.
+
+   :param position: The start of the ray, in meters.
+   :param direction: The direction of the ray.
+   :param reference_frame: The reference frame of the position and direction.
+
+   .. note::
+
+      The ray tests the meshes of the parts, as picking a part with the mouse does.
+      It passes through terrain and kittens on EVA.
+
+
+
+
+.. staticmethod:: transform_position(position: Tuple, from: KSA.ReferenceFrame, to: KSA.ReferenceFrame): Tuple
 
    Convert a position from one reference frame to another.
 
-   :param Tuple position: Position, in meters, in the frame *from*.
-   :param KSA.ReferenceFrame from: The reference frame the position is in.
-   :param KSA.ReferenceFrame to: The reference frame to convert the position to.
+   :param position: Position, in meters, in the frame *from*.
+   :param from: The reference frame the position is in.
+   :param to: The reference frame to convert the position to.
    :returns: The position in the frame *to*.
-   :rtype: Tuple
 
 
 
 
-.. staticmethod:: transform_direction(direction, from, to)
+.. staticmethod:: transform_direction(direction: Tuple, from: KSA.ReferenceFrame, to: KSA.ReferenceFrame): Tuple
 
    Convert a direction from one reference frame to another.
 
-   :param Tuple direction: Direction in the frame *from*.
-   :param KSA.ReferenceFrame from: The reference frame the direction is in.
-   :param KSA.ReferenceFrame to: The reference frame to convert the direction to.
+   :param direction: Direction in the frame *from*.
+   :param from: The reference frame the direction is in.
+   :param to: The reference frame to convert the direction to.
    :returns: The direction in the frame *to*.
-   :rtype: Tuple
 
 
 
 
-.. staticmethod:: transform_rotation(rotation, from, to)
+.. staticmethod:: transform_rotation(rotation: Tuple, from: KSA.ReferenceFrame, to: KSA.ReferenceFrame): Tuple
 
    Convert a rotation from one reference frame to another.
 
-   :param Tuple rotation: Rotation in the frame *from*.
-   :param KSA.ReferenceFrame from: The reference frame the rotation is in.
-   :param KSA.ReferenceFrame to: The reference frame to convert the rotation to.
+   :param rotation: Rotation in the frame *from*.
+   :param from: The reference frame the rotation is in.
+   :param to: The reference frame to convert the rotation to.
    :returns: The rotation in the frame *to*.
-   :rtype: Tuple
 
 
 
 
-.. staticmethod:: transform_velocity(position, velocity, from, to)
+.. staticmethod:: transform_velocity(position: Tuple, velocity: Tuple, from: KSA.ReferenceFrame, to: KSA.ReferenceFrame): Tuple
 
    Convert a velocity from one reference frame to another. The velocity of a point
    depends on its position in a rotating frame, so the position is also needed.
 
-   :param Tuple position: Position, in meters, in the frame *from*.
-   :param Tuple velocity: Velocity, in meters per second, in the frame *from*.
-   :param KSA.ReferenceFrame from: The reference frame the position and velocity are in.
-   :param KSA.ReferenceFrame to: The reference frame to convert the velocity to.
+   :param position: Position, in meters, in the frame *from*.
+   :param velocity: Velocity, in meters per second, in the frame *from*.
+   :param from: The reference frame the position and velocity are in.
+   :param to: The reference frame to convert the velocity to.
    :returns: The velocity in the frame *to*.
-   :rtype: Tuple

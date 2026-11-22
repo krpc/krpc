@@ -1,0 +1,140 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Camera
+======
+
+
+.. class:: Camera
+
+   The game's main camera. Obtained from :func:`KSA.getCamera`.
+
+   .. method:: getMode()
+               setMode(value)
+
+      The mode of the camera.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.CameraMode`
+   
+
+      .. note::
+
+         Setting :attr:`KSA.CameraMode.iva` while the camera is not focused on a vehicle
+         with a crew seat sets :attr:`KSA.CameraMode.orbit` instead, as the game does. A
+         change of mode releases the active vehicle's held rotation and translation inputs.
+
+   .. method:: getAzimuth()
+               setAzimuth(value)
+
+      The angle of the camera around the focused object, in degrees. Throws an exception
+      in any mode other than orbit and map.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getElevation()
+               setElevation(value)
+
+      The angle of the camera above the plane it orbits in, in degrees, between -90 and
+      90. Throws an exception in any mode other than orbit and map.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getDistance()
+               setDistance(value)
+
+      The distance from the camera to the focused object, in meters. Throws an exception
+      in any mode other than orbit and map.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+      .. note::
+
+         The camera moves smoothly to a new distance, and stays at least the focused object's
+         radius from it in map mode, and half its radius in orbit mode.
+
+   .. method:: getFieldOfView()
+               setFieldOfView(value)
+
+      The camera's vertical field of view, in degrees, between 15 and 120.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getFocusedVehicle()
+               setFocusedVehicle(value)
+
+      Returns the vehicle the camera is focused on, or ``null`` if it is focused on
+      something else, and sets the focus to a vehicle.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.Vehicle` or ``null``
+   
+
+      .. note::
+
+         Setting the focus leaves the active vehicle as it is.
+
+   .. method:: getFocusedBody()
+               setFocusedBody(value)
+
+      Returns the body the camera is focused on, or ``null`` if it is focused on
+      something else, and sets the focus to a body.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.Body` or ``null``
+   
+
+   .. method:: getFocusedKitten()
+               setFocusedKitten(value)
+
+      Returns the kitten on EVA the camera is focused on, or ``null`` if it is focused
+      on something else, and sets the focus to a kitten on EVA.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.Kitten` or ``null``
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA.
+
+
+
+.. class:: CameraMode
+
+   The mode of the camera. See :meth:`KSA.Camera.getMode`.
+
+
+   .. attribute:: orbit
+
+      Orbits the focused object.
+
+
+   .. attribute:: free
+
+      Flies freely.
+
+
+   .. attribute:: map
+
+      The map view.
+
+
+   .. attribute:: iva
+
+      Inside the vehicle, from a crew seat.
+
+
+   .. attribute:: fixed
+
+      Fixed to a part of the vehicle, such as a docking port.

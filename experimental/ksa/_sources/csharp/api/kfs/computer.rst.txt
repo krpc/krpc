@@ -1,0 +1,408 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KFS
+
+Computer
+========
+
+
+.. class:: Computer
+
+   A vehicle's flight computer, which runs a kFS program. Obtained from
+   :meth:`KFS.Computer <KFS.KFS.Computer>`.
+
+   .. note::
+
+      A program is written in kC, a subset of C, or in kASM. The calls that change the
+      computer, and :meth:`Computer.WriteGlobals`, take effect before the computer's next tick, and
+      return once they have. The computer ticks while the game is running and the vehicle is
+      in the physics bubble, so until then they wait. The game does not save a program.
+
+   .. function:: System.Collections.Generic.IList<Diagnostic> Build(System.Collections.Generic.IDictionary<string,string> files)
+
+      Build a program, without loading it.
+
+      :parameters:
+
+       * **files** -- The source files, by name. A program with a ``.c`` file is kC, and one with only ``.kasm`` files is kASM.
+
+      :returns: The errors and warnings.
+      :Game Scenes: Flight
+
+   .. function:: void Load(System.Collections.Generic.IDictionary<string,string> files)
+
+      Build a program and load it onto the computer. Throws an exception if the program has
+      errors, or the computer rejects it.
+
+      :parameters:
+
+       * **files** -- The source files, by name, as for :meth:`Computer.Build`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The program is in standby once loaded. See :meth:`Computer.Start`.
+
+   .. function:: void Start()
+
+      Start the loaded program. Throws an exception if no program is loaded.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void Reset()
+
+      Restart the loaded program, as the reset button does. Throws an exception if no
+      program is loaded.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void Stop()
+
+      Stop the program, and give the vehicle back to the pilot. The program stays loaded.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void Kill()
+
+      Halt the program with the kill switch, and give the vehicle back to the pilot.
+
+
+      :Game Scenes: Flight
+
+   .. property:: ComputerState State { get; }
+
+      The state of the computer.
+
+      :Game Scenes: Flight
+
+   .. property:: ControlMode Mode { get; }
+
+      The control mode the loaded program claims.
+
+      :Game Scenes: Flight
+
+   .. property:: bool UnderControl { get; }
+
+      Whether the program controls the vehicle: it is running, or halted with its last
+      commands held.
+
+      :Game Scenes: Flight
+
+   .. property:: int TickRate { get; }
+
+      The ticks per second of the loaded program, or zero if no program is loaded.
+
+      :Game Scenes: Flight
+
+   .. property:: long CyclesUsed { get; }
+
+      The processor cycles the latest tick used.
+
+      :Game Scenes: Flight
+
+   .. property:: long CycleBudget { get; }
+
+      The processor cycles a tick may use.
+
+      :Game Scenes: Flight
+
+   .. property:: long Overruns { get; }
+
+      The number of ticks that ran past their budget since the program started.
+
+      :Game Scenes: Flight
+
+   .. property:: Trap? Trap { get; }
+
+      The error that halted the program, or ``null`` if no error halted it.
+
+      :Game Scenes: Flight
+
+   .. property:: string Fault { get; }
+
+      The game's error that halted the computer, or ``null`` if there is none.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Collections.Generic.IList<string> Log { get; }
+
+      The computer's console: the lines the program logs, and the computer's own messages.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The computer keeps the last 4,096 lines, and a program logs at most 10 lines a
+         second.
+
+   .. function:: void ClearLog()
+
+      Clear the computer's console.
+
+
+      :Game Scenes: Flight
+
+   .. property:: System.Collections.Generic.IList<string> Globals { get; }
+
+      The paths of the loaded program's global variables, one for each number in them,
+      such as ``command.args[2]``.
+
+      :Game Scenes: Flight
+
+   .. function:: double ReadGlobal(string path)
+
+      The value of one of the program's global variables, as of its latest tick.
+
+      :parameters:
+
+       * **path** -- The path of the variable, as in :prop:`Computer.Globals`.
+
+      :Game Scenes: Flight
+
+   .. function:: void WriteGlobals(System.Collections.Generic.IDictionary<string,double> values)
+
+      Write the program's global variables. The program sees all of them from the same
+      tick.
+
+      :parameters:
+
+       * **values** -- The values, by the paths in :prop:`Computer.Globals`.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A value is converted to the variable's type. Throws an exception if a value does not
+         fit, such as a fraction for an integer.
+
+   .. property:: System.Collections.Generic.IList<string> TraceChannels { get; }
+
+      The names of the channels the program has traced to.
+
+      :Game Scenes: Flight
+
+   .. function:: float Trace(string channel)
+
+      The latest value the program traced to a channel. Throws an exception if the program
+      has not traced to it.
+
+      :parameters:
+
+       * **channel** -- The name of the channel.
+
+      :Game Scenes: Flight
+
+
+
+.. enum:: ComputerState
+
+   The state of a flight computer. See :prop:`Computer.State`.
+
+
+   .. enumerator:: NoSoftware
+
+      No program is loaded.
+
+
+   .. enumerator:: Standby
+
+      A program is loaded, and not running.
+
+
+   .. enumerator:: Boot
+
+      The program is running its initialization.
+
+
+   .. enumerator:: Running
+
+      The program is running.
+
+
+   .. enumerator:: Idle
+
+      The program is running, with no task to run.
+
+
+   .. enumerator:: Halted
+
+      The program has stopped, after a trap, a halt or the kill switch.
+
+
+
+.. enum:: ControlMode
+
+   The control a program has of a vehicle. See :prop:`Computer.Mode`.
+
+
+   .. enumerator:: Pilot
+
+      The game's flight computer flies the vehicle, and the program steers it.
+
+
+   .. enumerator:: FullControl
+
+      The program commands the thrusters, engines and gimbals itself. A program claims it
+      with ``#pragma kfs claim ALLOCATION``.
+
+
+
+.. struct:: Diagnostic
+
+   An error or warning from building a program. See :meth:`Computer.Build`.
+
+   .. function:: Diagnostic(bool error, string code, string file, int line, int column, string message, string hint)
+
+      Construct a Diagnostic from the values of its fields.
+
+
+   .. property:: bool Error { get; }
+
+      Whether it is an error. An error stops the program from being built.
+
+   .. property:: string Code { get; }
+
+      The diagnostic's code, such as ``KC-E016``.
+
+   .. property:: string File { get; }
+
+      The source file.
+
+   .. property:: int Line { get; }
+
+      The line in the source file, from 1. Zero for the whole file.
+
+   .. property:: int Column { get; }
+
+      The column in the line, from 1.
+
+   .. property:: string Message { get; }
+
+      The message.
+
+   .. property:: string Hint { get; }
+
+      A hint at the fix, or ``null`` if there is none.
+
+
+.. struct:: Trap
+
+   The error that halted a program, and where it happened. See :prop:`Computer.Trap`.
+
+   .. function:: Trap(TrapCode code, string function, string file, int line)
+
+      Construct a Trap from the values of its fields.
+
+
+   .. property:: TrapCode Code { get; }
+
+      The error.
+
+   .. property:: string Function { get; }
+
+      The function that was running.
+
+   .. property:: string File { get; }
+
+      The source file, or ``null`` if it is not known.
+
+   .. property:: int Line { get; }
+
+      The line in the source file, or zero if it is not known.
+
+
+.. enum:: TrapCode
+
+   The error that halted a program. See :prop:`Trap.Code`.
+
+
+   .. enumerator:: IllegalOpcode
+
+      An instruction the processor does not have.
+
+
+   .. enumerator:: OperandOverflow
+
+      The operand stack overflowed.
+
+
+   .. enumerator:: OperandUnderflow
+
+      The operand stack underflowed.
+
+
+   .. enumerator:: ReturnOverflow
+
+      The return stack overflowed.
+
+
+   .. enumerator:: InitOverrun
+
+      The initialization ran past its budget.
+
+
+   .. enumerator:: StackOverflow
+
+      The stack overflowed.
+
+
+   .. enumerator:: NullAccess
+
+      A read or write through a null pointer.
+
+
+   .. enumerator:: BadAddress
+
+      A read or write outside memory.
+
+
+   .. enumerator:: ReadOnly
+
+      A write to read-only memory.
+
+
+   .. enumerator:: Misaligned
+
+      A misaligned read or write.
+
+
+   .. enumerator:: DivisionByZero
+
+      A division by zero.
+
+
+   .. enumerator:: Bounds
+
+      An array index out of bounds.
+
+
+   .. enumerator:: User
+
+      A trap raised by the program.
+
+
+   .. enumerator:: BadJump
+
+      A jump to an invalid address.
+
+
+   .. enumerator:: BadSyscall
+
+      A call to a service that does not exist.
+
+
+   .. enumerator:: BadYield
+
+      A task yielded where it may not.
+
+
+   .. enumerator:: MemoryError
+
+      A memory error, such as a radiation upset.

@@ -1,0 +1,52 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Reference Frame
+===============
+
+
+.. class:: ReferenceFrame
+
+   A reference frame, in which positions, directions, rotations and velocities are given.
+   Obtained from the reference frame properties of :class:`KSA.Vehicle` and
+   :class:`KSA.Body`, or created with :meth:`KSA.ReferenceFrame.createRelative` and
+   :meth:`KSA.ReferenceFrame.createHybrid`.
+
+   .. note::
+
+      Every reference frame is right-handed. Positions are in meters, velocities in meters
+      per second, and angular velocities in radians per second. A rotation is a quaternion
+      ``(x, y, z, w)``.
+
+   .. function:: createRelative(referenceFrame[, position[, rotation[, velocity[, angularVelocity]]]])
+
+      Create a reference frame that is offset from a parent frame.
+
+      :param referenceFrame: The parent reference frame.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :param position: The position of the origin in the parent frame, in meters. Defaults to ``(0, 0, 0)``. Defaults to ``[0.0, 0.0, 0.0]``.
+      :type position: ``[number, number, number]``
+      :param rotation: The rotation of the frame relative to the parent frame. Defaults to ``(0, 0, 0, 1)``, no rotation. Defaults to ``[0.0, 0.0, 0.0, 1.0]``.
+      :type rotation: ``[number, number, number, number]``
+      :param velocity: The velocity of the origin in the parent frame, in meters per second. Defaults to ``(0, 0, 0)``. Defaults to ``[0.0, 0.0, 0.0]``.
+      :type velocity: ``[number, number, number]``
+      :param angularVelocity: The angular velocity of the frame relative to the parent frame, in radians per second, in the axes of the parent frame. Defaults to ``(0, 0, 0)``. Defaults to ``[0.0, 0.0, 0.0]``.
+      :type angularVelocity: ``[number, number, number]``
+      :rtype: :class:`KSA.ReferenceFrame`
+   
+
+   .. function:: createHybrid(position[, rotation[, velocity[, angularVelocity]]])
+
+      Create a reference frame that takes its components from other frames.
+
+      :param position: The reference frame that gives the origin.
+      :type position: :class:`KSA.ReferenceFrame`
+      :param rotation: The reference frame that gives the axes. Defaults to *position*.
+      :type rotation: :class:`KSA.ReferenceFrame` or ``null``
+      :param velocity: The reference frame that gives the velocity of the origin. Defaults to *position*.
+      :type velocity: :class:`KSA.ReferenceFrame` or ``null``
+      :param angularVelocity: The reference frame that gives the angular velocity. Defaults to *position*.
+      :type angularVelocity: :class:`KSA.ReferenceFrame` or ``null``
+      :rtype: :class:`KSA.ReferenceFrame`

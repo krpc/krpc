@@ -1,0 +1,53 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.kfs
+
+Service
+=======
+
+.. grpc:service:: KFSService
+
+   Provides access to kFS, the game's flight software: programs that run on a vehicle's
+   flight computer.
+
+   .. note::
+
+      kFS is a prototype in the game, and is off until it is turned on, by setting
+      :grpc:rpc:`KFSService.GetAvailable <krpc.kfs.KFSService.GetAvailable>` or with the game's ``kfs on`` console command. This service
+      follows the prototype, and changes with it.
+
+   .. grpc:rpc:: GetAvailable (KFS.GetAvailableRequest) returns (KFS.GetAvailableResponse)
+
+      Returns whether kFS is on, and turns it on or off.
+
+      :KFS.GetAvailableRequest: Empty
+
+      :KFS.GetAvailableResponse: ``value`` (``bool``)
+
+      .. note::
+
+         Turning it off stops every program, and gives each vehicle back to the pilot, as the
+         game's ``kfs off`` console command does.
+
+   .. grpc:rpc:: SetAvailable (KFS.SetAvailableRequest) returns (KFS.SetAvailableResponse)
+
+      Returns whether kFS is on, and turns it on or off.
+
+      :KFS.SetAvailableRequest:
+         * ``value`` (``bool``)
+
+      :KFS.SetAvailableResponse: Empty
+
+      .. note::
+
+         Turning it off stops every program, and gives each vehicle back to the pilot, as the
+         game's ``kfs off`` console command does.
+
+   .. grpc:rpc:: Computer (KFS.ComputerRequest) returns (KFS.ComputerResponse)
+
+      The flight computer of a vehicle. Throws an exception if kFS is off.
+
+      :KFS.ComputerRequest:
+         * ``vehicle`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle.
+
+      :KFS.ComputerResponse: ``value`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)

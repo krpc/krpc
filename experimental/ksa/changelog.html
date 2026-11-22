@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Changelog &#8212; kRPC v0.2.0 documentation</title>
+    <title>Changelog &#8212; kRPC v0.3.0 documentation</title>
   
   
   
@@ -26,23 +26,24 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9c64f2e8" />
+    <link rel="stylesheet" type="text/css" href="_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5ab7b574" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/documentation_options.js?v=e259d695"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'changelog';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="_static/external-links.js?v=e8892020"></script>
@@ -53,7 +54,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.0" />
+  <meta name="docsearch:version" content="0.3.0" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -101,7 +102,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -205,14 +206,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -247,7 +248,7 @@
   
 
   
-    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -261,7 +262,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -332,14 +333,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -411,7 +412,7 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Changelog</span></li>
@@ -433,6 +434,112 @@
                   
   <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
+<section id="v0-3-0">
+<h2>v0.3.0<a class="headerlink" href="#v0-3-0" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Mod</p>
+<ul>
+<li><p><span class="changelog-marker breaking">Breaking</span> Use the kRPC 0.8 protocol, so clients and client stubs need kRPC 0.8 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Rename the server settings in <code class="docutils literal notranslate"><span class="pre">kRPC/settings.toml</span></code>, with one port per server (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Keep the settings in <code class="docutils literal notranslate"><span class="pre">kRPC/settings.toml</span></code> in the game’s user folder, so they apply to every save and are kept when the mod updates (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p>Create the settings file with the defaults when it is missing, and replace settings in it that are not valid with their defaults (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p>Run on Apple silicon Macs, including the gRPC and serial servers (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p>Budget the server’s time per frame, and choose the rate control settings from a preset in the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p>Name a server added in the server window “Server”, “Server 2” and so on (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p>Remember which servers are expanded in the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p>Show the number of connected clients beside each server in the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p>Add RTS/CTS flow control to serial servers, set in the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p>Add JSON over HTTP servers to the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p>Set the origins whose web pages may connect to a WebSockets or HTTP server in the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p>Fix serial servers failing to start on Linux and macOS, with the native serial port library not found (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p>Support KSA v2026.11.16.5901 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1401">#1401</a>)</p></li>
+<li><p>Move the kRPC menu to a <code class="docutils literal notranslate"><span class="pre">kRPC</span></code> item in the game’s Mods menu, which opens the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1400">#1400</a>)</p></li>
+<li><p>Fix every call failing with no vehicle under control, e.g. after the vehicle is destroyed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1407">#1407</a>)</p></li>
+</ul>
+</li>
+<li><p>Crew and life support</p>
+<ul>
+<li><p>Add life support: the supplies of a vehicle and its habitat zones, how long they last, and moving meals and canisters between habitats (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1400">#1400</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">KSA.LifeSupportEnabled</span></code> and <code class="docutils literal notranslate"><span class="pre">KSA.RadiationEnabled</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1400">#1400</a>)</p></li>
+<li><p>Add the condition and cause of death of kittens, and whether a vehicle can be flown (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1400">#1400</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Move a kitten in <code class="docutils literal notranslate"><span class="pre">Seat.Kitten</span></code> only within its habitat zone, and refuse an incapacitated or retired kitten (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1400">#1400</a>)</p></li>
+<li><p>Refuse <code class="docutils literal notranslate"><span class="pre">Kitten.GoOnEva</span></code> for a kitten too weak to go, or without supplies for its suit, and add <code class="docutils literal notranslate"><span class="pre">Kitten.CanGoOnEva</span></code> and <code class="docutils literal notranslate"><span class="pre">Kitten.CanBoard</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1400">#1400</a>)</p></li>
+<li><p>Add the life support of a kitten’s suit, and taking and stowing supplies on EVA (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1400">#1400</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">DockingPort.HatchOpen</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1400">#1400</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vehicle.CrewEvents</span></code> and <code class="docutils literal notranslate"><span class="pre">NextCrewEvent</span></code>, each kitten’s most urgent coming event, as the game’s crew clock shows them (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add the time until a kitten’s condition worsens, it gets radiation sickness, or it takes a lethal dose (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add the habitat zones linked through closed hatches, and the hatches to open (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vehicle.Mission</span></code>, the mission planned in the editor, with the times of its legs (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add whether a habitat zone’s supplies last the mission, and the kittens planned for each leg (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+</ul>
+</li>
+<li><p>Engines and mass properties</p>
+<ul>
+<li><p>Add solid rocket motors to <code class="docutils literal notranslate"><span class="pre">Engine</span></code>, with their grain mass, and the chamber pressure of every engine (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add the thrust and specific impulse of an engine at a given pressure, and its maximum thrust (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Engine.Thrust</span></code> and <code class="docutils literal notranslate"><span class="pre">Vehicle.Thrust</span></code> to include solid rocket motors, which fire whatever the throttle (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add the dry mass, inertia, RCS torque and accelerations of a vehicle (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+</ul>
+</li>
+<li><p>Control and power</p>
+<ul>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vehicle.ControlState</span></code>, the reason a vehicle cannot be flown (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add the power switch of a probe core: its mode, storm standby and power status (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Part.PowerForecast</span></code>, the charge, draw and time left of a part’s electrical circuit (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add the radiation dose, health and reboots of a probe core’s avionics (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+</ul>
+</li>
+<li><p>Flight and orbits</p>
+<ul>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return the scale height at sea level from <code class="docutils literal notranslate"><span class="pre">Body.ScaleHeight</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1400">#1400</a>)</p></li>
+<li><p>Add the air temperature, speed of sound, Mach number and breathable air to <code class="docutils literal notranslate"><span class="pre">Flight</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1400">#1400</a>)</p></li>
+<li><p>Add the temperature, speed of sound, oxygen fraction and molar mass of an atmosphere to <code class="docutils literal notranslate"><span class="pre">Body</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1400">#1400</a>)</p></li>
+<li><p>Add the depth, submerged portion and buoyant force of a vehicle to <code class="docutils literal notranslate"><span class="pre">Flight</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add the aerodynamic force, torque, lift and drag on a vehicle to <code class="docutils literal notranslate"><span class="pre">Flight</span></code>, and the force at another position and velocity (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Orbit.SpeedAt</span></code>, <code class="docutils literal notranslate"><span class="pre">MeanAnomalyAtUT</span></code>, <code class="docutils literal notranslate"><span class="pre">EccentricAnomalyAtUT</span></code>, <code class="docutils literal notranslate"><span class="pre">TrueAnomalyAtRadius</span></code>, <code class="docutils literal notranslate"><span class="pre">SemiLatusRectum</span></code> and <code class="docutils literal notranslate"><span class="pre">SpecificAngularMomentum</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add creating an orbit from its elements, or from a position and velocity (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Move a burn by setting <code class="docutils literal notranslate"><span class="pre">Burn.UT</span></code>, and add <code class="docutils literal notranslate"><span class="pre">Burn.BurnVector</span></code> and <code class="docutils literal notranslate"><span class="pre">RemainingBurnVector</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+</ul>
+</li>
+<li><p>Parts</p>
+<ul>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">KSA.RaycastDistance</span></code> and <code class="docutils literal notranslate"><span class="pre">KSA.RaycastPart</span></code>, to find the parts along a ray (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Part.Highlight</span></code>, to highlight a part in one of the game’s colors (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+</ul>
+</li>
+<li><p>Radiation and space weather</p>
+<ul>
+<li><p>Add the radiation shielding of a part, its cover by the vehicle’s tanks, and the dose rate behind them (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add the solar wind and radiation storm at a vehicle, and the coronal mass ejections heading for it, with their forecast arrival (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+<li><p>Add the geomagnetic storm of a body, and the activity and recent coronal mass ejections of a star (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+</ul>
+</li>
+<li><p>kFS</p>
+<ul>
+<li><p>Add a <code class="docutils literal notranslate"><span class="pre">KFS</span></code> service, to build, load, start and stop programs on kFS, the game’s prototype flight software (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1403">#1403</a>)</p></li>
+<li><p>Add reading and writing a program’s global variables, and its log and trace channels (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1403">#1403</a>)</p></li>
+<li><p>Refuse changes to <code class="docutils literal notranslate"><span class="pre">AutoPilot</span></code> while a kFS program controls the vehicle (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1403">#1403</a>)</p></li>
+</ul>
+</li>
+<li><p>Game</p>
+<ul>
+<li><p>Stop a warp in progress when <code class="docutils literal notranslate"><span class="pre">KSA.SimulationSpeed</span></code> is set (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1402">#1402</a>)</p></li>
+</ul>
+</li>
+<li><p>Clients</p>
+<ul>
+<li><p>Add stubs and documentation for the JavaScript client (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p>Add documentation for calling the server over HTTP, with its API reference (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1404">#1404</a>)</p></li>
+<li><p>Add a WebSockets server on port 50001 to the default settings, for the JavaScript client (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+</ul>
+</li>
+<li><p>Release</p>
+<ul>
+<li><p>Move the example scripts out of the release archive, into the tutorials in the documentation (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+</ul>
+</li>
+</ul>
+</section>
 <section id="v0-2-0">
 <h2>v0.2.0<a class="headerlink" href="#v0-2-0" title="Link to this heading">#</a></h2>
 <ul class="simple">
@@ -521,7 +628,7 @@
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -533,6 +640,7 @@
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-0">v0.3.0</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-2-0">v0.2.0</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-0">v0.1.0</a></li>
 </ul>
@@ -560,8 +668,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -594,7 +702,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

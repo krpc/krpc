@@ -15,8 +15,10 @@ KSA API
    ksa/resources
    ksa/power
    ksa/crew
+   ksa/life-support
    ksa/body
    ksa/flight
+   ksa/space-weather
    ksa/orbit
    ksa/control
    ksa/auto-pilot

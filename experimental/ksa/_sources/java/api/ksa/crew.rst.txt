@@ -8,7 +8,7 @@ Crew
 
 .. type:: public class Kitten
 
-   A kitten in the agency's roster. Obtained from :meth:`getKittens()`,
+   A kitten in the agency's roster. Obtained from :meth:`KSA.getKittens()`,
    :meth:`Vehicle.getCrew()` or :meth:`Seat.getKitten()`.
 
    .. method:: String getName()
@@ -21,7 +21,7 @@ Crew
    .. method:: int getRosterIndex()
 
 
-      The kitten's position in the agency's roster, from 0. See :meth:`getKittens()`.
+      The kitten's position in the agency's roster, from 0. See :meth:`KSA.getKittens()`.
 
    
 
@@ -43,6 +43,13 @@ Crew
 
 
       Whether the kitten has been killed in action.
+
+   
+
+   .. method:: DeathCause getCauseOfDeath()
+
+
+      What killed the kitten, or ``null`` if it is alive.
 
    
 
@@ -106,6 +113,33 @@ Crew
 
    
 
+   .. method:: float getTimeToRadiationSickness()
+
+
+      The time until the kitten gets radiation sickness at its current dose rate, in
+      seconds. Infinite if it never does, or the kitten already has it.
+
+   
+
+      .. note::
+
+         The game forecasts it for a kitten on a mission while
+         :meth:`KSA.getRadiationEnabled()` is true.
+
+   .. method:: float getTimeToLethalDose()
+
+
+      The time until the kitten takes a lethal radiation dose at its current dose rate, in
+      seconds. Infinite if it never does.
+
+   
+
+      .. note::
+
+         The game forecasts it for a kitten on a mission while
+         :meth:`KSA.getRadiationEnabled()` is true, and only within a day of radiation
+         sickness.
+
    .. method:: float getTimeUntilFitToFly()
 
 
@@ -129,6 +163,44 @@ Crew
 
    
 
+   .. method:: KittenCondition getWorstCondition()
+
+
+      The kitten's worst condition across its supplies.
+
+   
+
+   .. method:: KittenCondition condition(LifeSupportSupply supply)
+
+      The effect on the kitten of going without a supply.
+
+      :param LifeSupportSupply supply: The supply.
+   
+
+   .. method:: float timeWithout(LifeSupportSupply supply)
+
+      The time the kitten has gone without a supply, in seconds. It counts down again
+      once the supply returns.
+
+      :param LifeSupportSupply supply: The supply.
+   
+
+   .. method:: float timeToNextCondition(LifeSupportSupply supply)
+
+      The further time the kitten can go without a supply before its condition from the
+      supply worsens, in seconds. Infinite once the kitten is dead.
+
+      :param LifeSupportSupply supply: The supply.
+   
+
+   .. method:: boolean getIncapacitated()
+
+
+      Whether the kitten is incapacitated by going without a supply. An incapacitated
+      kitten cannot fly the vehicle or move supplies.
+
+   
+
    .. method:: boolean getOnEva()
 
 
@@ -139,13 +211,20 @@ Crew
    .. method:: void goOnEva()
 
       Leave the kitten's vehicle through its EVA hatch, and return once the kitten is on
-      EVA. The kitten becomes the controlled kitten, see :meth:`getActiveKitten()`.
+      EVA. The kitten becomes the controlled kitten, see :meth:`KSA.getActiveKitten()`.
 
    
 
       .. note::
 
          Throws an exception if the kitten is not in a seat, or the vehicle has no EVA hatch.
+
+   .. method:: boolean getCanGoOnEva()
+
+
+      Whether the kitten can go on EVA. See :meth:`Kitten.goOnEva()`.
+
+   
 
    .. method:: Vehicle board()
 
@@ -159,6 +238,14 @@ Crew
 
          Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
          within one meter.
+
+   .. method:: boolean getCanBoard()
+
+
+      Whether the kitten is on EVA and an EVA hatch with a free seat is in range. See
+      :meth:`Kitten.board()`.
+
+   
 
    .. method:: LocomotionMode getLocomotionMode()
 
@@ -183,6 +270,77 @@ Crew
 
       :param ReferenceFrame referenceFrame: The reference frame of the velocity.
    
+
+   .. method:: LifeSupport getLifeSupport()
+
+
+      How long the supplies in the kitten's suit last, or ``null`` if the kitten is
+      not on EVA.
+
+   
+
+      .. note::
+
+         The suit is filled from the kitten's habitat zone when it goes on EVA, and what is
+         left returns to the zone when it boards.
+
+   .. method:: int getCarriedMeals()
+
+
+      The number of meals the kitten on EVA carries. Throws an exception if the kitten is
+      not on EVA.
+
+   
+
+   .. method:: int getCarriedCanisters()
+
+
+      The number of carbon dioxide scrubber canisters the kitten on EVA carries. Throws an
+      exception if the kitten is not on EVA.
+
+   
+
+   .. method:: boolean canCarry(Habitat habitat)
+
+      Whether the kitten can take supplies from or stow them in a habitat. See
+      :meth:`Kitten.take(Habitat, int, int)` and :meth:`Kitten.stow(Habitat, int, int)`.
+
+      :param Habitat habitat: The habitat.
+   
+
+   .. method:: void take(Habitat habitat, int meals, int canisters)
+
+      Take meals and canisters from a habitat within reach, and return once the kitten
+      carries them. Takes fewer when the habitat holds fewer, or the kitten cannot carry
+      more.
+
+      :param Habitat habitat: The habitat, which must store supplies.
+      :param int meals: The number of meals to take.
+      :param int canisters: The number of canisters to take.
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA or is unwell, life support is
+         disabled, or the habitat stores no supplies or is out of reach. See
+         :meth:`Kitten.canCarry(Habitat)`.
+
+   .. method:: void stow(Habitat habitat, int meals, int canisters)
+
+      Stow the meals and canisters the kitten carries in a habitat within reach, and
+      return once they are stowed. Stows fewer when the kitten carries fewer, or the
+      habitat has less room.
+
+      :param Habitat habitat: The habitat, which must store supplies.
+      :param int meals: The number of meals to stow.
+      :param int canisters: The number of canisters to stow.
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA or is unwell, life support is
+         disabled, or the habitat stores no supplies or is out of reach. See
+         :meth:`Kitten.canCarry(Habitat)`.
 
 
 
@@ -227,6 +385,220 @@ Crew
 
 
 
+.. type:: public enum KittenCondition
+
+   The effect on a kitten of going without a supply. See :meth:`Kitten.condition(LifeSupportSupply)`.
+
+
+   .. field:: public KittenCondition HEALTHY
+
+      Unaffected.
+
+
+   .. field:: public KittenCondition WARNING
+
+      Going without, with no effect yet.
+
+
+   .. field:: public KittenCondition DEGRADED
+
+      Weakened, and unable to go on EVA.
+
+
+   .. field:: public KittenCondition INCAPACITATED
+
+      Unable to fly the vehicle or move supplies.
+
+
+   .. field:: public KittenCondition DEAD
+
+      Dead.
+
+
+
+.. type:: public enum DeathCause
+
+   What killed a kitten. See :meth:`Kitten.getCauseOfDeath()`.
+
+
+   .. field:: public DeathCause UNKNOWN
+
+      Not recorded.
+
+
+   .. field:: public DeathCause NO_OXYGEN
+
+      Lack of oxygen.
+
+
+   .. field:: public DeathCause NO_SCRUBBER
+
+      Carbon dioxide, with no scrubber canisters left.
+
+
+   .. field:: public DeathCause NO_WATER
+
+      Lack of water.
+
+
+   .. field:: public DeathCause NO_FOOD
+
+      Lack of food.
+
+
+   .. field:: public DeathCause RADIATION
+
+      A lethal radiation dose.
+
+
+   .. field:: public DeathCause GROUND_IMPACT
+
+      Hitting the ground.
+
+
+   .. field:: public DeathCause OCEAN_IMPACT
+
+      Hitting the ocean.
+
+
+   .. field:: public DeathCause COLLISION
+
+      A collision.
+
+
+   .. field:: public DeathCause EXCESSIVE_G_FORCE
+
+      Excessive acceleration.
+
+
+   .. field:: public DeathCause AERODYNAMIC_FORCES
+
+      Aerodynamic forces breaking up the vehicle.
+
+
+   .. field:: public DeathCause HYDRODYNAMIC_FORCES
+
+      Hydrodynamic forces breaking up the vehicle.
+
+
+   .. field:: public DeathCause FALL
+
+      A fall on EVA.
+
+
+   .. field:: public DeathCause ABANDONED
+
+      Left in a vehicle that was abandoned.
+
+
+
+.. type:: public class CrewEvent
+
+   A kitten's most urgent coming event: its supplies running low, or its condition
+   worsening. Obtained from :meth:`Vehicle.getCrewEvents()` or
+   :meth:`Vehicle.getNextCrewEvent()`.
+
+   .. note::
+
+      As the game's crew clock, an event within a day is the worst stage the kitten reaches
+      in that time, and a later event is the soonest. The event is the game's forecast when it
+      is read from the vehicle. Read it again for a new forecast.
+
+   .. method:: Kitten getKitten()
+
+
+      The kitten.
+
+   
+
+   .. method:: CrewStage getStage()
+
+
+      What happens to the kitten.
+
+   
+
+   .. method:: CrewHazard getHazard()
+
+
+      The cause of the event.
+
+   
+
+   .. method:: double getUT()
+
+
+      The universal time of the event, in seconds.
+
+   
+
+   .. method:: float getTimeTo()
+
+
+      The time until the event, in seconds. Zero once its time has passed.
+
+   
+
+
+
+.. type:: public enum CrewStage
+
+   What happens to a kitten in a crew event. See :meth:`CrewEvent.getStage()`.
+
+
+   .. field:: public CrewStage LOW
+
+      The supply runs low.
+
+
+   .. field:: public CrewStage DEGRADED
+
+      The kitten is weakened, and unable to go on EVA. For radiation, the kitten gets
+      radiation sickness.
+
+
+   .. field:: public CrewStage INCAPACITATED
+
+      The kitten is unable to fly the vehicle or move supplies.
+
+
+   .. field:: public CrewStage DEAD
+
+      The kitten dies.
+
+
+
+.. type:: public enum CrewHazard
+
+   The cause of a crew event. See :meth:`CrewEvent.getHazard()`.
+
+
+   .. field:: public CrewHazard AIR
+
+      Running out of air.
+
+
+   .. field:: public CrewHazard SCRUBBER
+
+      Running out of carbon dioxide scrubber.
+
+
+   .. field:: public CrewHazard WATER
+
+      Running out of water.
+
+
+   .. field:: public CrewHazard FOOD
+
+      Running out of food.
+
+
+   .. field:: public CrewHazard RADIATION
+
+      The radiation dose.
+
+
+
 .. type:: public class Seat
 
    A crew seat. Obtained from :meth:`Part.getSeats()`.
@@ -249,5 +621,6 @@ Crew
 
       .. note::
 
-         A kitten in another seat of the vehicle moves to this one. Throws an exception if
-         the kitten is killed in action, on EVA, or in another vehicle.
+         A kitten in another seat of the vehicle moves to this one, within its habitat zone.
+         Throws an exception if the kitten is killed in action, retired, on EVA, in another
+         vehicle, or incapacitated, or the seat is in another habitat zone.

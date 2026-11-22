@@ -11,8 +11,8 @@ KSA
 
    .. grpc:rpc:: GetActiveVehicle (KSA.GetActiveVehicleRequest) returns (KSA.GetActiveVehicleResponse)
 
-      The vehicle under the player's control, or ``null`` if the player controls a
-      kitten on EVA.
+      The vehicle under the player's control, or ``null`` if there is none or the
+      player controls a kitten on EVA.
 
       :KSA.GetActiveVehicleRequest: Empty
 
@@ -25,8 +25,8 @@ KSA
 
    .. grpc:rpc:: SetActiveVehicle (KSA.SetActiveVehicleRequest) returns (KSA.SetActiveVehicleResponse)
 
-      The vehicle under the player's control, or ``null`` if the player controls a
-      kitten on EVA.
+      The vehicle under the player's control, or ``null`` if there is none or the
+      player controls a kitten on EVA.
 
       :KSA.SetActiveVehicleRequest:
          * ``value`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
@@ -115,6 +115,10 @@ KSA
 
       :KSA.GetSimulationSpeedResponse: ``value`` (``float``)
 
+      .. note::
+
+         Setting it stops a warp in progress, such as one started by :grpc:rpc:`KSAService.WarpTo <krpc.ksa.KSAService.WarpTo>`.
+
    .. grpc:rpc:: SetSimulationSpeed (KSA.SetSimulationSpeedRequest) returns (KSA.SetSimulationSpeedResponse)
 
       The simulation speed, as a multiple of real time. Zero when paused.
@@ -123,6 +127,26 @@ KSA
          * ``value`` (``float``)
 
       :KSA.SetSimulationSpeedResponse: Empty
+
+      .. note::
+
+         Setting it stops a warp in progress, such as one started by :grpc:rpc:`KSAService.WarpTo <krpc.ksa.KSAService.WarpTo>`.
+
+   .. grpc:rpc:: GetLifeSupportEnabled (KSA.GetLifeSupportEnabledRequest) returns (KSA.GetLifeSupportEnabledResponse)
+
+      Whether the crew use up supplies, as set when the game was created.
+
+      :KSA.GetLifeSupportEnabledRequest: Empty
+
+      :KSA.GetLifeSupportEnabledResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetRadiationEnabled (KSA.GetRadiationEnabledRequest) returns (KSA.GetRadiationEnabledResponse)
+
+      Whether radiation harms the crew, as set when the game was created.
+
+      :KSA.GetRadiationEnabledRequest: Empty
+
+      :KSA.GetRadiationEnabledResponse: ``value`` (``bool``)
 
    .. grpc:rpc:: WarpTo (KSA.WarpToRequest) returns (KSA.WarpToResponse)
 
@@ -137,7 +161,7 @@ KSA
       .. note::
 
          Does nothing when the time is in the past. Returns early if the game stops the
-         warp, for example when its menu pauses the game.
+         warp, for example when its menu pauses the game, or a vehicle's supplies run out.
 
    .. grpc:rpc:: GetVehicleDesigns (KSA.GetVehicleDesignsRequest) returns (KSA.GetVehicleDesignsResponse)
 
@@ -218,6 +242,39 @@ KSA
          * ``warning`` (``optional bool``): Whether to show the message in the warning color. Defaults to ``false``.
 
       :KSA.ShowMessageResponse: Empty
+
+   .. grpc:rpc:: RaycastDistance (KSA.RaycastDistanceRequest) returns (KSA.RaycastDistanceResponse)
+
+      The distance from a position to the first part of a vehicle along a ray, in
+      meters. Infinite if the ray hits no part.
+
+      :KSA.RaycastDistanceRequest:
+         * ``position`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The start of the ray, in meters.
+         * ``direction`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The direction of the ray.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position and direction.
+
+      :KSA.RaycastDistanceResponse: ``value`` (``double``)
+
+      .. note::
+
+         The ray tests the meshes of the parts, as picking a part with the mouse does.
+         It passes through terrain and kittens on EVA.
+
+   .. grpc:rpc:: RaycastPart (KSA.RaycastPartRequest) returns (KSA.RaycastPartResponse)
+
+      The first part of a vehicle along a ray, or ``null`` if the ray hits no part.
+
+      :KSA.RaycastPartRequest:
+         * ``position`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The start of the ray, in meters.
+         * ``direction`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The direction of the ray.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position and direction.
+
+      :KSA.RaycastPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      .. note::
+
+         The ray tests the meshes of the parts, as picking a part with the mouse does.
+         It passes through terrain and kittens on EVA.
 
    .. grpc:rpc:: TransformPosition (KSA.TransformPositionRequest) returns (KSA.TransformPositionResponse)
 

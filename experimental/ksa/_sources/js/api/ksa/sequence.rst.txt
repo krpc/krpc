@@ -1,0 +1,91 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Sequence
+========
+
+
+.. class:: Sequence
+
+   A sequence of a vehicle, the group of parts activated together, and its predicted
+   performance. Obtained from :meth:`KSA.Vehicle.getSequences`.
+
+   .. note::
+
+      The performance is the game's prediction at the current atmospheric pressure. It
+      assumes the sequences activate in order, each once the one before has burned its
+      propellant.
+
+   .. method:: getNumber()
+
+      The number of the sequence, as shown in the game.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getActivated()
+
+      Whether the sequence has been activated.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getDeltaV()
+
+      The change in velocity the sequence provides, in meters per second.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getThrust()
+
+      The thrust of the sequence's engines at full throttle, in Newtons.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSpecificImpulse()
+
+      The combined specific impulse of the sequence's engines, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getBurnTime()
+
+      The time the sequence's engines take to burn its propellant at full throttle,
+      in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getStartMass()
+
+      The mass of the vehicle when the sequence starts to burn, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getEndMass()
+
+      The mass of the vehicle once the sequence has burned its propellant, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getPropellantMass()
+
+      The mass of propellant the sequence burns, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``

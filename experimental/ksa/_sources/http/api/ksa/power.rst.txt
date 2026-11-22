@@ -1,0 +1,646 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Power
+=====
+
+
+.. _http-KSA.Battery:
+
+.. rubric:: Battery
+
+A battery, which stores electrical energy. Obtained from :http:get:`/ksa/part/(id)/batteries`.
+
+A ``Battery`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/battery/(id)/part
+
+   The part the battery is in.
+
+
+   :param id: The identifier of the :ref:`Battery <http-KSA.Battery>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/battery/(id)/stored-energy
+
+   The energy stored in the battery, in joules.
+
+
+   :param id: The identifier of the :ref:`Battery <http-KSA.Battery>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/battery/(id)/energy-capacity
+
+   The energy the battery can store, in joules.
+
+
+   :param id: The identifier of the :ref:`Battery <http-KSA.Battery>` object.
+
+   :resjson float value:
+
+
+
+
+
+.. _http-KSA.SolarPanel:
+
+.. rubric:: SolarPanel
+
+A solar panel, which turns sunlight into electrical power. Obtained from :http:get:`/ksa/part/(id)/solar-panels`.
+
+A ``SolarPanel`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/solar-panel/(id)/part
+
+   The part the solar panel is in.
+
+
+   :param id: The identifier of the :ref:`SolarPanel <http-KSA.SolarPanel>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/solar-panel/(id)/active
+
+   Whether the solar panel can produce power, because it is deployed or does not deploy.
+
+
+   :param id: The identifier of the :ref:`SolarPanel <http-KSA.SolarPanel>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/solar-panel/(id)/power
+
+   The power the solar panel produces, in watts.
+
+
+   :param id: The identifier of the :ref:`SolarPanel <http-KSA.SolarPanel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/solar-panel/(id)/sun-angle
+
+   The angle between the solar panel's face and the direction to the sun, in degrees.
+   Zero when the panel faces the sun.
+
+
+   :param id: The identifier of the :ref:`SolarPanel <http-KSA.SolarPanel>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/solar-panel/(id)/occluded
+
+   Whether a body blocks the sunlight to the solar panel.
+
+
+   :param id: The identifier of the :ref:`SolarPanel <http-KSA.SolarPanel>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/solar-panel/(id)/deployable
+
+   The deployable section that opens the solar panel, or ``null`` for a panel that
+   does not deploy.
+
+
+   :param id: The identifier of the :ref:`SolarPanel <http-KSA.SolarPanel>` object.
+
+   :resjson KSA.Deployable? value:
+
+
+
+
+
+.. _http-KSA.Generator:
+
+.. rubric:: Generator
+
+A generator, which produces electrical power. Obtained from :http:get:`/ksa/part/(id)/generators`.
+
+.. note::
+
+   A generator runs while its :http:get:`/ksa/generator/(id)/engine` is active, and produces power in
+   proportion to the engine's throttle.
+
+
+A ``Generator`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/generator/(id)/part
+
+   The part the generator is in.
+
+
+   :param id: The identifier of the :ref:`Generator <http-KSA.Generator>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/generator/(id)/engine
+
+   The engine that drives the generator, or ``null`` if it has none.
+
+
+   :param id: The identifier of the :ref:`Generator <http-KSA.Generator>` object.
+
+   :resjson KSA.Engine? value:
+
+
+
+
+.. http:get:: /ksa/generator/(id)/active
+
+   Whether the generator is producing power.
+
+
+   :param id: The identifier of the :ref:`Generator <http-KSA.Generator>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/generator/(id)/power
+
+   The power the generator produces, in watts.
+
+
+   :param id: The identifier of the :ref:`Generator <http-KSA.Generator>` object.
+
+   :resjson float value:
+
+
+
+
+
+.. _http-KSA.PowerConsumer:
+
+.. rubric:: PowerConsumer
+
+A power consumer, which uses electrical power, such as a light. Obtained from
+:http:get:`/ksa/part/(id)/power-consumers`.
+
+A ``PowerConsumer`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/power-consumer/(id)/part
+
+   The part the power consumer is in.
+
+
+   :param id: The identifier of the :ref:`PowerConsumer <http-KSA.PowerConsumer>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/power-consumer/(id)/active
+
+   Whether the part is using power.
+
+
+   :param id: The identifier of the :ref:`PowerConsumer <http-KSA.PowerConsumer>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/power-consumer/(id)/power
+
+   The power the part uses, in watts.
+
+
+   :param id: The identifier of the :ref:`PowerConsumer <http-KSA.PowerConsumer>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/power-consumer/(id)/has-power-switch
+
+   Whether the part has a power switch, as a probe core does.
+
+
+   :param id: The identifier of the :ref:`PowerConsumer <http-KSA.PowerConsumer>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/power-consumer/(id)/mode
+
+   The setting of the power switch.
+
+   .. note::
+
+      Throws an exception if the part has no power switch.
+
+
+   :param id: The identifier of the :ref:`PowerConsumer <http-KSA.PowerConsumer>` object.
+
+   :resjson KSA.PowerMode value:
+
+.. http:put:: /ksa/power-consumer/(id)/mode
+
+   The setting of the power switch.
+
+   .. note::
+
+      Throws an exception if the part has no power switch.
+
+
+   :param id: The identifier of the :ref:`PowerConsumer <http-KSA.PowerConsumer>` object.
+
+   :reqjson KSA.PowerMode value: The new value.
+
+
+
+
+.. http:get:: /ksa/power-consumer/(id)/standby-in-storms
+
+   Whether the part goes on standby, drawing no power, while a radiation storm is under
+   way at the vehicle.
+
+   .. note::
+
+      The game takes a storm of level 1 or worse on the S scale, as
+      :http:get:`/ksa/flight/(id)/radiation-storm-level` gives. Throws an exception if the part has
+      no power switch.
+
+
+   :param id: The identifier of the :ref:`PowerConsumer <http-KSA.PowerConsumer>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/power-consumer/(id)/standby-in-storms
+
+   Whether the part goes on standby, drawing no power, while a radiation storm is under
+   way at the vehicle.
+
+   .. note::
+
+      The game takes a storm of level 1 or worse on the S scale, as
+      :http:get:`/ksa/flight/(id)/radiation-storm-level` gives. Throws an exception if the part has
+      no power switch.
+
+
+   :param id: The identifier of the :ref:`PowerConsumer <http-KSA.PowerConsumer>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/power-consumer/(id)/status
+
+   The power status of the part.
+
+   .. note::
+
+      Throws an exception if the part has no power switch.
+
+
+   :param id: The identifier of the :ref:`PowerConsumer <http-KSA.PowerConsumer>` object.
+
+   :resjson KSA.PowerStatus value:
+
+
+
+
+
+.. _http-KSA.PowerMode:
+
+.. rubric:: PowerMode
+
+The setting of a power switch. See :http:get:`/ksa/power-consumer/(id)/mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"off"``
+   Switched off.
+
+
+``"auto"``
+   On standby while another control module flies the vehicle, and on when none can.
+
+
+``"on"``
+   Switched on.
+
+
+
+.. _http-KSA.PowerStatus:
+
+.. rubric:: PowerStatus
+
+The power status of a part with a power switch. See :http:get:`/ksa/power-consumer/(id)/status`.
+
+Passed and returned as the name of one of its values:
+
+
+``"off"``
+   Switched off.
+
+
+``"standby"``
+   On standby, while another control module flies the vehicle or a radiation storm is under way.
+
+
+``"rebooting"``
+   Rebooting after a radiation upset.
+
+
+``"on"``
+   On, with power.
+
+
+``"low"``
+   On, with power for less than five minutes.
+
+
+``"out"``
+   Out of power.
+
+
+``"failed"``
+   Failed from its radiation dose.
+
+
+
+.. _http-KSA.PowerForecast:
+
+.. rubric:: PowerForecast
+
+The charge, draw and supply of the electrical circuit a part is on, and how long its
+batteries last. Obtained from :http:get:`/ksa/part/(id)/power-forecast`.
+
+.. note::
+
+   A circuit is the parts joined by connections that carry electricity. This is the
+   forecast the game shows for a probe core.
+
+
+A ``PowerForecast`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/power-forecast/(id)/has-battery
+
+   Whether the circuit has a battery.
+
+
+   :param id: The identifier of the :ref:`PowerForecast <http-KSA.PowerForecast>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/power-forecast/(id)/charge
+
+   The energy stored in the circuit's batteries, in joules.
+
+
+   :param id: The identifier of the :ref:`PowerForecast <http-KSA.PowerForecast>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/power-forecast/(id)/draw
+
+   The power the parts on the circuit draw, in watts.
+
+
+   :param id: The identifier of the :ref:`PowerForecast <http-KSA.PowerForecast>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/power-forecast/(id)/supply
+
+   The power the solar panels and generators on the circuit supply, in watts.
+
+
+   :param id: The identifier of the :ref:`PowerForecast <http-KSA.PowerForecast>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/power-forecast/(id)/time-left
+
+   The time until the batteries run out, in seconds. Infinite while the supply meets
+   the draw, and zero when the batteries are empty or there are none.
+
+
+   :param id: The identifier of the :ref:`PowerForecast <http-KSA.PowerForecast>` object.
+
+   :resjson float value:
+
+
+
+
+
+.. _http-KSA.Avionics:
+
+.. rubric:: Avionics
+
+The avionics of a probe core, which radiation wears out and upsets. Obtained from
+:http:get:`/ksa/part/(id)/avionics` or :http:get:`/ksa/vehicle/(id)/avionics`.
+
+.. note::
+
+   The avionics take a dose only while :http:get:`/ksa/radiation-enabled` is true. Switched
+   off or on standby, they take half the dose and no upsets.
+
+
+A ``Avionics`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/avionics/(id)/part
+
+   The part the avionics are in.
+
+
+   :param id: The identifier of the :ref:`Avionics <http-KSA.Avionics>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/avionics/(id)/health
+
+   The health of the avionics.
+
+
+   :param id: The identifier of the :ref:`Avionics <http-KSA.Avionics>` object.
+
+   :resjson KSA.AvionicsHealth value:
+
+
+
+
+.. http:get:: /ksa/avionics/(id)/dose
+
+   The radiation dose the avionics have taken, in grays of silicon.
+
+
+   :param id: The identifier of the :ref:`Avionics <http-KSA.Avionics>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/avionics/(id)/tolerance
+
+   The dose at which the avionics fail, in grays of silicon.
+
+
+   :param id: The identifier of the :ref:`Avionics <http-KSA.Avionics>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/avionics/(id)/dose-rate
+
+   The rate at which the avionics take a dose, in grays of silicon per second,
+   averaged over about an hour. Not a number until the avionics have taken a dose.
+
+
+   :param id: The identifier of the :ref:`Avionics <http-KSA.Avionics>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/avionics/(id)/time-left
+
+   The time until the avionics fail at :http:get:`/ksa/avionics/(id)/dose-rate`, in seconds. Infinite
+   while they take no dose, and zero once they have failed.
+
+
+   :param id: The identifier of the :ref:`Avionics <http-KSA.Avionics>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/avionics/(id)/rebooting
+
+   Whether the avionics are rebooting after a radiation upset.
+
+
+   :param id: The identifier of the :ref:`Avionics <http-KSA.Avionics>` object.
+
+   :resjson bool value:
+
+
+
+
+
+.. _http-KSA.AvionicsHealth:
+
+.. rubric:: AvionicsHealth
+
+The health of avionics. See :http:get:`/ksa/avionics/(id)/health`.
+
+Passed and returned as the name of one of its values:
+
+
+``"ok"``
+   Working.
+
+
+``"worn"``
+   Working, with a dose of at least four fifths of the tolerance.
+
+
+``"failed"``
+   Failed for good, at the tolerance.
+
+
+
+.. _http-KSA.Light:
+
+.. rubric:: Light
+
+A light. Obtained from :http:get:`/ksa/part/(id)/lights`.
+
+.. note::
+
+   The vehicle's lights switch on and off together, see :http:get:`/ksa/control/(id)/lights`.
+   Cabin lights are always on.
+
+
+A ``Light`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/light/(id)/part
+
+   The part the light is in.
+
+
+   :param id: The identifier of the :ref:`Light <http-KSA.Light>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/light/(id)/active
+
+   Whether the light is on.
+
+
+   :param id: The identifier of the :ref:`Light <http-KSA.Light>` object.
+
+   :resjson bool value:

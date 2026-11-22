@@ -1,0 +1,616 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Drawing
+=======
+
+
+.. class:: Drawing
+
+   Draws lines, shapes and text in the scene, each placed in a reference frame.
+
+   .. note::
+
+      The objects are drawn every frame until removed, and are removed when the client that
+      added them disconnects. Lines are drawn at the game's fixed gizmo width.
+
+   .. function:: addLine(start, end, referenceFrame[, visible])
+
+      Draw a line between two positions.
+
+      :param start: The position of the start of the line, in meters.
+      :type start: ``[number, number, number]``
+      :param end: The position of the end of the line, in meters.
+      :type end: ``[number, number, number]``
+      :param referenceFrame: The reference frame of the positions.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :param visible: Whether the line is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Line`
+   
+
+   .. function:: addDirection(direction, referenceFrame[, length[, visible]])
+
+      Draw a line from the origin of a reference frame in a direction.
+
+      :param direction: The direction of the line.
+      :type direction: ``[number, number, number]``
+      :param referenceFrame: The reference frame of the direction.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :param length: The length of the line, in meters. Defaults to ``1e+01``.
+      :type length: ``number``
+      :param visible: Whether the line is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Line`
+   
+
+   .. function:: addPolyline(vertices, referenceFrame[, closed[, visible]])
+
+      Draw a line through a list of positions.
+
+      :param vertices: The positions the line passes through, in meters.
+      :type vertices: ``Array`` of ``[number, number, number]``
+      :param referenceFrame: The reference frame of the positions.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :param closed: Whether the line joins the last position back to the first. Defaults to ``false``.
+      :type closed: ``boolean``
+      :param visible: Whether the line is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Polyline`
+   
+
+   .. function:: addCircle(center, normal, radius, referenceFrame[, visible])
+
+      Draw a circle.
+
+      :param center: The position of the center of the circle, in meters.
+      :type center: ``[number, number, number]``
+      :param normal: The direction normal to the plane of the circle.
+      :type normal: ``[number, number, number]``
+      :param radius: The radius of the circle, in meters.
+      :type radius: ``number``
+      :param referenceFrame: The reference frame of the position and direction.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :param visible: Whether the circle is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Circle`
+   
+
+   .. function:: addArc(center, normal, startDirection, angle, radius, referenceFrame[, visible])
+
+      Draw an arc of a circle.
+
+      :param center: The position of the center of the arc's circle, in meters.
+      :type center: ``[number, number, number]``
+      :param normal: The direction normal to the plane of the arc.
+      :type normal: ``[number, number, number]``
+      :param startDirection: The direction from the center to the start of the arc.
+      :type startDirection: ``[number, number, number]``
+      :param angle: The angle the arc turns through, counterclockwise about the normal, in radians.
+      :type angle: ``number``
+      :param radius: The radius of the arc, in meters.
+      :type radius: ``number``
+      :param referenceFrame: The reference frame of the position and directions.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :param visible: Whether the arc is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Arc`
+   
+
+   .. function:: addBox(center, size, rotation, referenceFrame[, visible])
+
+      Draw the edges of a box.
+
+      :param center: The position of the center of the box, in meters.
+      :type center: ``[number, number, number]``
+      :param size: The lengths of the box's edges along its x, y and z axes, in meters.
+      :type size: ``[number, number, number]``
+      :param rotation: The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+      :type rotation: ``[number, number, number, number]``
+      :param referenceFrame: The reference frame of the position and rotation.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :param visible: Whether the box is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Box`
+   
+
+   .. function:: addSphere(center, radius, referenceFrame[, visible])
+
+      Draw a solid sphere.
+
+      :param center: The position of the center of the sphere, in meters.
+      :type center: ``[number, number, number]``
+      :param radius: The radius of the sphere, in meters.
+      :type radius: ``number``
+      :param referenceFrame: The reference frame of the position.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :param visible: Whether the sphere is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Sphere`
+   
+
+   .. function:: addText(text, position, referenceFrame[, size[, visible]])
+
+      Draw text over the scene, centered on a position.
+
+      :param text: The text.
+      :type text: ``string``
+      :param position: The position of the center of the text, in meters.
+      :type position: ``[number, number, number]``
+      :param referenceFrame: The reference frame of the position.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :param size: The height of the font, in pixels. Defaults to ``16.0``.
+      :type size: ``number``
+      :param visible: Whether the text is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Text`
+   
+
+   .. function:: clear([clientOnly])
+
+      Remove the drawing objects.
+
+      :param clientOnly: Whether to remove only the objects added by the calling client. Defaults to ``false``.
+      :type clientOnly: ``boolean``
+   
+
+
+
+.. class:: Line
+
+   A line. Created using :meth:`KSA.Drawing.addLine` or :meth:`KSA.Drawing.addDirection`.
+
+   .. method:: getStart()
+               setStart(value)
+
+      The start position of the line, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: getEnd()
+               setEnd(value)
+
+      The end position of the line, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: getReferenceFrame()
+               setReferenceFrame(value)
+
+      The reference frame for the positions and directions of the object.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.ReferenceFrame`
+   
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+   
+
+   .. method:: remove()
+
+      Remove the object.
+
+   
+
+
+
+.. class:: Polyline
+
+   A line through a list of points. Created using :meth:`KSA.Drawing.addPolyline`.
+
+   .. method:: getVertices()
+               setVertices(value)
+
+      The points the line passes through, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``Array`` of ``[number, number, number]``
+   
+
+   .. method:: getClosed()
+               setClosed(value)
+
+      Whether the line joins the last point back to the first.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getReferenceFrame()
+               setReferenceFrame(value)
+
+      The reference frame for the positions and directions of the object.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.ReferenceFrame`
+   
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+   
+
+   .. method:: remove()
+
+      Remove the object.
+
+   
+
+
+
+.. class:: Circle
+
+   A circle. Created using :meth:`KSA.Drawing.addCircle`.
+
+   .. method:: getCenter()
+               setCenter(value)
+
+      The position of the center of the circle, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: getNormal()
+               setNormal(value)
+
+      The direction normal to the plane of the circle, as a unit vector.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: getRadius()
+               setRadius(value)
+
+      The radius of the circle, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getReferenceFrame()
+               setReferenceFrame(value)
+
+      The reference frame for the positions and directions of the object.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.ReferenceFrame`
+   
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+   
+
+   .. method:: remove()
+
+      Remove the object.
+
+   
+
+
+
+.. class:: Arc
+
+   An arc of a circle. Created using :meth:`KSA.Drawing.addArc`.
+
+   .. method:: getCenter()
+               setCenter(value)
+
+      The position of the center of the arc's circle, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: getNormal()
+               setNormal(value)
+
+      The direction normal to the plane of the arc, as a unit vector.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: getStartDirection()
+               setStartDirection(value)
+
+      The direction from the center to the start of the arc, as a unit vector.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+   
+
+      .. note::
+
+         The part of the direction along :meth:`KSA.Arc.getNormal` is ignored.
+
+   .. method:: getAngle()
+               setAngle(value)
+
+      The angle the arc turns through, counterclockwise about :meth:`KSA.Arc.getNormal`, in radians.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getRadius()
+               setRadius(value)
+
+      The radius of the arc, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getReferenceFrame()
+               setReferenceFrame(value)
+
+      The reference frame for the positions and directions of the object.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.ReferenceFrame`
+   
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+   
+
+   .. method:: remove()
+
+      Remove the object.
+
+   
+
+
+
+.. class:: Box
+
+   The edges of a box. Created using :meth:`KSA.Drawing.addBox`.
+
+   .. method:: getCenter()
+               setCenter(value)
+
+      The position of the center of the box, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: getSize()
+               setSize(value)
+
+      The lengths of the box's edges along its x, y and z axes, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: getRotation()
+               setRotation(value)
+
+      The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number, number]``
+   
+
+   .. method:: getReferenceFrame()
+               setReferenceFrame(value)
+
+      The reference frame for the positions and directions of the object.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.ReferenceFrame`
+   
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+   
+
+   .. method:: remove()
+
+      Remove the object.
+
+   
+
+
+
+.. class:: Sphere
+
+   A solid sphere. Created using :meth:`KSA.Drawing.addSphere`.
+
+   .. method:: getCenter()
+               setCenter(value)
+
+      The position of the center of the sphere, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: getRadius()
+               setRadius(value)
+
+      The radius of the sphere, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getReferenceFrame()
+               setReferenceFrame(value)
+
+      The reference frame for the positions and directions of the object.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.ReferenceFrame`
+   
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+   
+
+   .. method:: remove()
+
+      Remove the object.
+
+   
+
+
+
+.. class:: Text
+
+   Text drawn over the scene, centered on a position. Created using :meth:`KSA.Drawing.addText`.
+
+   .. note::
+
+      The text is hidden with the game's UI.
+
+   .. method:: getContent()
+               setContent(value)
+
+      The text.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getPosition()
+               setPosition(value)
+
+      The position of the center of the text, in meters.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: getSize()
+               setSize(value)
+
+      The height of the font, in pixels.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getReferenceFrame()
+               setReferenceFrame(value)
+
+      The reference frame for the positions and directions of the object.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.ReferenceFrame`
+   
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the object is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getColor()
+               setColor(value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Property: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+   
+
+   .. method:: remove()
+
+      Remove the object.

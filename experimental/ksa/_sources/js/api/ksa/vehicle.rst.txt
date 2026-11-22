@@ -1,0 +1,889 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Vehicle
+=======
+
+
+.. class:: Vehicle
+
+   A vehicle in the current system. Obtained from :func:`KSA.getActiveVehicle`
+   or :func:`KSA.getVehicles`.
+
+   .. note::
+
+      Docking and undocking replace the vehicles involved, so an object for one of them
+      throws an exception afterwards.
+
+   .. method:: getName()
+               setName(value)
+
+      The name of the vehicle, which is unique in the system.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: destroy()
+
+      Destroy the vehicle, killing its crew, as abandoning the vehicle does. Returns once
+      the vehicle is gone.
+
+   
+
+      .. note::
+
+         If the vehicle is the active vehicle, the game hands control to a nearby vehicle.
+
+   .. method:: getCanRecover()
+
+      Whether the vehicle can be recovered: at rest on the surface of the home planet.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: recover()
+
+      Recover the vehicle, ending its crew's missions, as the game's recover button does.
+      Returns once the vehicle is gone.
+
+   
+
+      .. note::
+
+         Throws an exception if the vehicle cannot be recovered, see :meth:`KSA.Vehicle.getCanRecover`.
+
+   .. method:: getSituation()
+
+      The situation of the vehicle.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Situation`
+   
+
+   .. method:: getOnRails()
+
+      Whether the game moves the vehicle without simulating the forces on it: along its
+      orbit, or held on the surface. True in the freefall, landed, floating and bottomed
+      situations.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getIsDebris()
+
+      Whether the vehicle is debris, such as a spent stage.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getHasLaunched()
+
+      Whether the vehicle has launched.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getLaunchTime()
+
+      The universal time the vehicle was created, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMass()
+
+      The total mass of the vehicle, including propellant, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getDryMass()
+
+      The mass of the vehicle's parts, without propellant or supplies, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getPropellantMass()
+
+      The mass of the propellant in the vehicle, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getThrust()
+
+      The thrust of the engines at their current throttle and the current atmospheric
+      pressure, in Newtons.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getAvailableThrust()
+
+      The thrust of the active engines that have propellant, at full throttle and the
+      current atmospheric pressure, in Newtons.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSpecificImpulse()
+
+      The combined specific impulse of the active engines that have propellant, at the
+      current atmospheric pressure, in seconds. Zero when no engine is active.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMomentOfInertia()
+
+      The vehicle's moments of inertia about the axes of :meth:`KSA.Vehicle.getReferenceFrame`
+      through its center of mass, in :math:`\mathrm{kg \cdot m^{2}}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: getInertiaTensor()
+
+      The vehicle's inertia tensor about its center of mass, along the axes of
+      :meth:`KSA.Vehicle.getReferenceFrame`, in :math:`\mathrm{kg \cdot m^{2}}`, as its three rows.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of ``[number, number, number]``
+   
+
+   .. method:: getAvailableRCSTorque()
+
+      The torque the vehicle's RCS thrusters can give about each axis of its control
+      frame, in :math:`\mathrm{N \cdot m}`. Each is the smaller of the torques in the two
+      directions about the axis.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``[number, number, number]``
+   
+
+      .. note::
+
+         The control frame has the axes of :meth:`KSA.Vehicle.getReferenceFrame`, unless the flight
+         computer steers along the thrust. The thrusters give this torque while
+         :meth:`KSA.Control.getRCS` is on.
+
+   .. method:: acceleration(referenceFrame)
+
+      The vehicle's acceleration from the forces on it other than gravity, in
+      :math:`\mathrm{m/s^{2}}`.
+
+      :param referenceFrame: The reference frame of the acceleration.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+   
+
+      .. note::
+
+         The game measures it over the last physics step. Its length divided by standard
+         gravity is :meth:`KSA.Flight.getGForce`.
+
+   .. method:: angularAcceleration(referenceFrame)
+
+      The vehicle's angular acceleration, in :math:`\mathrm{rad/s^{2}}`. The vector points
+      along the axis of rotation.
+
+      :param referenceFrame: The reference frame of the angular acceleration.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+   
+
+      .. note::
+
+         The game measures it over the last physics step.
+
+   .. method:: getPeakGLoad()
+
+      The highest smoothed g-load on the vehicle during the last physics step, as a
+      multiple of standard gravity. Zero while the vehicle is :meth:`KSA.Vehicle.getOnRails`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMaxGLoad()
+
+      The g-load the vehicle can take before it breaks up, as a multiple of standard
+      gravity. Zero while the vehicle is :meth:`KSA.Vehicle.getOnRails`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getPeakDynamicPressure()
+
+      The highest dynamic pressure on the vehicle during the last physics step, in
+      pascals. In the sea, this is the dynamic pressure of the water. Zero while the
+      vehicle is :meth:`KSA.Vehicle.getOnRails`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMaxDynamicPressure()
+
+      The dynamic pressure the vehicle can take before it breaks up, in pascals. Zero
+      while the vehicle is :meth:`KSA.Vehicle.getOnRails`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getParts()
+
+      The vehicle's parts.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Part`
+   
+
+   .. method:: getRootPart()
+
+      The vehicle's root part, which the other parts are attached to.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: partsWithName(name)
+
+      The vehicle's parts with the given template id. See :meth:`KSA.Part.getName`.
+
+      :param name: The template id.
+      :type name: ``string``
+      :rtype: ``Array`` of :class:`KSA.Part`
+   
+
+   .. method:: getSeats()
+
+      The vehicle's crew seats.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Seat`
+   
+
+   .. method:: getCrew()
+
+      The kittens in the vehicle's seats.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Kitten`
+   
+
+   .. method:: getCrewCapacity()
+
+      The number of crew seats in the vehicle.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getControllable()
+
+      Whether the vehicle can be flown. A vehicle needs a control module, and a crewed
+      vehicle with every kitten incapacitated also needs a probe core.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getHasControlModule()
+
+      Whether the vehicle has a control module, such as a capsule or a probe core.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getControlState()
+
+      Whether the vehicle can be flown, or why not.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.ControlState`
+   
+
+      .. note::
+
+         This is the reason the game gives when the vehicle does not respond to its controls.
+
+   .. method:: getCrewEvents()
+
+      The most urgent coming event of each kitten in the vehicle, most urgent first.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.CrewEvent`
+   
+
+      .. note::
+
+         The order is the game's crew clock's: events within a day come first, the worst
+         first. Empty while :func:`KSA.getLifeSupportEnabled` and
+         :func:`KSA.getRadiationEnabled` are both false.
+
+   .. method:: getNextCrewEvent()
+
+      The most urgent of :meth:`KSA.Vehicle.getCrewEvents`, or ``null`` if there is none.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.CrewEvent` or ``null``
+   
+
+   .. method:: getLifeSupport()
+
+      How long the supplies of the vehicle's worst habitat zone last its crew, or
+      ``null`` if the vehicle has no habitats.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.LifeSupport` or ``null``
+   
+
+   .. method:: getMission()
+
+      The mission planned for the vehicle, or ``null`` if it has none.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Mission` or ``null``
+   
+
+   .. method:: getHabitatZones()
+
+      The vehicle's habitat zones.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.HabitatZone`
+   
+
+   .. method:: getHabitats()
+
+      The vehicle's habitats.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Habitat`
+   
+
+   .. method:: getEngines()
+
+      The vehicle's engines.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Engine`
+   
+
+   .. method:: getRCS()
+
+      The vehicle's RCS thrusters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.RCS`
+   
+
+   .. method:: getDecouplers()
+
+      The vehicle's decouplers.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Decoupler`
+   
+
+   .. method:: getParachutes()
+
+      The vehicle's parachutes.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Parachute`
+   
+
+   .. method:: getTanks()
+
+      The vehicle's propellant tanks.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Tank`
+   
+
+   .. method:: getBatteries()
+
+      The vehicle's batteries.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Battery`
+   
+
+   .. method:: getSolarPanels()
+
+      The vehicle's solar panels.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.SolarPanel`
+   
+
+   .. method:: getGenerators()
+
+      The vehicle's generators.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Generator`
+   
+
+   .. method:: getPowerConsumers()
+
+      The vehicle's power consumers.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.PowerConsumer`
+   
+
+   .. method:: getAvionics()
+
+      The avionics of the vehicle's probe cores.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Avionics`
+   
+
+   .. method:: getStoredEnergy()
+
+      The energy stored in the vehicle's batteries, in joules.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getEnergyCapacity()
+
+      The energy the vehicle's batteries can store, in joules.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getNetPower()
+
+      The power produced by the vehicle's solar panels and generators, less the power its
+      parts use, in watts.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getLights()
+
+      The vehicle's lights.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Light`
+   
+
+   .. method:: getDeployables()
+
+      The vehicle's deployable sections.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Deployable`
+   
+
+   .. method:: getMagneticScoops()
+
+      The vehicle's magnetic scoops.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.MagneticScoop`
+   
+
+   .. method:: getFuelLinks()
+
+      The vehicle's fuel links.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.FuelLink`
+   
+
+   .. method:: getDockingPorts()
+
+      The vehicle's docking ports.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.DockingPort`
+   
+
+   .. method:: getResources()
+
+      The resources the vehicle holds, one for each substance, totaled over its parts.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Resource`
+   
+
+   .. method:: getDeltaV()
+
+      The change in velocity of all the vehicle's sequences, in meters per second.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSequences()
+
+      The vehicle's sequences, in activation order.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Sequence`
+   
+
+   .. method:: getTargetVehicle()
+               setTargetVehicle(value)
+
+      The vehicle targeted by this vehicle, or ``null``. Setting it replaces the
+      target, and ``null`` clears it.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.Vehicle` or ``null``
+   
+
+   .. method:: getTargetBody()
+               setTargetBody(value)
+
+      The body targeted by this vehicle, or ``null``. Setting it replaces the target,
+      and ``null`` clears it.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.Body` or ``null``
+   
+
+      .. note::
+
+         Setting a body that orbits nothing, such as the star, throws an exception.
+
+   .. method:: getTargetPart()
+               setTargetPart(value)
+
+      The part targeted by this vehicle, on the vehicle in :meth:`KSA.Vehicle.getTargetVehicle`,
+      or ``null``. Setting it targets the part and its vehicle, and ``null`` clears
+      the target.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.Part` or ``null``
+   
+
+   .. method:: getBurns()
+
+      The vehicle's planned burns, in time order.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Burn`
+   
+
+   .. method:: addBurn(ut[, prograde[, normal[, radial]]])
+
+      Plan a burn, and add it to the vehicle's burn plan.
+
+      :param ut: Universal time of the burn, in seconds.
+      :type ut: ``number``
+      :param prograde: Change in velocity in the prograde direction, in meters per second. Defaults to ``0.0``.
+      :type prograde: ``number``
+      :param normal: Change in velocity along the orbit normal, in meters per second. Defaults to ``0.0``.
+      :type normal: ``number``
+      :param radial: Change in velocity radially outward, in meters per second. Defaults to ``0.0``.
+      :type radial: ``number``
+      :returns: The burn.
+      :rtype: :class:`KSA.Burn`
+   
+
+      .. note::
+
+         Returns once the flight computer has timed the burn, if it is the next one. Throws
+         an exception if the time is in the past, or beyond the vehicle's predicted
+         trajectory.
+
+   .. method:: getOrbit()
+
+      The current orbit of the vehicle.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Orbit`
+   
+
+   .. method:: getFlight()
+
+      Flight telemetry for the vehicle, relative to the surface of the body it orbits.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Flight`
+      :Game Scenes: Flight
+
+   .. method:: getControl()
+
+      The controls of the vehicle.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Control`
+      :Game Scenes: Flight
+
+   .. method:: getAutoPilot()
+
+      The auto-pilot of the vehicle.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.AutoPilot`
+      :Game Scenes: Flight
+
+   .. method:: getReferenceFrame()
+
+      The reference frame fixed to the vehicle, with its origin at the vehicle's position.
+      The x axis points forward, the y axis to the right and the z axis down, relative to
+      the vehicle's control point.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.ReferenceFrame`
+   
+
+   .. method:: getSurfaceReferenceFrame()
+
+      The reference frame with its origin at the vehicle's position, and axes aligned with
+      the surface below it. The x axis points east, the y axis north and the z axis up.
+      The frame rotates with the body.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.ReferenceFrame`
+   
+
+   .. method:: getOrbitalReferenceFrame()
+
+      The reference frame with its origin at the vehicle's position, and axes aligned with
+      its orbit. The x axis points prograde, the y axis along the orbit normal and the z
+      axis radially outward, perpendicular to the x axis.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.ReferenceFrame`
+   
+
+   .. method:: position(referenceFrame)
+
+      The position of the vehicle, in meters.
+
+      :param referenceFrame: The reference frame of the position.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: velocity(referenceFrame)
+
+      The velocity of the vehicle, in meters per second.
+
+      :param referenceFrame: The reference frame of the velocity.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: direction(referenceFrame)
+
+      The unit vector in which the vehicle points, the x axis of
+      :meth:`KSA.Vehicle.getReferenceFrame`.
+
+      :param referenceFrame: The reference frame of the direction.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: rotation(referenceFrame)
+
+      The rotation of :meth:`KSA.Vehicle.getReferenceFrame` relative to the given frame.
+
+      :param referenceFrame: The reference frame of the rotation.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number, number]``
+   
+
+   .. method:: angularVelocity(referenceFrame)
+
+      The angular velocity of the vehicle, in radians per second. The vector points along
+      the axis of rotation, and its length is the rate of rotation.
+
+      :param referenceFrame: The reference frame of the angular velocity.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+   
+
+
+
+.. class:: Situation
+
+   The situation of a vehicle: its contact with the surface, and whether the game is
+   simulating it with physics or propagating it along its orbit.
+   See :meth:`KSA.Vehicle.getSituation`.
+
+
+   .. attribute:: maneuvering
+
+      No surface contact, simulated with physics.
+
+
+   .. attribute:: freefall
+
+      No surface contact, on rails.
+
+
+   .. attribute:: rolling
+
+      On terrain, simulated with physics.
+
+
+   .. attribute:: landed
+
+      At rest on terrain.
+
+
+   .. attribute:: sailing
+
+      In the ocean, simulated with physics.
+
+
+   .. attribute:: floating
+
+      At rest in the ocean.
+
+
+   .. attribute:: dragging
+
+      On terrain and in the ocean, simulated with physics.
+
+
+   .. attribute:: bottomed
+
+      At rest on terrain and in the ocean.
+
+
+
+.. class:: ControlState
+
+   Whether a vehicle can be flown, or why not. See :meth:`KSA.Vehicle.getControlState`.
+
+
+   .. attribute:: controllable
+
+      The vehicle can be flown.
+
+
+   .. attribute:: noControlModule
+
+      The vehicle has no control module, such as a capsule or a probe core.
+
+
+   .. attribute:: noCrew
+
+      The capsules have no crew, and no probe core is on.
+
+
+   .. attribute:: crewIncapacitated
+
+      Every kitten in the capsules is incapacitated, and no probe core is on.
+
+
+   .. attribute:: probeCoreUnpowered
+
+      The probe core has no power.
+
+
+   .. attribute:: probeCoreOff
+
+      The probe core is switched off.
+
+
+   .. attribute:: probeCoreFailed
+
+      The probe core has failed from its radiation dose.
+
+
+   .. attribute:: probeCoreStormStandby
+
+      The probe core is on standby for a radiation storm.
+
+
+   .. attribute:: probeCoreRebooting
+
+      The probe core is rebooting after a radiation upset.
+
+
+
+.. class:: VehicleDesign
+
+   A vehicle design that can be launched: one of the game's default vehicles, or a vehicle
+   saved by the player in the editor. Obtained from :func:`KSA.getVehicleDesigns`.
+
+   .. note::
+
+      The mass and delta-v are those the editor shows for the design.
+
+   .. method:: getName()
+
+      The name of the design, as passed to :func:`KSA.launchVehicle`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+   
+
+   .. method:: getIsDefault()
+
+      Whether the design is one of the game's default vehicles.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getPartCount()
+
+      The number of parts in the design.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMass()
+
+      The total mass of the design, including propellant, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getDryMass()
+
+      The mass of the design without propellant, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getDeltaV()
+
+      The change in velocity of all the design's sequences, in meters per second.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Each sequence is computed in the environment chosen for it in the editor, in vacuum
+         or at sea level.

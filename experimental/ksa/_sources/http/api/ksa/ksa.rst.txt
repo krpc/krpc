@@ -1,0 +1,372 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+KSA
+===
+
+
+.. _http-KSA:
+
+Provides functionality to interact with Kitten Space Agency.
+
+
+.. http:get:: /ksa/active-vehicle
+
+   The vehicle under the player's control, or ``null`` if there is none or the
+   player controls a kitten on EVA.
+
+   .. note::
+
+      Setting it moves the camera to the vehicle, as the switch vehicle key does. See
+      :http:get:`/ksa/active-kitten` for a kitten on EVA.
+
+
+   :resjson KSA.Vehicle? value:
+
+.. http:put:: /ksa/active-vehicle
+
+   The vehicle under the player's control, or ``null`` if there is none or the
+   player controls a kitten on EVA.
+
+   .. note::
+
+      Setting it moves the camera to the vehicle, as the switch vehicle key does. See
+      :http:get:`/ksa/active-kitten` for a kitten on EVA.
+
+
+   :reqjson KSA.Vehicle? value: The new value.
+
+
+
+
+.. http:get:: /ksa/vehicles
+
+   The vehicles in the current system, excluding kittens on EVA.
+
+
+   :resjson list<KSA.Vehicle> value:
+
+
+
+
+.. http:get:: /ksa/active-kitten
+
+   The kitten on EVA under the player's control, or ``null`` if the player
+   controls a vehicle.
+
+   .. note::
+
+      Setting it moves the camera to the kitten. Throws an exception if the kitten is not
+      on EVA. See :http:get:`/ksa/active-vehicle` for a vehicle.
+
+
+   :resjson KSA.Kitten? value:
+
+.. http:put:: /ksa/active-kitten
+
+   The kitten on EVA under the player's control, or ``null`` if the player
+   controls a vehicle.
+
+   .. note::
+
+      Setting it moves the camera to the kitten. Throws an exception if the kitten is not
+      on EVA. See :http:get:`/ksa/active-vehicle` for a vehicle.
+
+
+   :reqjson KSA.Kitten? value: The new value.
+
+
+
+
+.. http:get:: /ksa/kittens
+
+   The kittens in the agency's roster, including those killed in action, keyed by name.
+
+
+   :resjson dictionary<string, KSA.Kitten> value:
+
+
+
+
+.. http:get:: /ksa/camera
+
+   The game's main camera.
+
+
+   :resjson KSA.Camera value:
+
+
+
+
+.. http:get:: /ksa/bodies
+
+   The planets, moons and stars in the current system, keyed by name.
+
+
+   :resjson dictionary<string, KSA.Body> value:
+
+
+
+
+.. http:get:: /ksa/ut
+
+   The universal time, in seconds.
+
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/simulation-speed
+
+   The simulation speed, as a multiple of real time. Zero when paused.
+
+   .. note::
+
+      Setting it stops a warp in progress, such as one started by :http:post:`/ksa/warp-to`.
+
+
+   :resjson float value:
+
+.. http:put:: /ksa/simulation-speed
+
+   The simulation speed, as a multiple of real time. Zero when paused.
+
+   .. note::
+
+      Setting it stops a warp in progress, such as one started by :http:post:`/ksa/warp-to`.
+
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/life-support-enabled
+
+   Whether the crew use up supplies, as set when the game was created.
+
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/radiation-enabled
+
+   Whether radiation harms the crew, as set when the game was created.
+
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /ksa/warp-to
+
+   Warp to the given universal time, and return once the warp has finished.
+   The game slows the warp down to normal speed toward the end.
+
+   .. note::
+
+      Does nothing when the time is in the past. Returns early if the game stops the
+      warp, for example when its menu pauses the game, or a vehicle's supplies run out.
+
+
+   :reqjson double ut: The universal time to warp to, in seconds.
+
+
+
+
+
+.. http:get:: /ksa/vehicle-designs
+
+   The vehicle designs that can be launched, keyed by name.
+
+
+   :resjson dictionary<string, KSA.VehicleDesign> value:
+
+
+
+
+.. http:post:: /ksa/launch-vehicle
+
+   Launch a vehicle from a launch site, and make it the active vehicle. Returns once
+   the vehicle is on the launch site.
+
+   .. note::
+
+      Throws an exception if there is no such vehicle or launch site, or the name is one
+      of the game's kittens.
+
+
+   :reqjson string name: The name of the vehicle design. See :http:get:`/ksa/vehicle-designs`.
+   :reqjson string site: The name of the launch site. See :http:get:`/ksa/body/(id)/launch-sites`.
+   :resjson KSA.Vehicle value: The vehicle. Its name is the vehicle's name, with a number appended if another vehicle has that name.
+
+
+
+
+
+.. http:post:: /ksa/save-exists
+
+   Whether a save with the given name exists.
+
+
+   :reqjson string name: Name of the save.
+   :resjson bool value:
+
+
+
+
+
+.. http:post:: /ksa/save
+
+   Save the game, replacing any save with the same name.
+
+
+   :reqjson string name: Name of the save.
+
+
+
+
+
+.. http:post:: /ksa/load
+
+   Load a save, and return once it has loaded. The game is paused after loading.
+
+   .. note::
+
+      Throws an exception if the save does not exist.
+
+
+   :reqjson string name: Name of the save.
+
+
+
+
+
+.. http:post:: /ksa/take-screenshot
+
+   Save a screenshot, as the screenshot key does, and return once the file is written.
+
+   .. note::
+
+      Throws an exception in the vehicle editor, or if a screenshot is already being taken.
+
+
+   :reqjson int32 scale: The size of the image, as a multiple of the window size, from 1 to 8. The game reduces it to fit the graphics memory. Optional, defaults to ``1``.
+   :reqjson bool ui: Whether to include the game's windows. The image is then the size of the window. Optional, defaults to ``false``.
+   :resjson string value: The path of the PNG file, in the game's screenshots folder.
+
+
+
+
+
+.. http:post:: /ksa/show-message
+
+   Show a message in the middle of the screen.
+
+
+   :reqjson string text: The message.
+   :reqjson float duration: How long to show the message for, in seconds. The game shows a message for at least 2 seconds. Optional, defaults to ``5.0``.
+   :reqjson bool warning: Whether to show the message in the warning color. Optional, defaults to ``false``.
+
+
+
+
+
+.. http:post:: /ksa/raycast-distance
+
+   The distance from a position to the first part of a vehicle along a ray, in
+   meters. Infinite if the ray hits no part.
+
+   .. note::
+
+      The ray tests the meshes of the parts, as picking a part with the mouse does.
+      It passes through terrain and kittens on EVA.
+
+
+   :reqjson tuple<double, double, double> position: The start of the ray, in meters.
+   :reqjson tuple<double, double, double> direction: The direction of the ray.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position and direction.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /ksa/raycast-part
+
+   The first part of a vehicle along a ray, or ``null`` if the ray hits no part.
+
+   .. note::
+
+      The ray tests the meshes of the parts, as picking a part with the mouse does.
+      It passes through terrain and kittens on EVA.
+
+
+   :reqjson tuple<double, double, double> position: The start of the ray, in meters.
+   :reqjson tuple<double, double, double> direction: The direction of the ray.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position and direction.
+   :resjson KSA.Part? value:
+
+
+
+
+
+.. http:post:: /ksa/transform-position
+
+   Convert a position from one reference frame to another.
+
+
+   :reqjson tuple<double, double, double> position: Position, in meters, in the frame *from*.
+   :reqjson KSA.ReferenceFrame from: The reference frame the position is in.
+   :reqjson KSA.ReferenceFrame to: The reference frame to convert the position to.
+   :resjson tuple<double, double, double> value: The position in the frame *to*.
+
+
+
+
+
+.. http:post:: /ksa/transform-direction
+
+   Convert a direction from one reference frame to another.
+
+
+   :reqjson tuple<double, double, double> direction: Direction in the frame *from*.
+   :reqjson KSA.ReferenceFrame from: The reference frame the direction is in.
+   :reqjson KSA.ReferenceFrame to: The reference frame to convert the direction to.
+   :resjson tuple<double, double, double> value: The direction in the frame *to*.
+
+
+
+
+
+.. http:post:: /ksa/transform-rotation
+
+   Convert a rotation from one reference frame to another.
+
+
+   :reqjson tuple<double, double, double, double> rotation: Rotation in the frame *from*.
+   :reqjson KSA.ReferenceFrame from: The reference frame the rotation is in.
+   :reqjson KSA.ReferenceFrame to: The reference frame to convert the rotation to.
+   :resjson tuple<double, double, double, double> value: The rotation in the frame *to*.
+
+
+
+
+
+.. http:post:: /ksa/transform-velocity
+
+   Convert a velocity from one reference frame to another. The velocity of a point
+   depends on its position in a rotating frame, so the position is also needed.
+
+
+   :reqjson tuple<double, double, double> position: Position, in meters, in the frame *from*.
+   :reqjson tuple<double, double, double> velocity: Velocity, in meters per second, in the frame *from*.
+   :reqjson KSA.ReferenceFrame from: The reference frame the position and velocity are in.
+   :reqjson KSA.ReferenceFrame to: The reference frame to convert the velocity to.
+   :resjson tuple<double, double, double> value: The velocity in the frame *to*.

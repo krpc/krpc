@@ -11,7 +11,7 @@ Debug
    Changes the state of the simulation directly, as the game's debug windows and console
    commands do: teleporting a vehicle, setting its attitude, refilling its tanks.
 
-   .. function:: static void set_circular_orbit(Client& connection, Vehicle vehicle, Body body, double altitude)
+   .. function:: static void set_circular_orbit(krpc::Connection& connection, Vehicle vehicle, Body body, double altitude)
 
       Move a vehicle onto a circular orbit around a body, and return once it is there.
 
@@ -28,7 +28,7 @@ Debug
          Throws an exception if the game cannot compute the vehicle's trajectory on the
          orbit.
 
-   .. function:: static void set_orbit(Client& connection, Vehicle vehicle, Body body, double semi_major_axis, double eccentricity, double inclination, double longitude_of_ascending_node, double argument_of_periapsis, double mean_anomaly_at_epoch, double epoch)
+   .. function:: static void set_orbit(krpc::Connection& connection, Vehicle vehicle, Body body, double semi_major_axis, double eccentricity, double inclination, double longitude_of_ascending_node, double argument_of_periapsis, double mean_anomaly_at_epoch, double epoch)
 
       Move a vehicle onto the orbit with the given elements, and return once it is there.
       The angles are those of :class:`Orbit`.
@@ -37,8 +37,8 @@ Debug
 
        * **vehicle** -- The vehicle.
        * **body** -- The body to orbit.
-       * **semi_major_axis** -- The semi-major axis, in meters.
-       * **eccentricity** -- The eccentricity.
+       * **semi_major_axis** -- The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+       * **eccentricity** -- The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
        * **inclination** -- The inclination, in radians.
        * **longitude_of_ascending_node** -- The longitude of the ascending node, in radians.
        * **argument_of_periapsis** -- The argument of periapsis, in radians.
@@ -52,7 +52,7 @@ Debug
          Throws an exception if the game cannot compute the vehicle's trajectory on the
          orbit.
 
-   .. function:: static void set_landed(Client& connection, Vehicle vehicle, Body body, double latitude, double longitude)
+   .. function:: static void set_landed(krpc::Connection& connection, Vehicle vehicle, Body body, double latitude, double longitude)
 
       Place a vehicle on the surface of a body, as the game's teleport window does, and
       return once it is there.
@@ -70,7 +70,7 @@ Debug
 
          Throws an exception if the body has no surface.
 
-   .. function:: static void set_position(Client& connection, Vehicle vehicle, std::tuple<double, double, double> position, ReferenceFrame reference_frame)
+   .. function:: static void set_position(krpc::Connection& connection, Vehicle vehicle, std::tuple<double, double, double> position, ReferenceFrame reference_frame)
 
       Move a vehicle to the given position, keeping its velocity, and return once it is
       there.
@@ -88,7 +88,7 @@ Debug
          This is the inverse of :func:`Vehicle::position`. The vehicle keeps orbiting
          the same body.
 
-   .. function:: static void set_velocity(Client& connection, Vehicle vehicle, std::tuple<double, double, double> velocity, ReferenceFrame reference_frame)
+   .. function:: static void set_velocity(krpc::Connection& connection, Vehicle vehicle, std::tuple<double, double, double> velocity, ReferenceFrame reference_frame)
 
       Set the velocity of a vehicle, keeping its position, and return once it is set.
 
@@ -105,7 +105,7 @@ Debug
          This is the inverse of :func:`Vehicle::velocity`. The vehicle keeps orbiting
          the same body.
 
-   .. function:: static void set_rotation(Client& connection, Vehicle vehicle, std::tuple<double, double, double, double> rotation, ReferenceFrame reference_frame)
+   .. function:: static void set_rotation(krpc::Connection& connection, Vehicle vehicle, std::tuple<double, double, double, double> rotation, ReferenceFrame reference_frame)
 
       Set the rotation of a vehicle, and return once it is set.
 
@@ -121,7 +121,7 @@ Debug
 
          This is the inverse of :func:`Vehicle::rotation`.
 
-   .. function:: static void set_angular_velocity(Client& connection, Vehicle vehicle, std::tuple<double, double, double> angular_velocity, ReferenceFrame reference_frame)
+   .. function:: static void set_angular_velocity(krpc::Connection& connection, Vehicle vehicle, std::tuple<double, double, double> angular_velocity, ReferenceFrame reference_frame)
 
       Set the angular velocity of a vehicle, and return once it is set.
 
@@ -137,9 +137,9 @@ Debug
 
          This is the inverse of :func:`Vehicle::angular_velocity`.
 
-   .. function:: static void fill_resources(Client& connection, Vehicle vehicle)
+   .. function:: static void fill_resources(krpc::Connection& connection, Vehicle vehicle)
 
-      Fill the propellant, batteries and other consumables of a vehicle, as the game's
+      Fill the propellant and other substances in the tanks of a vehicle, as the game's
       refill command does.
 
       :Parameters:
@@ -148,9 +148,13 @@ Debug
 
    
 
-   .. function:: static void empty_resources(Client& connection, Vehicle vehicle)
+      .. note::
 
-      Empty the propellant, batteries and other consumables of a vehicle, as the game's
+         The batteries keep their charge.
+
+   .. function:: static void empty_resources(krpc::Connection& connection, Vehicle vehicle)
+
+      Empty the propellant and other substances in the tanks of a vehicle, as the game's
       empty command does.
 
       :Parameters:
@@ -159,7 +163,11 @@ Debug
 
    
 
-   .. function:: static Vehicle duplicate_vehicle(Client& connection, Vehicle vehicle, std::string name)
+      .. note::
+
+         The batteries keep their charge.
+
+   .. function:: static Vehicle duplicate_vehicle(krpc::Connection& connection, Vehicle vehicle, std::string name)
 
       Create a copy of a vehicle beside it, as the game's duplicate command does, and
       return once it is created.
@@ -176,7 +184,7 @@ Debug
 
          Throws an exception if the name is in use.
 
-   .. function:: static void explode_vehicle(Client& connection, Vehicle vehicle)
+   .. function:: static void explode_vehicle(krpc::Connection& connection, Vehicle vehicle)
 
       Destroy a vehicle in an explosion, as the game's explode command does, and return
       once the vehicle is gone. Its crew are killed.
@@ -187,7 +195,7 @@ Debug
 
    
 
-   .. function:: static void show_velocity_arrows(Client& connection, bool visible)
+   .. function:: static void show_velocity_arrows(krpc::Connection& connection, bool visible)
 
       Show or hide the game's debug arrows for the velocities of the vehicles.
 
@@ -197,7 +205,7 @@ Debug
 
    
 
-   .. function:: static std::vector<std::string> run_command(Client& connection, std::string command)
+   .. function:: static std::vector<std::string> run_command(krpc::Connection& connection, std::string command)
 
       Run a command in the game's console, as typed in the console.
 

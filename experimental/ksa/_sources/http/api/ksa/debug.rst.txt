@@ -1,0 +1,238 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Debug
+=====
+
+
+.. _http-KSA.Debug:
+
+.. rubric:: Debug
+
+Changes the state of the simulation directly, as the game's debug windows and console
+commands do: teleporting a vehicle, setting its attitude, refilling its tanks.
+
+A ``Debug`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:post:: /ksa/debug/set-circular-orbit
+
+   Move a vehicle onto a circular orbit around a body, and return once it is there.
+
+   .. note::
+
+      Throws an exception if the game cannot compute the vehicle's trajectory on the
+      orbit.
+
+
+   :reqjson KSA.Vehicle vehicle: The vehicle.
+   :reqjson KSA.Body body: The body to orbit.
+   :reqjson double altitude: The altitude of the orbit above the mean radius, in meters.
+
+
+
+
+
+.. http:post:: /ksa/debug/set-orbit
+
+   Move a vehicle onto the orbit with the given elements, and return once it is there.
+   The angles are those of :ref:`Orbit <http-KSA.Orbit>`.
+
+   .. note::
+
+      Throws an exception if the game cannot compute the vehicle's trajectory on the
+      orbit.
+
+
+   :reqjson KSA.Vehicle vehicle: The vehicle.
+   :reqjson KSA.Body body: The body to orbit.
+   :reqjson double semi_major_axis: The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+   :reqjson double eccentricity: The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
+   :reqjson double inclination: The inclination, in radians.
+   :reqjson double longitude_of_ascending_node: The longitude of the ascending node, in radians.
+   :reqjson double argument_of_periapsis: The argument of periapsis, in radians.
+   :reqjson double mean_anomaly_at_epoch: The mean anomaly at the epoch, in radians.
+   :reqjson double epoch: The universal time of the epoch, in seconds.
+
+
+
+
+
+.. http:post:: /ksa/debug/set-landed
+
+   Place a vehicle on the surface of a body, as the game's teleport window does, and
+   return once it is there.
+
+   .. note::
+
+      Throws an exception if the body has no surface.
+
+
+   :reqjson KSA.Vehicle vehicle: The vehicle.
+   :reqjson KSA.Body body: The body to land on.
+   :reqjson double latitude: The latitude, in degrees.
+   :reqjson double longitude: The longitude, in degrees.
+
+
+
+
+
+.. http:post:: /ksa/debug/set-position
+
+   Move a vehicle to the given position, keeping its velocity, and return once it is
+   there.
+
+   .. note::
+
+      This is the inverse of :http:post:`/ksa/vehicle/(id)/position`. The vehicle keeps orbiting
+      the same body.
+
+
+   :reqjson KSA.Vehicle vehicle: The vehicle.
+   :reqjson tuple<double, double, double> position: The position of the vehicle, in meters.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position.
+
+
+
+
+
+.. http:post:: /ksa/debug/set-velocity
+
+   Set the velocity of a vehicle, keeping its position, and return once it is set.
+
+   .. note::
+
+      This is the inverse of :http:post:`/ksa/vehicle/(id)/velocity`. The vehicle keeps orbiting
+      the same body.
+
+
+   :reqjson KSA.Vehicle vehicle: The vehicle.
+   :reqjson tuple<double, double, double> velocity: The velocity of the vehicle, in meters per second.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the velocity.
+
+
+
+
+
+.. http:post:: /ksa/debug/set-rotation
+
+   Set the rotation of a vehicle, and return once it is set.
+
+   .. note::
+
+      This is the inverse of :http:post:`/ksa/vehicle/(id)/rotation`.
+
+
+   :reqjson KSA.Vehicle vehicle: The vehicle.
+   :reqjson tuple<double, double, double, double> rotation: The rotation of the vehicle, as a quaternion of the form ``(x, y, z, w)``.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the rotation.
+
+
+
+
+
+.. http:post:: /ksa/debug/set-angular-velocity
+
+   Set the angular velocity of a vehicle, and return once it is set.
+
+   .. note::
+
+      This is the inverse of :http:post:`/ksa/vehicle/(id)/angular-velocity`.
+
+
+   :reqjson KSA.Vehicle vehicle: The vehicle.
+   :reqjson tuple<double, double, double> angular_velocity: The angular velocity, in radians per second. The vector points along the axis of rotation, and its length is the rate.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the angular velocity.
+
+
+
+
+
+.. http:post:: /ksa/debug/fill-resources
+
+   Fill the propellant and other substances in the tanks of a vehicle, as the game's
+   refill command does.
+
+   .. note::
+
+      The batteries keep their charge.
+
+
+   :reqjson KSA.Vehicle vehicle: The vehicle.
+
+
+
+
+
+.. http:post:: /ksa/debug/empty-resources
+
+   Empty the propellant and other substances in the tanks of a vehicle, as the game's
+   empty command does.
+
+   .. note::
+
+      The batteries keep their charge.
+
+
+   :reqjson KSA.Vehicle vehicle: The vehicle.
+
+
+
+
+
+.. http:post:: /ksa/debug/duplicate-vehicle
+
+   Create a copy of a vehicle beside it, as the game's duplicate command does, and
+   return once it is created.
+
+   .. note::
+
+      Throws an exception if the name is in use.
+
+
+   :reqjson KSA.Vehicle vehicle: The vehicle to copy.
+   :reqjson string name: The name of the copy.
+   :resjson KSA.Vehicle value: The copy.
+
+
+
+
+
+.. http:post:: /ksa/debug/explode-vehicle
+
+   Destroy a vehicle in an explosion, as the game's explode command does, and return
+   once the vehicle is gone. Its crew are killed.
+
+
+   :reqjson KSA.Vehicle vehicle: The vehicle.
+
+
+
+
+
+.. http:post:: /ksa/debug/show-velocity-arrows
+
+   Show or hide the game's debug arrows for the velocities of the vehicles.
+
+
+   :reqjson bool visible: Whether to show the arrows.
+
+
+
+
+
+.. http:post:: /ksa/debug/run-command
+
+   Run a command in the game's console, as typed in the console.
+
+   .. note::
+
+      Most commands write their messages to the game's log, not the returned output.
+      Throws an exception if the console has no such command, or the arguments are not
+      valid.
+
+
+   :reqjson string command: The command and its arguments.
+   :resjson list<string> value: The console output of the command, one line per message.

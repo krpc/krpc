@@ -1,0 +1,2245 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Vehicle &#8212; kRPC v0.3.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5ab7b574" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'js/api/ksa/vehicle';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <link rel="icon" href="../../../_static/logo-mark.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Sequence" href="sequence.html" />
+    <link rel="prev" title="KSA" href="ksa.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="../../../_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../js.html">JavaScript</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ksa.html">KSA</a></li>
+<li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../http.html">HTTP</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../clients.html" class="nav-link">Clients</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../../js.html" class="nav-link">JavaScript</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../ksa.html" class="nav-link">KSA API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Vehicle</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="vehicle">
+<h1>Vehicle<a class="headerlink" href="#vehicle" title="Link to this heading">#</a></h1>
+<dl class="js class">
+<dt class="sig sig-object js" id="KSA.Vehicle">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">KSA</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Vehicle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle" title="Link to this definition">#</a></dt>
+<dd><p>A vehicle in the current system. Obtained from <a class="reference internal" href="ksa.html#KSA.getActiveVehicle" title="KSA.getActiveVehicle"><code class="xref js js-func docutils literal notranslate"><span class="pre">KSA.getActiveVehicle()</span></code></a>
+or <a class="reference internal" href="ksa.html#KSA.getVehicles" title="KSA.getVehicles"><code class="xref js js-func docutils literal notranslate"><span class="pre">KSA.getVehicles()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Docking and undocking replace the vehicles involved, so an object for one of them
+throws an exception afterwards.</p>
+</div>
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getName">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getName</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getName" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object js" id="KSA.Vehicle.setName">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">setName</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.setName" title="Link to this definition">#</a></dt>
+<dd><p>The name of the vehicle, which is unique in the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.destroy">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">destroy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.destroy" title="Link to this definition">#</a></dt>
+<dd><p>Destroy the vehicle, killing its crew, as abandoning the vehicle does. Returns once
+the vehicle is gone.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the vehicle is the active vehicle, the game hands control to a nearby vehicle.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getCanRecover">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getCanRecover</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getCanRecover" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle can be recovered: at rest on the surface of the home planet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">boolean</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.recover">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">recover</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.recover" title="Link to this definition">#</a></dt>
+<dd><p>Recover the vehicle, ending its crew’s missions, as the game’s recover button does.
+Returns once the vehicle is gone.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the vehicle cannot be recovered, see <a class="reference internal" href="#KSA.Vehicle.getCanRecover" title="KSA.Vehicle.getCanRecover"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.getCanRecover()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getSituation">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSituation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getSituation" title="Link to this definition">#</a></dt>
+<dd><p>The situation of the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KSA.Situation" title="KSA.Situation"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Situation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getOnRails">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getOnRails</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getOnRails" title="Link to this definition">#</a></dt>
+<dd><p>Whether the game moves the vehicle without simulating the forces on it: along its
+orbit, or held on the surface. True in the freefall, landed, floating and bottomed
+situations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">boolean</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getIsDebris">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getIsDebris</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getIsDebris" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle is debris, such as a spent stage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">boolean</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getHasLaunched">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getHasLaunched</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getHasLaunched" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle has launched.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">boolean</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getLaunchTime">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getLaunchTime</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getLaunchTime" title="Link to this definition">#</a></dt>
+<dd><p>The universal time the vehicle was created, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getMass">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getMass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getMass" title="Link to this definition">#</a></dt>
+<dd><p>The total mass of the vehicle, including propellant, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getDryMass">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getDryMass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getDryMass" title="Link to this definition">#</a></dt>
+<dd><p>The mass of the vehicle’s parts, without propellant or supplies, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getPropellantMass">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getPropellantMass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getPropellantMass" title="Link to this definition">#</a></dt>
+<dd><p>The mass of the propellant in the vehicle, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getThrust">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getThrust</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getThrust" title="Link to this definition">#</a></dt>
+<dd><p>The thrust of the engines at their current throttle and the current atmospheric
+pressure, in Newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getAvailableThrust">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getAvailableThrust</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getAvailableThrust" title="Link to this definition">#</a></dt>
+<dd><p>The thrust of the active engines that have propellant, at full throttle and the
+current atmospheric pressure, in Newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getSpecificImpulse">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSpecificImpulse</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getSpecificImpulse" title="Link to this definition">#</a></dt>
+<dd><p>The combined specific impulse of the active engines that have propellant, at the
+current atmospheric pressure, in seconds. Zero when no engine is active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getMomentOfInertia">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getMomentOfInertia</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getMomentOfInertia" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s moments of inertia about the axes of <a class="reference internal" href="#KSA.Vehicle.getReferenceFrame" title="KSA.Vehicle.getReferenceFrame"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.getReferenceFrame()</span></code></a>
+through its center of mass, in <span class="math notranslate nohighlight">\(\mathrm{kg \cdot m^{2}}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">[number,</span> <span class="pre">number,</span> <span class="pre">number]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getInertiaTensor">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getInertiaTensor</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getInertiaTensor" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s inertia tensor about its center of mass, along the axes of
+<a class="reference internal" href="#KSA.Vehicle.getReferenceFrame" title="KSA.Vehicle.getReferenceFrame"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.getReferenceFrame()</span></code></a>, in <span class="math notranslate nohighlight">\(\mathrm{kg \cdot m^{2}}\)</span>, as its three rows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <code class="docutils literal notranslate"><span class="pre">[number,</span> <span class="pre">number,</span> <span class="pre">number]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getAvailableRCSTorque">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getAvailableRCSTorque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getAvailableRCSTorque" title="Link to this definition">#</a></dt>
+<dd><p>The torque the vehicle’s RCS thrusters can give about each axis of its control
+frame, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>. Each is the smaller of the torques in the two
+directions about the axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">[number,</span> <span class="pre">number,</span> <span class="pre">number]</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The control frame has the axes of <a class="reference internal" href="#KSA.Vehicle.getReferenceFrame" title="KSA.Vehicle.getReferenceFrame"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.getReferenceFrame()</span></code></a>, unless the flight
+computer steers along the thrust. The thrusters give this torque while
+<a class="reference internal" href="control.html#KSA.Control.getRCS" title="KSA.Control.getRCS"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Control.getRCS()</span></code></a> is on.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.acceleration">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">acceleration</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">referenceFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.acceleration" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s acceleration from the forces on it other than gravity, in
+<span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a>) – The reference frame of the acceleration.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">[number,</span> <span class="pre">number,</span> <span class="pre">number]</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game measures it over the last physics step. Its length divided by standard
+gravity is <a class="reference internal" href="flight.html#KSA.Flight.getGForce" title="KSA.Flight.getGForce"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Flight.getGForce()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.angularAcceleration">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">angularAcceleration</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">referenceFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.angularAcceleration" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s angular acceleration, in <span class="math notranslate nohighlight">\(\mathrm{rad/s^{2}}\)</span>. The vector points
+along the axis of rotation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a>) – The reference frame of the angular acceleration.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">[number,</span> <span class="pre">number,</span> <span class="pre">number]</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game measures it over the last physics step.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getPeakGLoad">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getPeakGLoad</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getPeakGLoad" title="Link to this definition">#</a></dt>
+<dd><p>The highest smoothed g-load on the vehicle during the last physics step, as a
+multiple of standard gravity. Zero while the vehicle is <a class="reference internal" href="#KSA.Vehicle.getOnRails" title="KSA.Vehicle.getOnRails"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.getOnRails()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getMaxGLoad">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getMaxGLoad</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getMaxGLoad" title="Link to this definition">#</a></dt>
+<dd><p>The g-load the vehicle can take before it breaks up, as a multiple of standard
+gravity. Zero while the vehicle is <a class="reference internal" href="#KSA.Vehicle.getOnRails" title="KSA.Vehicle.getOnRails"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.getOnRails()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getPeakDynamicPressure">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getPeakDynamicPressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getPeakDynamicPressure" title="Link to this definition">#</a></dt>
+<dd><p>The highest dynamic pressure on the vehicle during the last physics step, in
+pascals. In the sea, this is the dynamic pressure of the water. Zero while the
+vehicle is <a class="reference internal" href="#KSA.Vehicle.getOnRails" title="KSA.Vehicle.getOnRails"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.getOnRails()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getMaxDynamicPressure">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getMaxDynamicPressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getMaxDynamicPressure" title="Link to this definition">#</a></dt>
+<dd><p>The dynamic pressure the vehicle can take before it breaks up, in pascals. Zero
+while the vehicle is <a class="reference internal" href="#KSA.Vehicle.getOnRails" title="KSA.Vehicle.getOnRails"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.getOnRails()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getParts">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getParts</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getParts" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s parts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="parts.html#KSA.Part" title="KSA.Part"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Part</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getRootPart">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getRootPart</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getRootPart" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s root part, which the other parts are attached to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="parts.html#KSA.Part" title="KSA.Part"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Part</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.partsWithName">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">partsWithName</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.partsWithName" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s parts with the given template id. See <a class="reference internal" href="parts.html#KSA.Part.getName" title="KSA.Part.getName"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Part.getName()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<code class="docutils literal notranslate"><span class="pre">string</span></code>) – The template id.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="parts.html#KSA.Part" title="KSA.Part"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Part</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getSeats">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSeats</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getSeats" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s crew seats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="crew.html#KSA.Seat" title="KSA.Seat"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Seat</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getCrew">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getCrew</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getCrew" title="Link to this definition">#</a></dt>
+<dd><p>The kittens in the vehicle’s seats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="crew.html#KSA.Kitten" title="KSA.Kitten"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Kitten</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getCrewCapacity">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getCrewCapacity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getCrewCapacity" title="Link to this definition">#</a></dt>
+<dd><p>The number of crew seats in the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getControllable">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getControllable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getControllable" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle can be flown. A vehicle needs a control module, and a crewed
+vehicle with every kitten incapacitated also needs a probe core.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">boolean</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getHasControlModule">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getHasControlModule</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getHasControlModule" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle has a control module, such as a capsule or a probe core.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">boolean</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getControlState">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getControlState</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getControlState" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle can be flown, or why not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KSA.ControlState" title="KSA.ControlState"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.ControlState</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the reason the game gives when the vehicle does not respond to its controls.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getCrewEvents">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getCrewEvents</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getCrewEvents" title="Link to this definition">#</a></dt>
+<dd><p>The most urgent coming event of each kitten in the vehicle, most urgent first.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="crew.html#KSA.CrewEvent" title="KSA.CrewEvent"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.CrewEvent</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The order is the game’s crew clock’s: events within a day come first, the worst
+first. Empty while <a class="reference internal" href="ksa.html#KSA.getLifeSupportEnabled" title="KSA.getLifeSupportEnabled"><code class="xref js js-func docutils literal notranslate"><span class="pre">KSA.getLifeSupportEnabled()</span></code></a> and
+<a class="reference internal" href="ksa.html#KSA.getRadiationEnabled" title="KSA.getRadiationEnabled"><code class="xref js js-func docutils literal notranslate"><span class="pre">KSA.getRadiationEnabled()</span></code></a> are both false.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getNextCrewEvent">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getNextCrewEvent</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getNextCrewEvent" title="Link to this definition">#</a></dt>
+<dd><p>The most urgent of <a class="reference internal" href="#KSA.Vehicle.getCrewEvents" title="KSA.Vehicle.getCrewEvents"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.getCrewEvents()</span></code></a>, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if there is none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="crew.html#KSA.CrewEvent" title="KSA.CrewEvent"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.CrewEvent</span></code></a> or <code class="docutils literal notranslate"><span class="pre">null</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getLifeSupport">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getLifeSupport</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getLifeSupport" title="Link to this definition">#</a></dt>
+<dd><p>How long the supplies of the vehicle’s worst habitat zone last its crew, or
+<code class="docutils literal notranslate"><span class="pre">null</span></code> if the vehicle has no habitats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="life-support.html#KSA.LifeSupport" title="KSA.LifeSupport"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.LifeSupport</span></code></a> or <code class="docutils literal notranslate"><span class="pre">null</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getMission">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getMission</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getMission" title="Link to this definition">#</a></dt>
+<dd><p>The mission planned for the vehicle, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="life-support.html#KSA.Mission" title="KSA.Mission"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Mission</span></code></a> or <code class="docutils literal notranslate"><span class="pre">null</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getHabitatZones">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getHabitatZones</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getHabitatZones" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s habitat zones.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="life-support.html#KSA.HabitatZone" title="KSA.HabitatZone"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.HabitatZone</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getHabitats">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getHabitats</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getHabitats" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s habitats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="life-support.html#KSA.Habitat" title="KSA.Habitat"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Habitat</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getEngines">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getEngines</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getEngines" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s engines.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="parts.html#KSA.Engine" title="KSA.Engine"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Engine</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getRCS">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getRCS</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getRCS" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s RCS thrusters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="parts.html#KSA.RCS" title="KSA.RCS"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.RCS</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getDecouplers">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getDecouplers</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getDecouplers" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s decouplers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="parts.html#KSA.Decoupler" title="KSA.Decoupler"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Decoupler</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getParachutes">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getParachutes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getParachutes" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s parachutes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="parts.html#KSA.Parachute" title="KSA.Parachute"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Parachute</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getTanks">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getTanks</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getTanks" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s propellant tanks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="resources.html#KSA.Tank" title="KSA.Tank"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Tank</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getBatteries">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getBatteries</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getBatteries" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s batteries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="power.html#KSA.Battery" title="KSA.Battery"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Battery</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getSolarPanels">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSolarPanels</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getSolarPanels" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s solar panels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="power.html#KSA.SolarPanel" title="KSA.SolarPanel"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.SolarPanel</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getGenerators">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getGenerators</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getGenerators" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s generators.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="power.html#KSA.Generator" title="KSA.Generator"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Generator</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getPowerConsumers">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getPowerConsumers</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getPowerConsumers" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s power consumers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="power.html#KSA.PowerConsumer" title="KSA.PowerConsumer"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.PowerConsumer</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getAvionics">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getAvionics</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getAvionics" title="Link to this definition">#</a></dt>
+<dd><p>The avionics of the vehicle’s probe cores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="power.html#KSA.Avionics" title="KSA.Avionics"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Avionics</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getStoredEnergy">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getStoredEnergy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getStoredEnergy" title="Link to this definition">#</a></dt>
+<dd><p>The energy stored in the vehicle’s batteries, in joules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getEnergyCapacity">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getEnergyCapacity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getEnergyCapacity" title="Link to this definition">#</a></dt>
+<dd><p>The energy the vehicle’s batteries can store, in joules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getNetPower">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getNetPower</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getNetPower" title="Link to this definition">#</a></dt>
+<dd><p>The power produced by the vehicle’s solar panels and generators, less the power its
+parts use, in watts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getLights">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getLights</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getLights" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s lights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="power.html#KSA.Light" title="KSA.Light"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Light</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getDeployables">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getDeployables</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getDeployables" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s deployable sections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="parts.html#KSA.Deployable" title="KSA.Deployable"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Deployable</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getMagneticScoops">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getMagneticScoops</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getMagneticScoops" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s magnetic scoops.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="parts.html#KSA.MagneticScoop" title="KSA.MagneticScoop"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.MagneticScoop</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getFuelLinks">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getFuelLinks</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getFuelLinks" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s fuel links.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="resources.html#KSA.FuelLink" title="KSA.FuelLink"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.FuelLink</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getDockingPorts">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getDockingPorts</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getDockingPorts" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s docking ports.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="parts.html#KSA.DockingPort" title="KSA.DockingPort"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.DockingPort</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getResources">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getResources</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getResources" title="Link to this definition">#</a></dt>
+<dd><p>The resources the vehicle holds, one for each substance, totaled over its parts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="resources.html#KSA.Resource" title="KSA.Resource"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Resource</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getDeltaV">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getDeltaV</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getDeltaV" title="Link to this definition">#</a></dt>
+<dd><p>The change in velocity of all the vehicle’s sequences, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getSequences">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSequences</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getSequences" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s sequences, in activation order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="sequence.html#KSA.Sequence" title="KSA.Sequence"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Sequence</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getTargetVehicle">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getTargetVehicle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getTargetVehicle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object js" id="KSA.Vehicle.setTargetVehicle">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">setTargetVehicle</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.setTargetVehicle" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle targeted by this vehicle, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it replaces the
+target, and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#KSA.Vehicle" title="KSA.Vehicle"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a> or <code class="docutils literal notranslate"><span class="pre">null</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getTargetBody">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getTargetBody</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getTargetBody" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object js" id="KSA.Vehicle.setTargetBody">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">setTargetBody</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.setTargetBody" title="Link to this definition">#</a></dt>
+<dd><p>The body targeted by this vehicle, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it replaces the target,
+and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="body.html#KSA.Body" title="KSA.Body"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Body</span></code></a> or <code class="docutils literal notranslate"><span class="pre">null</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Setting a body that orbits nothing, such as the star, throws an exception.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getTargetPart">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getTargetPart</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getTargetPart" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object js" id="KSA.Vehicle.setTargetPart">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">setTargetPart</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.setTargetPart" title="Link to this definition">#</a></dt>
+<dd><p>The part targeted by this vehicle, on the vehicle in <a class="reference internal" href="#KSA.Vehicle.getTargetVehicle" title="KSA.Vehicle.getTargetVehicle"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.getTargetVehicle()</span></code></a>,
+or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it targets the part and its vehicle, and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears
+the target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="parts.html#KSA.Part" title="KSA.Part"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Part</span></code></a> or <code class="docutils literal notranslate"><span class="pre">null</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getBurns">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getBurns</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getBurns" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s planned burns, in time order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code> of <a class="reference internal" href="burn.html#KSA.Burn" title="KSA.Burn"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Burn</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.addBurn">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">addBurn</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ut</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">prograde</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">normal</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">radial</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.addBurn" title="Link to this definition">#</a></dt>
+<dd><p>Plan a burn, and add it to the vehicle’s burn plan.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> (<code class="docutils literal notranslate"><span class="pre">number</span></code>) – Universal time of the burn, in seconds.</p></li>
+<li><p><strong>prograde</strong> (<code class="docutils literal notranslate"><span class="pre">number</span></code>) – Change in velocity in the prograde direction, in meters per second. Defaults to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
+<li><p><strong>normal</strong> (<code class="docutils literal notranslate"><span class="pre">number</span></code>) – Change in velocity along the orbit normal, in meters per second. Defaults to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
+<li><p><strong>radial</strong> (<code class="docutils literal notranslate"><span class="pre">number</span></code>) – Change in velocity radially outward, in meters per second. Defaults to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The burn.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="burn.html#KSA.Burn" title="KSA.Burn"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Burn</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Returns once the flight computer has timed the burn, if it is the next one. Throws
+an exception if the time is in the past, or beyond the vehicle’s predicted
+trajectory.</p>
+</div>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getOrbit">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getOrbit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getOrbit" title="Link to this definition">#</a></dt>
+<dd><p>The current orbit of the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="orbit.html#KSA.Orbit" title="KSA.Orbit"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Orbit</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getFlight">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getFlight</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getFlight" title="Link to this definition">#</a></dt>
+<dd><p>Flight telemetry for the vehicle, relative to the surface of the body it orbits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="flight.html#KSA.Flight" title="KSA.Flight"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Flight</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getControl">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getControl</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getControl" title="Link to this definition">#</a></dt>
+<dd><p>The controls of the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="control.html#KSA.Control" title="KSA.Control"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.Control</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getAutoPilot">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getAutoPilot</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getAutoPilot" title="Link to this definition">#</a></dt>
+<dd><p>The auto-pilot of the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="auto-pilot.html#KSA.AutoPilot" title="KSA.AutoPilot"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.AutoPilot</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getReferenceFrame">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getReferenceFrame</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame fixed to the vehicle, with its origin at the vehicle’s position.
+The x axis points forward, the y axis to the right and the z axis down, relative to
+the vehicle’s control point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getSurfaceReferenceFrame">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSurfaceReferenceFrame</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getSurfaceReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame with its origin at the vehicle’s position, and axes aligned with
+the surface below it. The x axis points east, the y axis north and the z axis up.
+The frame rotates with the body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.getOrbitalReferenceFrame">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getOrbitalReferenceFrame</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.getOrbitalReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame with its origin at the vehicle’s position, and axes aligned with
+its orbit. The x axis points prograde, the y axis along the orbit normal and the z
+axis radially outward, perpendicular to the x axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.position">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">position</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">referenceFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.position" title="Link to this definition">#</a></dt>
+<dd><p>The position of the vehicle, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a>) – The reference frame of the position.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">[number,</span> <span class="pre">number,</span> <span class="pre">number]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.velocity">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">velocity</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">referenceFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.velocity" title="Link to this definition">#</a></dt>
+<dd><p>The velocity of the vehicle, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a>) – The reference frame of the velocity.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">[number,</span> <span class="pre">number,</span> <span class="pre">number]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.direction">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">direction</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">referenceFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.direction" title="Link to this definition">#</a></dt>
+<dd><p>The unit vector in which the vehicle points, the x axis of
+<a class="reference internal" href="#KSA.Vehicle.getReferenceFrame" title="KSA.Vehicle.getReferenceFrame"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.getReferenceFrame()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a>) – The reference frame of the direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">[number,</span> <span class="pre">number,</span> <span class="pre">number]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.rotation">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">rotation</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">referenceFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.rotation" title="Link to this definition">#</a></dt>
+<dd><p>The rotation of <a class="reference internal" href="#KSA.Vehicle.getReferenceFrame" title="KSA.Vehicle.getReferenceFrame"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.getReferenceFrame()</span></code></a> relative to the given frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a>) – The reference frame of the rotation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">[number,</span> <span class="pre">number,</span> <span class="pre">number,</span> <span class="pre">number]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.Vehicle.angularVelocity">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Vehicle</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">angularVelocity</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">referenceFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Vehicle.angularVelocity" title="Link to this definition">#</a></dt>
+<dd><p>The angular velocity of the vehicle, in radians per second. The vector points along
+the axis of rotation, and its length is the rate of rotation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref js js-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a>) – The reference frame of the angular velocity.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">[number,</span> <span class="pre">number,</span> <span class="pre">number]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="js class">
+<dt class="sig sig-object js" id="KSA.Situation">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">KSA</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Situation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Situation" title="Link to this definition">#</a></dt>
+<dd><p>The situation of a vehicle: its contact with the surface, and whether the game is
+simulating it with physics or propagating it along its orbit.
+See <a class="reference internal" href="#KSA.Vehicle.getSituation" title="KSA.Vehicle.getSituation"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.getSituation()</span></code></a>.</p>
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.Situation.maneuvering">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Situation</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">maneuvering</span></span></span><a class="headerlink" href="#KSA.Situation.maneuvering" title="Link to this definition">#</a></dt>
+<dd><p>No surface contact, simulated with physics.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.Situation.freefall">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Situation</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">freefall</span></span></span><a class="headerlink" href="#KSA.Situation.freefall" title="Link to this definition">#</a></dt>
+<dd><p>No surface contact, on rails.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.Situation.rolling">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Situation</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">rolling</span></span></span><a class="headerlink" href="#KSA.Situation.rolling" title="Link to this definition">#</a></dt>
+<dd><p>On terrain, simulated with physics.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.Situation.landed">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Situation</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">landed</span></span></span><a class="headerlink" href="#KSA.Situation.landed" title="Link to this definition">#</a></dt>
+<dd><p>At rest on terrain.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.Situation.sailing">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Situation</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">sailing</span></span></span><a class="headerlink" href="#KSA.Situation.sailing" title="Link to this definition">#</a></dt>
+<dd><p>In the ocean, simulated with physics.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.Situation.floating">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Situation</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">floating</span></span></span><a class="headerlink" href="#KSA.Situation.floating" title="Link to this definition">#</a></dt>
+<dd><p>At rest in the ocean.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.Situation.dragging">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Situation</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">dragging</span></span></span><a class="headerlink" href="#KSA.Situation.dragging" title="Link to this definition">#</a></dt>
+<dd><p>On terrain and in the ocean, simulated with physics.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.Situation.bottomed">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Situation</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">bottomed</span></span></span><a class="headerlink" href="#KSA.Situation.bottomed" title="Link to this definition">#</a></dt>
+<dd><p>At rest on terrain and in the ocean.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="js class">
+<dt class="sig sig-object js" id="KSA.ControlState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">KSA</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ControlState</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.ControlState" title="Link to this definition">#</a></dt>
+<dd><p>Whether a vehicle can be flown, or why not. See <a class="reference internal" href="#KSA.Vehicle.getControlState" title="KSA.Vehicle.getControlState"><code class="xref js js-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.getControlState()</span></code></a>.</p>
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.ControlState.controllable">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ControlState</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">controllable</span></span></span><a class="headerlink" href="#KSA.ControlState.controllable" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle can be flown.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.ControlState.noControlModule">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ControlState</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">noControlModule</span></span></span><a class="headerlink" href="#KSA.ControlState.noControlModule" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle has no control module, such as a capsule or a probe core.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.ControlState.noCrew">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ControlState</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">noCrew</span></span></span><a class="headerlink" href="#KSA.ControlState.noCrew" title="Link to this definition">#</a></dt>
+<dd><p>The capsules have no crew, and no probe core is on.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.ControlState.crewIncapacitated">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ControlState</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">crewIncapacitated</span></span></span><a class="headerlink" href="#KSA.ControlState.crewIncapacitated" title="Link to this definition">#</a></dt>
+<dd><p>Every kitten in the capsules is incapacitated, and no probe core is on.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.ControlState.probeCoreUnpowered">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ControlState</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">probeCoreUnpowered</span></span></span><a class="headerlink" href="#KSA.ControlState.probeCoreUnpowered" title="Link to this definition">#</a></dt>
+<dd><p>The probe core has no power.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.ControlState.probeCoreOff">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ControlState</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">probeCoreOff</span></span></span><a class="headerlink" href="#KSA.ControlState.probeCoreOff" title="Link to this definition">#</a></dt>
+<dd><p>The probe core is switched off.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.ControlState.probeCoreFailed">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ControlState</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">probeCoreFailed</span></span></span><a class="headerlink" href="#KSA.ControlState.probeCoreFailed" title="Link to this definition">#</a></dt>
+<dd><p>The probe core has failed from its radiation dose.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.ControlState.probeCoreStormStandby">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ControlState</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">probeCoreStormStandby</span></span></span><a class="headerlink" href="#KSA.ControlState.probeCoreStormStandby" title="Link to this definition">#</a></dt>
+<dd><p>The probe core is on standby for a radiation storm.</p>
+</dd></dl>
+
+<dl class="js attribute">
+<dt class="sig sig-object js" id="KSA.ControlState.probeCoreRebooting">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">ControlState</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">probeCoreRebooting</span></span></span><a class="headerlink" href="#KSA.ControlState.probeCoreRebooting" title="Link to this definition">#</a></dt>
+<dd><p>The probe core is rebooting after a radiation upset.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="js class">
+<dt class="sig sig-object js" id="KSA.VehicleDesign">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="n"><span class="pre">KSA</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">VehicleDesign</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.VehicleDesign" title="Link to this definition">#</a></dt>
+<dd><p>A vehicle design that can be launched: one of the game’s default vehicles, or a vehicle
+saved by the player in the editor. Obtained from <a class="reference internal" href="ksa.html#KSA.getVehicleDesigns" title="KSA.getVehicleDesigns"><code class="xref js js-func docutils literal notranslate"><span class="pre">KSA.getVehicleDesigns()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The mass and delta-v are those the editor shows for the design.</p>
+</div>
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.VehicleDesign.getName">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">VehicleDesign</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getName</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.VehicleDesign.getName" title="Link to this definition">#</a></dt>
+<dd><p>The name of the design, as passed to <a class="reference internal" href="ksa.html#KSA.launchVehicle" title="KSA.launchVehicle"><code class="xref js js-func docutils literal notranslate"><span class="pre">KSA.launchVehicle()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">string</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.VehicleDesign.getIsDefault">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">VehicleDesign</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getIsDefault</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.VehicleDesign.getIsDefault" title="Link to this definition">#</a></dt>
+<dd><p>Whether the design is one of the game’s default vehicles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">boolean</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.VehicleDesign.getPartCount">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">VehicleDesign</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getPartCount</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.VehicleDesign.getPartCount" title="Link to this definition">#</a></dt>
+<dd><p>The number of parts in the design.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.VehicleDesign.getMass">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">VehicleDesign</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getMass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.VehicleDesign.getMass" title="Link to this definition">#</a></dt>
+<dd><p>The total mass of the design, including propellant, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.VehicleDesign.getDryMass">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">VehicleDesign</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getDryMass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.VehicleDesign.getDryMass" title="Link to this definition">#</a></dt>
+<dd><p>The mass of the design without propellant, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="js method">
+<dt class="sig sig-object js" id="KSA.VehicleDesign.getDeltaV">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">VehicleDesign</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getDeltaV</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.VehicleDesign.getDeltaV" title="Link to this definition">#</a></dt>
+<dd><p>The change in velocity of all the design’s sequences, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Property<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">number</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each sequence is computed in the environment chosen for it in the editor, in vacuum
+or at sea level.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ksa.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">KSA</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="sequence.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Sequence</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/js/api/ksa/vehicle.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026 kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

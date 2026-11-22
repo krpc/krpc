@@ -1,0 +1,702 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Life Support
+============
+
+.. grpc:service:: LifeSupportService
+
+   How long the supplies of a vehicle, a habitat zone or a kitten's suit last. Obtained
+   from :grpc:rpc:`VehicleService.GetLifeSupport <krpc.ksa.VehicleService.GetLifeSupport>`, :grpc:rpc:`HabitatZoneService.GetLifeSupport <krpc.ksa.HabitatZoneService.GetLifeSupport>` or
+   :grpc:rpc:`KittenService.GetLifeSupport <krpc.ksa.KittenService.GetLifeSupport>`.
+
+   .. note::
+
+      The times count down only while :grpc:rpc:`KSAService.GetLifeSupportEnabled <krpc.ksa.KSAService.GetLifeSupportEnabled>` is true. Air
+      lasts forever in breathable air outside the vehicle.
+
+   .. grpc:rpc:: GetKittens (LifeSupport.GetKittensRequest) returns (LifeSupport.GetKittensResponse)
+
+      The number of kittens the supplies are shared between.
+
+      :LifeSupport.GetKittensRequest:
+         * ``this`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+      :LifeSupport.GetKittensResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetAirMass (LifeSupport.GetAirMassRequest) returns (LifeSupport.GetAirMassResponse)
+
+      The mass of oxygen in the crew's tanks, in kilograms.
+
+      :LifeSupport.GetAirMassRequest:
+         * ``this`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+      :LifeSupport.GetAirMassResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetWaterMass (LifeSupport.GetWaterMassRequest) returns (LifeSupport.GetWaterMassResponse)
+
+      The mass of water in the crew's tanks, in kilograms.
+
+      :LifeSupport.GetWaterMassRequest:
+         * ``this`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+      :LifeSupport.GetWaterMassResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetMeals (LifeSupport.GetMealsRequest) returns (LifeSupport.GetMealsResponse)
+
+      The number of meals.
+
+      :LifeSupport.GetMealsRequest:
+         * ``this`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+      :LifeSupport.GetMealsResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetAirTime (LifeSupport.GetAirTimeRequest) returns (LifeSupport.GetAirTimeResponse)
+
+      The time the air lasts, in seconds. Infinite with no crew, or in breathable air.
+
+      :LifeSupport.GetAirTimeRequest:
+         * ``this`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+      :LifeSupport.GetAirTimeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetScrubberTime (LifeSupport.GetScrubberTimeRequest) returns (LifeSupport.GetScrubberTimeResponse)
+
+      The time the carbon dioxide scrubbers last, in seconds. Infinite with no crew.
+
+      :LifeSupport.GetScrubberTimeRequest:
+         * ``this`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+      :LifeSupport.GetScrubberTimeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetWaterTime (LifeSupport.GetWaterTimeRequest) returns (LifeSupport.GetWaterTimeResponse)
+
+      The time the water lasts, in seconds. Infinite with no crew.
+
+      :LifeSupport.GetWaterTimeRequest:
+         * ``this`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+      :LifeSupport.GetWaterTimeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetFoodTime (LifeSupport.GetFoodTimeRequest) returns (LifeSupport.GetFoodTimeResponse)
+
+      The time the food lasts, in seconds. Infinite with no crew.
+
+      :LifeSupport.GetFoodTimeRequest:
+         * ``this`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+      :LifeSupport.GetFoodTimeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetTime (LifeSupport.GetTimeRequest) returns (LifeSupport.GetTimeResponse)
+
+      The time until the first supply runs out, in seconds. A suit counts its air and
+      scrubber only. Infinite with no crew.
+
+      :LifeSupport.GetTimeRequest:
+         * ``this`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+      :LifeSupport.GetTimeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetLimitingSupply (LifeSupport.GetLimitingSupplyRequest) returns (LifeSupport.GetLimitingSupplyResponse)
+
+      The supply that runs out first. Air when every time is infinite, as with no crew.
+
+      :LifeSupport.GetLimitingSupplyRequest:
+         * ``this`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+      :LifeSupport.GetLimitingSupplyResponse: ``value`` (:grpc:enum:`LifeSupportSupply <krpc.ksa.LifeSupportSupply>`)
+
+   .. grpc:rpc:: GetLevel (LifeSupport.GetLevelRequest) returns (LifeSupport.GetLevelResponse)
+
+      How long the supplies last, as the game's life support gauge shows it.
+
+      :LifeSupport.GetLevelRequest:
+         * ``this`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+      :LifeSupport.GetLevelResponse: ``value`` (:grpc:enum:`LifeSupportLevel <krpc.ksa.LifeSupportLevel>`)
+
+   .. grpc:rpc:: GetTimeToNextLevel (LifeSupport.GetTimeToNextLevelRequest) returns (LifeSupport.GetTimeToNextLevelResponse)
+
+      The time until :grpc:rpc:`LifeSupportService.GetLevel <krpc.ksa.LifeSupportService.GetLevel>` next changes, in seconds. Infinite with no crew.
+
+      :LifeSupport.GetTimeToNextLevelRequest:
+         * ``this`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+      :LifeSupport.GetTimeToNextLevelResponse: ``value`` (``float``)
+
+.. grpc:enum:: LifeSupportLevel
+
+   How long the crew's supplies last. See :grpc:rpc:`LifeSupportService.GetLevel <krpc.ksa.LifeSupportService.GetLevel>`.
+
+   .. grpc:value:: LIFE_SUPPORT_LEVEL_OK
+
+      More than a day of supplies, or no crew.
+
+   .. grpc:value:: LIFE_SUPPORT_LEVEL_LOW
+
+      A day of supplies or less.
+
+   .. grpc:value:: LIFE_SUPPORT_LEVEL_CRITICAL
+
+      An hour of supplies or less.
+
+   .. grpc:value:: LIFE_SUPPORT_LEVEL_OUT
+
+      A supply has run out.
+
+.. grpc:enum:: LifeSupportSupply
+
+   A supply the crew needs. See :grpc:rpc:`LifeSupportService.GetLimitingSupply <krpc.ksa.LifeSupportService.GetLimitingSupply>`.
+
+   .. grpc:value:: LIFE_SUPPORT_SUPPLY_AIR
+
+      Oxygen to breathe.
+
+   .. grpc:value:: LIFE_SUPPORT_SUPPLY_SCRUBBER
+
+      Lithium hydroxide canisters, which scrub carbon dioxide from the air.
+
+   .. grpc:value:: LIFE_SUPPORT_SUPPLY_WATER
+
+      Drinking water.
+
+   .. grpc:value:: LIFE_SUPPORT_SUPPLY_FOOD
+
+      Meals.
+
+.. grpc:service:: HabitatZoneService
+
+   The connected habitable parts of a vehicle, which share their crew's supplies.
+   Obtained from :grpc:rpc:`VehicleService.GetHabitatZones <krpc.ksa.VehicleService.GetHabitatZones>` or :grpc:rpc:`HabitatService.GetZone <krpc.ksa.HabitatService.GetZone>`.
+
+   .. note::
+
+      Parts join a zone through connections the crew can pass, such as an open docking
+      port hatch.
+
+   .. grpc:rpc:: GetVehicle (HabitatZone.GetVehicleRequest) returns (HabitatZone.GetVehicleResponse)
+
+      The vehicle the zone is in.
+
+      :HabitatZone.GetVehicleRequest:
+         * ``this`` (:grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+
+      :HabitatZone.GetVehicleResponse: ``value`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+   .. grpc:rpc:: GetParts (HabitatZone.GetPartsRequest) returns (HabitatZone.GetPartsResponse)
+
+      The parts in the zone.
+
+      :HabitatZone.GetPartsRequest:
+         * ``this`` (:grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+
+      :HabitatZone.GetPartsResponse: ``value`` (``repeated`` :grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetHabitats (HabitatZone.GetHabitatsRequest) returns (HabitatZone.GetHabitatsResponse)
+
+      The habitats in the zone.
+
+      :HabitatZone.GetHabitatsRequest:
+         * ``this`` (:grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+
+      :HabitatZone.GetHabitatsResponse: ``value`` (``repeated`` :grpc:service:`Habitat <krpc.ksa.HabitatService>`)
+
+   .. grpc:rpc:: GetSeats (HabitatZone.GetSeatsRequest) returns (HabitatZone.GetSeatsResponse)
+
+      The crew seats in the zone.
+
+      :HabitatZone.GetSeatsRequest:
+         * ``this`` (:grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+
+      :HabitatZone.GetSeatsResponse: ``value`` (``repeated`` :grpc:service:`Seat <krpc.ksa.SeatService>`)
+
+   .. grpc:rpc:: GetCrew (HabitatZone.GetCrewRequest) returns (HabitatZone.GetCrewResponse)
+
+      The kittens in the zone's seats.
+
+      :HabitatZone.GetCrewRequest:
+         * ``this`` (:grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+
+      :HabitatZone.GetCrewResponse: ``value`` (``repeated`` :grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+   .. grpc:rpc:: GetLinkedZones (HabitatZone.GetLinkedZonesRequest) returns (HabitatZone.GetLinkedZonesResponse)
+
+      The zones that join this one when closed docking port hatches between them open.
+
+      :HabitatZone.GetLinkedZonesRequest:
+         * ``this`` (:grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+
+      :HabitatZone.GetLinkedZonesResponse: ``value`` (``repeated`` :grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+
+   .. grpc:rpc:: HatchesTo (HabitatZone.HatchesToRequest) returns (HabitatZone.HatchesToResponse)
+
+      The closed docking port hatches that join this zone to a linked zone when they
+      open.
+
+      :HabitatZone.HatchesToRequest:
+         * ``this`` (:grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+         * ``zone`` (:grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`): A zone in :grpc:rpc:`HabitatZoneService.GetLinkedZones <krpc.ksa.HabitatZoneService.GetLinkedZones>`.
+
+      :HabitatZone.HatchesToResponse: ``value`` (``repeated`` :grpc:service:`DockingPort <krpc.ksa.DockingPortService>`)
+
+      .. note::
+
+         Throws an exception if the zone is not linked to this one.
+
+   .. grpc:rpc:: GetHabitableVolume (HabitatZone.GetHabitableVolumeRequest) returns (HabitatZone.GetHabitableVolumeResponse)
+
+      The volume the crew can live in, in cubic meters.
+
+      :HabitatZone.GetHabitableVolumeRequest:
+         * ``this`` (:grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+
+      :HabitatZone.GetHabitableVolumeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetStorageVolume (HabitatZone.GetStorageVolumeRequest) returns (HabitatZone.GetStorageVolumeResponse)
+
+      The volume for stored supplies, in cubic meters.
+
+      :HabitatZone.GetStorageVolumeRequest:
+         * ``this`` (:grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+
+      :HabitatZone.GetStorageVolumeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetLifeSupport (HabitatZone.GetLifeSupportRequest) returns (HabitatZone.GetLifeSupportResponse)
+
+      How long the zone's supplies last its crew.
+
+      :HabitatZone.GetLifeSupportRequest:
+         * ``this`` (:grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+
+      :HabitatZone.GetLifeSupportResponse: ``value`` (:grpc:service:`LifeSupport <krpc.ksa.LifeSupportService>`)
+
+   .. grpc:rpc:: GetMissionSupplies (HabitatZone.GetMissionSuppliesRequest) returns (HabitatZone.GetMissionSuppliesResponse)
+
+      Whether the zone's supplies last its crew through the vehicle's mission. ``null``
+      without a feasible mission with time left, or while
+      :grpc:rpc:`KSAService.GetLifeSupportEnabled <krpc.ksa.KSAService.GetLifeSupportEnabled>` is false.
+
+      :HabitatZone.GetMissionSuppliesRequest:
+         * ``this`` (:grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+
+      :HabitatZone.GetMissionSuppliesResponse: ``value`` (:grpc:service:`MissionSupplies <krpc.ksa.MissionSuppliesService>`)
+
+   .. grpc:rpc:: PlannedKittens (HabitatZone.PlannedKittensRequest) returns (HabitatZone.PlannedKittensResponse)
+
+      The number of kittens planned in the zone for a leg of the vehicle's mission. The
+      plan defaults to the kittens seated in the zone.
+
+      :HabitatZone.PlannedKittensRequest:
+         * ``this`` (:grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+         * ``leg`` (:grpc:enum:`MissionLeg <krpc.ksa.MissionLeg>`): The leg.
+
+      :HabitatZone.PlannedKittensResponse: ``value`` (``sint32``)
+
+.. grpc:service:: MissionService
+
+   The mission planned for a vehicle in the editor's life support window. Obtained from
+   :grpc:rpc:`VehicleService.GetMission <krpc.ksa.VehicleService.GetMission>`.
+
+   .. note::
+
+      The game times the legs of the mission from the plan, and checks the supplies of each
+      habitat zone against them. See :grpc:rpc:`HabitatZoneService.GetMissionSupplies <krpc.ksa.HabitatZoneService.GetMissionSupplies>`.
+
+   .. grpc:rpc:: GetDestination (Mission.GetDestinationRequest) returns (Mission.GetDestinationResponse)
+
+      Where the mission goes.
+
+      :Mission.GetDestinationRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetDestinationResponse: ``value`` (:grpc:enum:`MissionDestination <krpc.ksa.MissionDestination>`)
+
+   .. grpc:rpc:: GetBody (Mission.GetBodyRequest) returns (Mission.GetBodyResponse)
+
+      The body the mission goes to, or ``null`` if it has no destination. For a low
+      orbit, this is the home body.
+
+      :Mission.GetBodyRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetBodyResponse: ``value`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+   .. grpc:rpc:: GetArrival (Mission.GetArrivalRequest) returns (Mission.GetArrivalResponse)
+
+      What the mission does at its destination.
+
+      :Mission.GetArrivalRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetArrivalResponse: ``value`` (:grpc:enum:`MissionArrival <krpc.ksa.MissionArrival>`)
+
+   .. grpc:rpc:: GetTrip (Mission.GetTripRequest) returns (Mission.GetTripResponse)
+
+      Whether the mission comes back.
+
+      :Mission.GetTripRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetTripResponse: ``value`` (:grpc:enum:`MissionTrip <krpc.ksa.MissionTrip>`)
+
+   .. grpc:rpc:: GetStay (Mission.GetStayRequest) returns (Mission.GetStayResponse)
+
+      The time planned at the destination, in seconds.
+
+      :Mission.GetStayRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetStayResponse: ``value`` (``float``)
+
+      .. note::
+
+         The game rounds a stay before a return up to the next transfer window home. See
+         :grpc:rpc:`MissionService.GetStayTime <krpc.ksa.MissionService.GetStayTime>`.
+
+   .. grpc:rpc:: GetCustom (Mission.GetCustomRequest) returns (Mission.GetCustomResponse)
+
+      Whether the mission has a length set by the player, in place of legs timed from
+      its destination. See :grpc:rpc:`MissionService.GetCustomLength <krpc.ksa.MissionService.GetCustomLength>`.
+
+      :Mission.GetCustomRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetCustomResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetCustomLength (Mission.GetCustomLengthRequest) returns (Mission.GetCustomLengthResponse)
+
+      The length of a mission with :grpc:rpc:`MissionService.GetCustom <krpc.ksa.MissionService.GetCustom>` set, in seconds.
+
+      :Mission.GetCustomLengthRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetCustomLengthResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetFeasible (Mission.GetFeasibleRequest) returns (Mission.GetFeasibleResponse)
+
+      Whether the game can time the legs of the mission. A mission with no destination,
+      or a flyby with no way back, cannot be timed.
+
+      :Mission.GetFeasibleRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetFeasibleResponse: ``value`` (``bool``)
+
+      .. note::
+
+         The leg times are zero when this is false.
+
+   .. grpc:rpc:: GetOutTime (Mission.GetOutTimeRequest) returns (Mission.GetOutTimeResponse)
+
+      The planned time of the way out, in seconds.
+
+      :Mission.GetOutTimeRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetOutTimeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetStayTime (Mission.GetStayTimeRequest) returns (Mission.GetStayTimeResponse)
+
+      The planned time at the destination, in seconds.
+
+      :Mission.GetStayTimeRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetStayTimeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetBackTime (Mission.GetBackTimeRequest) returns (Mission.GetBackTimeResponse)
+
+      The planned time of the way back, in seconds. Zero for a one way trip.
+
+      :Mission.GetBackTimeRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetBackTimeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetReturnWait (Mission.GetReturnWaitRequest) returns (Mission.GetReturnWaitResponse)
+
+      The time from arriving at the destination until the next transfer window home, in
+      seconds. Zero when there is no wait.
+
+      :Mission.GetReturnWaitRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetReturnWaitResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetTotalTime (Mission.GetTotalTimeRequest) returns (Mission.GetTotalTimeResponse)
+
+      The planned length of the mission, in seconds.
+
+      :Mission.GetTotalTimeRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetTotalTimeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetTimeLeft (Mission.GetTimeLeftRequest) returns (Mission.GetTimeLeftResponse)
+
+      The time left in the mission as planned, counted from the vehicle's launch, in
+      seconds.
+
+      :Mission.GetTimeLeftRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetTimeLeftResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetArrivalUT (Mission.GetArrivalUTRequest) returns (Mission.GetArrivalUTResponse)
+
+      The universal time the vehicle arrived at the destination body, in seconds. Not a
+      number until it has.
+
+      :Mission.GetArrivalUTRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetArrivalUTResponse: ``value`` (``double``)
+
+      .. note::
+
+         The game records the arrival for a mission to another body.
+
+   .. grpc:rpc:: GetDepartureUT (Mission.GetDepartureUTRequest) returns (Mission.GetDepartureUTResponse)
+
+      The universal time the vehicle left the destination body, in seconds. Not a number
+      until it has.
+
+      :Mission.GetDepartureUTRequest:
+         * ``this`` (:grpc:service:`Mission <krpc.ksa.MissionService>`)
+
+      :Mission.GetDepartureUTResponse: ``value`` (``double``)
+
+.. grpc:enum:: MissionDestination
+
+   Where a mission goes. See :grpc:rpc:`MissionService.GetDestination <krpc.ksa.MissionService.GetDestination>`.
+
+   .. grpc:value:: MISSION_DESTINATION_NONE
+
+      No destination.
+
+   .. grpc:value:: MISSION_DESTINATION_LOW_ORBIT
+
+      A low orbit around the home body.
+
+   .. grpc:value:: MISSION_DESTINATION_BODY
+
+      Another body, given by :grpc:rpc:`MissionService.GetBody <krpc.ksa.MissionService.GetBody>`.
+
+.. grpc:enum:: MissionArrival
+
+   What a mission does at its destination. See :grpc:rpc:`MissionService.GetArrival <krpc.ksa.MissionService.GetArrival>`.
+
+   .. grpc:value:: MISSION_ARRIVAL_FLYBY
+
+      Flies past it.
+
+   .. grpc:value:: MISSION_ARRIVAL_ORBIT
+
+      Orbits it.
+
+   .. grpc:value:: MISSION_ARRIVAL_LAND
+
+      Lands on it.
+
+.. grpc:enum:: MissionTrip
+
+   Whether a mission comes back. See :grpc:rpc:`MissionService.GetTrip <krpc.ksa.MissionService.GetTrip>`.
+
+   .. grpc:value:: MISSION_TRIP_RETURN
+
+      Goes and comes back.
+
+   .. grpc:value:: MISSION_TRIP_ONE_WAY
+
+      Goes and stays.
+
+.. grpc:enum:: MissionLeg
+
+   A leg of a mission. See :grpc:rpc:`HabitatZoneService.PlannedKittens <krpc.ksa.HabitatZoneService.PlannedKittens>`.
+
+   .. grpc:value:: MISSION_LEG_OUT
+
+      The way out.
+
+   .. grpc:value:: MISSION_LEG_STAY
+
+      The stay at the destination.
+
+   .. grpc:value:: MISSION_LEG_BACK
+
+      The way back.
+
+.. grpc:service:: MissionSuppliesService
+
+   Whether the supplies of a habitat zone last its crew through the vehicle's mission, as
+   the life support window shows it. Obtained from :grpc:rpc:`HabitatZoneService.GetMissionSupplies <krpc.ksa.HabitatZoneService.GetMissionSupplies>`.
+
+   .. note::
+
+      The check takes the legs left in the mission as planned, counted from the vehicle's
+      launch, and the kittens planned for each leg. The times are from now.
+
+   .. grpc:rpc:: GetVerdict (MissionSupplies.GetVerdictRequest) returns (MissionSupplies.GetVerdictResponse)
+
+      Whether the supplies last the mission.
+
+      :MissionSupplies.GetVerdictRequest:
+         * ``this`` (:grpc:service:`MissionSupplies <krpc.ksa.MissionSuppliesService>`)
+
+      :MissionSupplies.GetVerdictResponse: ``value`` (:grpc:enum:`MissionSupplyVerdict <krpc.ksa.MissionSupplyVerdict>`)
+
+   .. grpc:rpc:: GetShortBy (MissionSupplies.GetShortByRequest) returns (MissionSupplies.GetShortByResponse)
+
+      The time by which the first supply to run out falls short of the end of the
+      mission, in seconds. Zero when the supplies last.
+
+      :MissionSupplies.GetShortByRequest:
+         * ``this`` (:grpc:service:`MissionSupplies <krpc.ksa.MissionSuppliesService>`)
+
+      :MissionSupplies.GetShortByResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetFirstSupply (MissionSupplies.GetFirstSupplyRequest) returns (MissionSupplies.GetFirstSupplyResponse)
+
+      The supply that runs out first.
+
+      :MissionSupplies.GetFirstSupplyRequest:
+         * ``this`` (:grpc:service:`MissionSupplies <krpc.ksa.MissionSuppliesService>`)
+
+      :MissionSupplies.GetFirstSupplyResponse: ``value`` (:grpc:enum:`LifeSupportSupply <krpc.ksa.LifeSupportSupply>`)
+
+   .. grpc:rpc:: TimeLeft (MissionSupplies.TimeLeftRequest) returns (MissionSupplies.TimeLeftResponse)
+
+      The time until a supply runs out with the crew planned for each leg, in seconds.
+      Infinite if it lasts the mission.
+
+      :MissionSupplies.TimeLeftRequest:
+         * ``this`` (:grpc:service:`MissionSupplies <krpc.ksa.MissionSuppliesService>`)
+         * ``supply`` (:grpc:enum:`LifeSupportSupply <krpc.ksa.LifeSupportSupply>`): The supply.
+
+      :MissionSupplies.TimeLeftResponse: ``value`` (``float``)
+
+      .. note::
+
+         Air lasts while the vehicle is in breathable air.
+
+   .. grpc:rpc:: GetEnd (MissionSupplies.GetEndRequest) returns (MissionSupplies.GetEndResponse)
+
+      The time until the zone has no crew left in the mission, in seconds.
+
+      :MissionSupplies.GetEndRequest:
+         * ``this`` (:grpc:service:`MissionSupplies <krpc.ksa.MissionSuppliesService>`)
+
+      :MissionSupplies.GetEndResponse: ``value`` (``float``)
+
+.. grpc:enum:: MissionSupplyVerdict
+
+   Whether a habitat zone has the supplies for a mission. See :grpc:rpc:`MissionSuppliesService.GetVerdict <krpc.ksa.MissionSuppliesService.GetVerdict>`.
+
+   .. grpc:value:: MISSION_SUPPLY_VERDICT_UNUSED
+
+      The zone has no crew during the mission.
+
+   .. grpc:value:: MISSION_SUPPLY_VERDICT_ENOUGH
+
+      The supplies last the mission.
+
+   .. grpc:value:: MISSION_SUPPLY_VERDICT_SHORT
+
+      A supply runs out before the end of the mission.
+
+.. grpc:service:: HabitatService
+
+   A habitable or storage space in a part, which holds meals and carbon dioxide scrubber
+   canisters. Obtained from :grpc:rpc:`PartService.GetHabitats <krpc.ksa.PartService.GetHabitats>`.
+
+   .. grpc:rpc:: GetPart (Habitat.GetPartRequest) returns (Habitat.GetPartResponse)
+
+      The part the habitat is in.
+
+      :Habitat.GetPartRequest:
+         * ``this`` (:grpc:service:`Habitat <krpc.ksa.HabitatService>`)
+
+      :Habitat.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetZone (Habitat.GetZoneRequest) returns (Habitat.GetZoneResponse)
+
+      The habitat zone the habitat is in.
+
+      :Habitat.GetZoneRequest:
+         * ``this`` (:grpc:service:`Habitat <krpc.ksa.HabitatService>`)
+
+      :Habitat.GetZoneResponse: ``value`` (:grpc:service:`HabitatZone <krpc.ksa.HabitatZoneService>`)
+
+   .. grpc:rpc:: GetHabitableVolume (Habitat.GetHabitableVolumeRequest) returns (Habitat.GetHabitableVolumeResponse)
+
+      The volume the crew can live in, in cubic meters.
+
+      :Habitat.GetHabitableVolumeRequest:
+         * ``this`` (:grpc:service:`Habitat <krpc.ksa.HabitatService>`)
+
+      :Habitat.GetHabitableVolumeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetStorageVolume (Habitat.GetStorageVolumeRequest) returns (Habitat.GetStorageVolumeResponse)
+
+      The volume for stored supplies, in cubic meters.
+
+      :Habitat.GetStorageVolumeRequest:
+         * ``this`` (:grpc:service:`Habitat <krpc.ksa.HabitatService>`)
+
+      :Habitat.GetStorageVolumeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetMeals (Habitat.GetMealsRequest) returns (Habitat.GetMealsResponse)
+
+      The number of meals in the habitat.
+
+      :Habitat.GetMealsRequest:
+         * ``this`` (:grpc:service:`Habitat <krpc.ksa.HabitatService>`)
+
+      :Habitat.GetMealsResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetCanisters (Habitat.GetCanistersRequest) returns (Habitat.GetCanistersResponse)
+
+      The number of carbon dioxide scrubber canisters in the habitat.
+
+      :Habitat.GetCanistersRequest:
+         * ``this`` (:grpc:service:`Habitat <krpc.ksa.HabitatService>`)
+
+      :Habitat.GetCanistersResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetMealCapacity (Habitat.GetMealCapacityRequest) returns (Habitat.GetMealCapacityResponse)
+
+      The number of meals the habitat holds when full.
+
+      :Habitat.GetMealCapacityRequest:
+         * ``this`` (:grpc:service:`Habitat <krpc.ksa.HabitatService>`)
+
+      :Habitat.GetMealCapacityResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetCanisterCapacity (Habitat.GetCanisterCapacityRequest) returns (Habitat.GetCanisterCapacityResponse)
+
+      The number of carbon dioxide scrubber canisters the habitat holds when full.
+
+      :Habitat.GetCanisterCapacityRequest:
+         * ``this`` (:grpc:service:`Habitat <krpc.ksa.HabitatService>`)
+
+      :Habitat.GetCanisterCapacityResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: Transfer (Habitat.TransferRequest) returns (Habitat.TransferResponse)
+
+      Moves meals and canisters to another habitat in the same zone. Moves fewer when
+      this habitat holds fewer, or the other has less room.
+
+      :Habitat.TransferRequest:
+         * ``this`` (:grpc:service:`Habitat <krpc.ksa.HabitatService>`)
+         * ``to`` (:grpc:service:`Habitat <krpc.ksa.HabitatService>`): The habitat to move the supplies to.
+         * ``meals`` (``optional sint32``): The number of meals to move. Defaults to ``0``.
+         * ``canisters`` (``optional sint32``): The number of canisters to move. Defaults to ``0``.
+
+      :Habitat.TransferResponse: Empty
+
+      .. note::
+
+         A kitten in the zone moves the supplies. Throws an exception if life support is
+         disabled, the habitats are in different zones, or the zone has no crew able to
+         move them.

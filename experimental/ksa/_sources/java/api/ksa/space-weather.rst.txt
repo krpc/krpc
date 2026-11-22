@@ -1,0 +1,56 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Space Weather
+=============
+
+
+.. type:: public class CoronalMassEjection
+
+   A coronal mass ejection: a cloud of plasma thrown out by a star. One that reaches a body
+   with a magnetosphere can cause a geomagnetic storm. See
+   :meth:`Body.getRecentCoronalMassEjections()` and
+   :meth:`Flight.getIncomingCoronalMassEjections()`.
+
+   .. method:: Body getStar()
+
+
+      The star that threw out the ejection.
+
+   
+
+   .. method:: double getUT()
+
+
+      The universal time at which the ejection left the star, in seconds.
+
+   
+
+   .. method:: float getSpeed()
+
+
+      The speed of the ejection as it leaves the star, in :math:`\mathrm{m/s}`.
+
+   
+
+   .. method:: double arrivalTime(Vehicle vehicle)
+
+      The universal time at which the shock of the ejection is forecast to reach the
+      vehicle, in seconds. Not a number if the ejection misses the vehicle, or has
+      already reached it.
+
+      :param Vehicle vehicle: The vehicle.
+   
+
+      .. note::
+
+         The forecast the game's space weather window shows. It is uncertain by up to
+         :meth:`CoronalMassEjection.arrivalUncertainty(Vehicle)`, which shrinks as the ejection nears.
+
+   .. method:: float arrivalUncertainty(Vehicle vehicle)
+
+      The uncertainty of :meth:`CoronalMassEjection.arrivalTime(Vehicle)`, in seconds. Not a number if the
+      ejection misses the vehicle, or has already reached it.
+
+      :param Vehicle vehicle: The vehicle.

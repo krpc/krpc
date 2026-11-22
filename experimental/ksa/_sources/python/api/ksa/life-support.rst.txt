@@ -1,0 +1,688 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KSA
+
+Life Support
+============
+
+
+.. class:: LifeSupport
+
+   How long the supplies of a vehicle, a habitat zone or a kitten's suit last. Obtained
+   from :attr:`Vehicle.life_support`, :attr:`HabitatZone.life_support` or
+   :attr:`Kitten.life_support`.
+
+   .. note::
+
+      The times count down only while :attr:`life_support_enabled` is true. Air
+      lasts forever in breathable air outside the vehicle.
+
+   .. attribute:: kittens
+
+      The number of kittens the supplies are shared between.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. attribute:: air_mass
+
+      The mass of oxygen in the crew's tanks, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: water_mass
+
+      The mass of water in the crew's tanks, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: meals
+
+      The number of meals.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. attribute:: air_time
+
+      The time the air lasts, in seconds. Infinite with no crew, or in breathable air.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: scrubber_time
+
+      The time the carbon dioxide scrubbers last, in seconds. Infinite with no crew.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: water_time
+
+      The time the water lasts, in seconds. Infinite with no crew.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: food_time
+
+      The time the food lasts, in seconds. Infinite with no crew.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: time
+
+      The time until the first supply runs out, in seconds. A suit counts its air and
+      scrubber only. Infinite with no crew.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: limiting_supply
+
+      The supply that runs out first. Air when every time is infinite, as with no crew.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`LifeSupportSupply`
+   
+
+   .. attribute:: level
+
+      How long the supplies last, as the game's life support gauge shows it.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`LifeSupportLevel`
+   
+
+   .. attribute:: time_to_next_level
+
+      The time until :attr:`LifeSupport.level` next changes, in seconds. Infinite with no crew.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: LifeSupportLevel
+
+   How long the crew's supplies last. See :attr:`LifeSupport.level`.
+
+
+   .. data:: ok
+
+      More than a day of supplies, or no crew.
+
+
+   .. data:: low
+
+      A day of supplies or less.
+
+
+   .. data:: critical
+
+      An hour of supplies or less.
+
+
+   .. data:: out
+
+      A supply has run out.
+
+
+
+.. class:: LifeSupportSupply
+
+   A supply the crew needs. See :attr:`LifeSupport.limiting_supply`.
+
+
+   .. data:: air
+
+      Oxygen to breathe.
+
+
+   .. data:: scrubber
+
+      Lithium hydroxide canisters, which scrub carbon dioxide from the air.
+
+
+   .. data:: water
+
+      Drinking water.
+
+
+   .. data:: food
+
+      Meals.
+
+
+
+.. class:: HabitatZone
+
+   The connected habitable parts of a vehicle, which share their crew's supplies.
+   Obtained from :attr:`Vehicle.habitat_zones` or :attr:`Habitat.zone`.
+
+   .. note::
+
+      Parts join a zone through connections the crew can pass, such as an open docking
+      port hatch.
+
+   .. attribute:: vehicle
+
+      The vehicle the zone is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Vehicle`
+   
+
+   .. attribute:: parts
+
+      The parts in the zone.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Part`)
+   
+
+   .. attribute:: habitats
+
+      The habitats in the zone.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Habitat`)
+   
+
+   .. attribute:: seats
+
+      The crew seats in the zone.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Seat`)
+   
+
+   .. attribute:: crew
+
+      The kittens in the zone's seats.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Kitten`)
+   
+
+   .. attribute:: linked_zones
+
+      The zones that join this one when closed docking port hatches between them open.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`HabitatZone`)
+   
+
+   .. method:: hatches_to(zone)
+
+      The closed docking port hatches that join this zone to a linked zone when they
+      open.
+
+      :param HabitatZone zone: A zone in :attr:`HabitatZone.linked_zones`.
+      :rtype: list(:class:`DockingPort`)
+   
+
+      .. note::
+
+         Throws an exception if the zone is not linked to this one.
+
+   .. attribute:: habitable_volume
+
+      The volume the crew can live in, in cubic meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: storage_volume
+
+      The volume for stored supplies, in cubic meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: life_support
+
+      How long the zone's supplies last its crew.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`LifeSupport`
+   
+
+   .. attribute:: mission_supplies
+
+      Whether the zone's supplies last its crew through the vehicle's mission. ``None``
+      without a feasible mission with time left, or while
+      :attr:`life_support_enabled` is false.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`MissionSupplies` or None
+   
+
+   .. method:: planned_kittens(leg)
+
+      The number of kittens planned in the zone for a leg of the vehicle's mission. The
+      plan defaults to the kittens seated in the zone.
+
+      :param MissionLeg leg: The leg.
+      :rtype: int
+   
+
+
+
+.. class:: Mission
+
+   The mission planned for a vehicle in the editor's life support window. Obtained from
+   :attr:`Vehicle.mission`.
+
+   .. note::
+
+      The game times the legs of the mission from the plan, and checks the supplies of each
+      habitat zone against them. See :attr:`HabitatZone.mission_supplies`.
+
+   .. attribute:: destination
+
+      Where the mission goes.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`MissionDestination`
+   
+
+   .. attribute:: body
+
+      The body the mission goes to, or ``None`` if it has no destination. For a low
+      orbit, this is the home body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Body` or None
+   
+
+   .. attribute:: arrival
+
+      What the mission does at its destination.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`MissionArrival`
+   
+
+   .. attribute:: trip
+
+      Whether the mission comes back.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`MissionTrip`
+   
+
+   .. attribute:: stay
+
+      The time planned at the destination, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         The game rounds a stay before a return up to the next transfer window home. See
+         :attr:`Mission.stay_time`.
+
+   .. attribute:: custom
+
+      Whether the mission has a length set by the player, in place of legs timed from
+      its destination. See :attr:`Mission.custom_length`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: custom_length
+
+      The length of a mission with :attr:`Mission.custom` set, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: feasible
+
+      Whether the game can time the legs of the mission. A mission with no destination,
+      or a flyby with no way back, cannot be timed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+      .. note::
+
+         The leg times are zero when this is false.
+
+   .. attribute:: out_time
+
+      The planned time of the way out, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: stay_time
+
+      The planned time at the destination, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: back_time
+
+      The planned time of the way back, in seconds. Zero for a one way trip.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: return_wait
+
+      The time from arriving at the destination until the next transfer window home, in
+      seconds. Zero when there is no wait.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: total_time
+
+      The planned length of the mission, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: time_left
+
+      The time left in the mission as planned, counted from the vehicle's launch, in
+      seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: arrival_ut
+
+      The universal time the vehicle arrived at the destination body, in seconds. Not a
+      number until it has.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         The game records the arrival for a mission to another body.
+
+   .. attribute:: departure_ut
+
+      The universal time the vehicle left the destination body, in seconds. Not a number
+      until it has.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: MissionDestination
+
+   Where a mission goes. See :attr:`Mission.destination`.
+
+
+   .. data:: none
+
+      No destination.
+
+
+   .. data:: low_orbit
+
+      A low orbit around the home body.
+
+
+   .. data:: body
+
+      Another body, given by :attr:`Mission.body`.
+
+
+
+.. class:: MissionArrival
+
+   What a mission does at its destination. See :attr:`Mission.arrival`.
+
+
+   .. data:: flyby
+
+      Flies past it.
+
+
+   .. data:: orbit
+
+      Orbits it.
+
+
+   .. data:: land
+
+      Lands on it.
+
+
+
+.. class:: MissionTrip
+
+   Whether a mission comes back. See :attr:`Mission.trip`.
+
+
+   .. data:: return
+
+      Goes and comes back.
+
+
+   .. data:: one_way
+
+      Goes and stays.
+
+
+
+.. class:: MissionLeg
+
+   A leg of a mission. See :meth:`HabitatZone.planned_kittens`.
+
+
+   .. data:: out
+
+      The way out.
+
+
+   .. data:: stay
+
+      The stay at the destination.
+
+
+   .. data:: back
+
+      The way back.
+
+
+
+.. class:: MissionSupplies
+
+   Whether the supplies of a habitat zone last its crew through the vehicle's mission, as
+   the life support window shows it. Obtained from :attr:`HabitatZone.mission_supplies`.
+
+   .. note::
+
+      The check takes the legs left in the mission as planned, counted from the vehicle's
+      launch, and the kittens planned for each leg. The times are from now.
+
+   .. attribute:: verdict
+
+      Whether the supplies last the mission.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`MissionSupplyVerdict`
+   
+
+   .. attribute:: short_by
+
+      The time by which the first supply to run out falls short of the end of the
+      mission, in seconds. Zero when the supplies last.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: first_supply
+
+      The supply that runs out first.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`LifeSupportSupply`
+   
+
+   .. method:: time_left(supply)
+
+      The time until a supply runs out with the crew planned for each leg, in seconds.
+      Infinite if it lasts the mission.
+
+      :param LifeSupportSupply supply: The supply.
+      :rtype: float
+   
+
+      .. note::
+
+         Air lasts while the vehicle is in breathable air.
+
+   .. attribute:: end
+
+      The time until the zone has no crew left in the mission, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: MissionSupplyVerdict
+
+   Whether a habitat zone has the supplies for a mission. See :attr:`MissionSupplies.verdict`.
+
+
+   .. data:: unused
+
+      The zone has no crew during the mission.
+
+
+   .. data:: enough
+
+      The supplies last the mission.
+
+
+   .. data:: short
+
+      A supply runs out before the end of the mission.
+
+
+
+.. class:: Habitat
+
+   A habitable or storage space in a part, which holds meals and carbon dioxide scrubber
+   canisters. Obtained from :attr:`Part.habitats`.
+
+   .. attribute:: part
+
+      The part the habitat is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: zone
+
+      The habitat zone the habitat is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`HabitatZone`
+   
+
+   .. attribute:: habitable_volume
+
+      The volume the crew can live in, in cubic meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: storage_volume
+
+      The volume for stored supplies, in cubic meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: meals
+
+      The number of meals in the habitat.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. attribute:: canisters
+
+      The number of carbon dioxide scrubber canisters in the habitat.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. attribute:: meal_capacity
+
+      The number of meals the habitat holds when full.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. attribute:: canister_capacity
+
+      The number of carbon dioxide scrubber canisters the habitat holds when full.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. method:: transfer(to, [meals = 0], [canisters = 0])
+
+      Moves meals and canisters to another habitat in the same zone. Moves fewer when
+      this habitat holds fewer, or the other has less room.
+
+      :param Habitat to: The habitat to move the supplies to.
+      :param int meals: The number of meals to move.
+      :param int canisters: The number of canisters to move.
+   
+
+      .. note::
+
+         A kitten in the zone moves the supplies. Throws an exception if life support is
+         disabled, the habitats are in different zones, or the zone has no crew able to
+         move them.

@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Getting Started &#8212; kRPC v0.2.0 documentation</title>
+    <title>Getting Started &#8212; kRPC v0.3.0 documentation</title>
   
   
   
@@ -26,23 +26,24 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9c64f2e8" />
+    <link rel="stylesheet" type="text/css" href="_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5ab7b574" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/documentation_options.js?v=e259d695"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'getting-started';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="_static/external-links.js?v=e8892020"></script>
@@ -54,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.0" />
+  <meta name="docsearch:version" content="0.3.0" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -102,7 +103,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -206,14 +207,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -248,7 +249,7 @@
   
 
   
-    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -262,7 +263,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -333,14 +334,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -412,7 +413,7 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Getting Started</span></li>
@@ -446,7 +447,7 @@ manager. Borea installs StarMap and the mod, and launches the game through StarM
 <p>To install the mod by hand:</p>
 <ol class="arabic">
 <li><p>Install <a class="reference external" href="https://github.com/StarMapLoader/StarMap/releases">StarMap</a>
-0.4.8.</p></li>
+0.5.4.</p></li>
 <li><p>Copy the <code class="docutils literal notranslate"><span class="pre">kRPC</span></code> folder from the release archive into the KSA mods folder,
 <code class="docutils literal notranslate"><span class="pre">&lt;Documents&gt;/My</span> <span class="pre">Games/Kitten</span> <span class="pre">Space</span> <span class="pre">Agency/mods</span></code>.</p></li>
 <li><p>Enable the mod in <code class="docutils literal notranslate"><span class="pre">&lt;Documents&gt;/My</span> <span class="pre">Games/Kitten</span> <span class="pre">Space</span> <span class="pre">Agency/manifest.toml</span></code>:</p>
@@ -458,33 +459,32 @@ manager. Borea installs StarMap and the mod, and launches the game through StarM
 </li>
 <li><p>Launch the game through StarMap.</p></li>
 </ol>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Version 0.1.0 named the mod <code class="docutils literal notranslate"><span class="pre">kRPC.KSA</span></code>. To upgrade from it, delete the <code class="docutils literal notranslate"><span class="pre">mods/kRPC.KSA</span></code>
-folder, and change its <code class="docutils literal notranslate"><span class="pre">manifest.toml</span></code> entry to <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">&quot;kRPC&quot;</span></code>.</p>
-</div>
-<p>The server starts once the game has loaded its mods. It listens on <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code>, with RPC
-port 50000 and stream port 50001, and accepts every connection.</p>
+<p>The servers start once the game has loaded its mods. They listen on <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code>, with TCP/IP on
+port 50000 and WebSockets on port 50001, and accept every connection.</p>
 </section>
 <section id="game-versions">
 <h3>Game Versions<a class="headerlink" href="#game-versions" title="Link to this heading">#</a></h3>
-<p>kRPC for KSA 0.2.0 is built for KSA 2026.10.25.5707, and may run on other versions. If the mod
-detects that the game version is not supported, a pop-up warns you, and lists the RPCs that use
-game code missing from it. Those RPCs throw an exception when called. Other RPCs may still
-behave differently, as the check finds only missing code. <strong>Don’t show again for this version</strong>
-hides the pop-up until the game updates.</p>
+<p>kRPC for KSA 0.3.0 is built for KSA 2026.11.16.5901, and may run on other versions. On another
+version, a pop-up warns you, and lists the RPCs that use game code missing from it, or that rely
+on a patch to the game that failed. An RPC that uses missing code throws an exception when
+called, and one that relies on a failed patch may not take effect. Other RPCs may still behave
+differently, as the check finds only missing code. <strong>Don’t show again for this version</strong> hides
+the pop-up until the game updates.</p>
 </section>
 <section id="configuration">
 <h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">#</a></h3>
-<p>The <strong>kRPC</strong> menu in the game’s menu bar opens the server window and the server info window,
-and starts and stops the server. The server window shows each server’s address and connected
-clients, and edits its protocol, address and ports. <strong>Advanced settings</strong> at the bottom of the
-window holds the connection and rate control settings. The kRPC documentation describes the
-<a class="reference external" href="https://krpc.github.io/krpc/0.7.0/internals.html#server-performance-settings">rate control settings</a> in
+<p><strong>Mods &gt; kRPC</strong> in the game’s menu bar opens the server window. The server window shows each
+server’s address and connected clients, and edits its protocol, address and ports. For a
+WebSockets or HTTP server, <strong>Origins</strong> lists the other sites whose web pages may connect, as the
+<a class="reference external" href="https://krpc.github.io/krpc/0.8.0/communication-protocols/websockets.html#web-pages">WebSockets protocol page</a>
+and the <a class="reference internal" href="http.html#ksa-http-origins"><span class="std std-ref">HTTP page</span></a> describe. <strong>Advanced settings</strong> at the bottom of the window holds the connection and rate
+control settings, and shows the server info window. The kRPC documentation describes the
+<a class="reference external" href="https://krpc.github.io/krpc/0.8.0/user-guide/server-performance.html#settings">rate control settings</a> in
 more detail.</p>
 <p>Set the address to <strong>Any</strong> to accept connections from other machines.</p>
-<p>The window saves its settings to <code class="docutils literal notranslate"><span class="pre">kRPC/settings.toml</span></code> in the mods folder. Installing the
-mod again restores the default settings.</p>
+<p>The window saves its settings to <code class="docutils literal notranslate"><span class="pre">&lt;Documents&gt;/My</span> <span class="pre">Games/Kitten</span> <span class="pre">Space</span> <span class="pre">Agency/kRPC/settings.toml</span></code>,
+beside the game’s own settings. They apply to every save, and are kept when you update the mod.
+Delete the file to restore the default settings.</p>
 </section>
 </section>
 <section id="the-python-client">
@@ -492,7 +492,7 @@ mod again restores the default settings.</p>
 <section id="id1">
 <h3>Installation<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <p>Install the kRPC Python client from PyPI:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">krpc</span><span class="o">==</span><span class="m">0</span>.7.0
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">krpc</span><span class="o">==</span><span class="m">0</span>.8.0
 </pre></div>
 </div>
 </section>
@@ -507,7 +507,7 @@ mod again restores the default settings.</p>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Active vehicle: </span><span class="si">{</span><span class="n">vehicle</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">vehicle</span><span class="o">.</span><span class="n">situation</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The complete script, <a class="reference download internal" download="" href="_downloads/f7eba7b66edf197369eabe9a162536bd/telemetry.py"><code class="xref download docutils literal notranslate"><span class="pre">telemetry.py</span></code></a>, goes on to print the vehicle’s altitude, apoapsis and attitude once a
+<p>The complete script, <a class="reference download internal" download="" href="_downloads/9603507af41368dd31d20e2b74adde38/telemetry.py"><code class="xref download docutils literal notranslate"><span class="pre">telemetry.py</span></code></a>, goes on to print the vehicle’s altitude, apoapsis and attitude once a
 second.</p>
 </section>
 </section>
@@ -560,7 +560,7 @@ reference.</p></li>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -609,8 +609,8 @@ reference.</p></li>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -643,7 +643,7 @@ reference.</p></li>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

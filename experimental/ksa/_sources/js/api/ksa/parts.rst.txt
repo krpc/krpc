@@ -1,0 +1,932 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Parts
+=====
+
+
+.. class:: Part
+
+   A part of a vehicle. Obtained from :meth:`KSA.Vehicle.getParts`.
+
+   .. note::
+
+      A part keeps its object when the vehicle it belongs to changes, for example when a
+      decoupler separates it. Throws an exception once the part no longer exists.
+
+   .. method:: getName()
+
+      The id of the part's template.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+   
+
+   .. method:: getTitle()
+
+      The name of the part, as shown in the game.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+   
+
+   .. method:: getVehicle()
+
+      The vehicle the part belongs to.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Vehicle`
+   
+
+   .. method:: getParent()
+
+      The part this part is attached to, or ``null`` for the root part.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part` or ``null``
+   
+
+   .. method:: getChildren()
+
+      The parts attached to this part.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Part`
+   
+
+   .. method:: getSequence()
+
+      The number of the sequence that activates the part, or -1 if no sequence does.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMass()
+
+      The mass of the part, including its propellant, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getDryMass()
+
+      The mass of the part without its propellant, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getResources()
+
+      The resources the part holds, one for each substance.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Resource`
+   
+
+   .. method:: getShieldArealDensity()
+
+      The areal density of the part's radiation shielding, its hull included, in
+      :math:`\mathrm{kg/m^{2}}`. Zero for an unshielded part.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getShieldMass()
+
+      The mass of the shielding material added to the part, in kilograms. Zero when the
+      shielding is built into the hull.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getTankCover()
+
+      The fraction of the sky, seen from the part, that the contents of the vehicle's tanks
+      cover, between 0 and 1. The contents shield the part from radiation.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getDoseRate()
+
+      The radiation dose rate inside the part, behind its shielding and the vehicle's tanks,
+      in sieverts per second. Includes any solar particle event under way. A kitten in the
+      part's seats receives this dose rate.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getHighlight()
+               setHighlight(value)
+
+      The color the part is highlighted in.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.HighlightColor`
+   
+
+      .. note::
+
+         The life support window uses this highlight to pick parts, and replaces it on
+         the parts it picks from.
+
+   .. method:: getTanks()
+
+      The part's propellant tanks. Empty if it has none.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Tank`
+   
+
+   .. method:: getHabitats()
+
+      The part's habitats.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Habitat`
+   
+
+   .. method:: getBatteries()
+
+      The part's batteries.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Battery`
+   
+
+   .. method:: getSolarPanels()
+
+      The part's solar panels.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.SolarPanel`
+   
+
+   .. method:: getGenerators()
+
+      The part's generators.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Generator`
+   
+
+   .. method:: getPowerConsumers()
+
+      The part's power consumers.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.PowerConsumer`
+   
+
+   .. method:: getPowerForecast()
+
+      The charge, draw and supply of the electrical circuit the part is on.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.PowerForecast`
+   
+
+   .. method:: getAvionics()
+
+      The part's avionics, or ``null`` if it has none. A probe core has avionics.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Avionics` or ``null``
+   
+
+   .. method:: getLights()
+
+      The part's lights.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Light`
+   
+
+   .. method:: getDeployables()
+
+      The part's deployable sections. A part can have several, such as the doors of a
+      service module.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Deployable`
+   
+
+   .. method:: getMagneticScoops()
+
+      The part's magnetic scoops. Empty if it has none.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.MagneticScoop`
+   
+
+   .. method:: position(referenceFrame)
+
+      The position of the part's origin, in meters.
+
+      :param referenceFrame: The reference frame of the position.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: velocity(referenceFrame)
+
+      The velocity of the part's origin, in meters per second.
+
+      :param referenceFrame: The reference frame of the velocity.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: rotation(referenceFrame)
+
+      The rotation of the part's axes, relative to the given frame.
+
+      :param referenceFrame: The reference frame of the rotation.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number, number]``
+   
+
+   .. method:: getEngine()
+
+      The part's engine, or ``null`` if it has none.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Engine` or ``null``
+   
+
+   .. method:: getGimbals()
+
+      The part's gimbals. An engine part can have several, each steering one nozzle.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Gimbal`
+   
+
+   .. method:: getRCS()
+
+      The part's RCS thrusters, or ``null`` if it has none.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.RCS` or ``null``
+   
+
+   .. method:: getDecoupler()
+
+      The part's decoupler, or ``null`` if it has none.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Decoupler` or ``null``
+   
+
+   .. method:: getParachute()
+
+      The part's parachute, or ``null`` if it has none.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Parachute` or ``null``
+   
+
+   .. method:: getDockingPort()
+
+      The part's docking port, or ``null`` if it has none.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.DockingPort` or ``null``
+   
+
+   .. method:: getSeats()
+
+      The part's crew seats.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Seat`
+   
+
+   .. method:: getCrew()
+
+      The kittens in the part's seats.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Kitten`
+   
+
+
+
+.. class:: HighlightColor
+
+   The color of a part's highlight. See :meth:`KSA.Part.getHighlight`.
+
+
+   .. attribute:: none
+
+      Not highlighted.
+
+
+   .. attribute:: green
+
+      Green.
+
+
+   .. attribute:: yellow
+
+      Yellow.
+
+
+   .. attribute:: red
+
+      Red.
+
+
+   .. attribute:: purple
+
+      Purple.
+
+
+
+.. class:: Engine
+
+   An engine. Obtained from :meth:`KSA.Part.getEngine`.
+
+   .. note::
+
+      An active engine fires when the vehicle's engines are on, at the vehicle's throttle.
+      See :meth:`KSA.Control.getEngineOn` and :meth:`KSA.Control.getThrottle`.
+
+   .. method:: getPart()
+
+      The part the engine is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getGimbals()
+
+      The gimbals that steer the engine's nozzles. Empty if the engine has none.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Gimbal`
+   
+
+   .. method:: getActive()
+               setActive(value)
+
+      Whether the engine is active, as when its sequence is activated. Setting it returns
+      once the change has applied.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getHasPropellant()
+
+      Whether the engine has propellant to burn.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getMinimumThrottle()
+
+      The lowest throttle the engine runs at, between 0 and 1.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getPropellants()
+
+      The names of the substances the engine burns. See :meth:`KSA.Resource.getName`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of ``string``
+   
+
+   .. method:: getThrust()
+
+      The thrust of the engine at its current throttle and the current atmospheric
+      pressure, in Newtons. Zero when it is not firing.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getAvailableThrust()
+
+      The thrust of the engine at full throttle and the current atmospheric pressure, in
+      Newtons. Zero when it is inactive or has no propellant.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSpecificImpulse()
+
+      The specific impulse of the engine at the current atmospheric pressure, in seconds.
+      Zero when it is inactive or has no propellant.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: availableThrustAt(pressure)
+
+      The thrust of the engine at full throttle and the given atmospheric pressure, in
+      Newtons. Zero when it is inactive or has no propellant.
+
+      :param pressure: The atmospheric pressure, in pascals.
+      :type pressure: ``number``
+      :rtype: ``number``
+   
+
+   .. method:: specificImpulseAt(pressure)
+
+      The specific impulse of the engine at the given atmospheric pressure, in seconds.
+      Zero when it is inactive or has no propellant.
+
+      :param pressure: The atmospheric pressure, in pascals.
+      :type pressure: ``number``
+      :rtype: ``number``
+   
+
+   .. method:: getMaxThrust()
+
+      The thrust of the engine at full throttle and the current atmospheric pressure, in
+      Newtons, whether or not it is active and has propellant.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMaxVacuumThrust()
+
+      The thrust of the engine at full throttle in a vacuum, in Newtons, whether or not
+      it is active and has propellant.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getChamberPressure()
+
+      The pressure in the engine's combustion chamber, in pascals. Zero when it is not
+      firing.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSolid()
+
+      Whether the engine is a solid rocket motor. Once ignited, a solid motor burns at
+      full thrust until its grain runs out.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getGrainMass()
+
+      The mass of the propellant grain of a solid rocket motor, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Some of the grain is left unburned when the motor burns out. Throws an exception
+         if the engine is not a solid rocket motor.
+
+
+
+.. class:: Gimbal
+
+   A gimbal that steers an engine nozzle. Obtained from :meth:`KSA.Part.getGimbals` or
+   :meth:`KSA.Engine.getGimbals`.
+
+   .. note::
+
+      A gimbal turns about the y and z axes of its mount, which :meth:`KSA.Gimbal.rotation` gives.
+      The flight computer steers it while an engine it belongs to is :meth:`KSA.Gimbal.getActive`.
+
+   .. method:: getPart()
+
+      The part the gimbal is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getAngleY()
+
+      The angle of the gimbal about its y axis, in degrees.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getAngleZ()
+
+      The angle of the gimbal about its z axis, in degrees.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMaxAngleY()
+
+      The largest angle of the gimbal about its y axis, in degrees. Zero if it does not
+      turn about that axis.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMaxAngleZ()
+
+      The largest angle of the gimbal about its z axis, in degrees. Zero if it does not
+      turn about that axis.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getActive()
+
+      Whether an engine the gimbal steers is active.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: rotation(referenceFrame)
+
+      The rotation of the gimbal's mount, whose y and z axes the gimbal turns about.
+
+      :param referenceFrame: The reference frame of the rotation.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number, number]``
+   
+
+
+
+.. class:: RCS
+
+   The RCS thrusters of a part. Obtained from :meth:`KSA.Part.getRCS`.
+
+   .. note::
+
+      Active thrusters fire when the vehicle's RCS is on. See :meth:`KSA.Control.getRCS`.
+
+   .. method:: getPart()
+
+      The part the thrusters are in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getActive()
+               setActive(value)
+
+      Whether the thrusters are active. Setting it returns once the change has applied.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+
+
+.. class:: Decoupler
+
+   A decoupler. Obtained from :meth:`KSA.Part.getDecoupler`.
+
+   .. method:: getPart()
+
+      The part the decoupler is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getEnabled()
+
+      Whether the decoupler can fire.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getDecoupled()
+
+      Whether the decoupler has fired, or is attached to nothing.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: decouple()
+
+      Fire the decoupler, separating the vehicle into two. Returns once it has fired.
+      Throws an exception if the decoupler is disabled or :meth:`KSA.Decoupler.getDecoupled`.
+
+      :returns: The vehicles that separated from this one.
+      :rtype: ``Array`` of :class:`KSA.Vehicle`
+   
+
+
+
+.. class:: Parachute
+
+   A parachute. Obtained from :meth:`KSA.Part.getParachute`.
+
+   .. method:: getPart()
+
+      The part the parachute is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getState()
+
+      The state of the parachute.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.ParachuteState`
+   
+
+   .. method:: getFill()
+
+      How far the canopy is open, from 0 to 1.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getDeployAltitude()
+
+      The height above the terrain at which an armed parachute deploys, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getCanCut()
+
+      Whether the parachute can be cut away. Main parachutes cannot.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: deploy()
+
+      Arm the parachute, so that it deploys at :meth:`KSA.Parachute.getDeployAltitude`. Returns once
+      it is armed. Throws an exception if it is not stowed.
+
+   
+
+   .. method:: cut()
+
+      Cut the parachute away. Returns once it is cut. Throws an exception if it cannot
+      be cut. See :meth:`KSA.Parachute.getCanCut`.
+
+   
+
+
+
+.. class:: ParachuteState
+
+   The state of a parachute. See :meth:`KSA.Parachute.getState`.
+
+
+   .. attribute:: stowed
+
+      Packed away.
+
+
+   .. attribute:: armed
+
+      Waiting to deploy at :meth:`KSA.Parachute.getDeployAltitude`.
+
+
+   .. attribute:: lineStretch
+
+      Leaving the pack.
+
+
+   .. attribute:: reefed
+
+      Partly open, to limit the opening load.
+
+
+   .. attribute:: disreefing
+
+      Opening from reefed to full.
+
+
+   .. attribute:: full
+
+      Fully open.
+
+
+   .. attribute:: cut
+
+      Cut away.
+
+
+   .. attribute:: ripped
+
+      Torn by too much dynamic pressure.
+
+
+   .. attribute:: severedLines
+
+      Lost after its lines broke under too much load.
+
+
+
+.. class:: DockingPort
+
+   A docking port. Obtained from :meth:`KSA.Part.getDockingPort`.
+
+   .. method:: getPart()
+
+      The part the docking port is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getDocked()
+
+      Whether the port is docked.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getDockedPart()
+
+      The part the port is docked to, or ``null`` if it is not docked.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part` or ``null``
+   
+
+   .. method:: getHatchOpen()
+               setHatchOpen(value)
+
+      Returns whether the hatch through the docked ports is open, and opens or closes it.
+      An open hatch joins the habitat zones on either side.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         The hatch is closed while the port is not docked. Throws an exception when set on a
+         port that is not docked.
+
+   .. method:: undock()
+
+      Undock the port, separating the vehicle into two. Returns once it has undocked.
+      Throws an exception if the port is not docked.
+
+      :returns: The new vehicles.
+      :rtype: ``Array`` of :class:`KSA.Vehicle`
+   
+
+      .. note::
+
+         Docking and undocking replace the vehicles involved. See :class:`KSA.Vehicle`.
+
+
+
+.. class:: Deployable
+
+   A part that deploys and retracts, such as a landing leg, a solar panel or a service
+   module door. Obtained from :meth:`KSA.Part.getDeployables`.
+
+   .. note::
+
+      Deploying or retracting a part moves its symmetric copies with it, as the part's menu
+      in the game does.
+
+   .. method:: getPart()
+
+      The part the deployable is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getState()
+
+      The state of the part.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.DeployableState`
+   
+
+   .. method:: deploy()
+
+      Deploy the part. Returns once it has started to move.
+
+   
+
+      .. note::
+
+         Throws an exception if the part is broken.
+
+   .. method:: retract()
+
+      Retract the part. Returns once it has started to move.
+
+   
+
+      .. note::
+
+         Throws an exception if the part is broken.
+
+
+
+.. class:: DeployableState
+
+   The state of a deployable part. See :meth:`KSA.Deployable.getState`.
+
+
+   .. attribute:: deployed
+
+      Fully deployed.
+
+
+   .. attribute:: retracted
+
+      Fully retracted.
+
+
+   .. attribute:: deploying
+
+      Moving toward deployed.
+
+
+   .. attribute:: retracting
+
+      Moving toward retracted.
+
+
+   .. attribute:: broken
+
+      Broken, so it can no longer move.
+
+
+
+.. class:: MagneticScoop
+
+   A magnetic scoop, which collects gas from space into the vehicle's tanks. Obtained from
+   :meth:`KSA.Part.getMagneticScoops`.
+
+   .. method:: getPart()
+
+      The part the scoop is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getActive()
+               setActive(value)
+
+      Whether the scoop is switched on.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getSubstance()
+
+      The name of the substance the scoop collects. See :meth:`KSA.Resource.getName`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+   
+
+   .. method:: getCollectionRate()
+
+      The rate the scoop collects gas at, in kilograms per second.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``

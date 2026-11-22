@@ -132,6 +132,230 @@ Power
 
       :Game Scenes: All
 
+   .. property:: bool HasPowerSwitch { get; }
+
+      Whether the part has a power switch, as a probe core does.
+
+      :Game Scenes: All
+
+   .. property:: PowerMode Mode { get; set; }
+
+      The setting of the power switch.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+   .. property:: bool StandbyInStorms { get; set; }
+
+      Whether the part goes on standby, drawing no power, while a radiation storm is under
+      way at the vehicle.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The game takes a storm of level 1 or worse on the S scale, as
+         :prop:`Flight.RadiationStormLevel` gives. Throws an exception if the part has
+         no power switch.
+
+   .. property:: PowerStatus Status { get; }
+
+      The power status of the part.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+
+
+.. enum:: PowerMode
+
+   The setting of a power switch. See :prop:`PowerConsumer.Mode`.
+
+
+   .. enumerator:: Off
+
+      Switched off.
+
+
+   .. enumerator:: Auto
+
+      On standby while another control module flies the vehicle, and on when none can.
+
+
+   .. enumerator:: On
+
+      Switched on.
+
+
+
+.. enum:: PowerStatus
+
+   The power status of a part with a power switch. See :prop:`PowerConsumer.Status`.
+
+
+   .. enumerator:: Off
+
+      Switched off.
+
+
+   .. enumerator:: Standby
+
+      On standby, while another control module flies the vehicle or a radiation storm is under way.
+
+
+   .. enumerator:: Rebooting
+
+      Rebooting after a radiation upset.
+
+
+   .. enumerator:: On
+
+      On, with power.
+
+
+   .. enumerator:: Low
+
+      On, with power for less than five minutes.
+
+
+   .. enumerator:: Out
+
+      Out of power.
+
+
+   .. enumerator:: Failed
+
+      Failed from its radiation dose.
+
+
+
+.. class:: PowerForecast
+
+   The charge, draw and supply of the electrical circuit a part is on, and how long its
+   batteries last. Obtained from :prop:`Part.PowerForecast`.
+
+   .. note::
+
+      A circuit is the parts joined by connections that carry electricity. This is the
+      forecast the game shows for a probe core.
+
+   .. property:: bool HasBattery { get; }
+
+      Whether the circuit has a battery.
+
+      :Game Scenes: All
+
+   .. property:: float Charge { get; }
+
+      The energy stored in the circuit's batteries, in joules.
+
+      :Game Scenes: All
+
+   .. property:: float Draw { get; }
+
+      The power the parts on the circuit draw, in watts.
+
+      :Game Scenes: All
+
+   .. property:: float Supply { get; }
+
+      The power the solar panels and generators on the circuit supply, in watts.
+
+      :Game Scenes: All
+
+   .. property:: float TimeLeft { get; }
+
+      The time until the batteries run out, in seconds. Infinite while the supply meets
+      the draw, and zero when the batteries are empty or there are none.
+
+      :Game Scenes: All
+
+
+
+.. class:: Avionics
+
+   The avionics of a probe core, which radiation wears out and upsets. Obtained from
+   :prop:`Part.Avionics` or :prop:`Vehicle.Avionics`.
+
+   .. note::
+
+      The avionics take a dose only while :prop:`KSA.RadiationEnabled <KSA.KSA.RadiationEnabled>` is true. Switched
+      off or on standby, they take half the dose and no upsets.
+
+   .. property:: Part Part { get; }
+
+      The part the avionics are in.
+
+      :Game Scenes: All
+
+   .. property:: AvionicsHealth Health { get; }
+
+      The health of the avionics.
+
+      :Game Scenes: All
+
+   .. property:: float Dose { get; }
+
+      The radiation dose the avionics have taken, in grays of silicon.
+
+      :Game Scenes: All
+
+   .. property:: float Tolerance { get; }
+
+      The dose at which the avionics fail, in grays of silicon.
+
+      :Game Scenes: All
+
+   .. property:: float DoseRate { get; }
+
+      The rate at which the avionics take a dose, in grays of silicon per second,
+      averaged over about an hour. Not a number until the avionics have taken a dose.
+
+      :Game Scenes: All
+
+   .. property:: float TimeLeft { get; }
+
+      The time until the avionics fail at :prop:`Avionics.DoseRate`, in seconds. Infinite
+      while they take no dose, and zero once they have failed.
+
+      :Game Scenes: All
+
+   .. property:: bool Rebooting { get; }
+
+      Whether the avionics are rebooting after a radiation upset.
+
+      :Game Scenes: All
+
+
+
+.. enum:: AvionicsHealth
+
+   The health of avionics. See :prop:`Avionics.Health`.
+
+
+   .. enumerator:: Ok
+
+      Working.
+
+
+   .. enumerator:: Worn
+
+      Working, with a dose of at least four fifths of the tolerance.
+
+
+   .. enumerator:: Failed
+
+      Failed for good, at the tolerance.
+
 
 
 .. class:: Light

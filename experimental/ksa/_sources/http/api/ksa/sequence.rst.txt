@@ -1,0 +1,131 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Sequence
+========
+
+
+.. _http-KSA.Sequence:
+
+.. rubric:: Sequence
+
+A sequence of a vehicle, the group of parts activated together, and its predicted
+performance. Obtained from :http:get:`/ksa/vehicle/(id)/sequences`.
+
+.. note::
+
+   The performance is the game's prediction at the current atmospheric pressure. It
+   assumes the sequences activate in order, each once the one before has burned its
+   propellant.
+
+
+A ``Sequence`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/sequence/(id)/number
+
+   The number of the sequence, as shown in the game.
+
+
+   :param id: The identifier of the :ref:`Sequence <http-KSA.Sequence>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /ksa/sequence/(id)/activated
+
+   Whether the sequence has been activated.
+
+
+   :param id: The identifier of the :ref:`Sequence <http-KSA.Sequence>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/sequence/(id)/delta-v
+
+   The change in velocity the sequence provides, in meters per second.
+
+
+   :param id: The identifier of the :ref:`Sequence <http-KSA.Sequence>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/sequence/(id)/thrust
+
+   The thrust of the sequence's engines at full throttle, in Newtons.
+
+
+   :param id: The identifier of the :ref:`Sequence <http-KSA.Sequence>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/sequence/(id)/specific-impulse
+
+   The combined specific impulse of the sequence's engines, in seconds.
+
+
+   :param id: The identifier of the :ref:`Sequence <http-KSA.Sequence>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/sequence/(id)/burn-time
+
+   The time the sequence's engines take to burn its propellant at full throttle,
+   in seconds.
+
+
+   :param id: The identifier of the :ref:`Sequence <http-KSA.Sequence>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/sequence/(id)/start-mass
+
+   The mass of the vehicle when the sequence starts to burn, in kilograms.
+
+
+   :param id: The identifier of the :ref:`Sequence <http-KSA.Sequence>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/sequence/(id)/end-mass
+
+   The mass of the vehicle once the sequence has burned its propellant, in kilograms.
+
+
+   :param id: The identifier of the :ref:`Sequence <http-KSA.Sequence>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/sequence/(id)/propellant-mass
+
+   The mass of propellant the sequence burns, in kilograms.
+
+
+   :param id: The identifier of the :ref:`Sequence <http-KSA.Sequence>` object.
+
+   :resjson float value:

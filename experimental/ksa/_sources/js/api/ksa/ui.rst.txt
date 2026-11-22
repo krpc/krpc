@@ -1,0 +1,738 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+UI
+==
+
+
+.. class:: UI
+
+   Adds windows of buttons, text fields and other widgets to the game's UI.
+
+   .. note::
+
+      The windows are removed when the client that added them disconnects. For messages on
+      the screen, see :func:`KSA.showMessage`.
+
+   .. function:: addWindow(title[, visible])
+
+      Add a window, with no widgets.
+
+      :param title: The text in the title bar.
+      :type title: ``string``
+      :param visible: Whether the window is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Window`
+   
+
+   .. function:: clear([clientOnly])
+
+      Remove the windows.
+
+      :param clientOnly: Whether to remove only the windows added by the calling client. Defaults to ``false``.
+      :type clientOnly: ``boolean``
+   
+
+
+
+.. class:: Window
+
+   A window, holding widgets one per line. Created using :meth:`KSA.UI.addWindow`.
+
+   .. note::
+
+      The window fits its widgets until its size is set. Closing the window makes it
+      invisible. The window is hidden with the game's UI.
+
+   .. method:: getTitle()
+               setTitle(value)
+
+      The text in the title bar.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getPosition()
+               setPosition(value)
+
+      The position of the top left corner of the window, from the top left corner of the
+      game window, in pixels.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number]``
+   
+
+   .. method:: getSize()
+               setSize(value)
+
+      The width and height of the window, in pixels.
+
+      :Property: Can be read or written
+      :rtype: ``[number, number]``
+   
+
+      .. note::
+
+         Throws an exception if the width or height is not positive.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the widget is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: addLabel(content[, visible])
+
+      Add a label.
+
+      :param content: The text of the label.
+      :type content: ``string``
+      :param visible: Whether the label is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Label`
+   
+
+   .. method:: addButton(content[, visible])
+
+      Add a button.
+
+      :param content: The text on the button.
+      :type content: ``string``
+      :param visible: Whether the button is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Button`
+   
+
+   .. method:: addInputField([label[, visible]])
+
+      Add a text input field, empty.
+
+      :param label: The text shown next to the field. Defaults to ``""``.
+      :type label: ``string``
+      :param visible: Whether the field is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.InputField`
+   
+
+   .. method:: addSlider([label[, minimum[, maximum[, visible]]]])
+
+      Add a slider, at its minimum value.
+
+      :param label: The text shown next to the slider. Defaults to ``""``.
+      :type label: ``string``
+      :param minimum: The minimum value. Defaults to ``0.0``.
+      :type minimum: ``number``
+      :param maximum: The maximum value. Defaults to ``1.0``.
+      :type maximum: ``number``
+      :param visible: Whether the slider is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Slider`
+   
+
+      .. note::
+
+         Throws an exception if the minimum is not less than the maximum.
+
+   .. method:: addToggle(content[, visible])
+
+      Add a toggle, unchecked.
+
+      :param content: The text shown next to the toggle.
+      :type content: ``string``
+      :param visible: Whether the toggle is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Toggle`
+   
+
+   .. method:: addDropdown(options[, label[, visible]])
+
+      Add a dropdown, with no option selected.
+
+      :param options: The options to choose from.
+      :type options: ``Array`` of ``string``
+      :param label: The text shown next to the dropdown. Defaults to ``""``.
+      :type label: ``string``
+      :param visible: Whether the dropdown is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Dropdown`
+   
+
+   .. method:: addSeparator([visible])
+
+      Add a horizontal line.
+
+      :param visible: Whether the line is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Separator`
+   
+
+   .. method:: addRow([visible])
+
+      Add a row, which lays out its widgets from left to right.
+
+      :param visible: Whether the row is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Row`
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: Row
+
+   A row of widgets, laid out from left to right. Added to a window or a row.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the widget is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: addLabel(content[, visible])
+
+      Add a label.
+
+      :param content: The text of the label.
+      :type content: ``string``
+      :param visible: Whether the label is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Label`
+   
+
+   .. method:: addButton(content[, visible])
+
+      Add a button.
+
+      :param content: The text on the button.
+      :type content: ``string``
+      :param visible: Whether the button is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Button`
+   
+
+   .. method:: addInputField([label[, visible]])
+
+      Add a text input field, empty.
+
+      :param label: The text shown next to the field. Defaults to ``""``.
+      :type label: ``string``
+      :param visible: Whether the field is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.InputField`
+   
+
+   .. method:: addSlider([label[, minimum[, maximum[, visible]]]])
+
+      Add a slider, at its minimum value.
+
+      :param label: The text shown next to the slider. Defaults to ``""``.
+      :type label: ``string``
+      :param minimum: The minimum value. Defaults to ``0.0``.
+      :type minimum: ``number``
+      :param maximum: The maximum value. Defaults to ``1.0``.
+      :type maximum: ``number``
+      :param visible: Whether the slider is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Slider`
+   
+
+      .. note::
+
+         Throws an exception if the minimum is not less than the maximum.
+
+   .. method:: addToggle(content[, visible])
+
+      Add a toggle, unchecked.
+
+      :param content: The text shown next to the toggle.
+      :type content: ``string``
+      :param visible: Whether the toggle is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Toggle`
+   
+
+   .. method:: addDropdown(options[, label[, visible]])
+
+      Add a dropdown, with no option selected.
+
+      :param options: The options to choose from.
+      :type options: ``Array`` of ``string``
+      :param label: The text shown next to the dropdown. Defaults to ``""``.
+      :type label: ``string``
+      :param visible: Whether the dropdown is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Dropdown`
+   
+
+   .. method:: addSeparator([visible])
+
+      Add a horizontal line.
+
+      :param visible: Whether the line is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Separator`
+   
+
+   .. method:: addRow([visible])
+
+      Add a row, which lays out its widgets from left to right.
+
+      :param visible: Whether the row is visible. Defaults to ``true``.
+      :type visible: ``boolean``
+      :rtype: :class:`KSA.Row`
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: Label
+
+   A line of text. Added to a window or a row.
+
+   .. method:: getContent()
+               setContent(value)
+
+      The text of the label.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the widget is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: Button
+
+   A button. Added to a window or a row.
+
+   .. method:: getContent()
+               setContent(value)
+
+      The text on the button.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getClicked()
+               setClicked(value)
+
+      Whether the button has been clicked.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         A click sets this to ``true``, and it stays ``true`` until set to
+         ``false``.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the widget is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: InputField
+
+   A single line text input field. Added to a window or a row.
+
+   .. note::
+
+      While the field is being edited, the game clears the rotation and translation inputs
+      of the controlled vehicle each frame.
+
+   .. method:: getLabel()
+               setLabel(value)
+
+      The text shown next to the field.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getValue()
+               setValue(value)
+
+      The text in the field.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getChanged()
+               setChanged(value)
+
+      Whether the text has been edited.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         An edit sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :meth:`KSA.InputField.getValue` leaves it unchanged.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the widget is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: Slider
+
+   A horizontal slider. Added to a window or a row.
+
+   .. method:: getLabel()
+               setLabel(value)
+
+      The text shown next to the slider.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getValue()
+               setValue(value)
+
+      The value of the slider, clamped to its range.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: getMinimum()
+               setMinimum(value)
+
+      The minimum value.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Throws an exception if set to a value not less than the maximum.
+
+   .. method:: getMaximum()
+               setMaximum(value)
+
+      The maximum value.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Throws an exception if set to a value not greater than the minimum.
+
+   .. method:: getChanged()
+               setChanged(value)
+
+      Whether the value has been changed by dragging the slider.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         A change sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :meth:`KSA.Slider.getValue` leaves it unchanged.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the widget is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: Toggle
+
+   A check box with a label. Added to a window or a row.
+
+   .. method:: getContent()
+               setContent(value)
+
+      The text shown next to the toggle.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getChecked()
+               setChecked(value)
+
+      Whether the toggle is checked.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getChanged()
+               setChanged(value)
+
+      Whether the toggle has been clicked.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         A click sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :meth:`KSA.Toggle.getChecked` leaves it unchanged.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the widget is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: Dropdown
+
+   A dropdown list of options. Added to a window or a row.
+
+   .. method:: getLabel()
+               setLabel(value)
+
+      The text shown next to the dropdown.
+
+      :Property: Can be read or written
+      :rtype: ``string``
+   
+
+   .. method:: getOptions()
+               setOptions(value)
+
+      The options to choose from.
+
+      :Property: Can be read or written
+      :rtype: ``Array`` of ``string``
+   
+
+      .. note::
+
+         Setting the options clears the selection if the selected index is no longer in
+         the list.
+
+   .. method:: getSelectedIndex()
+               setSelectedIndex(value)
+
+      The index of the selected option, or -1 for none.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. method:: getChanged()
+               setChanged(value)
+
+      Whether an option has been chosen from the list.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         A choice sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :meth:`KSA.Dropdown.getSelectedIndex` leaves it unchanged.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the widget is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: Separator
+
+   A horizontal line between widgets. Added to a window or a row.
+
+   .. method:: getVisible()
+               setVisible(value)
+
+      Whether the widget is visible.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: getEnabled()
+               setEnabled(value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+   
+
+   .. method:: remove()
+
+      Remove the widget.

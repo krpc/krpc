@@ -1,0 +1,620 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Flight
+======
+
+
+.. _http-KSA.Flight:
+
+.. rubric:: Flight
+
+Flight telemetry for a vehicle, relative to the surface of the body it orbits.
+Obtained from :http:get:`/ksa/vehicle/(id)/flight`.
+
+A ``Flight`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/flight/(id)/mean-altitude
+
+   The altitude above the mean radius of the body, in meters.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/surface-altitude
+
+   The altitude above the terrain or the ocean surface, whichever is higher, in meters.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/bedrock-altitude
+
+   The altitude above the terrain, in meters. Over the sea, this is the altitude above
+   the sea floor.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/elevation
+
+   The height of the terrain below the vehicle, in meters above the mean radius of the
+   body. Below the sea, this is the height of the sea floor.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/time-to-impact
+
+   The time until the vehicle hits the surface on its current trajectory, in seconds.
+   Not a number if its trajectory does not hit the surface.
+
+   .. note::
+
+      The game predicts the trajectory on a worker thread, so a change to it shows here
+      shortly after.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/latitude
+
+   The latitude of the vehicle, in degrees.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/longitude
+
+   The longitude of the vehicle, in degrees.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/biome
+
+   The biome below the vehicle, or ``null`` if the body has no biomes.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson string? value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/speed
+
+   The speed of the vehicle relative to the surface, in meters per second.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/horizontal-speed
+
+   The horizontal speed of the vehicle relative to the surface, in meters per second.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/vertical-speed
+
+   The vertical speed of the vehicle relative to the surface, in meters per second.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/pitch
+
+   The pitch of the vehicle relative to the horizon, in degrees.
+   A value between -90° and +90°.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/heading
+
+   The heading of the vehicle (its angle relative to north), in degrees.
+   A value between 0° and 360°.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/roll
+
+   The roll of the vehicle relative to the horizon, in degrees.
+   A value between -180° and +180°.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/static-pressure
+
+   The static atmospheric pressure at the vehicle, in pascals.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/atmosphere-density
+
+   The density of the atmosphere at the vehicle, in kilograms per cubic meter.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/static-air-temperature
+
+   The temperature of the atmosphere at the vehicle, in kelvin. Zero outside the
+   atmosphere.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/speed-of-sound
+
+   The speed of sound in the atmosphere at the vehicle, in meters per second. Zero
+   outside the atmosphere.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/mach
+
+   The speed of the vehicle relative to the surface, as a multiple of the speed of
+   sound. Zero outside the atmosphere.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/outside-air
+
+   Whether a kitten can breathe the air outside the vehicle.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson KSA.OutsideAir value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/dynamic-pressure
+
+   The dynamic pressure acting on the vehicle, in pascals.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/depth
+
+   The depth of the vehicle's center of mass below the ocean surface, in meters. Zero
+   above the surface.
+
+   .. note::
+
+      The ocean surface includes its waves.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/submerged-portion
+
+   The fraction of the vehicle's volume below the ocean surface, between 0 and 1.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/buoyant-force
+
+   The buoyant force on the vehicle from the ocean and the atmosphere, in newtons. It
+   acts against gravity.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/dose-rate
+
+   The radiation dose rate at the vehicle, in sieverts per second. Includes any solar
+   particle event under way.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/orbit-average-dose-rate
+
+   The radiation dose rate averaged over the vehicle's orbit, in sieverts per second.
+   Includes any solar particle event under way. Not a number if the body has no
+   magnetosphere, or the orbit dips below the surface.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/solar-wind-speed
+
+   The speed of the solar wind at the vehicle, in :math:`\mathrm{m/s}`. Zero if no star
+   has a solar wind.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/solar-wind-pressure
+
+   The dynamic pressure of the solar wind at the vehicle, in pascals.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/solar-wind-northward-field
+
+   The northward component of the magnetic field carried by the solar wind at the
+   vehicle, in teslas. A southward field, a negative value, drives geomagnetic storms.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/proton-flux
+
+   The flux of solar energetic protons at the vehicle during a solar particle event, in
+   protons per square centimeter per second per steradian. Zero outside an event.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/radiation-storm-level
+
+   The level of the radiation storm at the vehicle, from 0 for none to 5 for the
+   most severe. The S level of the game's space weather window.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/incoming-coronal-mass-ejections
+
+   The coronal mass ejections heading for the vehicle, as the game's space weather
+   window lists them.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson list<KSA.CoronalMassEjection> value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/g-force
+
+   The acceleration of the vehicle, excluding gravity, in multiples of standard
+   gravity.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/angle-of-attack
+
+   The angle between the direction the vehicle points in and its velocity relative to
+   the surface, in the vehicle's pitch plane, in degrees. Positive when the nose is
+   above the velocity.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/sideslip-angle
+
+   The angle between the direction the vehicle points in and its velocity relative to
+   the surface, in the vehicle's yaw plane, in degrees. Positive when the nose is to
+   the right of the velocity.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/drag
+
+   The part of the aerodynamic force along the airflow, in newtons.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/flight/(id)/lift
+
+   The part of the aerodynamic force across the airflow, in newtons.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:post:: /ksa/flight/(id)/aerodynamic-force
+
+   The aerodynamic force on the vehicle, in newtons.
+
+   .. note::
+
+      The game computes the force from the surfaces of the vehicle's hull.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the force.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/flight/(id)/aerodynamic-torque
+
+   The aerodynamic torque on the vehicle about its center of mass, in
+   :math:`\mathrm{N \cdot m}`. The vector points along the axis of the torque.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the torque.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/flight/(id)/simulate-aerodynamic-force-at
+
+   The aerodynamic force the vehicle would have at a given position and velocity, in
+   its current attitude and rotation, in newtons.
+
+   .. note::
+
+      The atmosphere moves with the body's rotation.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :reqjson KSA.Body body: The body whose atmosphere the vehicle flies through.
+   :reqjson tuple<double, double, double> position: The position, in meters.
+   :reqjson tuple<double, double, double> velocity: The velocity, in meters per second.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position, velocity and force.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/flight/(id)/prograde
+
+   The unit vector of the vehicle's velocity relative to the surface.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the direction.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/flight/(id)/normal
+
+   The unit vector normal to the plane of the vehicle's position and its velocity
+   relative to the surface.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the direction.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/flight/(id)/radial
+
+   The unit vector pointing radially outward, perpendicular to :http:post:`/ksa/flight/(id)/prograde`
+   and :http:post:`/ksa/flight/(id)/normal`.
+
+
+   :param id: The identifier of the :ref:`Flight <http-KSA.Flight>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the direction.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+
+.. _http-KSA.OutsideAir:
+
+.. rubric:: OutsideAir
+
+Whether a kitten can breathe the air outside a vehicle. See
+:http:get:`/ksa/flight/(id)/outside-air`.
+
+Passed and returned as the name of one of its values:
+
+
+``"no_atmosphere"``
+   Outside the atmosphere, or at a body with none.
+
+
+``"no_oxygen"``
+   An atmosphere with no oxygen.
+
+
+``"too_thin"``
+   An atmosphere whose oxygen pressure is too low to breathe.
+
+
+``"breathable"``
+   Breathable air.

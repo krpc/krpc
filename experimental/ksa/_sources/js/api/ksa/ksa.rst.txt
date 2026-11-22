@@ -1,0 +1,373 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+KSA
+===
+
+
+.. module:: KSA
+
+Provides functionality to interact with Kitten Space Agency.
+
+
+.. function:: getActiveVehicle()
+              setActiveVehicle(value)
+
+   The vehicle under the player's control, or ``null`` if there is none or the
+   player controls a kitten on EVA.
+
+   :Property: Can be read or written
+   :rtype: :class:`KSA.Vehicle` or ``null``
+   
+
+   .. note::
+
+      Setting it moves the camera to the vehicle, as the switch vehicle key does. See
+      :func:`KSA.getActiveKitten` for a kitten on EVA.
+
+
+
+
+.. function:: getVehicles()
+
+   The vehicles in the current system, excluding kittens on EVA.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``Array`` of :class:`KSA.Vehicle`
+   
+
+
+
+
+.. function:: getActiveKitten()
+              setActiveKitten(value)
+
+   The kitten on EVA under the player's control, or ``null`` if the player
+   controls a vehicle.
+
+   :Property: Can be read or written
+   :rtype: :class:`KSA.Kitten` or ``null``
+   
+
+   .. note::
+
+      Setting it moves the camera to the kitten. Throws an exception if the kitten is not
+      on EVA. See :func:`KSA.getActiveVehicle` for a vehicle.
+
+
+
+
+.. function:: getKittens()
+
+   The kittens in the agency's roster, including those killed in action, keyed by name.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``Map`` from ``string`` to :class:`KSA.Kitten`
+   
+
+
+
+
+.. function:: getCamera()
+
+   The game's main camera.
+
+   :Property: Read-only, cannot be set
+   :rtype: :class:`KSA.Camera`
+   
+
+
+
+
+.. function:: getBodies()
+
+   The planets, moons and stars in the current system, keyed by name.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``Map`` from ``string`` to :class:`KSA.Body`
+   
+
+
+
+
+.. function:: getUT()
+
+   The universal time, in seconds.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: getSimulationSpeed()
+              setSimulationSpeed(value)
+
+   The simulation speed, as a multiple of real time. Zero when paused.
+
+   :Property: Can be read or written
+   :rtype: ``number``
+   
+
+   .. note::
+
+      Setting it stops a warp in progress, such as one started by :func:`KSA.warpTo`.
+
+
+
+
+.. function:: getLifeSupportEnabled()
+
+   Whether the crew use up supplies, as set when the game was created.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: getRadiationEnabled()
+
+   Whether radiation harms the crew, as set when the game was created.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: warpTo(ut)
+
+   Warp to the given universal time, and return once the warp has finished.
+   The game slows the warp down to normal speed toward the end.
+
+   :param ut: The universal time to warp to, in seconds.
+   :type ut: ``number``
+   
+
+   .. note::
+
+      Does nothing when the time is in the past. Returns early if the game stops the
+      warp, for example when its menu pauses the game, or a vehicle's supplies run out.
+
+
+
+
+.. function:: getVehicleDesigns()
+
+   The vehicle designs that can be launched, keyed by name.
+
+   :Property: Read-only, cannot be set
+   :rtype: ``Map`` from ``string`` to :class:`KSA.VehicleDesign`
+   
+
+
+
+
+.. function:: launchVehicle(name, site)
+
+   Launch a vehicle from a launch site, and make it the active vehicle. Returns once
+   the vehicle is on the launch site.
+
+   :param name: The name of the vehicle design. See :func:`KSA.getVehicleDesigns`.
+   :type name: ``string``
+   :param site: The name of the launch site. See :meth:`KSA.Body.getLaunchSites`.
+   :type site: ``string``
+   :returns: The vehicle. Its name is the vehicle's name, with a number appended if another vehicle has that name.
+   :rtype: :class:`KSA.Vehicle`
+   
+
+   .. note::
+
+      Throws an exception if there is no such vehicle or launch site, or the name is one
+      of the game's kittens.
+
+
+
+
+.. function:: saveExists(name)
+
+   Whether a save with the given name exists.
+
+   :param name: Name of the save.
+   :type name: ``string``
+   :rtype: ``boolean``
+   
+
+
+
+
+.. function:: save(name)
+
+   Save the game, replacing any save with the same name.
+
+   :param name: Name of the save.
+   :type name: ``string``
+   
+
+
+
+
+.. function:: load(name)
+
+   Load a save, and return once it has loaded. The game is paused after loading.
+
+   :param name: Name of the save.
+   :type name: ``string``
+   
+
+   .. note::
+
+      Throws an exception if the save does not exist.
+
+
+
+
+.. function:: takeScreenshot([scale[, ui]])
+
+   Save a screenshot, as the screenshot key does, and return once the file is written.
+
+   :param scale: The size of the image, as a multiple of the window size, from 1 to 8. The game reduces it to fit the graphics memory. Defaults to ``1``.
+   :type scale: ``number``
+   :param ui: Whether to include the game's windows. The image is then the size of the window. Defaults to ``false``.
+   :type ui: ``boolean``
+   :returns: The path of the PNG file, in the game's screenshots folder.
+   :rtype: ``string``
+   
+
+   .. note::
+
+      Throws an exception in the vehicle editor, or if a screenshot is already being taken.
+
+
+
+
+.. function:: showMessage(text[, duration[, warning]])
+
+   Show a message in the middle of the screen.
+
+   :param text: The message.
+   :type text: ``string``
+   :param duration: How long to show the message for, in seconds. The game shows a message for at least 2 seconds. Defaults to ``5.0``.
+   :type duration: ``number``
+   :param warning: Whether to show the message in the warning color. Defaults to ``false``.
+   :type warning: ``boolean``
+   
+
+
+
+
+.. function:: raycastDistance(position, direction, referenceFrame)
+
+   The distance from a position to the first part of a vehicle along a ray, in
+   meters. Infinite if the ray hits no part.
+
+   :param position: The start of the ray, in meters.
+   :type position: ``[number, number, number]``
+   :param direction: The direction of the ray.
+   :type direction: ``[number, number, number]``
+   :param referenceFrame: The reference frame of the position and direction.
+   :type referenceFrame: :class:`KSA.ReferenceFrame`
+   :rtype: ``number``
+   
+
+   .. note::
+
+      The ray tests the meshes of the parts, as picking a part with the mouse does.
+      It passes through terrain and kittens on EVA.
+
+
+
+
+.. function:: raycastPart(position, direction, referenceFrame)
+
+   The first part of a vehicle along a ray, or ``null`` if the ray hits no part.
+
+   :param position: The start of the ray, in meters.
+   :type position: ``[number, number, number]``
+   :param direction: The direction of the ray.
+   :type direction: ``[number, number, number]``
+   :param referenceFrame: The reference frame of the position and direction.
+   :type referenceFrame: :class:`KSA.ReferenceFrame`
+   :rtype: :class:`KSA.Part` or ``null``
+   
+
+   .. note::
+
+      The ray tests the meshes of the parts, as picking a part with the mouse does.
+      It passes through terrain and kittens on EVA.
+
+
+
+
+.. function:: transformPosition(position, from, to)
+
+   Convert a position from one reference frame to another.
+
+   :param position: Position, in meters, in the frame *from*.
+   :type position: ``[number, number, number]``
+   :param from: The reference frame the position is in.
+   :type from: :class:`KSA.ReferenceFrame`
+   :param to: The reference frame to convert the position to.
+   :type to: :class:`KSA.ReferenceFrame`
+   :returns: The position in the frame *to*.
+   :rtype: ``[number, number, number]``
+   
+
+
+
+
+.. function:: transformDirection(direction, from, to)
+
+   Convert a direction from one reference frame to another.
+
+   :param direction: Direction in the frame *from*.
+   :type direction: ``[number, number, number]``
+   :param from: The reference frame the direction is in.
+   :type from: :class:`KSA.ReferenceFrame`
+   :param to: The reference frame to convert the direction to.
+   :type to: :class:`KSA.ReferenceFrame`
+   :returns: The direction in the frame *to*.
+   :rtype: ``[number, number, number]``
+   
+
+
+
+
+.. function:: transformRotation(rotation, from, to)
+
+   Convert a rotation from one reference frame to another.
+
+   :param rotation: Rotation in the frame *from*.
+   :type rotation: ``[number, number, number, number]``
+   :param from: The reference frame the rotation is in.
+   :type from: :class:`KSA.ReferenceFrame`
+   :param to: The reference frame to convert the rotation to.
+   :type to: :class:`KSA.ReferenceFrame`
+   :returns: The rotation in the frame *to*.
+   :rtype: ``[number, number, number, number]``
+   
+
+
+
+
+.. function:: transformVelocity(position, velocity, from, to)
+
+   Convert a velocity from one reference frame to another. The velocity of a point
+   depends on its position in a rotating frame, so the position is also needed.
+
+   :param position: Position, in meters, in the frame *from*.
+   :type position: ``[number, number, number]``
+   :param velocity: Velocity, in meters per second, in the frame *from*.
+   :type velocity: ``[number, number, number]``
+   :param from: The reference frame the position and velocity are in.
+   :type from: :class:`KSA.ReferenceFrame`
+   :param to: The reference frame to convert the velocity to.
+   :type to: :class:`KSA.ReferenceFrame`
+   :returns: The velocity in the frame *to*.
+   :rtype: ``[number, number, number]``

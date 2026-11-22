@@ -1,0 +1,4640 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTTP Routing Table &#8212; kRPC v0.3.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5ab7b574" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="_static/documentation_options.js?v=e259d695"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'http-routingtable';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="_static/external-links.js?v=e8892020"></script>
+    <link rel="icon" href="_static/logo-mark.svg"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.0" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+
+    <script>
+      DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
+    </script>
+
+
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+
+   <h1>HTTP Routing Table</h1>
+
+   <div class="modindex-jumpbox">
+   <a href="#cap-/kfs"><strong>/kfs</strong></a> | 
+   <a href="#cap-/ksa"><strong>/ksa</strong></a>
+   </div>
+
+   <table class="indextable modindextable">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/kfs"><td></td><td>
+       <strong>/kfs</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/kfs.html#get--kfs-available"><code class="xref">GET /kfs/available</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#get--kfs-computer-(id)-cycle-budget"><code class="xref">GET /kfs/computer/(id)/cycle-budget</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#get--kfs-computer-(id)-cycles-used"><code class="xref">GET /kfs/computer/(id)/cycles-used</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#get--kfs-computer-(id)-fault"><code class="xref">GET /kfs/computer/(id)/fault</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#get--kfs-computer-(id)-globals"><code class="xref">GET /kfs/computer/(id)/globals</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#get--kfs-computer-(id)-log"><code class="xref">GET /kfs/computer/(id)/log</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#get--kfs-computer-(id)-mode"><code class="xref">GET /kfs/computer/(id)/mode</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#get--kfs-computer-(id)-overruns"><code class="xref">GET /kfs/computer/(id)/overruns</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#get--kfs-computer-(id)-state"><code class="xref">GET /kfs/computer/(id)/state</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#get--kfs-computer-(id)-tick-rate"><code class="xref">GET /kfs/computer/(id)/tick-rate</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#get--kfs-computer-(id)-trace-channels"><code class="xref">GET /kfs/computer/(id)/trace-channels</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#get--kfs-computer-(id)-trap"><code class="xref">GET /kfs/computer/(id)/trap</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#get--kfs-computer-(id)-under-control"><code class="xref">GET /kfs/computer/(id)/under-control</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/kfs.html#post--kfs-computer"><code class="xref">POST /kfs/computer</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#post--kfs-computer-(id)-build"><code class="xref">POST /kfs/computer/(id)/build</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#post--kfs-computer-(id)-clear-log"><code class="xref">POST /kfs/computer/(id)/clear-log</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#post--kfs-computer-(id)-kill"><code class="xref">POST /kfs/computer/(id)/kill</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#post--kfs-computer-(id)-load"><code class="xref">POST /kfs/computer/(id)/load</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#post--kfs-computer-(id)-read-global"><code class="xref">POST /kfs/computer/(id)/read-global</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#post--kfs-computer-(id)-reset"><code class="xref">POST /kfs/computer/(id)/reset</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#post--kfs-computer-(id)-start"><code class="xref">POST /kfs/computer/(id)/start</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#post--kfs-computer-(id)-stop"><code class="xref">POST /kfs/computer/(id)/stop</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#post--kfs-computer-(id)-trace"><code class="xref">POST /kfs/computer/(id)/trace</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/computer.html#post--kfs-computer-(id)-write-globals"><code class="xref">POST /kfs/computer/(id)/write-globals</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/kfs/kfs.html#put--kfs-available"><code class="xref">PUT /kfs/available</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/ksa"><td></td><td>
+       <strong>/ksa</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#get--ksa-active-kitten"><code class="xref">GET /ksa/active-kitten</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#get--ksa-active-vehicle"><code class="xref">GET /ksa/active-vehicle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-arc-(id)-angle"><code class="xref">GET /ksa/arc/(id)/angle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-arc-(id)-center"><code class="xref">GET /ksa/arc/(id)/center</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-arc-(id)-color"><code class="xref">GET /ksa/arc/(id)/color</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-arc-(id)-normal"><code class="xref">GET /ksa/arc/(id)/normal</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-arc-(id)-radius"><code class="xref">GET /ksa/arc/(id)/radius</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-arc-(id)-reference-frame"><code class="xref">GET /ksa/arc/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-arc-(id)-start-direction"><code class="xref">GET /ksa/arc/(id)/start-direction</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-arc-(id)-visible"><code class="xref">GET /ksa/arc/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#get--ksa-auto-pilot-(id)-auto-burn"><code class="xref">GET /ksa/auto-pilot/(id)/auto-burn</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#get--ksa-auto-pilot-(id)-engaged"><code class="xref">GET /ksa/auto-pilot/(id)/engaged</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#get--ksa-auto-pilot-(id)-error"><code class="xref">GET /ksa/auto-pilot/(id)/error</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#get--ksa-auto-pilot-(id)-mode"><code class="xref">GET /ksa/auto-pilot/(id)/mode</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#get--ksa-auto-pilot-(id)-roll-error"><code class="xref">GET /ksa/auto-pilot/(id)/roll-error</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#get--ksa-auto-pilot-(id)-target-heading"><code class="xref">GET /ksa/auto-pilot/(id)/target-heading</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#get--ksa-auto-pilot-(id)-target-pitch"><code class="xref">GET /ksa/auto-pilot/(id)/target-pitch</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#get--ksa-auto-pilot-(id)-target-roll"><code class="xref">GET /ksa/auto-pilot/(id)/target-roll</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-avionics-(id)-dose"><code class="xref">GET /ksa/avionics/(id)/dose</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-avionics-(id)-dose-rate"><code class="xref">GET /ksa/avionics/(id)/dose-rate</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-avionics-(id)-health"><code class="xref">GET /ksa/avionics/(id)/health</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-avionics-(id)-part"><code class="xref">GET /ksa/avionics/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-avionics-(id)-rebooting"><code class="xref">GET /ksa/avionics/(id)/rebooting</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-avionics-(id)-time-left"><code class="xref">GET /ksa/avionics/(id)/time-left</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-avionics-(id)-tolerance"><code class="xref">GET /ksa/avionics/(id)/tolerance</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-battery-(id)-energy-capacity"><code class="xref">GET /ksa/battery/(id)/energy-capacity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-battery-(id)-part"><code class="xref">GET /ksa/battery/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-battery-(id)-stored-energy"><code class="xref">GET /ksa/battery/(id)/stored-energy</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#get--ksa-bodies"><code class="xref">GET /ksa/bodies</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-active-region-count"><code class="xref">GET /ksa/body/(id)/active-region-count</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-atmosphere-molar-mass"><code class="xref">GET /ksa/body/(id)/atmosphere-molar-mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-atmosphere-oxygen-fraction"><code class="xref">GET /ksa/body/(id)/atmosphere-oxygen-fraction</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-atmosphere-radius"><code class="xref">GET /ksa/body/(id)/atmosphere-radius</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-biomes"><code class="xref">GET /ksa/body/(id)/biomes</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-coronal-mass-ejections-per-day"><code class="xref">GET /ksa/body/(id)/coronal-mass-ejections-per-day</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-dst-index"><code class="xref">GET /ksa/body/(id)/dst-index</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-geomagnetic-storm-level"><code class="xref">GET /ksa/body/(id)/geomagnetic-storm-level</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-gravitational-parameter"><code class="xref">GET /ksa/body/(id)/gravitational-parameter</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-has-atmosphere"><code class="xref">GET /ksa/body/(id)/has-atmosphere</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-has-ocean"><code class="xref">GET /ksa/body/(id)/has-ocean</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-is-star"><code class="xref">GET /ksa/body/(id)/is-star</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-launch-sites"><code class="xref">GET /ksa/body/(id)/launch-sites</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-mass"><code class="xref">GET /ksa/body/(id)/mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-name"><code class="xref">GET /ksa/body/(id)/name</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-non-rotating-reference-frame"><code class="xref">GET /ksa/body/(id)/non-rotating-reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-ocean-density"><code class="xref">GET /ksa/body/(id)/ocean-density</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-orbit"><code class="xref">GET /ksa/body/(id)/orbit</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-parent"><code class="xref">GET /ksa/body/(id)/parent</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-radius"><code class="xref">GET /ksa/body/(id)/radius</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-recent-coronal-mass-ejections"><code class="xref">GET /ksa/body/(id)/recent-coronal-mass-ejections</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-reference-frame"><code class="xref">GET /ksa/body/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-rotational-period"><code class="xref">GET /ksa/body/(id)/rotational-period</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-rotational-speed"><code class="xref">GET /ksa/body/(id)/rotational-speed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-satellites"><code class="xref">GET /ksa/body/(id)/satellites</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-scale-height"><code class="xref">GET /ksa/body/(id)/scale-height</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-sea-level-density"><code class="xref">GET /ksa/body/(id)/sea-level-density</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-sea-level-pressure"><code class="xref">GET /ksa/body/(id)/sea-level-pressure</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-solar-activity"><code class="xref">GET /ksa/body/(id)/solar-activity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-solar-activity-rising"><code class="xref">GET /ksa/body/(id)/solar-activity-rising</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-sphere-of-influence"><code class="xref">GET /ksa/body/(id)/sphere-of-influence</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-surface-gravity"><code class="xref">GET /ksa/body/(id)/surface-gravity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#get--ksa-body-(id)-time-to-solar-activity-turn"><code class="xref">GET /ksa/body/(id)/time-to-solar-activity-turn</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-box-(id)-center"><code class="xref">GET /ksa/box/(id)/center</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-box-(id)-color"><code class="xref">GET /ksa/box/(id)/color</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-box-(id)-reference-frame"><code class="xref">GET /ksa/box/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-box-(id)-rotation"><code class="xref">GET /ksa/box/(id)/rotation</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-box-(id)-size"><code class="xref">GET /ksa/box/(id)/size</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-box-(id)-visible"><code class="xref">GET /ksa/box/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#get--ksa-burn-(id)-burn-time"><code class="xref">GET /ksa/burn/(id)/burn-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#get--ksa-burn-(id)-delta-v"><code class="xref">GET /ksa/burn/(id)/delta-v</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#get--ksa-burn-(id)-ignition-time"><code class="xref">GET /ksa/burn/(id)/ignition-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#get--ksa-burn-(id)-normal"><code class="xref">GET /ksa/burn/(id)/normal</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#get--ksa-burn-(id)-orbit"><code class="xref">GET /ksa/burn/(id)/orbit</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#get--ksa-burn-(id)-orbit-average-dose-rate"><code class="xref">GET /ksa/burn/(id)/orbit-average-dose-rate</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#get--ksa-burn-(id)-prograde"><code class="xref">GET /ksa/burn/(id)/prograde</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#get--ksa-burn-(id)-radial"><code class="xref">GET /ksa/burn/(id)/radial</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#get--ksa-burn-(id)-reference-frame"><code class="xref">GET /ksa/burn/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#get--ksa-burn-(id)-remaining-delta-v"><code class="xref">GET /ksa/burn/(id)/remaining-delta-v</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#get--ksa-burn-(id)-time-to"><code class="xref">GET /ksa/burn/(id)/time-to</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#get--ksa-burn-(id)-ut"><code class="xref">GET /ksa/burn/(id)/ut</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-button-(id)-clicked"><code class="xref">GET /ksa/button/(id)/clicked</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-button-(id)-content"><code class="xref">GET /ksa/button/(id)/content</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-button-(id)-enabled"><code class="xref">GET /ksa/button/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-button-(id)-visible"><code class="xref">GET /ksa/button/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#get--ksa-camera"><code class="xref">GET /ksa/camera</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#get--ksa-camera-(id)-azimuth"><code class="xref">GET /ksa/camera/(id)/azimuth</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#get--ksa-camera-(id)-distance"><code class="xref">GET /ksa/camera/(id)/distance</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#get--ksa-camera-(id)-elevation"><code class="xref">GET /ksa/camera/(id)/elevation</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#get--ksa-camera-(id)-field-of-view"><code class="xref">GET /ksa/camera/(id)/field-of-view</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#get--ksa-camera-(id)-focused-body"><code class="xref">GET /ksa/camera/(id)/focused-body</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#get--ksa-camera-(id)-focused-kitten"><code class="xref">GET /ksa/camera/(id)/focused-kitten</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#get--ksa-camera-(id)-focused-vehicle"><code class="xref">GET /ksa/camera/(id)/focused-vehicle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#get--ksa-camera-(id)-mode"><code class="xref">GET /ksa/camera/(id)/mode</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-circle-(id)-center"><code class="xref">GET /ksa/circle/(id)/center</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-circle-(id)-color"><code class="xref">GET /ksa/circle/(id)/color</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-circle-(id)-normal"><code class="xref">GET /ksa/circle/(id)/normal</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-circle-(id)-radius"><code class="xref">GET /ksa/circle/(id)/radius</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-circle-(id)-reference-frame"><code class="xref">GET /ksa/circle/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-circle-(id)-visible"><code class="xref">GET /ksa/circle/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#get--ksa-control-(id)-active-sequence"><code class="xref">GET /ksa/control/(id)/active-sequence</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#get--ksa-control-(id)-engine-on"><code class="xref">GET /ksa/control/(id)/engine-on</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#get--ksa-control-(id)-forward"><code class="xref">GET /ksa/control/(id)/forward</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#get--ksa-control-(id)-lights"><code class="xref">GET /ksa/control/(id)/lights</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#get--ksa-control-(id)-pitch"><code class="xref">GET /ksa/control/(id)/pitch</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#get--ksa-control-(id)-pulse"><code class="xref">GET /ksa/control/(id)/pulse</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#get--ksa-control-(id)-rcs"><code class="xref">GET /ksa/control/(id)/rcs</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#get--ksa-control-(id)-right"><code class="xref">GET /ksa/control/(id)/right</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#get--ksa-control-(id)-roll"><code class="xref">GET /ksa/control/(id)/roll</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#get--ksa-control-(id)-stabilization"><code class="xref">GET /ksa/control/(id)/stabilization</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#get--ksa-control-(id)-throttle"><code class="xref">GET /ksa/control/(id)/throttle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#get--ksa-control-(id)-up"><code class="xref">GET /ksa/control/(id)/up</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#get--ksa-control-(id)-yaw"><code class="xref">GET /ksa/control/(id)/yaw</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/space-weather.html#get--ksa-coronal-mass-ejection-(id)-speed"><code class="xref">GET /ksa/coronal-mass-ejection/(id)/speed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/space-weather.html#get--ksa-coronal-mass-ejection-(id)-star"><code class="xref">GET /ksa/coronal-mass-ejection/(id)/star</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/space-weather.html#get--ksa-coronal-mass-ejection-(id)-ut"><code class="xref">GET /ksa/coronal-mass-ejection/(id)/ut</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-crew-event-(id)-hazard"><code class="xref">GET /ksa/crew-event/(id)/hazard</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-crew-event-(id)-kitten"><code class="xref">GET /ksa/crew-event/(id)/kitten</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-crew-event-(id)-stage"><code class="xref">GET /ksa/crew-event/(id)/stage</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-crew-event-(id)-time-to"><code class="xref">GET /ksa/crew-event/(id)/time-to</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-crew-event-(id)-ut"><code class="xref">GET /ksa/crew-event/(id)/ut</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-decoupler-(id)-decoupled"><code class="xref">GET /ksa/decoupler/(id)/decoupled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-decoupler-(id)-enabled"><code class="xref">GET /ksa/decoupler/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-decoupler-(id)-part"><code class="xref">GET /ksa/decoupler/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-deployable-(id)-part"><code class="xref">GET /ksa/deployable/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-deployable-(id)-state"><code class="xref">GET /ksa/deployable/(id)/state</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-docking-port-(id)-docked"><code class="xref">GET /ksa/docking-port/(id)/docked</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-docking-port-(id)-docked-part"><code class="xref">GET /ksa/docking-port/(id)/docked-part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-docking-port-(id)-hatch-open"><code class="xref">GET /ksa/docking-port/(id)/hatch-open</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-docking-port-(id)-part"><code class="xref">GET /ksa/docking-port/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-dropdown-(id)-changed"><code class="xref">GET /ksa/dropdown/(id)/changed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-dropdown-(id)-enabled"><code class="xref">GET /ksa/dropdown/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-dropdown-(id)-label"><code class="xref">GET /ksa/dropdown/(id)/label</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-dropdown-(id)-options"><code class="xref">GET /ksa/dropdown/(id)/options</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-dropdown-(id)-selected-index"><code class="xref">GET /ksa/dropdown/(id)/selected-index</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-dropdown-(id)-visible"><code class="xref">GET /ksa/dropdown/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-engine-(id)-active"><code class="xref">GET /ksa/engine/(id)/active</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-engine-(id)-available-thrust"><code class="xref">GET /ksa/engine/(id)/available-thrust</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-engine-(id)-chamber-pressure"><code class="xref">GET /ksa/engine/(id)/chamber-pressure</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-engine-(id)-gimbals"><code class="xref">GET /ksa/engine/(id)/gimbals</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-engine-(id)-grain-mass"><code class="xref">GET /ksa/engine/(id)/grain-mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-engine-(id)-has-propellant"><code class="xref">GET /ksa/engine/(id)/has-propellant</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-engine-(id)-max-thrust"><code class="xref">GET /ksa/engine/(id)/max-thrust</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-engine-(id)-max-vacuum-thrust"><code class="xref">GET /ksa/engine/(id)/max-vacuum-thrust</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-engine-(id)-minimum-throttle"><code class="xref">GET /ksa/engine/(id)/minimum-throttle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-engine-(id)-part"><code class="xref">GET /ksa/engine/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-engine-(id)-propellants"><code class="xref">GET /ksa/engine/(id)/propellants</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-engine-(id)-solid"><code class="xref">GET /ksa/engine/(id)/solid</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-engine-(id)-specific-impulse"><code class="xref">GET /ksa/engine/(id)/specific-impulse</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-engine-(id)-thrust"><code class="xref">GET /ksa/engine/(id)/thrust</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-angle-of-attack"><code class="xref">GET /ksa/flight/(id)/angle-of-attack</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-atmosphere-density"><code class="xref">GET /ksa/flight/(id)/atmosphere-density</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-bedrock-altitude"><code class="xref">GET /ksa/flight/(id)/bedrock-altitude</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-biome"><code class="xref">GET /ksa/flight/(id)/biome</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-buoyant-force"><code class="xref">GET /ksa/flight/(id)/buoyant-force</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-depth"><code class="xref">GET /ksa/flight/(id)/depth</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-dose-rate"><code class="xref">GET /ksa/flight/(id)/dose-rate</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-drag"><code class="xref">GET /ksa/flight/(id)/drag</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-dynamic-pressure"><code class="xref">GET /ksa/flight/(id)/dynamic-pressure</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-elevation"><code class="xref">GET /ksa/flight/(id)/elevation</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-g-force"><code class="xref">GET /ksa/flight/(id)/g-force</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-heading"><code class="xref">GET /ksa/flight/(id)/heading</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-horizontal-speed"><code class="xref">GET /ksa/flight/(id)/horizontal-speed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-incoming-coronal-mass-ejections"><code class="xref">GET /ksa/flight/(id)/incoming-coronal-mass-ejections</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-latitude"><code class="xref">GET /ksa/flight/(id)/latitude</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-lift"><code class="xref">GET /ksa/flight/(id)/lift</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-longitude"><code class="xref">GET /ksa/flight/(id)/longitude</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-mach"><code class="xref">GET /ksa/flight/(id)/mach</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-mean-altitude"><code class="xref">GET /ksa/flight/(id)/mean-altitude</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-orbit-average-dose-rate"><code class="xref">GET /ksa/flight/(id)/orbit-average-dose-rate</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-outside-air"><code class="xref">GET /ksa/flight/(id)/outside-air</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-pitch"><code class="xref">GET /ksa/flight/(id)/pitch</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-proton-flux"><code class="xref">GET /ksa/flight/(id)/proton-flux</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-radiation-storm-level"><code class="xref">GET /ksa/flight/(id)/radiation-storm-level</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-roll"><code class="xref">GET /ksa/flight/(id)/roll</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-sideslip-angle"><code class="xref">GET /ksa/flight/(id)/sideslip-angle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-solar-wind-northward-field"><code class="xref">GET /ksa/flight/(id)/solar-wind-northward-field</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-solar-wind-pressure"><code class="xref">GET /ksa/flight/(id)/solar-wind-pressure</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-solar-wind-speed"><code class="xref">GET /ksa/flight/(id)/solar-wind-speed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-speed"><code class="xref">GET /ksa/flight/(id)/speed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-speed-of-sound"><code class="xref">GET /ksa/flight/(id)/speed-of-sound</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-static-air-temperature"><code class="xref">GET /ksa/flight/(id)/static-air-temperature</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-static-pressure"><code class="xref">GET /ksa/flight/(id)/static-pressure</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-submerged-portion"><code class="xref">GET /ksa/flight/(id)/submerged-portion</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-surface-altitude"><code class="xref">GET /ksa/flight/(id)/surface-altitude</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-time-to-impact"><code class="xref">GET /ksa/flight/(id)/time-to-impact</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#get--ksa-flight-(id)-vertical-speed"><code class="xref">GET /ksa/flight/(id)/vertical-speed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#get--ksa-fuel-link-(id)-enabled"><code class="xref">GET /ksa/fuel-link/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#get--ksa-fuel-link-(id)-flow"><code class="xref">GET /ksa/fuel-link/(id)/flow</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#get--ksa-fuel-link-(id)-part-a"><code class="xref">GET /ksa/fuel-link/(id)/part-a</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#get--ksa-fuel-link-(id)-part-b"><code class="xref">GET /ksa/fuel-link/(id)/part-b</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-generator-(id)-active"><code class="xref">GET /ksa/generator/(id)/active</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-generator-(id)-engine"><code class="xref">GET /ksa/generator/(id)/engine</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-generator-(id)-part"><code class="xref">GET /ksa/generator/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-generator-(id)-power"><code class="xref">GET /ksa/generator/(id)/power</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-gimbal-(id)-active"><code class="xref">GET /ksa/gimbal/(id)/active</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-gimbal-(id)-angle-y"><code class="xref">GET /ksa/gimbal/(id)/angle-y</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-gimbal-(id)-angle-z"><code class="xref">GET /ksa/gimbal/(id)/angle-z</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-gimbal-(id)-max-angle-y"><code class="xref">GET /ksa/gimbal/(id)/max-angle-y</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-gimbal-(id)-max-angle-z"><code class="xref">GET /ksa/gimbal/(id)/max-angle-z</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-gimbal-(id)-part"><code class="xref">GET /ksa/gimbal/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-zone-(id)-crew"><code class="xref">GET /ksa/habitat-zone/(id)/crew</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-zone-(id)-habitable-volume"><code class="xref">GET /ksa/habitat-zone/(id)/habitable-volume</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-zone-(id)-habitats"><code class="xref">GET /ksa/habitat-zone/(id)/habitats</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-zone-(id)-life-support"><code class="xref">GET /ksa/habitat-zone/(id)/life-support</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-zone-(id)-linked-zones"><code class="xref">GET /ksa/habitat-zone/(id)/linked-zones</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-zone-(id)-mission-supplies"><code class="xref">GET /ksa/habitat-zone/(id)/mission-supplies</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-zone-(id)-parts"><code class="xref">GET /ksa/habitat-zone/(id)/parts</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-zone-(id)-seats"><code class="xref">GET /ksa/habitat-zone/(id)/seats</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-zone-(id)-storage-volume"><code class="xref">GET /ksa/habitat-zone/(id)/storage-volume</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-zone-(id)-vehicle"><code class="xref">GET /ksa/habitat-zone/(id)/vehicle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-(id)-canister-capacity"><code class="xref">GET /ksa/habitat/(id)/canister-capacity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-(id)-canisters"><code class="xref">GET /ksa/habitat/(id)/canisters</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-(id)-habitable-volume"><code class="xref">GET /ksa/habitat/(id)/habitable-volume</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-(id)-meal-capacity"><code class="xref">GET /ksa/habitat/(id)/meal-capacity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-(id)-meals"><code class="xref">GET /ksa/habitat/(id)/meals</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-(id)-part"><code class="xref">GET /ksa/habitat/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-(id)-storage-volume"><code class="xref">GET /ksa/habitat/(id)/storage-volume</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-habitat-(id)-zone"><code class="xref">GET /ksa/habitat/(id)/zone</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-input-field-(id)-changed"><code class="xref">GET /ksa/input-field/(id)/changed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-input-field-(id)-enabled"><code class="xref">GET /ksa/input-field/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-input-field-(id)-label"><code class="xref">GET /ksa/input-field/(id)/label</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-input-field-(id)-value"><code class="xref">GET /ksa/input-field/(id)/value</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-input-field-(id)-visible"><code class="xref">GET /ksa/input-field/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-acute-dose"><code class="xref">GET /ksa/kitten/(id)/acute-dose</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-can-board"><code class="xref">GET /ksa/kitten/(id)/can-board</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-can-go-on-eva"><code class="xref">GET /ksa/kitten/(id)/can-go-on-eva</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-carried-canisters"><code class="xref">GET /ksa/kitten/(id)/carried-canisters</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-carried-meals"><code class="xref">GET /ksa/kitten/(id)/carried-meals</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-cause-of-death"><code class="xref">GET /ksa/kitten/(id)/cause-of-death</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-distance-traveled"><code class="xref">GET /ksa/kitten/(id)/distance-traveled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-dose-rate"><code class="xref">GET /ksa/kitten/(id)/dose-rate</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-fastest-speed"><code class="xref">GET /ksa/kitten/(id)/fastest-speed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-incapacitated"><code class="xref">GET /ksa/kitten/(id)/incapacitated</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-killed-in-action"><code class="xref">GET /ksa/kitten/(id)/killed-in-action</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-life-support"><code class="xref">GET /ksa/kitten/(id)/life-support</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-lifetime-dose"><code class="xref">GET /ksa/kitten/(id)/lifetime-dose</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-locomotion-mode"><code class="xref">GET /ksa/kitten/(id)/locomotion-mode</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-mission-count"><code class="xref">GET /ksa/kitten/(id)/mission-count</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-mission-time"><code class="xref">GET /ksa/kitten/(id)/mission-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-name"><code class="xref">GET /ksa/kitten/(id)/name</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-on-eva"><code class="xref">GET /ksa/kitten/(id)/on-eva</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-radiation-sickness"><code class="xref">GET /ksa/kitten/(id)/radiation-sickness</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-recovery-time"><code class="xref">GET /ksa/kitten/(id)/recovery-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-retired"><code class="xref">GET /ksa/kitten/(id)/retired</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-roster-index"><code class="xref">GET /ksa/kitten/(id)/roster-index</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-seat"><code class="xref">GET /ksa/kitten/(id)/seat</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-time-to-lethal-dose"><code class="xref">GET /ksa/kitten/(id)/time-to-lethal-dose</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-time-to-radiation-sickness"><code class="xref">GET /ksa/kitten/(id)/time-to-radiation-sickness</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-time-until-fit-to-fly"><code class="xref">GET /ksa/kitten/(id)/time-until-fit-to-fly</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-vehicle"><code class="xref">GET /ksa/kitten/(id)/vehicle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-kitten-(id)-worst-condition"><code class="xref">GET /ksa/kitten/(id)/worst-condition</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#get--ksa-kittens"><code class="xref">GET /ksa/kittens</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-label-(id)-content"><code class="xref">GET /ksa/label/(id)/content</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-label-(id)-enabled"><code class="xref">GET /ksa/label/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-label-(id)-visible"><code class="xref">GET /ksa/label/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#get--ksa-life-support-enabled"><code class="xref">GET /ksa/life-support-enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-life-support-(id)-air-mass"><code class="xref">GET /ksa/life-support/(id)/air-mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-life-support-(id)-air-time"><code class="xref">GET /ksa/life-support/(id)/air-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-life-support-(id)-food-time"><code class="xref">GET /ksa/life-support/(id)/food-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-life-support-(id)-kittens"><code class="xref">GET /ksa/life-support/(id)/kittens</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-life-support-(id)-level"><code class="xref">GET /ksa/life-support/(id)/level</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-life-support-(id)-limiting-supply"><code class="xref">GET /ksa/life-support/(id)/limiting-supply</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-life-support-(id)-meals"><code class="xref">GET /ksa/life-support/(id)/meals</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-life-support-(id)-scrubber-time"><code class="xref">GET /ksa/life-support/(id)/scrubber-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-life-support-(id)-time"><code class="xref">GET /ksa/life-support/(id)/time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-life-support-(id)-time-to-next-level"><code class="xref">GET /ksa/life-support/(id)/time-to-next-level</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-life-support-(id)-water-mass"><code class="xref">GET /ksa/life-support/(id)/water-mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-life-support-(id)-water-time"><code class="xref">GET /ksa/life-support/(id)/water-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-light-(id)-active"><code class="xref">GET /ksa/light/(id)/active</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-light-(id)-part"><code class="xref">GET /ksa/light/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-line-(id)-color"><code class="xref">GET /ksa/line/(id)/color</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-line-(id)-end"><code class="xref">GET /ksa/line/(id)/end</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-line-(id)-reference-frame"><code class="xref">GET /ksa/line/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-line-(id)-start"><code class="xref">GET /ksa/line/(id)/start</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-line-(id)-visible"><code class="xref">GET /ksa/line/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-magnetic-scoop-(id)-active"><code class="xref">GET /ksa/magnetic-scoop/(id)/active</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-magnetic-scoop-(id)-collection-rate"><code class="xref">GET /ksa/magnetic-scoop/(id)/collection-rate</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-magnetic-scoop-(id)-part"><code class="xref">GET /ksa/magnetic-scoop/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-magnetic-scoop-(id)-substance"><code class="xref">GET /ksa/magnetic-scoop/(id)/substance</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-supplies-(id)-end"><code class="xref">GET /ksa/mission-supplies/(id)/end</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-supplies-(id)-first-supply"><code class="xref">GET /ksa/mission-supplies/(id)/first-supply</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-supplies-(id)-short-by"><code class="xref">GET /ksa/mission-supplies/(id)/short-by</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-supplies-(id)-verdict"><code class="xref">GET /ksa/mission-supplies/(id)/verdict</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-arrival"><code class="xref">GET /ksa/mission/(id)/arrival</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-arrival-ut"><code class="xref">GET /ksa/mission/(id)/arrival-ut</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-back-time"><code class="xref">GET /ksa/mission/(id)/back-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-body"><code class="xref">GET /ksa/mission/(id)/body</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-custom"><code class="xref">GET /ksa/mission/(id)/custom</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-custom-length"><code class="xref">GET /ksa/mission/(id)/custom-length</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-departure-ut"><code class="xref">GET /ksa/mission/(id)/departure-ut</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-destination"><code class="xref">GET /ksa/mission/(id)/destination</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-feasible"><code class="xref">GET /ksa/mission/(id)/feasible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-out-time"><code class="xref">GET /ksa/mission/(id)/out-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-return-wait"><code class="xref">GET /ksa/mission/(id)/return-wait</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-stay"><code class="xref">GET /ksa/mission/(id)/stay</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-stay-time"><code class="xref">GET /ksa/mission/(id)/stay-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-time-left"><code class="xref">GET /ksa/mission/(id)/time-left</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-total-time"><code class="xref">GET /ksa/mission/(id)/total-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#get--ksa-mission-(id)-trip"><code class="xref">GET /ksa/mission/(id)/trip</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-apoapsis"><code class="xref">GET /ksa/orbit/(id)/apoapsis</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-apoapsis-altitude"><code class="xref">GET /ksa/orbit/(id)/apoapsis-altitude</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-argument-of-periapsis"><code class="xref">GET /ksa/orbit/(id)/argument-of-periapsis</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-body"><code class="xref">GET /ksa/orbit/(id)/body</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-distance-at-closest-approach"><code class="xref">GET /ksa/orbit/(id)/distance-at-closest-approach</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-eccentric-anomaly"><code class="xref">GET /ksa/orbit/(id)/eccentric-anomaly</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-eccentricity"><code class="xref">GET /ksa/orbit/(id)/eccentricity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-end-transition"><code class="xref">GET /ksa/orbit/(id)/end-transition</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-end-ut"><code class="xref">GET /ksa/orbit/(id)/end-ut</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-inclination"><code class="xref">GET /ksa/orbit/(id)/inclination</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-longitude-of-ascending-node"><code class="xref">GET /ksa/orbit/(id)/longitude-of-ascending-node</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-mean-anomaly"><code class="xref">GET /ksa/orbit/(id)/mean-anomaly</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-mean-motion"><code class="xref">GET /ksa/orbit/(id)/mean-motion</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-next-orbit"><code class="xref">GET /ksa/orbit/(id)/next-orbit</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-periapsis"><code class="xref">GET /ksa/orbit/(id)/periapsis</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-periapsis-altitude"><code class="xref">GET /ksa/orbit/(id)/periapsis-altitude</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-period"><code class="xref">GET /ksa/orbit/(id)/period</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-radius"><code class="xref">GET /ksa/orbit/(id)/radius</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-semi-latus-rectum"><code class="xref">GET /ksa/orbit/(id)/semi-latus-rectum</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-semi-major-axis"><code class="xref">GET /ksa/orbit/(id)/semi-major-axis</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-semi-minor-axis"><code class="xref">GET /ksa/orbit/(id)/semi-minor-axis</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-specific-angular-momentum"><code class="xref">GET /ksa/orbit/(id)/specific-angular-momentum</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-specific-energy"><code class="xref">GET /ksa/orbit/(id)/specific-energy</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-speed"><code class="xref">GET /ksa/orbit/(id)/speed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-start-ut"><code class="xref">GET /ksa/orbit/(id)/start-ut</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-time-of-closest-approach"><code class="xref">GET /ksa/orbit/(id)/time-of-closest-approach</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-time-to-apoapsis"><code class="xref">GET /ksa/orbit/(id)/time-to-apoapsis</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-time-to-periapsis"><code class="xref">GET /ksa/orbit/(id)/time-to-periapsis</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-time-to-soi-change"><code class="xref">GET /ksa/orbit/(id)/time-to-soi-change</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#get--ksa-orbit-(id)-true-anomaly"><code class="xref">GET /ksa/orbit/(id)/true-anomaly</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-parachute-(id)-can-cut"><code class="xref">GET /ksa/parachute/(id)/can-cut</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-parachute-(id)-deploy-altitude"><code class="xref">GET /ksa/parachute/(id)/deploy-altitude</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-parachute-(id)-fill"><code class="xref">GET /ksa/parachute/(id)/fill</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-parachute-(id)-part"><code class="xref">GET /ksa/parachute/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-parachute-(id)-state"><code class="xref">GET /ksa/parachute/(id)/state</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-avionics"><code class="xref">GET /ksa/part/(id)/avionics</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-batteries"><code class="xref">GET /ksa/part/(id)/batteries</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-children"><code class="xref">GET /ksa/part/(id)/children</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-crew"><code class="xref">GET /ksa/part/(id)/crew</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-decoupler"><code class="xref">GET /ksa/part/(id)/decoupler</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-deployables"><code class="xref">GET /ksa/part/(id)/deployables</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-docking-port"><code class="xref">GET /ksa/part/(id)/docking-port</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-dose-rate"><code class="xref">GET /ksa/part/(id)/dose-rate</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-dry-mass"><code class="xref">GET /ksa/part/(id)/dry-mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-engine"><code class="xref">GET /ksa/part/(id)/engine</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-generators"><code class="xref">GET /ksa/part/(id)/generators</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-gimbals"><code class="xref">GET /ksa/part/(id)/gimbals</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-habitats"><code class="xref">GET /ksa/part/(id)/habitats</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-highlight"><code class="xref">GET /ksa/part/(id)/highlight</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-lights"><code class="xref">GET /ksa/part/(id)/lights</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-magnetic-scoops"><code class="xref">GET /ksa/part/(id)/magnetic-scoops</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-mass"><code class="xref">GET /ksa/part/(id)/mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-name"><code class="xref">GET /ksa/part/(id)/name</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-parachute"><code class="xref">GET /ksa/part/(id)/parachute</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-parent"><code class="xref">GET /ksa/part/(id)/parent</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-power-consumers"><code class="xref">GET /ksa/part/(id)/power-consumers</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-power-forecast"><code class="xref">GET /ksa/part/(id)/power-forecast</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-rcs"><code class="xref">GET /ksa/part/(id)/rcs</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-resources"><code class="xref">GET /ksa/part/(id)/resources</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-seats"><code class="xref">GET /ksa/part/(id)/seats</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-sequence"><code class="xref">GET /ksa/part/(id)/sequence</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-shield-areal-density"><code class="xref">GET /ksa/part/(id)/shield-areal-density</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-shield-mass"><code class="xref">GET /ksa/part/(id)/shield-mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-solar-panels"><code class="xref">GET /ksa/part/(id)/solar-panels</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-tank-cover"><code class="xref">GET /ksa/part/(id)/tank-cover</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-tanks"><code class="xref">GET /ksa/part/(id)/tanks</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-title"><code class="xref">GET /ksa/part/(id)/title</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-part-(id)-vehicle"><code class="xref">GET /ksa/part/(id)/vehicle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-polyline-(id)-closed"><code class="xref">GET /ksa/polyline/(id)/closed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-polyline-(id)-color"><code class="xref">GET /ksa/polyline/(id)/color</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-polyline-(id)-reference-frame"><code class="xref">GET /ksa/polyline/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-polyline-(id)-vertices"><code class="xref">GET /ksa/polyline/(id)/vertices</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-polyline-(id)-visible"><code class="xref">GET /ksa/polyline/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-power-consumer-(id)-active"><code class="xref">GET /ksa/power-consumer/(id)/active</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-power-consumer-(id)-has-power-switch"><code class="xref">GET /ksa/power-consumer/(id)/has-power-switch</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-power-consumer-(id)-mode"><code class="xref">GET /ksa/power-consumer/(id)/mode</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-power-consumer-(id)-part"><code class="xref">GET /ksa/power-consumer/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-power-consumer-(id)-power"><code class="xref">GET /ksa/power-consumer/(id)/power</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-power-consumer-(id)-standby-in-storms"><code class="xref">GET /ksa/power-consumer/(id)/standby-in-storms</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-power-consumer-(id)-status"><code class="xref">GET /ksa/power-consumer/(id)/status</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-power-forecast-(id)-charge"><code class="xref">GET /ksa/power-forecast/(id)/charge</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-power-forecast-(id)-draw"><code class="xref">GET /ksa/power-forecast/(id)/draw</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-power-forecast-(id)-has-battery"><code class="xref">GET /ksa/power-forecast/(id)/has-battery</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-power-forecast-(id)-supply"><code class="xref">GET /ksa/power-forecast/(id)/supply</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-power-forecast-(id)-time-left"><code class="xref">GET /ksa/power-forecast/(id)/time-left</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#get--ksa-radiation-enabled"><code class="xref">GET /ksa/radiation-enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-rcs-(id)-active"><code class="xref">GET /ksa/rcs/(id)/active</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#get--ksa-rcs-(id)-part"><code class="xref">GET /ksa/rcs/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#get--ksa-resource-(id)-amount"><code class="xref">GET /ksa/resource/(id)/amount</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#get--ksa-resource-(id)-max"><code class="xref">GET /ksa/resource/(id)/max</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#get--ksa-resource-(id)-name"><code class="xref">GET /ksa/resource/(id)/name</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-row-(id)-enabled"><code class="xref">GET /ksa/row/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-row-(id)-visible"><code class="xref">GET /ksa/row/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-seat-(id)-kitten"><code class="xref">GET /ksa/seat/(id)/kitten</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#get--ksa-seat-(id)-part"><code class="xref">GET /ksa/seat/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-separator-(id)-enabled"><code class="xref">GET /ksa/separator/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-separator-(id)-visible"><code class="xref">GET /ksa/separator/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/sequence.html#get--ksa-sequence-(id)-activated"><code class="xref">GET /ksa/sequence/(id)/activated</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/sequence.html#get--ksa-sequence-(id)-burn-time"><code class="xref">GET /ksa/sequence/(id)/burn-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/sequence.html#get--ksa-sequence-(id)-delta-v"><code class="xref">GET /ksa/sequence/(id)/delta-v</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/sequence.html#get--ksa-sequence-(id)-end-mass"><code class="xref">GET /ksa/sequence/(id)/end-mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/sequence.html#get--ksa-sequence-(id)-number"><code class="xref">GET /ksa/sequence/(id)/number</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/sequence.html#get--ksa-sequence-(id)-propellant-mass"><code class="xref">GET /ksa/sequence/(id)/propellant-mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/sequence.html#get--ksa-sequence-(id)-specific-impulse"><code class="xref">GET /ksa/sequence/(id)/specific-impulse</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/sequence.html#get--ksa-sequence-(id)-start-mass"><code class="xref">GET /ksa/sequence/(id)/start-mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/sequence.html#get--ksa-sequence-(id)-thrust"><code class="xref">GET /ksa/sequence/(id)/thrust</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#get--ksa-simulation-speed"><code class="xref">GET /ksa/simulation-speed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-slider-(id)-changed"><code class="xref">GET /ksa/slider/(id)/changed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-slider-(id)-enabled"><code class="xref">GET /ksa/slider/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-slider-(id)-label"><code class="xref">GET /ksa/slider/(id)/label</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-slider-(id)-maximum"><code class="xref">GET /ksa/slider/(id)/maximum</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-slider-(id)-minimum"><code class="xref">GET /ksa/slider/(id)/minimum</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-slider-(id)-value"><code class="xref">GET /ksa/slider/(id)/value</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-slider-(id)-visible"><code class="xref">GET /ksa/slider/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-solar-panel-(id)-active"><code class="xref">GET /ksa/solar-panel/(id)/active</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-solar-panel-(id)-deployable"><code class="xref">GET /ksa/solar-panel/(id)/deployable</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-solar-panel-(id)-occluded"><code class="xref">GET /ksa/solar-panel/(id)/occluded</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-solar-panel-(id)-part"><code class="xref">GET /ksa/solar-panel/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-solar-panel-(id)-power"><code class="xref">GET /ksa/solar-panel/(id)/power</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#get--ksa-solar-panel-(id)-sun-angle"><code class="xref">GET /ksa/solar-panel/(id)/sun-angle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-sphere-(id)-center"><code class="xref">GET /ksa/sphere/(id)/center</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-sphere-(id)-color"><code class="xref">GET /ksa/sphere/(id)/color</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-sphere-(id)-radius"><code class="xref">GET /ksa/sphere/(id)/radius</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-sphere-(id)-reference-frame"><code class="xref">GET /ksa/sphere/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-sphere-(id)-visible"><code class="xref">GET /ksa/sphere/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#get--ksa-tank-(id)-filled-fraction"><code class="xref">GET /ksa/tank/(id)/filled-fraction</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#get--ksa-tank-(id)-part"><code class="xref">GET /ksa/tank/(id)/part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#get--ksa-tank-(id)-propellant-use-enabled"><code class="xref">GET /ksa/tank/(id)/propellant-use-enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#get--ksa-tank-(id)-rated-pressure"><code class="xref">GET /ksa/tank/(id)/rated-pressure</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#get--ksa-tank-(id)-transfer-mode"><code class="xref">GET /ksa/tank/(id)/transfer-mode</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#get--ksa-tank-(id)-volume"><code class="xref">GET /ksa/tank/(id)/volume</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-text-(id)-color"><code class="xref">GET /ksa/text/(id)/color</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-text-(id)-content"><code class="xref">GET /ksa/text/(id)/content</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-text-(id)-position"><code class="xref">GET /ksa/text/(id)/position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-text-(id)-reference-frame"><code class="xref">GET /ksa/text/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-text-(id)-size"><code class="xref">GET /ksa/text/(id)/size</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#get--ksa-text-(id)-visible"><code class="xref">GET /ksa/text/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-toggle-(id)-changed"><code class="xref">GET /ksa/toggle/(id)/changed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-toggle-(id)-checked"><code class="xref">GET /ksa/toggle/(id)/checked</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-toggle-(id)-content"><code class="xref">GET /ksa/toggle/(id)/content</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-toggle-(id)-enabled"><code class="xref">GET /ksa/toggle/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-toggle-(id)-visible"><code class="xref">GET /ksa/toggle/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#get--ksa-ut"><code class="xref">GET /ksa/ut</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-design-(id)-delta-v"><code class="xref">GET /ksa/vehicle-design/(id)/delta-v</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-design-(id)-dry-mass"><code class="xref">GET /ksa/vehicle-design/(id)/dry-mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-design-(id)-is-default"><code class="xref">GET /ksa/vehicle-design/(id)/is-default</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-design-(id)-mass"><code class="xref">GET /ksa/vehicle-design/(id)/mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-design-(id)-name"><code class="xref">GET /ksa/vehicle-design/(id)/name</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-design-(id)-part-count"><code class="xref">GET /ksa/vehicle-design/(id)/part-count</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#get--ksa-vehicle-designs"><code class="xref">GET /ksa/vehicle-designs</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-auto-pilot"><code class="xref">GET /ksa/vehicle/(id)/auto-pilot</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-available-rcs-torque"><code class="xref">GET /ksa/vehicle/(id)/available-rcs-torque</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-available-thrust"><code class="xref">GET /ksa/vehicle/(id)/available-thrust</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-avionics"><code class="xref">GET /ksa/vehicle/(id)/avionics</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-batteries"><code class="xref">GET /ksa/vehicle/(id)/batteries</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-burns"><code class="xref">GET /ksa/vehicle/(id)/burns</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-can-recover"><code class="xref">GET /ksa/vehicle/(id)/can-recover</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-control"><code class="xref">GET /ksa/vehicle/(id)/control</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-control-state"><code class="xref">GET /ksa/vehicle/(id)/control-state</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-controllable"><code class="xref">GET /ksa/vehicle/(id)/controllable</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-crew"><code class="xref">GET /ksa/vehicle/(id)/crew</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-crew-capacity"><code class="xref">GET /ksa/vehicle/(id)/crew-capacity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-crew-events"><code class="xref">GET /ksa/vehicle/(id)/crew-events</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-decouplers"><code class="xref">GET /ksa/vehicle/(id)/decouplers</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-delta-v"><code class="xref">GET /ksa/vehicle/(id)/delta-v</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-deployables"><code class="xref">GET /ksa/vehicle/(id)/deployables</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-docking-ports"><code class="xref">GET /ksa/vehicle/(id)/docking-ports</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-dry-mass"><code class="xref">GET /ksa/vehicle/(id)/dry-mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-energy-capacity"><code class="xref">GET /ksa/vehicle/(id)/energy-capacity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-engines"><code class="xref">GET /ksa/vehicle/(id)/engines</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-flight"><code class="xref">GET /ksa/vehicle/(id)/flight</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-fuel-links"><code class="xref">GET /ksa/vehicle/(id)/fuel-links</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-generators"><code class="xref">GET /ksa/vehicle/(id)/generators</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-habitat-zones"><code class="xref">GET /ksa/vehicle/(id)/habitat-zones</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-habitats"><code class="xref">GET /ksa/vehicle/(id)/habitats</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-has-control-module"><code class="xref">GET /ksa/vehicle/(id)/has-control-module</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-has-launched"><code class="xref">GET /ksa/vehicle/(id)/has-launched</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-inertia-tensor"><code class="xref">GET /ksa/vehicle/(id)/inertia-tensor</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-is-debris"><code class="xref">GET /ksa/vehicle/(id)/is-debris</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-launch-time"><code class="xref">GET /ksa/vehicle/(id)/launch-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-life-support"><code class="xref">GET /ksa/vehicle/(id)/life-support</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-lights"><code class="xref">GET /ksa/vehicle/(id)/lights</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-magnetic-scoops"><code class="xref">GET /ksa/vehicle/(id)/magnetic-scoops</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-mass"><code class="xref">GET /ksa/vehicle/(id)/mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-max-dynamic-pressure"><code class="xref">GET /ksa/vehicle/(id)/max-dynamic-pressure</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-max-g-load"><code class="xref">GET /ksa/vehicle/(id)/max-g-load</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-mission"><code class="xref">GET /ksa/vehicle/(id)/mission</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-moment-of-inertia"><code class="xref">GET /ksa/vehicle/(id)/moment-of-inertia</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-name"><code class="xref">GET /ksa/vehicle/(id)/name</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-net-power"><code class="xref">GET /ksa/vehicle/(id)/net-power</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-next-crew-event"><code class="xref">GET /ksa/vehicle/(id)/next-crew-event</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-on-rails"><code class="xref">GET /ksa/vehicle/(id)/on-rails</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-orbit"><code class="xref">GET /ksa/vehicle/(id)/orbit</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-orbital-reference-frame"><code class="xref">GET /ksa/vehicle/(id)/orbital-reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-parachutes"><code class="xref">GET /ksa/vehicle/(id)/parachutes</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-parts"><code class="xref">GET /ksa/vehicle/(id)/parts</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-peak-dynamic-pressure"><code class="xref">GET /ksa/vehicle/(id)/peak-dynamic-pressure</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-peak-g-load"><code class="xref">GET /ksa/vehicle/(id)/peak-g-load</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-power-consumers"><code class="xref">GET /ksa/vehicle/(id)/power-consumers</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-propellant-mass"><code class="xref">GET /ksa/vehicle/(id)/propellant-mass</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-rcs"><code class="xref">GET /ksa/vehicle/(id)/rcs</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-reference-frame"><code class="xref">GET /ksa/vehicle/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-resources"><code class="xref">GET /ksa/vehicle/(id)/resources</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-root-part"><code class="xref">GET /ksa/vehicle/(id)/root-part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-seats"><code class="xref">GET /ksa/vehicle/(id)/seats</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-sequences"><code class="xref">GET /ksa/vehicle/(id)/sequences</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-situation"><code class="xref">GET /ksa/vehicle/(id)/situation</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-solar-panels"><code class="xref">GET /ksa/vehicle/(id)/solar-panels</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-specific-impulse"><code class="xref">GET /ksa/vehicle/(id)/specific-impulse</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-stored-energy"><code class="xref">GET /ksa/vehicle/(id)/stored-energy</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-surface-reference-frame"><code class="xref">GET /ksa/vehicle/(id)/surface-reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-tanks"><code class="xref">GET /ksa/vehicle/(id)/tanks</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-target-body"><code class="xref">GET /ksa/vehicle/(id)/target-body</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-target-part"><code class="xref">GET /ksa/vehicle/(id)/target-part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-target-vehicle"><code class="xref">GET /ksa/vehicle/(id)/target-vehicle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#get--ksa-vehicle-(id)-thrust"><code class="xref">GET /ksa/vehicle/(id)/thrust</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#get--ksa-vehicles"><code class="xref">GET /ksa/vehicles</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-window-(id)-enabled"><code class="xref">GET /ksa/window/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-window-(id)-position"><code class="xref">GET /ksa/window/(id)/position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-window-(id)-size"><code class="xref">GET /ksa/window/(id)/size</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-window-(id)-title"><code class="xref">GET /ksa/window/(id)/title</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#get--ksa-window-(id)-visible"><code class="xref">GET /ksa/window/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-arc-(id)-remove"><code class="xref">POST /ksa/arc/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#post--ksa-auto-pilot-(id)-disengage"><code class="xref">POST /ksa/auto-pilot/(id)/disengage</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#post--ksa-auto-pilot-(id)-engage"><code class="xref">POST /ksa/auto-pilot/(id)/engage</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#post--ksa-auto-pilot-(id)-target-direction"><code class="xref">POST /ksa/auto-pilot/(id)/target-direction</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#post--ksa-auto-pilot-(id)-target-pitch-and-heading"><code class="xref">POST /ksa/auto-pilot/(id)/target-pitch-and-heading</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#post--ksa-auto-pilot-(id)-wait"><code class="xref">POST /ksa/auto-pilot/(id)/wait</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-altitude-at-position"><code class="xref">POST /ksa/body/(id)/altitude-at-position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-angular-velocity"><code class="xref">POST /ksa/body/(id)/angular-velocity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-bedrock-height"><code class="xref">POST /ksa/body/(id)/bedrock-height</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-biome-at"><code class="xref">POST /ksa/body/(id)/biome-at</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-density-at"><code class="xref">POST /ksa/body/(id)/density-at</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-latitude-at-position"><code class="xref">POST /ksa/body/(id)/latitude-at-position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-longitude-at-position"><code class="xref">POST /ksa/body/(id)/longitude-at-position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-position"><code class="xref">POST /ksa/body/(id)/position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-pressure-at"><code class="xref">POST /ksa/body/(id)/pressure-at</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-rotation"><code class="xref">POST /ksa/body/(id)/rotation</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-speed-of-sound-at"><code class="xref">POST /ksa/body/(id)/speed-of-sound-at</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-surface-height"><code class="xref">POST /ksa/body/(id)/surface-height</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-surface-position"><code class="xref">POST /ksa/body/(id)/surface-position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-temperature-at"><code class="xref">POST /ksa/body/(id)/temperature-at</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/body.html#post--ksa-body-(id)-velocity"><code class="xref">POST /ksa/body/(id)/velocity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-box-(id)-remove"><code class="xref">POST /ksa/box/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#post--ksa-burn-(id)-burn-vector"><code class="xref">POST /ksa/burn/(id)/burn-vector</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#post--ksa-burn-(id)-direction"><code class="xref">POST /ksa/burn/(id)/direction</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#post--ksa-burn-(id)-position"><code class="xref">POST /ksa/burn/(id)/position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#post--ksa-burn-(id)-remaining-burn-vector"><code class="xref">POST /ksa/burn/(id)/remaining-burn-vector</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#post--ksa-burn-(id)-remove"><code class="xref">POST /ksa/burn/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-button-(id)-remove"><code class="xref">POST /ksa/button/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-circle-(id)-remove"><code class="xref">POST /ksa/circle/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#post--ksa-control-(id)-activate-next-sequence"><code class="xref">POST /ksa/control/(id)/activate-next-sequence</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/space-weather.html#post--ksa-coronal-mass-ejection-(id)-arrival-time"><code class="xref">POST /ksa/coronal-mass-ejection/(id)/arrival-time</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/space-weather.html#post--ksa-coronal-mass-ejection-(id)-arrival-uncertainty"><code class="xref">POST /ksa/coronal-mass-ejection/(id)/arrival-uncertainty</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/debug.html#post--ksa-debug-duplicate-vehicle"><code class="xref">POST /ksa/debug/duplicate-vehicle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/debug.html#post--ksa-debug-empty-resources"><code class="xref">POST /ksa/debug/empty-resources</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/debug.html#post--ksa-debug-explode-vehicle"><code class="xref">POST /ksa/debug/explode-vehicle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/debug.html#post--ksa-debug-fill-resources"><code class="xref">POST /ksa/debug/fill-resources</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/debug.html#post--ksa-debug-run-command"><code class="xref">POST /ksa/debug/run-command</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/debug.html#post--ksa-debug-set-angular-velocity"><code class="xref">POST /ksa/debug/set-angular-velocity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/debug.html#post--ksa-debug-set-circular-orbit"><code class="xref">POST /ksa/debug/set-circular-orbit</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/debug.html#post--ksa-debug-set-landed"><code class="xref">POST /ksa/debug/set-landed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/debug.html#post--ksa-debug-set-orbit"><code class="xref">POST /ksa/debug/set-orbit</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/debug.html#post--ksa-debug-set-position"><code class="xref">POST /ksa/debug/set-position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/debug.html#post--ksa-debug-set-rotation"><code class="xref">POST /ksa/debug/set-rotation</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/debug.html#post--ksa-debug-set-velocity"><code class="xref">POST /ksa/debug/set-velocity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/debug.html#post--ksa-debug-show-velocity-arrows"><code class="xref">POST /ksa/debug/show-velocity-arrows</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#post--ksa-decoupler-(id)-decouple"><code class="xref">POST /ksa/decoupler/(id)/decouple</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#post--ksa-deployable-(id)-deploy"><code class="xref">POST /ksa/deployable/(id)/deploy</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#post--ksa-deployable-(id)-retract"><code class="xref">POST /ksa/deployable/(id)/retract</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#post--ksa-docking-port-(id)-undock"><code class="xref">POST /ksa/docking-port/(id)/undock</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-drawing-add-arc"><code class="xref">POST /ksa/drawing/add-arc</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-drawing-add-box"><code class="xref">POST /ksa/drawing/add-box</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-drawing-add-circle"><code class="xref">POST /ksa/drawing/add-circle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-drawing-add-direction"><code class="xref">POST /ksa/drawing/add-direction</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-drawing-add-line"><code class="xref">POST /ksa/drawing/add-line</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-drawing-add-polyline"><code class="xref">POST /ksa/drawing/add-polyline</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-drawing-add-sphere"><code class="xref">POST /ksa/drawing/add-sphere</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-drawing-add-text"><code class="xref">POST /ksa/drawing/add-text</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-drawing-clear"><code class="xref">POST /ksa/drawing/clear</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-dropdown-(id)-remove"><code class="xref">POST /ksa/dropdown/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#post--ksa-engine-(id)-available-thrust-at"><code class="xref">POST /ksa/engine/(id)/available-thrust-at</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#post--ksa-engine-(id)-specific-impulse-at"><code class="xref">POST /ksa/engine/(id)/specific-impulse-at</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#post--ksa-flight-(id)-aerodynamic-force"><code class="xref">POST /ksa/flight/(id)/aerodynamic-force</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#post--ksa-flight-(id)-aerodynamic-torque"><code class="xref">POST /ksa/flight/(id)/aerodynamic-torque</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#post--ksa-flight-(id)-normal"><code class="xref">POST /ksa/flight/(id)/normal</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#post--ksa-flight-(id)-prograde"><code class="xref">POST /ksa/flight/(id)/prograde</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#post--ksa-flight-(id)-radial"><code class="xref">POST /ksa/flight/(id)/radial</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/flight.html#post--ksa-flight-(id)-simulate-aerodynamic-force-at"><code class="xref">POST /ksa/flight/(id)/simulate-aerodynamic-force-at</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#post--ksa-gimbal-(id)-rotation"><code class="xref">POST /ksa/gimbal/(id)/rotation</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#post--ksa-habitat-zone-(id)-hatches-to"><code class="xref">POST /ksa/habitat-zone/(id)/hatches-to</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#post--ksa-habitat-zone-(id)-planned-kittens"><code class="xref">POST /ksa/habitat-zone/(id)/planned-kittens</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#post--ksa-habitat-(id)-transfer"><code class="xref">POST /ksa/habitat/(id)/transfer</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-input-field-(id)-remove"><code class="xref">POST /ksa/input-field/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#post--ksa-kitten-(id)-board"><code class="xref">POST /ksa/kitten/(id)/board</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#post--ksa-kitten-(id)-can-carry"><code class="xref">POST /ksa/kitten/(id)/can-carry</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#post--ksa-kitten-(id)-condition"><code class="xref">POST /ksa/kitten/(id)/condition</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#post--ksa-kitten-(id)-go-on-eva"><code class="xref">POST /ksa/kitten/(id)/go-on-eva</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#post--ksa-kitten-(id)-position"><code class="xref">POST /ksa/kitten/(id)/position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#post--ksa-kitten-(id)-stow"><code class="xref">POST /ksa/kitten/(id)/stow</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#post--ksa-kitten-(id)-take"><code class="xref">POST /ksa/kitten/(id)/take</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#post--ksa-kitten-(id)-time-to-next-condition"><code class="xref">POST /ksa/kitten/(id)/time-to-next-condition</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#post--ksa-kitten-(id)-time-without"><code class="xref">POST /ksa/kitten/(id)/time-without</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#post--ksa-kitten-(id)-velocity"><code class="xref">POST /ksa/kitten/(id)/velocity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-label-(id)-remove"><code class="xref">POST /ksa/label/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#post--ksa-launch-vehicle"><code class="xref">POST /ksa/launch-vehicle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-line-(id)-remove"><code class="xref">POST /ksa/line/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#post--ksa-load"><code class="xref">POST /ksa/load</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/life-support.html#post--ksa-mission-supplies-(id)-time-left"><code class="xref">POST /ksa/mission-supplies/(id)/time-left</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-(id)-eccentric-anomaly-at-ut"><code class="xref">POST /ksa/orbit/(id)/eccentric-anomaly-at-ut</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-(id)-mean-anomaly-at-ut"><code class="xref">POST /ksa/orbit/(id)/mean-anomaly-at-ut</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-(id)-position-at"><code class="xref">POST /ksa/orbit/(id)/position-at</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-(id)-radius-at"><code class="xref">POST /ksa/orbit/(id)/radius-at</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-(id)-relative-inclination"><code class="xref">POST /ksa/orbit/(id)/relative-inclination</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-(id)-remove"><code class="xref">POST /ksa/orbit/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-(id)-speed-at"><code class="xref">POST /ksa/orbit/(id)/speed-at</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-(id)-true-anomaly-at-an"><code class="xref">POST /ksa/orbit/(id)/true-anomaly-at-an</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-(id)-true-anomaly-at-dn"><code class="xref">POST /ksa/orbit/(id)/true-anomaly-at-dn</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-(id)-true-anomaly-at-radius"><code class="xref">POST /ksa/orbit/(id)/true-anomaly-at-radius</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-(id)-true-anomaly-at-ut"><code class="xref">POST /ksa/orbit/(id)/true-anomaly-at-ut</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-(id)-ut-at-true-anomaly"><code class="xref">POST /ksa/orbit/(id)/ut-at-true-anomaly</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-(id)-velocity-at"><code class="xref">POST /ksa/orbit/(id)/velocity-at</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-create-from-elements"><code class="xref">POST /ksa/orbit/create-from-elements</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/orbit.html#post--ksa-orbit-create-from-position-and-velocity"><code class="xref">POST /ksa/orbit/create-from-position-and-velocity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#post--ksa-parachute-(id)-cut"><code class="xref">POST /ksa/parachute/(id)/cut</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#post--ksa-parachute-(id)-deploy"><code class="xref">POST /ksa/parachute/(id)/deploy</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#post--ksa-part-(id)-position"><code class="xref">POST /ksa/part/(id)/position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#post--ksa-part-(id)-rotation"><code class="xref">POST /ksa/part/(id)/rotation</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#post--ksa-part-(id)-velocity"><code class="xref">POST /ksa/part/(id)/velocity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-polyline-(id)-remove"><code class="xref">POST /ksa/polyline/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#post--ksa-raycast-distance"><code class="xref">POST /ksa/raycast-distance</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#post--ksa-raycast-part"><code class="xref">POST /ksa/raycast-part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/reference-frame.html#post--ksa-reference-frame-create-hybrid"><code class="xref">POST /ksa/reference-frame/create-hybrid</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/reference-frame.html#post--ksa-reference-frame-create-relative"><code class="xref">POST /ksa/reference-frame/create-relative</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-row-(id)-add-button"><code class="xref">POST /ksa/row/(id)/add-button</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-row-(id)-add-dropdown"><code class="xref">POST /ksa/row/(id)/add-dropdown</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-row-(id)-add-input-field"><code class="xref">POST /ksa/row/(id)/add-input-field</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-row-(id)-add-label"><code class="xref">POST /ksa/row/(id)/add-label</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-row-(id)-add-row"><code class="xref">POST /ksa/row/(id)/add-row</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-row-(id)-add-separator"><code class="xref">POST /ksa/row/(id)/add-separator</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-row-(id)-add-slider"><code class="xref">POST /ksa/row/(id)/add-slider</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-row-(id)-add-toggle"><code class="xref">POST /ksa/row/(id)/add-toggle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-row-(id)-remove"><code class="xref">POST /ksa/row/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#post--ksa-save"><code class="xref">POST /ksa/save</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#post--ksa-save-exists"><code class="xref">POST /ksa/save-exists</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-separator-(id)-remove"><code class="xref">POST /ksa/separator/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#post--ksa-show-message"><code class="xref">POST /ksa/show-message</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-slider-(id)-remove"><code class="xref">POST /ksa/slider/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-sphere-(id)-remove"><code class="xref">POST /ksa/sphere/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#post--ksa-take-screenshot"><code class="xref">POST /ksa/take-screenshot</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#post--ksa-text-(id)-remove"><code class="xref">POST /ksa/text/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-toggle-(id)-remove"><code class="xref">POST /ksa/toggle/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#post--ksa-transform-direction"><code class="xref">POST /ksa/transform-direction</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#post--ksa-transform-position"><code class="xref">POST /ksa/transform-position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#post--ksa-transform-rotation"><code class="xref">POST /ksa/transform-rotation</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#post--ksa-transform-velocity"><code class="xref">POST /ksa/transform-velocity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-ui-add-window"><code class="xref">POST /ksa/ui/add-window</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-ui-clear"><code class="xref">POST /ksa/ui/clear</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#post--ksa-vehicle-(id)-acceleration"><code class="xref">POST /ksa/vehicle/(id)/acceleration</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#post--ksa-vehicle-(id)-add-burn"><code class="xref">POST /ksa/vehicle/(id)/add-burn</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#post--ksa-vehicle-(id)-angular-acceleration"><code class="xref">POST /ksa/vehicle/(id)/angular-acceleration</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#post--ksa-vehicle-(id)-angular-velocity"><code class="xref">POST /ksa/vehicle/(id)/angular-velocity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#post--ksa-vehicle-(id)-destroy"><code class="xref">POST /ksa/vehicle/(id)/destroy</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#post--ksa-vehicle-(id)-direction"><code class="xref">POST /ksa/vehicle/(id)/direction</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#post--ksa-vehicle-(id)-parts-with-name"><code class="xref">POST /ksa/vehicle/(id)/parts-with-name</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#post--ksa-vehicle-(id)-position"><code class="xref">POST /ksa/vehicle/(id)/position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#post--ksa-vehicle-(id)-recover"><code class="xref">POST /ksa/vehicle/(id)/recover</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#post--ksa-vehicle-(id)-rotation"><code class="xref">POST /ksa/vehicle/(id)/rotation</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#post--ksa-vehicle-(id)-velocity"><code class="xref">POST /ksa/vehicle/(id)/velocity</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#post--ksa-warp-to"><code class="xref">POST /ksa/warp-to</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-window-(id)-add-button"><code class="xref">POST /ksa/window/(id)/add-button</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-window-(id)-add-dropdown"><code class="xref">POST /ksa/window/(id)/add-dropdown</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-window-(id)-add-input-field"><code class="xref">POST /ksa/window/(id)/add-input-field</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-window-(id)-add-label"><code class="xref">POST /ksa/window/(id)/add-label</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-window-(id)-add-row"><code class="xref">POST /ksa/window/(id)/add-row</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-window-(id)-add-separator"><code class="xref">POST /ksa/window/(id)/add-separator</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-window-(id)-add-slider"><code class="xref">POST /ksa/window/(id)/add-slider</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-window-(id)-add-toggle"><code class="xref">POST /ksa/window/(id)/add-toggle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#post--ksa-window-(id)-remove"><code class="xref">POST /ksa/window/(id)/remove</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#put--ksa-active-kitten"><code class="xref">PUT /ksa/active-kitten</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#put--ksa-active-vehicle"><code class="xref">PUT /ksa/active-vehicle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-arc-(id)-angle"><code class="xref">PUT /ksa/arc/(id)/angle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-arc-(id)-center"><code class="xref">PUT /ksa/arc/(id)/center</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-arc-(id)-color"><code class="xref">PUT /ksa/arc/(id)/color</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-arc-(id)-normal"><code class="xref">PUT /ksa/arc/(id)/normal</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-arc-(id)-radius"><code class="xref">PUT /ksa/arc/(id)/radius</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-arc-(id)-reference-frame"><code class="xref">PUT /ksa/arc/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-arc-(id)-start-direction"><code class="xref">PUT /ksa/arc/(id)/start-direction</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-arc-(id)-visible"><code class="xref">PUT /ksa/arc/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#put--ksa-auto-pilot-(id)-auto-burn"><code class="xref">PUT /ksa/auto-pilot/(id)/auto-burn</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#put--ksa-auto-pilot-(id)-mode"><code class="xref">PUT /ksa/auto-pilot/(id)/mode</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#put--ksa-auto-pilot-(id)-target-heading"><code class="xref">PUT /ksa/auto-pilot/(id)/target-heading</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#put--ksa-auto-pilot-(id)-target-pitch"><code class="xref">PUT /ksa/auto-pilot/(id)/target-pitch</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/auto-pilot.html#put--ksa-auto-pilot-(id)-target-roll"><code class="xref">PUT /ksa/auto-pilot/(id)/target-roll</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-box-(id)-center"><code class="xref">PUT /ksa/box/(id)/center</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-box-(id)-color"><code class="xref">PUT /ksa/box/(id)/color</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-box-(id)-reference-frame"><code class="xref">PUT /ksa/box/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-box-(id)-rotation"><code class="xref">PUT /ksa/box/(id)/rotation</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-box-(id)-size"><code class="xref">PUT /ksa/box/(id)/size</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-box-(id)-visible"><code class="xref">PUT /ksa/box/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#put--ksa-burn-(id)-normal"><code class="xref">PUT /ksa/burn/(id)/normal</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#put--ksa-burn-(id)-prograde"><code class="xref">PUT /ksa/burn/(id)/prograde</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#put--ksa-burn-(id)-radial"><code class="xref">PUT /ksa/burn/(id)/radial</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/burn.html#put--ksa-burn-(id)-ut"><code class="xref">PUT /ksa/burn/(id)/ut</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-button-(id)-clicked"><code class="xref">PUT /ksa/button/(id)/clicked</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-button-(id)-content"><code class="xref">PUT /ksa/button/(id)/content</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-button-(id)-enabled"><code class="xref">PUT /ksa/button/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-button-(id)-visible"><code class="xref">PUT /ksa/button/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#put--ksa-camera-(id)-azimuth"><code class="xref">PUT /ksa/camera/(id)/azimuth</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#put--ksa-camera-(id)-distance"><code class="xref">PUT /ksa/camera/(id)/distance</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#put--ksa-camera-(id)-elevation"><code class="xref">PUT /ksa/camera/(id)/elevation</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#put--ksa-camera-(id)-field-of-view"><code class="xref">PUT /ksa/camera/(id)/field-of-view</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#put--ksa-camera-(id)-focused-body"><code class="xref">PUT /ksa/camera/(id)/focused-body</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#put--ksa-camera-(id)-focused-kitten"><code class="xref">PUT /ksa/camera/(id)/focused-kitten</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#put--ksa-camera-(id)-focused-vehicle"><code class="xref">PUT /ksa/camera/(id)/focused-vehicle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/camera.html#put--ksa-camera-(id)-mode"><code class="xref">PUT /ksa/camera/(id)/mode</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-circle-(id)-center"><code class="xref">PUT /ksa/circle/(id)/center</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-circle-(id)-color"><code class="xref">PUT /ksa/circle/(id)/color</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-circle-(id)-normal"><code class="xref">PUT /ksa/circle/(id)/normal</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-circle-(id)-radius"><code class="xref">PUT /ksa/circle/(id)/radius</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-circle-(id)-reference-frame"><code class="xref">PUT /ksa/circle/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-circle-(id)-visible"><code class="xref">PUT /ksa/circle/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#put--ksa-control-(id)-engine-on"><code class="xref">PUT /ksa/control/(id)/engine-on</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#put--ksa-control-(id)-forward"><code class="xref">PUT /ksa/control/(id)/forward</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#put--ksa-control-(id)-lights"><code class="xref">PUT /ksa/control/(id)/lights</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#put--ksa-control-(id)-pitch"><code class="xref">PUT /ksa/control/(id)/pitch</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#put--ksa-control-(id)-pulse"><code class="xref">PUT /ksa/control/(id)/pulse</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#put--ksa-control-(id)-rcs"><code class="xref">PUT /ksa/control/(id)/rcs</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#put--ksa-control-(id)-right"><code class="xref">PUT /ksa/control/(id)/right</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#put--ksa-control-(id)-roll"><code class="xref">PUT /ksa/control/(id)/roll</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#put--ksa-control-(id)-stabilization"><code class="xref">PUT /ksa/control/(id)/stabilization</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#put--ksa-control-(id)-throttle"><code class="xref">PUT /ksa/control/(id)/throttle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#put--ksa-control-(id)-up"><code class="xref">PUT /ksa/control/(id)/up</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/control.html#put--ksa-control-(id)-yaw"><code class="xref">PUT /ksa/control/(id)/yaw</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#put--ksa-docking-port-(id)-hatch-open"><code class="xref">PUT /ksa/docking-port/(id)/hatch-open</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-dropdown-(id)-changed"><code class="xref">PUT /ksa/dropdown/(id)/changed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-dropdown-(id)-enabled"><code class="xref">PUT /ksa/dropdown/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-dropdown-(id)-label"><code class="xref">PUT /ksa/dropdown/(id)/label</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-dropdown-(id)-options"><code class="xref">PUT /ksa/dropdown/(id)/options</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-dropdown-(id)-selected-index"><code class="xref">PUT /ksa/dropdown/(id)/selected-index</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-dropdown-(id)-visible"><code class="xref">PUT /ksa/dropdown/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#put--ksa-engine-(id)-active"><code class="xref">PUT /ksa/engine/(id)/active</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#put--ksa-fuel-link-(id)-enabled"><code class="xref">PUT /ksa/fuel-link/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#put--ksa-fuel-link-(id)-flow"><code class="xref">PUT /ksa/fuel-link/(id)/flow</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-input-field-(id)-changed"><code class="xref">PUT /ksa/input-field/(id)/changed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-input-field-(id)-enabled"><code class="xref">PUT /ksa/input-field/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-input-field-(id)-label"><code class="xref">PUT /ksa/input-field/(id)/label</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-input-field-(id)-value"><code class="xref">PUT /ksa/input-field/(id)/value</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-input-field-(id)-visible"><code class="xref">PUT /ksa/input-field/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-label-(id)-content"><code class="xref">PUT /ksa/label/(id)/content</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-label-(id)-enabled"><code class="xref">PUT /ksa/label/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-label-(id)-visible"><code class="xref">PUT /ksa/label/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-line-(id)-color"><code class="xref">PUT /ksa/line/(id)/color</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-line-(id)-end"><code class="xref">PUT /ksa/line/(id)/end</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-line-(id)-reference-frame"><code class="xref">PUT /ksa/line/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-line-(id)-start"><code class="xref">PUT /ksa/line/(id)/start</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-line-(id)-visible"><code class="xref">PUT /ksa/line/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#put--ksa-magnetic-scoop-(id)-active"><code class="xref">PUT /ksa/magnetic-scoop/(id)/active</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#put--ksa-part-(id)-highlight"><code class="xref">PUT /ksa/part/(id)/highlight</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-polyline-(id)-closed"><code class="xref">PUT /ksa/polyline/(id)/closed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-polyline-(id)-color"><code class="xref">PUT /ksa/polyline/(id)/color</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-polyline-(id)-reference-frame"><code class="xref">PUT /ksa/polyline/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-polyline-(id)-vertices"><code class="xref">PUT /ksa/polyline/(id)/vertices</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-polyline-(id)-visible"><code class="xref">PUT /ksa/polyline/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#put--ksa-power-consumer-(id)-mode"><code class="xref">PUT /ksa/power-consumer/(id)/mode</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/power.html#put--ksa-power-consumer-(id)-standby-in-storms"><code class="xref">PUT /ksa/power-consumer/(id)/standby-in-storms</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/parts.html#put--ksa-rcs-(id)-active"><code class="xref">PUT /ksa/rcs/(id)/active</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-row-(id)-enabled"><code class="xref">PUT /ksa/row/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-row-(id)-visible"><code class="xref">PUT /ksa/row/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/crew.html#put--ksa-seat-(id)-kitten"><code class="xref">PUT /ksa/seat/(id)/kitten</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-separator-(id)-enabled"><code class="xref">PUT /ksa/separator/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-separator-(id)-visible"><code class="xref">PUT /ksa/separator/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ksa.html#put--ksa-simulation-speed"><code class="xref">PUT /ksa/simulation-speed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-slider-(id)-changed"><code class="xref">PUT /ksa/slider/(id)/changed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-slider-(id)-enabled"><code class="xref">PUT /ksa/slider/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-slider-(id)-label"><code class="xref">PUT /ksa/slider/(id)/label</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-slider-(id)-maximum"><code class="xref">PUT /ksa/slider/(id)/maximum</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-slider-(id)-minimum"><code class="xref">PUT /ksa/slider/(id)/minimum</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-slider-(id)-value"><code class="xref">PUT /ksa/slider/(id)/value</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-slider-(id)-visible"><code class="xref">PUT /ksa/slider/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-sphere-(id)-center"><code class="xref">PUT /ksa/sphere/(id)/center</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-sphere-(id)-color"><code class="xref">PUT /ksa/sphere/(id)/color</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-sphere-(id)-radius"><code class="xref">PUT /ksa/sphere/(id)/radius</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-sphere-(id)-reference-frame"><code class="xref">PUT /ksa/sphere/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-sphere-(id)-visible"><code class="xref">PUT /ksa/sphere/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#put--ksa-tank-(id)-propellant-use-enabled"><code class="xref">PUT /ksa/tank/(id)/propellant-use-enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/resources.html#put--ksa-tank-(id)-transfer-mode"><code class="xref">PUT /ksa/tank/(id)/transfer-mode</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-text-(id)-color"><code class="xref">PUT /ksa/text/(id)/color</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-text-(id)-content"><code class="xref">PUT /ksa/text/(id)/content</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-text-(id)-position"><code class="xref">PUT /ksa/text/(id)/position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-text-(id)-reference-frame"><code class="xref">PUT /ksa/text/(id)/reference-frame</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-text-(id)-size"><code class="xref">PUT /ksa/text/(id)/size</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/drawing.html#put--ksa-text-(id)-visible"><code class="xref">PUT /ksa/text/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-toggle-(id)-changed"><code class="xref">PUT /ksa/toggle/(id)/changed</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-toggle-(id)-checked"><code class="xref">PUT /ksa/toggle/(id)/checked</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-toggle-(id)-content"><code class="xref">PUT /ksa/toggle/(id)/content</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-toggle-(id)-enabled"><code class="xref">PUT /ksa/toggle/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-toggle-(id)-visible"><code class="xref">PUT /ksa/toggle/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#put--ksa-vehicle-(id)-name"><code class="xref">PUT /ksa/vehicle/(id)/name</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#put--ksa-vehicle-(id)-target-body"><code class="xref">PUT /ksa/vehicle/(id)/target-body</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#put--ksa-vehicle-(id)-target-part"><code class="xref">PUT /ksa/vehicle/(id)/target-part</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/vehicle.html#put--ksa-vehicle-(id)-target-vehicle"><code class="xref">PUT /ksa/vehicle/(id)/target-vehicle</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-window-(id)-enabled"><code class="xref">PUT /ksa/window/(id)/enabled</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-window-(id)-position"><code class="xref">PUT /ksa/window/(id)/position</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-window-(id)-size"><code class="xref">PUT /ksa/window/(id)/size</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-window-(id)-title"><code class="xref">PUT /ksa/window/(id)/title</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="http/api/ksa/ui.html#put--ksa-window-(id)-visible"><code class="xref">PUT /ksa/window/(id)/visible</code></a></td><td>
+       <em></em></td></tr>
+   </table>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026 kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

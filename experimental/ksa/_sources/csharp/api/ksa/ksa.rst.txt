@@ -12,8 +12,8 @@ KSA
 
    .. property:: Vehicle ActiveVehicle { get; set; }
 
-      The vehicle under the player's control, or ``null`` if the player controls a
-      kitten on EVA.
+      The vehicle under the player's control, or ``null`` if there is none or the
+      player controls a kitten on EVA.
 
       :Game Scenes: All
 
@@ -72,6 +72,23 @@ KSA
 
       :Game Scenes: All
 
+
+      .. note::
+
+         Setting it stops a warp in progress, such as one started by :meth:`KSA.WarpTo <KSA.KSA.WarpTo>`.
+
+   .. property:: bool LifeSupportEnabled { get; }
+
+      Whether the crew use up supplies, as set when the game was created.
+
+      :Game Scenes: All
+
+   .. property:: bool RadiationEnabled { get; }
+
+      Whether radiation harms the crew, as set when the game was created.
+
+      :Game Scenes: All
+
    .. function:: void WarpTo(double ut)
 
       Warp to the given universal time, and return once the warp has finished.
@@ -87,7 +104,7 @@ KSA
       .. note::
 
          Does nothing when the time is in the past. Returns early if the game stops the
-         warp, for example when its menu pauses the game.
+         warp, for example when its menu pauses the game, or a vehicle's supplies run out.
 
    .. property:: System.Collections.Generic.IDictionary<string,VehicleDesign> VehicleDesigns { get; }
 
@@ -177,6 +194,43 @@ KSA
        * **warning** -- Whether to show the message in the warning color.
 
       :Game Scenes: All
+
+   .. function:: double RaycastDistance(System.Tuple<double,double,double> position, System.Tuple<double,double,double> direction, ReferenceFrame referenceFrame)
+
+      The distance from a position to the first part of a vehicle along a ray, in
+      meters. Infinite if the ray hits no part.
+
+      :parameters:
+
+       * **position** -- The start of the ray, in meters.
+       * **direction** -- The direction of the ray.
+       * **referenceFrame** -- The reference frame of the position and direction.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The ray tests the meshes of the parts, as picking a part with the mouse does.
+         It passes through terrain and kittens on EVA.
+
+   .. function:: Part RaycastPart(System.Tuple<double,double,double> position, System.Tuple<double,double,double> direction, ReferenceFrame referenceFrame)
+
+      The first part of a vehicle along a ray, or ``null`` if the ray hits no part.
+
+      :parameters:
+
+       * **position** -- The start of the ray, in meters.
+       * **direction** -- The direction of the ray.
+       * **referenceFrame** -- The reference frame of the position and direction.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The ray tests the meshes of the parts, as picking a part with the mouse does.
+         It passes through terrain and kittens on EVA.
 
    .. function:: System.Tuple<double,double,double> TransformPosition(System.Tuple<double,double,double> position, ReferenceFrame from, ReferenceFrame to)
 

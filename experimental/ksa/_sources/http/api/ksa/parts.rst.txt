@@ -1,0 +1,1381 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Parts
+=====
+
+
+.. _http-KSA.Part:
+
+.. rubric:: Part
+
+A part of a vehicle. Obtained from :http:get:`/ksa/vehicle/(id)/parts`.
+
+.. note::
+
+   A part keeps its object when the vehicle it belongs to changes, for example when a
+   decoupler separates it. Throws an exception once the part no longer exists.
+
+
+A ``Part`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/part/(id)/name
+
+   The id of the part's template.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/title
+
+   The name of the part, as shown in the game.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/vehicle
+
+   The vehicle the part belongs to.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson KSA.Vehicle value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/parent
+
+   The part this part is attached to, or ``null`` for the root part.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson KSA.Part? value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/children
+
+   The parts attached to this part.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson list<KSA.Part> value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/sequence
+
+   The number of the sequence that activates the part, or -1 if no sequence does.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/mass
+
+   The mass of the part, including its propellant, in kilograms.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/dry-mass
+
+   The mass of the part without its propellant, in kilograms.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/resources
+
+   The resources the part holds, one for each substance.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson list<KSA.Resource> value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/shield-areal-density
+
+   The areal density of the part's radiation shielding, its hull included, in
+   :math:`\mathrm{kg/m^{2}}`. Zero for an unshielded part.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/shield-mass
+
+   The mass of the shielding material added to the part, in kilograms. Zero when the
+   shielding is built into the hull.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/tank-cover
+
+   The fraction of the sky, seen from the part, that the contents of the vehicle's tanks
+   cover, between 0 and 1. The contents shield the part from radiation.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/dose-rate
+
+   The radiation dose rate inside the part, behind its shielding and the vehicle's tanks,
+   in sieverts per second. Includes any solar particle event under way. A kitten in the
+   part's seats receives this dose rate.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/highlight
+
+   The color the part is highlighted in.
+
+   .. note::
+
+      The life support window uses this highlight to pick parts, and replaces it on
+      the parts it picks from.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson KSA.HighlightColor value:
+
+.. http:put:: /ksa/part/(id)/highlight
+
+   The color the part is highlighted in.
+
+   .. note::
+
+      The life support window uses this highlight to pick parts, and replaces it on
+      the parts it picks from.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :reqjson KSA.HighlightColor value: The new value.
+
+
+
+
+.. http:get:: /ksa/part/(id)/tanks
+
+   The part's propellant tanks. Empty if it has none.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson list<KSA.Tank> value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/habitats
+
+   The part's habitats.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson list<KSA.Habitat> value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/batteries
+
+   The part's batteries.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson list<KSA.Battery> value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/solar-panels
+
+   The part's solar panels.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson list<KSA.SolarPanel> value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/generators
+
+   The part's generators.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson list<KSA.Generator> value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/power-consumers
+
+   The part's power consumers.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson list<KSA.PowerConsumer> value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/power-forecast
+
+   The charge, draw and supply of the electrical circuit the part is on.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson KSA.PowerForecast value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/avionics
+
+   The part's avionics, or ``null`` if it has none. A probe core has avionics.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson KSA.Avionics? value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/lights
+
+   The part's lights.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson list<KSA.Light> value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/deployables
+
+   The part's deployable sections. A part can have several, such as the doors of a
+   service module.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson list<KSA.Deployable> value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/magnetic-scoops
+
+   The part's magnetic scoops. Empty if it has none.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson list<KSA.MagneticScoop> value:
+
+
+
+
+.. http:post:: /ksa/part/(id)/position
+
+   The position of the part's origin, in meters.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/part/(id)/velocity
+
+   The velocity of the part's origin, in meters per second.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the velocity.
+   :resjson tuple<double, double, double> value:
+
+
+
+
+
+.. http:post:: /ksa/part/(id)/rotation
+
+   The rotation of the part's axes, relative to the given frame.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the rotation.
+   :resjson tuple<double, double, double, double> value:
+
+
+
+
+
+.. http:get:: /ksa/part/(id)/engine
+
+   The part's engine, or ``null`` if it has none.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson KSA.Engine? value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/gimbals
+
+   The part's gimbals. An engine part can have several, each steering one nozzle.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson list<KSA.Gimbal> value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/rcs
+
+   The part's RCS thrusters, or ``null`` if it has none.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson KSA.RCS? value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/decoupler
+
+   The part's decoupler, or ``null`` if it has none.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson KSA.Decoupler? value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/parachute
+
+   The part's parachute, or ``null`` if it has none.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson KSA.Parachute? value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/docking-port
+
+   The part's docking port, or ``null`` if it has none.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson KSA.DockingPort? value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/seats
+
+   The part's crew seats.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson list<KSA.Seat> value:
+
+
+
+
+.. http:get:: /ksa/part/(id)/crew
+
+   The kittens in the part's seats.
+
+
+   :param id: The identifier of the :ref:`Part <http-KSA.Part>` object.
+
+   :resjson list<KSA.Kitten> value:
+
+
+
+
+
+.. _http-KSA.HighlightColor:
+
+.. rubric:: HighlightColor
+
+The color of a part's highlight. See :http:get:`/ksa/part/(id)/highlight`.
+
+Passed and returned as the name of one of its values:
+
+
+``"none"``
+   Not highlighted.
+
+
+``"green"``
+   Green.
+
+
+``"yellow"``
+   Yellow.
+
+
+``"red"``
+   Red.
+
+
+``"purple"``
+   Purple.
+
+
+
+.. _http-KSA.Engine:
+
+.. rubric:: Engine
+
+An engine. Obtained from :http:get:`/ksa/part/(id)/engine`.
+
+.. note::
+
+   An active engine fires when the vehicle's engines are on, at the vehicle's throttle.
+   See :http:get:`/ksa/control/(id)/engine-on` and :http:get:`/ksa/control/(id)/throttle`.
+
+
+A ``Engine`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/engine/(id)/part
+
+   The part the engine is in.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/engine/(id)/gimbals
+
+   The gimbals that steer the engine's nozzles. Empty if the engine has none.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :resjson list<KSA.Gimbal> value:
+
+
+
+
+.. http:get:: /ksa/engine/(id)/active
+
+   Whether the engine is active, as when its sequence is activated. Setting it returns
+   once the change has applied.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/engine/(id)/active
+
+   Whether the engine is active, as when its sequence is activated. Setting it returns
+   once the change has applied.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/engine/(id)/has-propellant
+
+   Whether the engine has propellant to burn.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/engine/(id)/minimum-throttle
+
+   The lowest throttle the engine runs at, between 0 and 1.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/engine/(id)/propellants
+
+   The names of the substances the engine burns. See :http:get:`/ksa/resource/(id)/name`.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :resjson list<string> value:
+
+
+
+
+.. http:get:: /ksa/engine/(id)/thrust
+
+   The thrust of the engine at its current throttle and the current atmospheric
+   pressure, in Newtons. Zero when it is not firing.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/engine/(id)/available-thrust
+
+   The thrust of the engine at full throttle and the current atmospheric pressure, in
+   Newtons. Zero when it is inactive or has no propellant.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/engine/(id)/specific-impulse
+
+   The specific impulse of the engine at the current atmospheric pressure, in seconds.
+   Zero when it is inactive or has no propellant.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:post:: /ksa/engine/(id)/available-thrust-at
+
+   The thrust of the engine at full throttle and the given atmospheric pressure, in
+   Newtons. Zero when it is inactive or has no propellant.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :reqjson float pressure: The atmospheric pressure, in pascals.
+   :resjson float value:
+
+
+
+
+
+.. http:post:: /ksa/engine/(id)/specific-impulse-at
+
+   The specific impulse of the engine at the given atmospheric pressure, in seconds.
+   Zero when it is inactive or has no propellant.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :reqjson float pressure: The atmospheric pressure, in pascals.
+   :resjson float value:
+
+
+
+
+
+.. http:get:: /ksa/engine/(id)/max-thrust
+
+   The thrust of the engine at full throttle and the current atmospheric pressure, in
+   Newtons, whether or not it is active and has propellant.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/engine/(id)/max-vacuum-thrust
+
+   The thrust of the engine at full throttle in a vacuum, in Newtons, whether or not
+   it is active and has propellant.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/engine/(id)/chamber-pressure
+
+   The pressure in the engine's combustion chamber, in pascals. Zero when it is not
+   firing.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/engine/(id)/solid
+
+   Whether the engine is a solid rocket motor. Once ignited, a solid motor burns at
+   full thrust until its grain runs out.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/engine/(id)/grain-mass
+
+   The mass of the propellant grain of a solid rocket motor, in kilograms.
+
+   .. note::
+
+      Some of the grain is left unburned when the motor burns out. Throws an exception
+      if the engine is not a solid rocket motor.
+
+
+   :param id: The identifier of the :ref:`Engine <http-KSA.Engine>` object.
+
+   :resjson float value:
+
+
+
+
+
+.. _http-KSA.Gimbal:
+
+.. rubric:: Gimbal
+
+A gimbal that steers an engine nozzle. Obtained from :http:get:`/ksa/part/(id)/gimbals` or
+:http:get:`/ksa/engine/(id)/gimbals`.
+
+.. note::
+
+   A gimbal turns about the y and z axes of its mount, which :http:post:`/ksa/gimbal/(id)/rotation` gives.
+   The flight computer steers it while an engine it belongs to is :http:get:`/ksa/gimbal/(id)/active`.
+
+
+A ``Gimbal`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/gimbal/(id)/part
+
+   The part the gimbal is in.
+
+
+   :param id: The identifier of the :ref:`Gimbal <http-KSA.Gimbal>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/gimbal/(id)/angle-y
+
+   The angle of the gimbal about its y axis, in degrees.
+
+
+   :param id: The identifier of the :ref:`Gimbal <http-KSA.Gimbal>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/gimbal/(id)/angle-z
+
+   The angle of the gimbal about its z axis, in degrees.
+
+
+   :param id: The identifier of the :ref:`Gimbal <http-KSA.Gimbal>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/gimbal/(id)/max-angle-y
+
+   The largest angle of the gimbal about its y axis, in degrees. Zero if it does not
+   turn about that axis.
+
+
+   :param id: The identifier of the :ref:`Gimbal <http-KSA.Gimbal>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/gimbal/(id)/max-angle-z
+
+   The largest angle of the gimbal about its z axis, in degrees. Zero if it does not
+   turn about that axis.
+
+
+   :param id: The identifier of the :ref:`Gimbal <http-KSA.Gimbal>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/gimbal/(id)/active
+
+   Whether an engine the gimbal steers is active.
+
+
+   :param id: The identifier of the :ref:`Gimbal <http-KSA.Gimbal>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /ksa/gimbal/(id)/rotation
+
+   The rotation of the gimbal's mount, whose y and z axes the gimbal turns about.
+
+
+   :param id: The identifier of the :ref:`Gimbal <http-KSA.Gimbal>` object.
+
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the rotation.
+   :resjson tuple<double, double, double, double> value:
+
+
+
+
+
+
+.. _http-KSA.RCS:
+
+.. rubric:: RCS
+
+The RCS thrusters of a part. Obtained from :http:get:`/ksa/part/(id)/rcs`.
+
+.. note::
+
+   Active thrusters fire when the vehicle's RCS is on. See :http:get:`/ksa/control/(id)/rcs`.
+
+
+A ``RCS`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/rcs/(id)/part
+
+   The part the thrusters are in.
+
+
+   :param id: The identifier of the :ref:`RCS <http-KSA.RCS>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/rcs/(id)/active
+
+   Whether the thrusters are active. Setting it returns once the change has applied.
+
+
+   :param id: The identifier of the :ref:`RCS <http-KSA.RCS>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/rcs/(id)/active
+
+   Whether the thrusters are active. Setting it returns once the change has applied.
+
+
+   :param id: The identifier of the :ref:`RCS <http-KSA.RCS>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+
+.. _http-KSA.Decoupler:
+
+.. rubric:: Decoupler
+
+A decoupler. Obtained from :http:get:`/ksa/part/(id)/decoupler`.
+
+A ``Decoupler`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/decoupler/(id)/part
+
+   The part the decoupler is in.
+
+
+   :param id: The identifier of the :ref:`Decoupler <http-KSA.Decoupler>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/decoupler/(id)/enabled
+
+   Whether the decoupler can fire.
+
+
+   :param id: The identifier of the :ref:`Decoupler <http-KSA.Decoupler>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/decoupler/(id)/decoupled
+
+   Whether the decoupler has fired, or is attached to nothing.
+
+
+   :param id: The identifier of the :ref:`Decoupler <http-KSA.Decoupler>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /ksa/decoupler/(id)/decouple
+
+   Fire the decoupler, separating the vehicle into two. Returns once it has fired.
+   Throws an exception if the decoupler is disabled or :http:get:`/ksa/decoupler/(id)/decoupled`.
+
+
+   :param id: The identifier of the :ref:`Decoupler <http-KSA.Decoupler>` object.
+
+   :resjson list<KSA.Vehicle> value: The vehicles that separated from this one.
+
+
+
+
+
+
+.. _http-KSA.Parachute:
+
+.. rubric:: Parachute
+
+A parachute. Obtained from :http:get:`/ksa/part/(id)/parachute`.
+
+A ``Parachute`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/parachute/(id)/part
+
+   The part the parachute is in.
+
+
+   :param id: The identifier of the :ref:`Parachute <http-KSA.Parachute>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/parachute/(id)/state
+
+   The state of the parachute.
+
+
+   :param id: The identifier of the :ref:`Parachute <http-KSA.Parachute>` object.
+
+   :resjson KSA.ParachuteState value:
+
+
+
+
+.. http:get:: /ksa/parachute/(id)/fill
+
+   How far the canopy is open, from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Parachute <http-KSA.Parachute>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/parachute/(id)/deploy-altitude
+
+   The height above the terrain at which an armed parachute deploys, in meters.
+
+
+   :param id: The identifier of the :ref:`Parachute <http-KSA.Parachute>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:get:: /ksa/parachute/(id)/can-cut
+
+   Whether the parachute can be cut away. Main parachutes cannot.
+
+
+   :param id: The identifier of the :ref:`Parachute <http-KSA.Parachute>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:post:: /ksa/parachute/(id)/deploy
+
+   Arm the parachute, so that it deploys at :http:get:`/ksa/parachute/(id)/deploy-altitude`. Returns once
+   it is armed. Throws an exception if it is not stowed.
+
+
+   :param id: The identifier of the :ref:`Parachute <http-KSA.Parachute>` object.
+
+
+
+
+
+
+.. http:post:: /ksa/parachute/(id)/cut
+
+   Cut the parachute away. Returns once it is cut. Throws an exception if it cannot
+   be cut. See :http:get:`/ksa/parachute/(id)/can-cut`.
+
+
+   :param id: The identifier of the :ref:`Parachute <http-KSA.Parachute>` object.
+
+
+
+
+
+
+
+.. _http-KSA.ParachuteState:
+
+.. rubric:: ParachuteState
+
+The state of a parachute. See :http:get:`/ksa/parachute/(id)/state`.
+
+Passed and returned as the name of one of its values:
+
+
+``"stowed"``
+   Packed away.
+
+
+``"armed"``
+   Waiting to deploy at :http:get:`/ksa/parachute/(id)/deploy-altitude`.
+
+
+``"line_stretch"``
+   Leaving the pack.
+
+
+``"reefed"``
+   Partly open, to limit the opening load.
+
+
+``"disreefing"``
+   Opening from reefed to full.
+
+
+``"full"``
+   Fully open.
+
+
+``"cut"``
+   Cut away.
+
+
+``"ripped"``
+   Torn by too much dynamic pressure.
+
+
+``"severed_lines"``
+   Lost after its lines broke under too much load.
+
+
+
+.. _http-KSA.DockingPort:
+
+.. rubric:: DockingPort
+
+A docking port. Obtained from :http:get:`/ksa/part/(id)/docking-port`.
+
+A ``DockingPort`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/docking-port/(id)/part
+
+   The part the docking port is in.
+
+
+   :param id: The identifier of the :ref:`DockingPort <http-KSA.DockingPort>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/docking-port/(id)/docked
+
+   Whether the port is docked.
+
+
+   :param id: The identifier of the :ref:`DockingPort <http-KSA.DockingPort>` object.
+
+   :resjson bool value:
+
+
+
+
+.. http:get:: /ksa/docking-port/(id)/docked-part
+
+   The part the port is docked to, or ``null`` if it is not docked.
+
+
+   :param id: The identifier of the :ref:`DockingPort <http-KSA.DockingPort>` object.
+
+   :resjson KSA.Part? value:
+
+
+
+
+.. http:get:: /ksa/docking-port/(id)/hatch-open
+
+   Returns whether the hatch through the docked ports is open, and opens or closes it.
+   An open hatch joins the habitat zones on either side.
+
+   .. note::
+
+      The hatch is closed while the port is not docked. Throws an exception when set on a
+      port that is not docked.
+
+
+   :param id: The identifier of the :ref:`DockingPort <http-KSA.DockingPort>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/docking-port/(id)/hatch-open
+
+   Returns whether the hatch through the docked ports is open, and opens or closes it.
+   An open hatch joins the habitat zones on either side.
+
+   .. note::
+
+      The hatch is closed while the port is not docked. Throws an exception when set on a
+      port that is not docked.
+
+
+   :param id: The identifier of the :ref:`DockingPort <http-KSA.DockingPort>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /ksa/docking-port/(id)/undock
+
+   Undock the port, separating the vehicle into two. Returns once it has undocked.
+   Throws an exception if the port is not docked.
+
+   .. note::
+
+      Docking and undocking replace the vehicles involved. See :ref:`Vehicle <http-KSA.Vehicle>`.
+
+
+   :param id: The identifier of the :ref:`DockingPort <http-KSA.DockingPort>` object.
+
+   :resjson list<KSA.Vehicle> value: The new vehicles.
+
+
+
+
+
+
+.. _http-KSA.Deployable:
+
+.. rubric:: Deployable
+
+A part that deploys and retracts, such as a landing leg, a solar panel or a service
+module door. Obtained from :http:get:`/ksa/part/(id)/deployables`.
+
+.. note::
+
+   Deploying or retracting a part moves its symmetric copies with it, as the part's menu
+   in the game does.
+
+
+A ``Deployable`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/deployable/(id)/part
+
+   The part the deployable is in.
+
+
+   :param id: The identifier of the :ref:`Deployable <http-KSA.Deployable>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/deployable/(id)/state
+
+   The state of the part.
+
+
+   :param id: The identifier of the :ref:`Deployable <http-KSA.Deployable>` object.
+
+   :resjson KSA.DeployableState value:
+
+
+
+
+.. http:post:: /ksa/deployable/(id)/deploy
+
+   Deploy the part. Returns once it has started to move.
+
+   .. note::
+
+      Throws an exception if the part is broken.
+
+
+   :param id: The identifier of the :ref:`Deployable <http-KSA.Deployable>` object.
+
+
+
+
+
+
+.. http:post:: /ksa/deployable/(id)/retract
+
+   Retract the part. Returns once it has started to move.
+
+   .. note::
+
+      Throws an exception if the part is broken.
+
+
+   :param id: The identifier of the :ref:`Deployable <http-KSA.Deployable>` object.
+
+
+
+
+
+
+
+.. _http-KSA.DeployableState:
+
+.. rubric:: DeployableState
+
+The state of a deployable part. See :http:get:`/ksa/deployable/(id)/state`.
+
+Passed and returned as the name of one of its values:
+
+
+``"deployed"``
+   Fully deployed.
+
+
+``"retracted"``
+   Fully retracted.
+
+
+``"deploying"``
+   Moving toward deployed.
+
+
+``"retracting"``
+   Moving toward retracted.
+
+
+``"broken"``
+   Broken, so it can no longer move.
+
+
+
+.. _http-KSA.MagneticScoop:
+
+.. rubric:: MagneticScoop
+
+A magnetic scoop, which collects gas from space into the vehicle's tanks. Obtained from
+:http:get:`/ksa/part/(id)/magnetic-scoops`.
+
+A ``MagneticScoop`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/magnetic-scoop/(id)/part
+
+   The part the scoop is in.
+
+
+   :param id: The identifier of the :ref:`MagneticScoop <http-KSA.MagneticScoop>` object.
+
+   :resjson KSA.Part value:
+
+
+
+
+.. http:get:: /ksa/magnetic-scoop/(id)/active
+
+   Whether the scoop is switched on.
+
+
+   :param id: The identifier of the :ref:`MagneticScoop <http-KSA.MagneticScoop>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/magnetic-scoop/(id)/active
+
+   Whether the scoop is switched on.
+
+
+   :param id: The identifier of the :ref:`MagneticScoop <http-KSA.MagneticScoop>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/magnetic-scoop/(id)/substance
+
+   The name of the substance the scoop collects. See :http:get:`/ksa/resource/(id)/name`.
+
+
+   :param id: The identifier of the :ref:`MagneticScoop <http-KSA.MagneticScoop>` object.
+
+   :resjson string value:
+
+
+
+
+.. http:get:: /ksa/magnetic-scoop/(id)/collection-rate
+
+   The rate the scoop collects gas at, in kilograms per second.
+
+
+   :param id: The identifier of the :ref:`MagneticScoop <http-KSA.MagneticScoop>` object.
+
+   :resjson float value:

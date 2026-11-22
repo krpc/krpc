@@ -91,6 +91,12 @@ Vehicle
 
    
 
+   .. function:: float dry_mass()
+
+      The mass of the vehicle's parts, without propellant or supplies, in kilograms.
+
+   
+
    .. function:: float propellant_mass()
 
       The mass of the propellant in the vehicle, in kilograms.
@@ -117,6 +123,65 @@ Vehicle
       current atmospheric pressure, in seconds. Zero when no engine is active.
 
    
+
+   .. function:: std::tuple<double, double, double> moment_of_inertia()
+
+      The vehicle's moments of inertia about the axes of :func:`Vehicle::reference_frame`
+      through its center of mass, in :math:`\mathrm{kg \cdot m^{2}}`.
+
+   
+
+   .. function:: std::vector<std::tuple<double, double, double>> inertia_tensor()
+
+      The vehicle's inertia tensor about its center of mass, along the axes of
+      :func:`Vehicle::reference_frame`, in :math:`\mathrm{kg \cdot m^{2}}`, as its three rows.
+
+   
+
+   .. function:: std::tuple<double, double, double> available_rcs_torque()
+
+      The torque the vehicle's RCS thrusters can give about each axis of its control
+      frame, in :math:`\mathrm{N \cdot m}`. Each is the smaller of the torques in the two
+      directions about the axis.
+
+   
+
+      .. note::
+
+         The control frame has the axes of :func:`Vehicle::reference_frame`, unless the flight
+         computer steers along the thrust. The thrusters give this torque while
+         :func:`Control::rcs` is on.
+
+   .. function:: std::tuple<double, double, double> acceleration(ReferenceFrame reference_frame)
+
+      The vehicle's acceleration from the forces on it other than gravity, in
+      :math:`\mathrm{m/s^{2}}`.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the acceleration.
+
+   
+
+      .. note::
+
+         The game measures it over the last physics step. Its length divided by standard
+         gravity is :func:`Flight::g_force`.
+
+   .. function:: std::tuple<double, double, double> angular_acceleration(ReferenceFrame reference_frame)
+
+      The vehicle's angular acceleration, in :math:`\mathrm{rad/s^{2}}`. The vector points
+      along the axis of rotation.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the angular acceleration.
+
+   
+
+      .. note::
+
+         The game measures it over the last physics step.
 
    .. function:: float peak_g_load()
 
@@ -187,6 +252,72 @@ Vehicle
 
    
 
+   .. function:: bool controllable()
+
+      Whether the vehicle can be flown. A vehicle needs a control module, and a crewed
+      vehicle with every kitten incapacitated also needs a probe core.
+
+   
+
+   .. function:: bool has_control_module()
+
+      Whether the vehicle has a control module, such as a capsule or a probe core.
+
+   
+
+   .. function:: ControlState control_state()
+
+      Whether the vehicle can be flown, or why not.
+
+   
+
+      .. note::
+
+         This is the reason the game gives when the vehicle does not respond to its controls.
+
+   .. function:: std::vector<CrewEvent> crew_events()
+
+      The most urgent coming event of each kitten in the vehicle, most urgent first.
+
+   
+
+      .. note::
+
+         The order is the game's crew clock's: events within a day come first, the worst
+         first. Empty while :func:`life_support_enabled` and
+         :func:`radiation_enabled` are both false.
+
+   .. function:: std::optional<CrewEvent> next_crew_event()
+
+      The most urgent of :func:`Vehicle::crew_events`, or ``NULL`` if there is none.
+
+   
+
+   .. function:: std::optional<LifeSupport> life_support()
+
+      How long the supplies of the vehicle's worst habitat zone last its crew, or
+      ``NULL`` if the vehicle has no habitats.
+
+   
+
+   .. function:: std::optional<Mission> mission()
+
+      The mission planned for the vehicle, or ``NULL`` if it has none.
+
+   
+
+   .. function:: std::vector<HabitatZone> habitat_zones()
+
+      The vehicle's habitat zones.
+
+   
+
+   .. function:: std::vector<Habitat> habitats()
+
+      The vehicle's habitats.
+
+   
+
    .. function:: std::vector<Engine> engines()
 
       The vehicle's engines.
@@ -238,6 +369,12 @@ Vehicle
    .. function:: std::vector<PowerConsumer> power_consumers()
 
       The vehicle's power consumers.
+
+   
+
+   .. function:: std::vector<Avionics> avionics()
+
+      The avionics of the vehicle's probe cores.
 
    
 
@@ -511,6 +648,58 @@ Vehicle
    .. enumerator:: bottomed
 
       At rest on terrain and in the ocean.
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: ControlState
+
+   Whether a vehicle can be flown, or why not. See :func:`Vehicle::control_state`.
+
+
+   .. enumerator:: controllable
+
+      The vehicle can be flown.
+
+
+   .. enumerator:: no_control_module
+
+      The vehicle has no control module, such as a capsule or a probe core.
+
+
+   .. enumerator:: no_crew
+
+      The capsules have no crew, and no probe core is on.
+
+
+   .. enumerator:: crew_incapacitated
+
+      Every kitten in the capsules is incapacitated, and no probe core is on.
+
+
+   .. enumerator:: probe_core_unpowered
+
+      The probe core has no power.
+
+
+   .. enumerator:: probe_core_off
+
+      The probe core is switched off.
+
+
+   .. enumerator:: probe_core_failed
+
+      The probe core has failed from its radiation dose.
+
+
+   .. enumerator:: probe_core_storm_standby
+
+      The probe core is on standby for a radiation storm.
+
+
+   .. enumerator:: probe_core_rebooting
+
+      The probe core is rebooting after a radiation upset.
 
 
 

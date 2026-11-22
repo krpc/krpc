@@ -10,6 +10,10 @@ Camera
 
    The game's main camera. Obtained from :func:`krpc_KSA_Camera`.
 
+   .. macro:: KRPC_CLASS_KSA_CAMERA
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Camera_Mode(krpc_connection_t connection, krpc_KSA_CameraMode_t * returnValue, krpc_KSA_Camera_t instance)
    .. function:: krpc_error_t krpc_KSA_Camera_set_Mode(krpc_connection_t connection, krpc_KSA_Camera_t instance, krpc_KSA_CameraMode_t value)
 
@@ -96,6 +100,11 @@ Camera
 .. type:: krpc_KSA_CameraMode_t
 
    The mode of the camera. See :func:`krpc_KSA_Camera_Mode`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_CAMERAMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_KSA_CAMERAMODE_ORBIT

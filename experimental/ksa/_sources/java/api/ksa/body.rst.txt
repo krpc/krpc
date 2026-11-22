@@ -8,7 +8,7 @@ Body
 
 .. type:: public class Body
 
-   A planet, moon or star. See :meth:`getBodies()`.
+   A planet, moon or star. See :meth:`KSA.getBodies()`.
 
    .. method:: String getName()
 
@@ -79,8 +79,8 @@ Body
    .. method:: float getScaleHeight()
 
 
-      The height over which the atmospheric pressure falls by a factor of ``e``, in
-      meters. Zero for a body with no atmosphere.
+      The height over which the atmospheric pressure falls by a factor of ``e`` at
+      sea level, in meters. Zero for a body with no atmosphere.
 
    
 
@@ -100,6 +100,38 @@ Body
       :param double altitude: Altitude above the body's mean radius, in meters.
    
 
+   .. method:: float temperatureAt(double altitude)
+
+      The temperature of the atmosphere at an altitude, in kelvin. Zero for a body with
+      no atmosphere, or above the atmosphere.
+
+      :param double altitude: Altitude above the body's mean radius, in meters.
+   
+
+   .. method:: float speedOfSoundAt(double altitude)
+
+      The speed of sound in the atmosphere at an altitude, in meters per second. Zero for
+      a body with no atmosphere, or above the atmosphere.
+
+      :param double altitude: Altitude above the body's mean radius, in meters.
+   
+
+   .. method:: float getAtmosphereOxygenFraction()
+
+
+      The fraction of the atmosphere that is oxygen, by volume. Zero for a body with no
+      atmosphere.
+
+   
+
+   .. method:: float getAtmosphereMolarMass()
+
+
+      The mean molar mass of the atmosphere, in kilograms per mole. Zero for a body with
+      no atmosphere.
+
+   
+
    .. method:: boolean getHasOcean()
 
 
@@ -112,6 +144,71 @@ Body
 
       The density of the ocean, in kilograms per cubic meter. Zero for a body with no
       ocean.
+
+   
+
+   .. method:: int getGeomagneticStormLevel()
+
+
+      The level of the geomagnetic storm at the body, from 0 for none to 5 for the most
+      severe. The G level of the game's space weather window. Zero for a body with no
+      magnetosphere.
+
+   
+
+   .. method:: float getDstIndex()
+
+
+      The disturbance storm time index of the body, in teslas. It falls below zero in a
+      geomagnetic storm. Zero for a body with no magnetosphere.
+
+   
+
+   .. method:: float getSolarActivity()
+
+
+      The activity of a star, from 0 at the minimum of its cycle to 1 at the maximum.
+      Zero for a body that is not a star.
+
+   
+
+   .. method:: boolean getSolarActivityRising()
+
+
+      Whether the activity of a star is rising toward the maximum of its cycle.
+      False for a body that is not a star, or a star with no cycle.
+
+   
+
+   .. method:: float getTimeToSolarActivityTurn()
+
+
+      The time until the activity of a star reaches the maximum or minimum of its cycle,
+      in seconds. Not a number for a body that is not a star, or a star with no cycle.
+
+   
+
+   .. method:: float getCoronalMassEjectionsPerDay()
+
+
+      The mean number of coronal mass ejections a star throws out per day, at its
+      current activity. Zero for a body that is not a star.
+
+   
+
+   .. method:: int getActiveRegionCount()
+
+
+      The number of active regions on a star, the sources of its eruptions. Zero for a
+      body that is not a star.
+
+   
+
+   .. method:: java.util.List<CoronalMassEjection> getRecentCoronalMassEjections()
+
+
+      The fast coronal mass ejections a star threw out in the last three days, as the
+      game's space weather window lists them. Empty for a body that is not a star.
 
    
 
@@ -192,7 +289,7 @@ Body
    .. method:: java.util.List<String> getLaunchSites()
 
 
-      The names of the launch sites on the body. See :meth:`launchVehicle(String, String)`.
+      The names of the launch sites on the body. See :meth:`KSA.launchVehicle(String, String)`.
 
    
 

@@ -16,21 +16,18 @@ Resources
       The name of the substance.
 
       :Attribute: Read-only, cannot be set
-      :rtype: string
 
    .. attribute:: amount: number
 
       The mass of the substance held, in kilograms.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: max: number
 
       The mass of the substance the tanks can hold, in kilograms.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
 
 
@@ -43,42 +40,36 @@ Resources
       The part the tank is in.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: volume: number
 
       The volume of the tank, in cubic meters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: rated_pressure: number
 
       The pressure the tank stores gas at, in pascals. Zero if the tank cannot store gas.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: filled_fraction: number
 
       The fraction of the tank's volume that is filled, between 0 and 1.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: propellant_use_enabled: boolean
 
       Whether engines can draw propellant from the tank.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: transfer_mode: KSA.TankTransferMode
 
       The direction the tank transfers propellant in.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.TankTransferMode`
 
       .. note::
 
@@ -119,28 +110,24 @@ Resources
       One of the parts the link joins.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: part_b: KSA.Part
 
       The other part the link joins.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Part`
 
    .. attribute:: flow: KSA.FuelLinkFlow
 
       The direction propellant flows through the link.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.FuelLinkFlow`
 
    .. attribute:: enabled: boolean
 
       Whether propellant can flow through the link.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
 
 

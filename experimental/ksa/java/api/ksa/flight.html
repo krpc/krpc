@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Flight &#8212; kRPC v0.2.0 documentation</title>
+    <title>Flight &#8212; kRPC v0.3.0 documentation</title>
   
   
   
@@ -26,35 +26,37 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5ab7b574" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'java/api/ksa/flight';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/external-links.js?v=e8892020"></script>
     <link rel="icon" href="../../../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Orbit" href="orbit.html" />
+    <link rel="next" title="Space Weather" href="space-weather.html" />
     <link rel="prev" title="Body" href="body.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.0" />
+  <meta name="docsearch:version" content="0.3.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -102,7 +104,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -206,14 +208,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -248,7 +250,7 @@
   
 
   
-    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -262,7 +264,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -333,14 +335,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -386,8 +388,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -397,6 +401,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -410,8 +419,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -421,6 +432,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -434,8 +450,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -445,6 +463,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -458,8 +481,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -469,6 +494,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -482,8 +512,10 @@
 <li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
 <li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
@@ -493,6 +525,42 @@
 <li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../js.html">JavaScript</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -506,8 +574,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -517,6 +587,42 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../http.html">HTTP</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -532,8 +638,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -546,6 +654,11 @@
 </ul>
 </details></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 </ul>
@@ -585,7 +698,7 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../../../index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     
@@ -623,7 +736,7 @@
 Obtained from <a class="reference internal" href="vehicle.html#krpc.client.services.KSA.Vehicle.getFlight()" title="krpc.client.services.KSA.Vehicle.getFlight()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vehicle.getFlight()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getMeanAltitude()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getMeanAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getMeanAltitude()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getMeanAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getMeanAltitude()" title="Link to this definition">#</a></dt>
 <dd><p>The altitude above the mean radius of the body, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -634,7 +747,7 @@ Obtained from <a class="reference internal" href="vehicle.html#krpc.client.servi
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getSurfaceAltitude()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getSurfaceAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getSurfaceAltitude()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getSurfaceAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getSurfaceAltitude()" title="Link to this definition">#</a></dt>
 <dd><p>The altitude above the terrain or the ocean surface, whichever is higher, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -645,7 +758,7 @@ Obtained from <a class="reference internal" href="vehicle.html#krpc.client.servi
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getBedrockAltitude()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getBedrockAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getBedrockAltitude()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getBedrockAltitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getBedrockAltitude()" title="Link to this definition">#</a></dt>
 <dd><p>The altitude above the terrain, in meters. Over the sea, this is the altitude above
 the sea floor.</p>
 <dl class="field-list simple">
@@ -657,7 +770,7 @@ the sea floor.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getElevation()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getElevation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getElevation()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getElevation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getElevation()" title="Link to this definition">#</a></dt>
 <dd><p>The height of the terrain below the vehicle, in meters above the mean radius of the
 body. Below the sea, this is the height of the sea floor.</p>
 <dl class="field-list simple">
@@ -669,7 +782,7 @@ body. Below the sea, this is the height of the sea floor.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getTimeToImpact()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTimeToImpact</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getTimeToImpact()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getTimeToImpact</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getTimeToImpact()" title="Link to this definition">#</a></dt>
 <dd><p>The time until the vehicle hits the surface on its current trajectory, in seconds.
 Not a number if its trajectory does not hit the surface.</p>
 <dl class="field-list simple">
@@ -686,7 +799,7 @@ shortly after.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getLatitude()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getLatitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getLatitude()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getLatitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getLatitude()" title="Link to this definition">#</a></dt>
 <dd><p>The latitude of the vehicle, in degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -697,7 +810,7 @@ shortly after.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getLongitude()">
- <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getLongitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getLongitude()" title="Link to this definition">#</a></dt>
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getLongitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getLongitude()" title="Link to this definition">#</a></dt>
 <dd><p>The longitude of the vehicle, in degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -708,7 +821,7 @@ shortly after.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getBiome()">
- <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getBiome</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getBiome()" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getBiome</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getBiome()" title="Link to this definition">#</a></dt>
 <dd><p>The biome below the vehicle, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if the body has no biomes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -719,7 +832,7 @@ shortly after.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getSpeed()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getSpeed()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getSpeed()" title="Link to this definition">#</a></dt>
 <dd><p>The speed of the vehicle relative to the surface, in meters per second.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -730,7 +843,7 @@ shortly after.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getHorizontalSpeed()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getHorizontalSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getHorizontalSpeed()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getHorizontalSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getHorizontalSpeed()" title="Link to this definition">#</a></dt>
 <dd><p>The horizontal speed of the vehicle relative to the surface, in meters per second.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -741,7 +854,7 @@ shortly after.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getVerticalSpeed()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVerticalSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getVerticalSpeed()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVerticalSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getVerticalSpeed()" title="Link to this definition">#</a></dt>
 <dd><p>The vertical speed of the vehicle relative to the surface, in meters per second.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -752,7 +865,7 @@ shortly after.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getPitch()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getPitch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getPitch()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getPitch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getPitch()" title="Link to this definition">#</a></dt>
 <dd><p>The pitch of the vehicle relative to the horizon, in degrees.
 A value between -90° and +90°.</p>
 <dl class="field-list simple">
@@ -764,7 +877,7 @@ A value between -90° and +90°.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getHeading()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getHeading</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getHeading()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getHeading</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getHeading()" title="Link to this definition">#</a></dt>
 <dd><p>The heading of the vehicle (its angle relative to north), in degrees.
 A value between 0° and 360°.</p>
 <dl class="field-list simple">
@@ -776,7 +889,7 @@ A value between 0° and 360°.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getRoll()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getRoll</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getRoll()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getRoll</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getRoll()" title="Link to this definition">#</a></dt>
 <dd><p>The roll of the vehicle relative to the horizon, in degrees.
 A value between -180° and +180°.</p>
 <dl class="field-list simple">
@@ -788,7 +901,7 @@ A value between -180° and +180°.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getStaticPressure()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStaticPressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getStaticPressure()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStaticPressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getStaticPressure()" title="Link to this definition">#</a></dt>
 <dd><p>The static atmospheric pressure at the vehicle, in pascals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -799,7 +912,7 @@ A value between -180° and +180°.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getAtmosphereDensity()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAtmosphereDensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getAtmosphereDensity()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAtmosphereDensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getAtmosphereDensity()" title="Link to this definition">#</a></dt>
 <dd><p>The density of the atmosphere at the vehicle, in kilograms per cubic meter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -809,8 +922,55 @@ A value between -180° and +180°.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getStaticAirTemperature()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStaticAirTemperature</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getStaticAirTemperature()" title="Link to this definition">#</a></dt>
+<dd><p>The temperature of the atmosphere at the vehicle, in kelvin. Zero outside the
+atmosphere.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getSpeedOfSound()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSpeedOfSound</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getSpeedOfSound()" title="Link to this definition">#</a></dt>
+<dd><p>The speed of sound in the atmosphere at the vehicle, in meters per second. Zero
+outside the atmosphere.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getMach()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMach</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getMach()" title="Link to this definition">#</a></dt>
+<dd><p>The speed of the vehicle relative to the surface, as a multiple of the speed of
+sound. Zero outside the atmosphere.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getOutsideAir()">
+<a class="reference internal" href="#krpc.client.services.KSA.OutsideAir" title="krpc.client.services.KSA.OutsideAir"><span class="pre">OutsideAir</span></a> <span class="sig-name descname"><span class="pre">getOutsideAir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getOutsideAir()" title="Link to this definition">#</a></dt>
+<dd><p>Whether a kitten can breathe the air outside the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getDynamicPressure()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDynamicPressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getDynamicPressure()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDynamicPressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getDynamicPressure()" title="Link to this definition">#</a></dt>
 <dd><p>The dynamic pressure acting on the vehicle, in pascals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -820,8 +980,47 @@ A value between -180° and +180°.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getDepth()">
+<span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDepth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getDepth()" title="Link to this definition">#</a></dt>
+<dd><p>The depth of the vehicle’s center of mass below the ocean surface, in meters. Zero
+above the surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ocean surface includes its waves.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getSubmergedPortion()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSubmergedPortion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getSubmergedPortion()" title="Link to this definition">#</a></dt>
+<dd><p>The fraction of the vehicle’s volume below the ocean surface, between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getBuoyantForce()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getBuoyantForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getBuoyantForce()" title="Link to this definition">#</a></dt>
+<dd><p>The buoyant force on the vehicle from the ocean and the atmosphere, in newtons. It
+acts against gravity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getDoseRate()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDoseRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getDoseRate()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDoseRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getDoseRate()" title="Link to this definition">#</a></dt>
 <dd><p>The radiation dose rate at the vehicle, in sieverts per second. Includes any solar
 particle event under way.</p>
 <dl class="field-list simple">
@@ -833,7 +1032,7 @@ particle event under way.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getOrbitAverageDoseRate()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getOrbitAverageDoseRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getOrbitAverageDoseRate()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getOrbitAverageDoseRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getOrbitAverageDoseRate()" title="Link to this definition">#</a></dt>
 <dd><p>The radiation dose rate averaged over the vehicle’s orbit, in sieverts per second.
 Includes any solar particle event under way. Not a number if the body has no
 magnetosphere, or the orbit dips below the surface.</p>
@@ -845,8 +1044,79 @@ magnetosphere, or the orbit dips below the surface.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getSolarWindSpeed()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSolarWindSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getSolarWindSpeed()" title="Link to this definition">#</a></dt>
+<dd><p>The speed of the solar wind at the vehicle, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>. Zero if no star
+has a solar wind.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getSolarWindPressure()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSolarWindPressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getSolarWindPressure()" title="Link to this definition">#</a></dt>
+<dd><p>The dynamic pressure of the solar wind at the vehicle, in pascals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getSolarWindNorthwardField()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSolarWindNorthwardField</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getSolarWindNorthwardField()" title="Link to this definition">#</a></dt>
+<dd><p>The northward component of the magnetic field carried by the solar wind at the
+vehicle, in teslas. A southward field, a negative value, drives geomagnetic storms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getProtonFlux()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getProtonFlux</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getProtonFlux()" title="Link to this definition">#</a></dt>
+<dd><p>The flux of solar energetic protons at the vehicle during a solar particle event, in
+protons per square centimeter per second per steradian. Zero outside an event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getRadiationStormLevel()">
+<span class="pre">int</span> <span class="sig-name descname"><span class="pre">getRadiationStormLevel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getRadiationStormLevel()" title="Link to this definition">#</a></dt>
+<dd><p>The level of the radiation storm at the vehicle, from 0 for none to 5 for the
+most severe. The S level of the game’s space weather window.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getIncomingCoronalMassEjections()">
+<a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/package-summary.html" title="java.util"><span class="pre">java.util</span></a><span class="pre">.</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="space-weather.html#krpc.client.services.KSA.CoronalMassEjection" title="krpc.client.services.KSA.CoronalMassEjection"><span class="pre">CoronalMassEjection</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getIncomingCoronalMassEjections</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getIncomingCoronalMassEjections()" title="Link to this definition">#</a></dt>
+<dd><p>The coronal mass ejections heading for the vehicle, as the game’s space weather
+window lists them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getGForce()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getGForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getGForce()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getGForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getGForce()" title="Link to this definition">#</a></dt>
 <dd><p>The acceleration of the vehicle, excluding gravity, in multiples of standard
 gravity.</p>
 <dl class="field-list simple">
@@ -858,7 +1128,7 @@ gravity.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getAngleOfAttack()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAngleOfAttack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getAngleOfAttack()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAngleOfAttack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getAngleOfAttack()" title="Link to this definition">#</a></dt>
 <dd><p>The angle between the direction the vehicle points in and its velocity relative to
 the surface, in the vehicle’s pitch plane, in degrees. Positive when the nose is
 above the velocity.</p>
@@ -871,7 +1141,7 @@ above the velocity.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getSideslipAngle()">
- <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSideslipAngle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getSideslipAngle()" title="Link to this definition">#</a></dt>
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSideslipAngle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getSideslipAngle()" title="Link to this definition">#</a></dt>
 <dd><p>The angle between the direction the vehicle points in and its velocity relative to
 the surface, in the vehicle’s yaw plane, in degrees. Positive when the nose is to
 the right of the velocity.</p>
@@ -883,8 +1153,91 @@ the right of the velocity.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getDrag()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDrag</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getDrag()" title="Link to this definition">#</a></dt>
+<dd><p>The part of the aerodynamic force along the airflow, in newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.getLift()">
+<span class="pre">float</span> <span class="sig-name descname"><span class="pre">getLift</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.getLift()" title="Link to this definition">#</a></dt>
+<dd><p>The part of the aerodynamic force across the airflow, in newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.aerodynamicForce(ReferenceFrame)">
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">aerodynamicForce</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.aerodynamicForce(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The aerodynamic force on the vehicle, in newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame of the force.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game computes the force from the surfaces of the vehicle’s hull.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.aerodynamicTorque(ReferenceFrame)">
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">aerodynamicTorque</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.aerodynamicTorque(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The aerodynamic torque on the vehicle about its center of mass, in
+<span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>. The vector points along the axis of the torque.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame of the torque.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.simulateAerodynamicForceAt(Body, org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame)">
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">simulateAerodynamicForceAt</span></span><span class="sig-paren">(</span><a class="reference internal" href="body.html#krpc.client.services.KSA.Body" title="krpc.client.services.KSA.Body"><span class="pre">Body</span></a><em> <span class="pre">body</span></em>, <a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">position</span></em>, <a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">velocity</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.simulateAerodynamicForceAt(Body, org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The aerodynamic force the vehicle would have at a given position and velocity, in
+its current attitude and rotation, in newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<span><a class="reference internal" href="body.html#krpc.client.services.KSA.Body" title="krpc.client.services.KSA.Body"><code class="xref java java-type docutils literal notranslate"><span class="pre">Body</span></code></a></span>) – The body whose atmosphere the vehicle flies through.</p></li>
+<li><p><strong>position</strong> (<span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;</span></code></a></span>) – The position, in meters.</p></li>
+<li><p><strong>velocity</strong> (<span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;</span></code></a></span>) – The velocity, in meters per second.</p></li>
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame of the position, velocity and force.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The atmosphere moves with the body’s rotation.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.prograde(ReferenceFrame)">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><span class="pre">Triplet</span><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">prograde</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.prograde(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">prograde</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.prograde(ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The unit vector of the vehicle’s velocity relative to the surface.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -900,7 +1253,7 @@ the right of the velocity.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.normal(ReferenceFrame)">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><span class="pre">Triplet</span><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">normal</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.normal(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">normal</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.normal(ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The unit vector normal to the plane of the vehicle’s position and its velocity
 relative to the surface.</p>
 <dl class="field-list simple">
@@ -917,7 +1270,7 @@ relative to the surface.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.KSA.Flight.radial(ReferenceFrame)">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><span class="pre">Triplet</span><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">radial</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.radial(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/package-summary.html" title="org.javatuples"><span class="pre">org.javatuples</span></a><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">radial</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.KSA.ReferenceFrame" title="krpc.client.services.KSA.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Flight.radial(ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The unit vector pointing radially outward, perpendicular to <a class="reference internal" href="#krpc.client.services.KSA.Flight.prograde(ReferenceFrame)" title="krpc.client.services.KSA.Flight.prograde(ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Flight.prograde(ReferenceFrame)</span></code></a>
 and <a class="reference internal" href="#krpc.client.services.KSA.Flight.normal(ReferenceFrame)" title="krpc.client.services.KSA.Flight.normal(ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Flight.normal(ReferenceFrame)</span></code></a>.</p>
 <dl class="field-list simple">
@@ -930,6 +1283,37 @@ and <a class="reference internal" href="#krpc.client.services.KSA.Flight.normal(
 <dd class="field-even"><p>Flight</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.OutsideAir">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">OutsideAir</span></span><a class="headerlink" href="#krpc.client.services.KSA.OutsideAir" title="Link to this definition">#</a></dt>
+<dd><p>Whether a kitten can breathe the air outside a vehicle. See
+<a class="reference internal" href="#krpc.client.services.KSA.Flight.getOutsideAir()" title="krpc.client.services.KSA.Flight.getOutsideAir()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Flight.getOutsideAir()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.OutsideAir.NO_ATMOSPHERE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.OutsideAir" title="krpc.client.services.KSA.OutsideAir"><span class="pre">OutsideAir</span></a> <span class="sig-name descname"><span class="pre">NO_ATMOSPHERE</span></span><a class="headerlink" href="#krpc.client.services.KSA.OutsideAir.NO_ATMOSPHERE" title="Link to this definition">#</a></dt>
+<dd><p>Outside the atmosphere, or at a body with none.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.OutsideAir.NO_OXYGEN">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.OutsideAir" title="krpc.client.services.KSA.OutsideAir"><span class="pre">OutsideAir</span></a> <span class="sig-name descname"><span class="pre">NO_OXYGEN</span></span><a class="headerlink" href="#krpc.client.services.KSA.OutsideAir.NO_OXYGEN" title="Link to this definition">#</a></dt>
+<dd><p>An atmosphere with no oxygen.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.OutsideAir.TOO_THIN">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.OutsideAir" title="krpc.client.services.KSA.OutsideAir"><span class="pre">OutsideAir</span></a> <span class="sig-name descname"><span class="pre">TOO_THIN</span></span><a class="headerlink" href="#krpc.client.services.KSA.OutsideAir.TOO_THIN" title="Link to this definition">#</a></dt>
+<dd><p>An atmosphere whose oxygen pressure is too low to breathe.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.OutsideAir.BREATHABLE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.KSA.OutsideAir" title="krpc.client.services.KSA.OutsideAir"><span class="pre">OutsideAir</span></a> <span class="sig-name descname"><span class="pre">BREATHABLE</span></span><a class="headerlink" href="#krpc.client.services.KSA.OutsideAir.BREATHABLE" title="Link to this definition">#</a></dt>
+<dd><p>Breathable air.</p>
 </dd></dl>
 
 </dd></dl>
@@ -956,11 +1340,11 @@ and <a class="reference internal" href="#krpc.client.services.KSA.Flight.normal(
       </div>
     </a>
     <a class="right-next"
-       href="orbit.html"
+       href="space-weather.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Orbit</p>
+        <p class="prev-next-title">Space Weather</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -971,7 +1355,7 @@ and <a class="reference internal" href="#krpc.client.services.KSA.Flight.normal(
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -997,8 +1381,8 @@ and <a class="reference internal" href="#krpc.client.services.KSA.Flight.normal(
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1031,7 +1415,7 @@ and <a class="reference internal" href="#krpc.client.services.KSA.Flight.normal(
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

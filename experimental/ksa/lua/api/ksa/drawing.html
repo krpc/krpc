@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Drawing &#8212; kRPC v0.2.0 documentation</title>
+    <title>Drawing &#8212; kRPC v0.3.0 documentation</title>
   
   
   
@@ -26,23 +26,24 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5ab7b574" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'lua/api/ksa/drawing';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/external-links.js?v=e8892020"></script>
@@ -54,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.0" />
+  <meta name="docsearch:version" content="0.3.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -102,7 +103,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -206,14 +207,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -248,7 +249,7 @@
   
 
   
-    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -262,7 +263,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -333,14 +334,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -386,8 +387,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -397,6 +400,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -410,8 +418,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -421,6 +431,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -434,8 +449,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -445,6 +462,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -458,8 +480,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -469,6 +493,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -482,8 +511,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -493,6 +524,42 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../js.html">JavaScript</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -506,8 +573,10 @@
 <li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
@@ -517,6 +586,42 @@
 <li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../http.html">HTTP</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -532,8 +637,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -546,6 +653,11 @@
 </ul>
 </details></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 </ul>
@@ -585,7 +697,7 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../../../index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     
@@ -617,8 +729,8 @@
   <section id="drawing">
 <h1>Drawing<a class="headerlink" href="#drawing" title="Link to this heading">#</a></h1>
 <dl class="lua class">
-<dt class="sig sig-object lua" id="KSA.Drawing">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Drawing</span></span><a class="headerlink" href="#KSA.Drawing" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Drawing">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Drawing</span></span><a class="headerlink" href="#lua-KSA.Drawing" title="Link to this definition">#</a></dt>
 <dd><p>Draws lines, shapes and text in the scene, each placed in a reference frame.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -626,170 +738,146 @@
 added them disconnects. Lines are drawn at the game’s fixed gizmo width.</p>
 </div>
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.Drawing.add_line">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">start</span></em>, <em class="sig-param"><span class="pre">end</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Drawing.add_line" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Drawing.add_line">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_line</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KSA.Line" title="KSA.Line"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.Line</span></code></a><a class="headerlink" href="#lua-KSA.Drawing.add_line" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a line between two positions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>start</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The position of the start of the line, in meters.</p></li>
-<li><p><strong>end</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The position of the end of the line, in meters.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the positions.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the line is visible.</p></li>
+<li><p><strong>start</strong> – The position of the start of the line, in meters.</p></li>
+<li><p><strong>end</strong> – The position of the end of the line, in meters.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame of the positions.</p></li>
+<li><p><strong>visible</strong> – Whether the line is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#KSA.Line" title="KSA.Line"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Line</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.Drawing.add_direction">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">direction</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">length</span> <span class="pre">=</span> <span class="pre">1e+01</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Drawing.add_direction" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Drawing.add_direction">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_direction</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">length</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KSA.Line" title="KSA.Line"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.Line</span></code></a><a class="headerlink" href="#lua-KSA.Drawing.add_direction" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a line from the origin of a reference frame in a direction.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>direction</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The direction of the line.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the direction.</p></li>
-<li><p><strong>length</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The length of the line, in meters.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the line is visible.</p></li>
+<li><p><strong>direction</strong> – The direction of the line.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame of the direction.</p></li>
+<li><p><strong>length</strong> – The length of the line, in meters. Defaults to <code class="docutils literal notranslate"><span class="pre">1e+01</span></code>.</p></li>
+<li><p><strong>visible</strong> – Whether the line is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#KSA.Line" title="KSA.Line"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Line</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.Drawing.add_polyline">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_polyline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vertices</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">closed</span> <span class="pre">=</span> <span class="pre">false</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Drawing.add_polyline" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Drawing.add_polyline">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_polyline</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">closed</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KSA.Polyline" title="KSA.Polyline"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.Polyline</span></code></a><a class="headerlink" href="#lua-KSA.Drawing.add_polyline" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a line through a list of positions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>vertices</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span>) – The positions the line passes through, in meters.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the positions.</p></li>
-<li><p><strong>closed</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the line joins the last position back to the first.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the line is visible.</p></li>
+<li><p><strong>vertices</strong> – The positions the line passes through, in meters.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame of the positions.</p></li>
+<li><p><strong>closed</strong> – Whether the line joins the last position back to the first. Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><strong>visible</strong> – Whether the line is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#KSA.Polyline" title="KSA.Polyline"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Polyline</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.Drawing.add_circle">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_circle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">center</span></em>, <em class="sig-param"><span class="pre">normal</span></em>, <em class="sig-param"><span class="pre">radius</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Drawing.add_circle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Drawing.add_circle">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_circle</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">normal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KSA.Circle" title="KSA.Circle"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.Circle</span></code></a><a class="headerlink" href="#lua-KSA.Drawing.add_circle" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a circle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>center</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The position of the center of the circle, in meters.</p></li>
-<li><p><strong>normal</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The direction normal to the plane of the circle.</p></li>
-<li><p><strong>radius</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The radius of the circle, in meters.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the position and direction.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the circle is visible.</p></li>
+<li><p><strong>center</strong> – The position of the center of the circle, in meters.</p></li>
+<li><p><strong>normal</strong> – The direction normal to the plane of the circle.</p></li>
+<li><p><strong>radius</strong> – The radius of the circle, in meters.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame of the position and direction.</p></li>
+<li><p><strong>visible</strong> – Whether the circle is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#KSA.Circle" title="KSA.Circle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Circle</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.Drawing.add_arc">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_arc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">center</span></em>, <em class="sig-param"><span class="pre">normal</span></em>, <em class="sig-param"><span class="pre">start_direction</span></em>, <em class="sig-param"><span class="pre">angle</span></em>, <em class="sig-param"><span class="pre">radius</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Drawing.add_arc" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Drawing.add_arc">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_arc</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">normal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">start_direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KSA.Arc" title="KSA.Arc"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.Arc</span></code></a><a class="headerlink" href="#lua-KSA.Drawing.add_arc" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw an arc of a circle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>center</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The position of the center of the arc’s circle, in meters.</p></li>
-<li><p><strong>normal</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The direction normal to the plane of the arc.</p></li>
-<li><p><strong>start_direction</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The direction from the center to the start of the arc.</p></li>
-<li><p><strong>angle</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The angle the arc turns through, counterclockwise about the normal, in radians.</p></li>
-<li><p><strong>radius</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The radius of the arc, in meters.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the position and directions.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the arc is visible.</p></li>
+<li><p><strong>center</strong> – The position of the center of the arc’s circle, in meters.</p></li>
+<li><p><strong>normal</strong> – The direction normal to the plane of the arc.</p></li>
+<li><p><strong>start_direction</strong> – The direction from the center to the start of the arc.</p></li>
+<li><p><strong>angle</strong> – The angle the arc turns through, counterclockwise about the normal, in radians.</p></li>
+<li><p><strong>radius</strong> – The radius of the arc, in meters.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame of the position and directions.</p></li>
+<li><p><strong>visible</strong> – Whether the arc is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#KSA.Arc" title="KSA.Arc"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Arc</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.Drawing.add_box">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">center</span></em>, <em class="sig-param"><span class="pre">size</span></em>, <em class="sig-param"><span class="pre">rotation</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Drawing.add_box" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Drawing.add_box">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_box</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KSA.Box" title="KSA.Box"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.Box</span></code></a><a class="headerlink" href="#lua-KSA.Drawing.add_box" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw the edges of a box.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>center</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The position of the center of the box, in meters.</p></li>
-<li><p><strong>size</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The lengths of the box’s edges along its x, y and z axes, in meters.</p></li>
-<li><p><strong>rotation</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The rotation of the box’s axes, as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the position and rotation.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the box is visible.</p></li>
+<li><p><strong>center</strong> – The position of the center of the box, in meters.</p></li>
+<li><p><strong>size</strong> – The lengths of the box’s edges along its x, y and z axes, in meters.</p></li>
+<li><p><strong>rotation</strong> – The rotation of the box’s axes, as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame of the position and rotation.</p></li>
+<li><p><strong>visible</strong> – Whether the box is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#KSA.Box" title="KSA.Box"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Box</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.Drawing.add_sphere">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">center</span></em>, <em class="sig-param"><span class="pre">radius</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Drawing.add_sphere" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Drawing.add_sphere">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_sphere</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KSA.Sphere" title="KSA.Sphere"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.Sphere</span></code></a><a class="headerlink" href="#lua-KSA.Drawing.add_sphere" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw a solid sphere.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>center</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The position of the center of the sphere, in meters.</p></li>
-<li><p><strong>radius</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The radius of the sphere, in meters.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the position.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the sphere is visible.</p></li>
+<li><p><strong>center</strong> – The position of the center of the sphere, in meters.</p></li>
+<li><p><strong>radius</strong> – The radius of the sphere, in meters.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame of the position.</p></li>
+<li><p><strong>visible</strong> – Whether the sphere is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#KSA.Sphere" title="KSA.Sphere"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Sphere</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.Drawing.add_text">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">text</span></em>, <em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">size</span> <span class="pre">=</span> <span class="pre">16.0</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Drawing.add_text" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Drawing.add_text">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_text</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">size</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">visible</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lua-KSA.Text" title="KSA.Text"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.Text</span></code></a><a class="headerlink" href="#lua-KSA.Drawing.add_text" title="Link to this definition">#</a><br /></dt>
 <dd><p>Draw text over the scene, centered on a position.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>text</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The text.</p></li>
-<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The position of the center of the text, in meters.</p></li>
-<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the position.</p></li>
-<li><p><strong>size</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The height of the font, in pixels.</p></li>
-<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the text is visible.</p></li>
+<li><p><strong>text</strong> – The text.</p></li>
+<li><p><strong>position</strong> – The position of the center of the text, in meters.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame of the position.</p></li>
+<li><p><strong>size</strong> – The height of the font, in pixels. Defaults to <code class="docutils literal notranslate"><span class="pre">16.0</span></code>.</p></li>
+<li><p><strong>visible</strong> – Whether the text is visible. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#KSA.Text" title="KSA.Text"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Text</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.Drawing.clear">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">client_only</span> <span class="pre">=</span> <span class="pre">false</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Drawing.clear" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Drawing.clear">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="p"><span class="pre">(</span></span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">client_only</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-KSA.Drawing.clear" title="Link to this definition">#</a></dt>
 <dd><p>Remove the drawing objects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>client_only</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether to remove only the objects added by the calling client.</p>
+<dd class="field-odd"><p><strong>client_only</strong> – Whether to remove only the objects added by the calling client. Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -797,666 +885,543 @@ added them disconnects. Lines are drawn at the game’s fixed gizmo width.</p>
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="KSA.Line">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Line</span></span><a class="headerlink" href="#KSA.Line" title="Link to this definition">#</a></dt>
-<dd><p>A line. Created using <a class="reference internal" href="#KSA.Drawing.add_line" title="KSA.Drawing.add_line"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_line()</span></code></a> or <a class="reference internal" href="#KSA.Drawing.add_direction" title="KSA.Drawing.add_direction"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_direction()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-KSA.Line">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Line</span></span><a class="headerlink" href="#lua-KSA.Line" title="Link to this definition">#</a></dt>
+<dd><p>A line. Created using <a class="reference internal" href="#lua-KSA.Drawing.add_line" title="KSA.Drawing.add_line"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_line()</span></code></a> or <a class="reference internal" href="#lua-KSA.Drawing.add_direction" title="KSA.Drawing.add_direction"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_direction()</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Line.start">
-<span class="sig-name descname"><span class="pre">start</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#KSA.KSA.Line.start" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Line.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.Line.start" title="Link to this definition">#</a></dt>
 <dd><p>The start position of the line, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Line.end">
-<span class="sig-name descname"><span class="pre">end</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#KSA.KSA.Line.end" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Line.end">
+<span class="sig-name descname"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.Line.end" title="Link to this definition">#</a></dt>
 <dd><p>The end position of the line, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Line.reference_frame">
-<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">KSA.ReferenceFrame</span><a class="headerlink" href="#KSA.KSA.Line.reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Line.reference_frame">
+<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-KSA.Line.reference_frame" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame for the positions and directions of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Line.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#KSA.KSA.Line.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Line.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KSA.Line.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Line.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">StdLib.ColorRGB</span><a class="headerlink" href="#KSA.KSA.Line.color" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Line.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code><a class="headerlink" href="#lua-KSA.Line.color" title="Link to this definition">#</a></dt>
 <dd><p>The color of the object, as an RGB triple with components from 0 to 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="KSA.Line.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Line.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Line.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-KSA.Line.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the object.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="KSA.Polyline">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Polyline</span></span><a class="headerlink" href="#KSA.Polyline" title="Link to this definition">#</a></dt>
-<dd><p>A line through a list of points. Created using <a class="reference internal" href="#KSA.Drawing.add_polyline" title="KSA.Drawing.add_polyline"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_polyline()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-KSA.Polyline">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Polyline</span></span><a class="headerlink" href="#lua-KSA.Polyline" title="Link to this definition">#</a></dt>
+<dd><p>A line through a list of points. Created using <a class="reference internal" href="#lua-KSA.Drawing.add_polyline" title="KSA.Drawing.add_polyline"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_polyline()</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Polyline.vertices">
-<span class="sig-name descname"><span class="pre">vertices</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">List</span><a class="headerlink" href="#KSA.KSA.Polyline.vertices" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Polyline.vertices">
+<span class="sig-name descname"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-KSA.Polyline.vertices" title="Link to this definition">#</a></dt>
 <dd><p>The points the line passes through, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Polyline.closed">
-<span class="sig-name descname"><span class="pre">closed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#KSA.KSA.Polyline.closed" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Polyline.closed">
+<span class="sig-name descname"><span class="pre">closed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KSA.Polyline.closed" title="Link to this definition">#</a></dt>
 <dd><p>Whether the line joins the last point back to the first.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Polyline.reference_frame">
-<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">KSA.ReferenceFrame</span><a class="headerlink" href="#KSA.KSA.Polyline.reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Polyline.reference_frame">
+<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-KSA.Polyline.reference_frame" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame for the positions and directions of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Polyline.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#KSA.KSA.Polyline.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Polyline.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KSA.Polyline.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Polyline.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">StdLib.ColorRGB</span><a class="headerlink" href="#KSA.KSA.Polyline.color" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Polyline.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code><a class="headerlink" href="#lua-KSA.Polyline.color" title="Link to this definition">#</a></dt>
 <dd><p>The color of the object, as an RGB triple with components from 0 to 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="KSA.Polyline.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Polyline.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Polyline.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-KSA.Polyline.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the object.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="KSA.Circle">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Circle</span></span><a class="headerlink" href="#KSA.Circle" title="Link to this definition">#</a></dt>
-<dd><p>A circle. Created using <a class="reference internal" href="#KSA.Drawing.add_circle" title="KSA.Drawing.add_circle"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_circle()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-KSA.Circle">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Circle</span></span><a class="headerlink" href="#lua-KSA.Circle" title="Link to this definition">#</a></dt>
+<dd><p>A circle. Created using <a class="reference internal" href="#lua-KSA.Drawing.add_circle" title="KSA.Drawing.add_circle"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_circle()</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Circle.center">
-<span class="sig-name descname"><span class="pre">center</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#KSA.KSA.Circle.center" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Circle.center">
+<span class="sig-name descname"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.Circle.center" title="Link to this definition">#</a></dt>
 <dd><p>The position of the center of the circle, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Circle.normal">
-<span class="sig-name descname"><span class="pre">normal</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#KSA.KSA.Circle.normal" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Circle.normal">
+<span class="sig-name descname"><span class="pre">normal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.Circle.normal" title="Link to this definition">#</a></dt>
 <dd><p>The direction normal to the plane of the circle, as a unit vector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Circle.radius">
-<span class="sig-name descname"><span class="pre">radius</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KSA.KSA.Circle.radius" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Circle.radius">
+<span class="sig-name descname"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-KSA.Circle.radius" title="Link to this definition">#</a></dt>
 <dd><p>The radius of the circle, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Circle.reference_frame">
-<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">KSA.ReferenceFrame</span><a class="headerlink" href="#KSA.KSA.Circle.reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Circle.reference_frame">
+<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-KSA.Circle.reference_frame" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame for the positions and directions of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Circle.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#KSA.KSA.Circle.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Circle.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KSA.Circle.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Circle.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">StdLib.ColorRGB</span><a class="headerlink" href="#KSA.KSA.Circle.color" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Circle.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code><a class="headerlink" href="#lua-KSA.Circle.color" title="Link to this definition">#</a></dt>
 <dd><p>The color of the object, as an RGB triple with components from 0 to 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="KSA.Circle.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Circle.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Circle.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-KSA.Circle.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the object.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="KSA.Arc">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Arc</span></span><a class="headerlink" href="#KSA.Arc" title="Link to this definition">#</a></dt>
-<dd><p>An arc of a circle. Created using <a class="reference internal" href="#KSA.Drawing.add_arc" title="KSA.Drawing.add_arc"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_arc()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-KSA.Arc">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Arc</span></span><a class="headerlink" href="#lua-KSA.Arc" title="Link to this definition">#</a></dt>
+<dd><p>An arc of a circle. Created using <a class="reference internal" href="#lua-KSA.Drawing.add_arc" title="KSA.Drawing.add_arc"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_arc()</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Arc.center">
-<span class="sig-name descname"><span class="pre">center</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#KSA.KSA.Arc.center" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Arc.center">
+<span class="sig-name descname"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.Arc.center" title="Link to this definition">#</a></dt>
 <dd><p>The position of the center of the arc’s circle, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Arc.normal">
-<span class="sig-name descname"><span class="pre">normal</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#KSA.KSA.Arc.normal" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Arc.normal">
+<span class="sig-name descname"><span class="pre">normal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.Arc.normal" title="Link to this definition">#</a></dt>
 <dd><p>The direction normal to the plane of the arc, as a unit vector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Arc.start_direction">
-<span class="sig-name descname"><span class="pre">start_direction</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#KSA.KSA.Arc.start_direction" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Arc.start_direction">
+<span class="sig-name descname"><span class="pre">start_direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.Arc.start_direction" title="Link to this definition">#</a></dt>
 <dd><p>The direction from the center to the start of the arc, as a unit vector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The part of the direction along <a class="reference internal" href="#KSA.KSA.Arc.normal" title="KSA.KSA.Arc.normal"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KSA.Arc.normal</span></code></a> is ignored.</p>
+<p>The part of the direction along <a class="reference internal" href="#lua-KSA.Arc.normal" title="KSA.Arc.normal"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KSA.Arc.normal</span></code></a> is ignored.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Arc.angle">
-<span class="sig-name descname"><span class="pre">angle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KSA.KSA.Arc.angle" title="Link to this definition">#</a></dt>
-<dd><p>The angle the arc turns through, counterclockwise about <a class="reference internal" href="#KSA.KSA.Arc.normal" title="KSA.KSA.Arc.normal"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KSA.Arc.normal</span></code></a>, in radians.</p>
+<dt class="sig sig-object lua" id="lua-KSA.Arc.angle">
+<span class="sig-name descname"><span class="pre">angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-KSA.Arc.angle" title="Link to this definition">#</a></dt>
+<dd><p>The angle the arc turns through, counterclockwise about <a class="reference internal" href="#lua-KSA.Arc.normal" title="KSA.Arc.normal"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KSA.Arc.normal</span></code></a>, in radians.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Arc.radius">
-<span class="sig-name descname"><span class="pre">radius</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KSA.KSA.Arc.radius" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Arc.radius">
+<span class="sig-name descname"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-KSA.Arc.radius" title="Link to this definition">#</a></dt>
 <dd><p>The radius of the arc, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Arc.reference_frame">
-<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">KSA.ReferenceFrame</span><a class="headerlink" href="#KSA.KSA.Arc.reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Arc.reference_frame">
+<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-KSA.Arc.reference_frame" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame for the positions and directions of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Arc.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#KSA.KSA.Arc.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Arc.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KSA.Arc.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Arc.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">StdLib.ColorRGB</span><a class="headerlink" href="#KSA.KSA.Arc.color" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Arc.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code><a class="headerlink" href="#lua-KSA.Arc.color" title="Link to this definition">#</a></dt>
 <dd><p>The color of the object, as an RGB triple with components from 0 to 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="KSA.Arc.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Arc.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Arc.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-KSA.Arc.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the object.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="KSA.Box">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Box</span></span><a class="headerlink" href="#KSA.Box" title="Link to this definition">#</a></dt>
-<dd><p>The edges of a box. Created using <a class="reference internal" href="#KSA.Drawing.add_box" title="KSA.Drawing.add_box"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_box()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-KSA.Box">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Box</span></span><a class="headerlink" href="#lua-KSA.Box" title="Link to this definition">#</a></dt>
+<dd><p>The edges of a box. Created using <a class="reference internal" href="#lua-KSA.Drawing.add_box" title="KSA.Drawing.add_box"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_box()</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Box.center">
-<span class="sig-name descname"><span class="pre">center</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#KSA.KSA.Box.center" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Box.center">
+<span class="sig-name descname"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.Box.center" title="Link to this definition">#</a></dt>
 <dd><p>The position of the center of the box, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Box.size">
-<span class="sig-name descname"><span class="pre">size</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#KSA.KSA.Box.size" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Box.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.Box.size" title="Link to this definition">#</a></dt>
 <dd><p>The lengths of the box’s edges along its x, y and z axes, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Box.rotation">
-<span class="sig-name descname"><span class="pre">rotation</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#KSA.KSA.Box.rotation" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Box.rotation">
+<span class="sig-name descname"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.Box.rotation" title="Link to this definition">#</a></dt>
 <dd><p>The rotation of the box’s axes, as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Box.reference_frame">
-<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">KSA.ReferenceFrame</span><a class="headerlink" href="#KSA.KSA.Box.reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Box.reference_frame">
+<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-KSA.Box.reference_frame" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame for the positions and directions of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Box.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#KSA.KSA.Box.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Box.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KSA.Box.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Box.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">StdLib.ColorRGB</span><a class="headerlink" href="#KSA.KSA.Box.color" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Box.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code><a class="headerlink" href="#lua-KSA.Box.color" title="Link to this definition">#</a></dt>
 <dd><p>The color of the object, as an RGB triple with components from 0 to 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="KSA.Box.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Box.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Box.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-KSA.Box.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the object.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="KSA.Sphere">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Sphere</span></span><a class="headerlink" href="#KSA.Sphere" title="Link to this definition">#</a></dt>
-<dd><p>A solid sphere. Created using <a class="reference internal" href="#KSA.Drawing.add_sphere" title="KSA.Drawing.add_sphere"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_sphere()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-KSA.Sphere">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Sphere</span></span><a class="headerlink" href="#lua-KSA.Sphere" title="Link to this definition">#</a></dt>
+<dd><p>A solid sphere. Created using <a class="reference internal" href="#lua-KSA.Drawing.add_sphere" title="KSA.Drawing.add_sphere"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_sphere()</span></code></a>.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Sphere.center">
-<span class="sig-name descname"><span class="pre">center</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#KSA.KSA.Sphere.center" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Sphere.center">
+<span class="sig-name descname"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.Sphere.center" title="Link to this definition">#</a></dt>
 <dd><p>The position of the center of the sphere, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Sphere.radius">
-<span class="sig-name descname"><span class="pre">radius</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KSA.KSA.Sphere.radius" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Sphere.radius">
+<span class="sig-name descname"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-KSA.Sphere.radius" title="Link to this definition">#</a></dt>
 <dd><p>The radius of the sphere, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Sphere.reference_frame">
-<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">KSA.ReferenceFrame</span><a class="headerlink" href="#KSA.KSA.Sphere.reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Sphere.reference_frame">
+<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-KSA.Sphere.reference_frame" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame for the positions and directions of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Sphere.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#KSA.KSA.Sphere.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Sphere.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KSA.Sphere.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Sphere.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">StdLib.ColorRGB</span><a class="headerlink" href="#KSA.KSA.Sphere.color" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Sphere.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code><a class="headerlink" href="#lua-KSA.Sphere.color" title="Link to this definition">#</a></dt>
 <dd><p>The color of the object, as an RGB triple with components from 0 to 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="KSA.Sphere.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Sphere.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Sphere.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-KSA.Sphere.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the object.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="lua class">
-<dt class="sig sig-object lua" id="KSA.Text">
-<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Text</span></span><a class="headerlink" href="#KSA.Text" title="Link to this definition">#</a></dt>
-<dd><p>Text drawn over the scene, centered on a position. Created using <a class="reference internal" href="#KSA.Drawing.add_text" title="KSA.Drawing.add_text"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_text()</span></code></a>.</p>
+<dt class="sig sig-object lua" id="lua-KSA.Text">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Text</span></span><a class="headerlink" href="#lua-KSA.Text" title="Link to this definition">#</a></dt>
+<dd><p>Text drawn over the scene, centered on a position. Created using <a class="reference internal" href="#lua-KSA.Drawing.add_text" title="KSA.Drawing.add_text"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Drawing.add_text()</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The text is hidden with the game’s UI.</p>
 </div>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Text.content">
-<span class="sig-name descname"><span class="pre">content</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#KSA.KSA.Text.content" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Text.content">
+<span class="sig-name descname"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-KSA.Text.content" title="Link to this definition">#</a></dt>
 <dd><p>The text.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Text.position">
-<span class="sig-name descname"><span class="pre">position</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#KSA.KSA.Text.position" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Text.position">
+<span class="sig-name descname"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.Text.position" title="Link to this definition">#</a></dt>
 <dd><p>The position of the center of the text, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Text.size">
-<span class="sig-name descname"><span class="pre">size</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KSA.KSA.Text.size" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Text.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-KSA.Text.size" title="Link to this definition">#</a></dt>
 <dd><p>The height of the font, in pixels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Text.reference_frame">
-<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">KSA.ReferenceFrame</span><a class="headerlink" href="#KSA.KSA.Text.reference_frame" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Text.reference_frame">
+<span class="sig-name descname"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><a class="headerlink" href="#lua-KSA.Text.reference_frame" title="Link to this definition">#</a></dt>
 <dd><p>The reference frame for the positions and directions of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Text.visible">
-<span class="sig-name descname"><span class="pre">visible</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#KSA.KSA.Text.visible" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Text.visible">
+<span class="sig-name descname"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KSA.Text.visible" title="Link to this definition">#</a></dt>
 <dd><p>Whether the object is visible.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.Text.color">
-<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">StdLib.ColorRGB</span><a class="headerlink" href="#KSA.KSA.Text.color" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Text.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code><a class="headerlink" href="#lua-KSA.Text.color" title="Link to this definition">#</a></dt>
 <dd><p>The color of the object, as an RGB triple with components from 0 to 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref lua lua-class docutils literal notranslate"><span class="pre">StdLib.ColorRGB</span></code></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua method">
-<dt class="sig sig-object lua" id="KSA.Text.remove">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Text.remove" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.Text.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-KSA.Text.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the object.</p>
 </dd></dl>
 
@@ -1499,7 +1464,7 @@ added them disconnects. Lines are drawn at the game’s fixed gizmo width.</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -1525,8 +1490,8 @@ added them disconnects. Lines are drawn at the game’s fixed gizmo width.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1559,7 +1524,7 @@ added them disconnects. Lines are drawn at the game’s fixed gizmo width.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

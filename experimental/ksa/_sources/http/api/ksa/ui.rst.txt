@@ -1,0 +1,1424 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+UI
+==
+
+
+.. _http-KSA.UI:
+
+.. rubric:: UI
+
+Adds windows of buttons, text fields and other widgets to the game's UI.
+
+.. note::
+
+   The windows are removed when the client that added them disconnects. For messages on
+   the screen, see :http:post:`/ksa/show-message`.
+
+
+A ``UI`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:post:: /ksa/ui/add-window
+
+   Add a window, with no widgets.
+
+
+   :reqjson string title: The text in the title bar.
+   :reqjson bool visible: Whether the window is visible. Optional, defaults to ``true``.
+   :resjson KSA.Window value:
+
+
+
+
+
+.. http:post:: /ksa/ui/clear
+
+   Remove the windows.
+
+
+   :reqjson bool client_only: Whether to remove only the windows added by the calling client. Optional, defaults to ``false``.
+
+
+
+
+
+
+.. _http-KSA.Window:
+
+.. rubric:: Window
+
+A window, holding widgets one per line. Created using :http:post:`/ksa/ui/add-window`.
+
+.. note::
+
+   The window fits its widgets until its size is set. Closing the window makes it
+   invisible. The window is hidden with the game's UI.
+
+
+A ``Window`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/window/(id)/title
+
+   The text in the title bar.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :resjson string value:
+
+.. http:put:: /ksa/window/(id)/title
+
+   The text in the title bar.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /ksa/window/(id)/position
+
+   The position of the top left corner of the window, from the top left corner of the
+   game window, in pixels.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :resjson tuple<float, float> value:
+
+.. http:put:: /ksa/window/(id)/position
+
+   The position of the top left corner of the window, from the top left corner of the
+   game window, in pixels.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :reqjson tuple<float, float> value: The new value.
+
+
+
+
+.. http:get:: /ksa/window/(id)/size
+
+   The width and height of the window, in pixels.
+
+   .. note::
+
+      Throws an exception if the width or height is not positive.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :resjson tuple<float, float> value:
+
+.. http:put:: /ksa/window/(id)/size
+
+   The width and height of the window, in pixels.
+
+   .. note::
+
+      Throws an exception if the width or height is not positive.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :reqjson tuple<float, float> value: The new value.
+
+
+
+
+.. http:get:: /ksa/window/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/window/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/window/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/window/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /ksa/window/(id)/add-label
+
+   Add a label.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :reqjson string content: The text of the label.
+   :reqjson bool visible: Whether the label is visible. Optional, defaults to ``true``.
+   :resjson KSA.Label value:
+
+
+
+
+
+.. http:post:: /ksa/window/(id)/add-button
+
+   Add a button.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :reqjson string content: The text on the button.
+   :reqjson bool visible: Whether the button is visible. Optional, defaults to ``true``.
+   :resjson KSA.Button value:
+
+
+
+
+
+.. http:post:: /ksa/window/(id)/add-input-field
+
+   Add a text input field, empty.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :reqjson string label: The text shown next to the field. Optional, defaults to ``""``.
+   :reqjson bool visible: Whether the field is visible. Optional, defaults to ``true``.
+   :resjson KSA.InputField value:
+
+
+
+
+
+.. http:post:: /ksa/window/(id)/add-slider
+
+   Add a slider, at its minimum value.
+
+   .. note::
+
+      Throws an exception if the minimum is not less than the maximum.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :reqjson string label: The text shown next to the slider. Optional, defaults to ``""``.
+   :reqjson float minimum: The minimum value. Optional, defaults to ``0.0``.
+   :reqjson float maximum: The maximum value. Optional, defaults to ``1.0``.
+   :reqjson bool visible: Whether the slider is visible. Optional, defaults to ``true``.
+   :resjson KSA.Slider value:
+
+
+
+
+
+.. http:post:: /ksa/window/(id)/add-toggle
+
+   Add a toggle, unchecked.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :reqjson string content: The text shown next to the toggle.
+   :reqjson bool visible: Whether the toggle is visible. Optional, defaults to ``true``.
+   :resjson KSA.Toggle value:
+
+
+
+
+
+.. http:post:: /ksa/window/(id)/add-dropdown
+
+   Add a dropdown, with no option selected.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :reqjson list<string> options: The options to choose from.
+   :reqjson string label: The text shown next to the dropdown. Optional, defaults to ``""``.
+   :reqjson bool visible: Whether the dropdown is visible. Optional, defaults to ``true``.
+   :resjson KSA.Dropdown value:
+
+
+
+
+
+.. http:post:: /ksa/window/(id)/add-separator
+
+   Add a horizontal line.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :reqjson bool visible: Whether the line is visible. Optional, defaults to ``true``.
+   :resjson KSA.Separator value:
+
+
+
+
+
+.. http:post:: /ksa/window/(id)/add-row
+
+   Add a row, which lays out its widgets from left to right.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+   :reqjson bool visible: Whether the row is visible. Optional, defaults to ``true``.
+   :resjson KSA.Row value:
+
+
+
+
+
+.. http:post:: /ksa/window/(id)/remove
+
+   Remove the widget.
+
+
+   :param id: The identifier of the :ref:`Window <http-KSA.Window>` object.
+
+
+
+
+
+
+
+.. _http-KSA.Row:
+
+.. rubric:: Row
+
+A row of widgets, laid out from left to right. Added to a window or a row.
+
+A ``Row`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/row/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Row <http-KSA.Row>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/row/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Row <http-KSA.Row>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/row/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Row <http-KSA.Row>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/row/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Row <http-KSA.Row>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /ksa/row/(id)/add-label
+
+   Add a label.
+
+
+   :param id: The identifier of the :ref:`Row <http-KSA.Row>` object.
+
+   :reqjson string content: The text of the label.
+   :reqjson bool visible: Whether the label is visible. Optional, defaults to ``true``.
+   :resjson KSA.Label value:
+
+
+
+
+
+.. http:post:: /ksa/row/(id)/add-button
+
+   Add a button.
+
+
+   :param id: The identifier of the :ref:`Row <http-KSA.Row>` object.
+
+   :reqjson string content: The text on the button.
+   :reqjson bool visible: Whether the button is visible. Optional, defaults to ``true``.
+   :resjson KSA.Button value:
+
+
+
+
+
+.. http:post:: /ksa/row/(id)/add-input-field
+
+   Add a text input field, empty.
+
+
+   :param id: The identifier of the :ref:`Row <http-KSA.Row>` object.
+
+   :reqjson string label: The text shown next to the field. Optional, defaults to ``""``.
+   :reqjson bool visible: Whether the field is visible. Optional, defaults to ``true``.
+   :resjson KSA.InputField value:
+
+
+
+
+
+.. http:post:: /ksa/row/(id)/add-slider
+
+   Add a slider, at its minimum value.
+
+   .. note::
+
+      Throws an exception if the minimum is not less than the maximum.
+
+
+   :param id: The identifier of the :ref:`Row <http-KSA.Row>` object.
+
+   :reqjson string label: The text shown next to the slider. Optional, defaults to ``""``.
+   :reqjson float minimum: The minimum value. Optional, defaults to ``0.0``.
+   :reqjson float maximum: The maximum value. Optional, defaults to ``1.0``.
+   :reqjson bool visible: Whether the slider is visible. Optional, defaults to ``true``.
+   :resjson KSA.Slider value:
+
+
+
+
+
+.. http:post:: /ksa/row/(id)/add-toggle
+
+   Add a toggle, unchecked.
+
+
+   :param id: The identifier of the :ref:`Row <http-KSA.Row>` object.
+
+   :reqjson string content: The text shown next to the toggle.
+   :reqjson bool visible: Whether the toggle is visible. Optional, defaults to ``true``.
+   :resjson KSA.Toggle value:
+
+
+
+
+
+.. http:post:: /ksa/row/(id)/add-dropdown
+
+   Add a dropdown, with no option selected.
+
+
+   :param id: The identifier of the :ref:`Row <http-KSA.Row>` object.
+
+   :reqjson list<string> options: The options to choose from.
+   :reqjson string label: The text shown next to the dropdown. Optional, defaults to ``""``.
+   :reqjson bool visible: Whether the dropdown is visible. Optional, defaults to ``true``.
+   :resjson KSA.Dropdown value:
+
+
+
+
+
+.. http:post:: /ksa/row/(id)/add-separator
+
+   Add a horizontal line.
+
+
+   :param id: The identifier of the :ref:`Row <http-KSA.Row>` object.
+
+   :reqjson bool visible: Whether the line is visible. Optional, defaults to ``true``.
+   :resjson KSA.Separator value:
+
+
+
+
+
+.. http:post:: /ksa/row/(id)/add-row
+
+   Add a row, which lays out its widgets from left to right.
+
+
+   :param id: The identifier of the :ref:`Row <http-KSA.Row>` object.
+
+   :reqjson bool visible: Whether the row is visible. Optional, defaults to ``true``.
+   :resjson KSA.Row value:
+
+
+
+
+
+.. http:post:: /ksa/row/(id)/remove
+
+   Remove the widget.
+
+
+   :param id: The identifier of the :ref:`Row <http-KSA.Row>` object.
+
+
+
+
+
+
+
+.. _http-KSA.Label:
+
+.. rubric:: Label
+
+A line of text. Added to a window or a row.
+
+A ``Label`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/label/(id)/content
+
+   The text of the label.
+
+
+   :param id: The identifier of the :ref:`Label <http-KSA.Label>` object.
+
+   :resjson string value:
+
+.. http:put:: /ksa/label/(id)/content
+
+   The text of the label.
+
+
+   :param id: The identifier of the :ref:`Label <http-KSA.Label>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /ksa/label/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Label <http-KSA.Label>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/label/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Label <http-KSA.Label>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/label/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Label <http-KSA.Label>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/label/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Label <http-KSA.Label>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /ksa/label/(id)/remove
+
+   Remove the widget.
+
+
+   :param id: The identifier of the :ref:`Label <http-KSA.Label>` object.
+
+
+
+
+
+
+
+.. _http-KSA.Button:
+
+.. rubric:: Button
+
+A button. Added to a window or a row.
+
+A ``Button`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/button/(id)/content
+
+   The text on the button.
+
+
+   :param id: The identifier of the :ref:`Button <http-KSA.Button>` object.
+
+   :resjson string value:
+
+.. http:put:: /ksa/button/(id)/content
+
+   The text on the button.
+
+
+   :param id: The identifier of the :ref:`Button <http-KSA.Button>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /ksa/button/(id)/clicked
+
+   Whether the button has been clicked.
+
+   .. note::
+
+      A click sets this to ``true``, and it stays ``true`` until set to
+      ``false``.
+
+
+   :param id: The identifier of the :ref:`Button <http-KSA.Button>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/button/(id)/clicked
+
+   Whether the button has been clicked.
+
+   .. note::
+
+      A click sets this to ``true``, and it stays ``true`` until set to
+      ``false``.
+
+
+   :param id: The identifier of the :ref:`Button <http-KSA.Button>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/button/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Button <http-KSA.Button>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/button/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Button <http-KSA.Button>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/button/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Button <http-KSA.Button>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/button/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Button <http-KSA.Button>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /ksa/button/(id)/remove
+
+   Remove the widget.
+
+
+   :param id: The identifier of the :ref:`Button <http-KSA.Button>` object.
+
+
+
+
+
+
+
+.. _http-KSA.InputField:
+
+.. rubric:: InputField
+
+A single line text input field. Added to a window or a row.
+
+.. note::
+
+   While the field is being edited, the game clears the rotation and translation inputs
+   of the controlled vehicle each frame.
+
+
+A ``InputField`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/input-field/(id)/label
+
+   The text shown next to the field.
+
+
+   :param id: The identifier of the :ref:`InputField <http-KSA.InputField>` object.
+
+   :resjson string value:
+
+.. http:put:: /ksa/input-field/(id)/label
+
+   The text shown next to the field.
+
+
+   :param id: The identifier of the :ref:`InputField <http-KSA.InputField>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /ksa/input-field/(id)/value
+
+   The text in the field.
+
+
+   :param id: The identifier of the :ref:`InputField <http-KSA.InputField>` object.
+
+   :resjson string value:
+
+.. http:put:: /ksa/input-field/(id)/value
+
+   The text in the field.
+
+
+   :param id: The identifier of the :ref:`InputField <http-KSA.InputField>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /ksa/input-field/(id)/changed
+
+   Whether the text has been edited.
+
+   .. note::
+
+      An edit sets this to ``true``, and it stays ``true`` until set to
+      ``false``. Setting :http:get:`/ksa/input-field/(id)/value` leaves it unchanged.
+
+
+   :param id: The identifier of the :ref:`InputField <http-KSA.InputField>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/input-field/(id)/changed
+
+   Whether the text has been edited.
+
+   .. note::
+
+      An edit sets this to ``true``, and it stays ``true`` until set to
+      ``false``. Setting :http:get:`/ksa/input-field/(id)/value` leaves it unchanged.
+
+
+   :param id: The identifier of the :ref:`InputField <http-KSA.InputField>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/input-field/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`InputField <http-KSA.InputField>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/input-field/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`InputField <http-KSA.InputField>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/input-field/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`InputField <http-KSA.InputField>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/input-field/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`InputField <http-KSA.InputField>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /ksa/input-field/(id)/remove
+
+   Remove the widget.
+
+
+   :param id: The identifier of the :ref:`InputField <http-KSA.InputField>` object.
+
+
+
+
+
+
+
+.. _http-KSA.Slider:
+
+.. rubric:: Slider
+
+A horizontal slider. Added to a window or a row.
+
+A ``Slider`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/slider/(id)/label
+
+   The text shown next to the slider.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+   :resjson string value:
+
+.. http:put:: /ksa/slider/(id)/label
+
+   The text shown next to the slider.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /ksa/slider/(id)/value
+
+   The value of the slider, clamped to its range.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/slider/(id)/value
+
+   The value of the slider, clamped to its range.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/slider/(id)/minimum
+
+   The minimum value.
+
+   .. note::
+
+      Throws an exception if set to a value not less than the maximum.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/slider/(id)/minimum
+
+   The minimum value.
+
+   .. note::
+
+      Throws an exception if set to a value not less than the maximum.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/slider/(id)/maximum
+
+   The maximum value.
+
+   .. note::
+
+      Throws an exception if set to a value not greater than the minimum.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/slider/(id)/maximum
+
+   The maximum value.
+
+   .. note::
+
+      Throws an exception if set to a value not greater than the minimum.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/slider/(id)/changed
+
+   Whether the value has been changed by dragging the slider.
+
+   .. note::
+
+      A change sets this to ``true``, and it stays ``true`` until set to
+      ``false``. Setting :http:get:`/ksa/slider/(id)/value` leaves it unchanged.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/slider/(id)/changed
+
+   Whether the value has been changed by dragging the slider.
+
+   .. note::
+
+      A change sets this to ``true``, and it stays ``true`` until set to
+      ``false``. Setting :http:get:`/ksa/slider/(id)/value` leaves it unchanged.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/slider/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/slider/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/slider/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/slider/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /ksa/slider/(id)/remove
+
+   Remove the widget.
+
+
+   :param id: The identifier of the :ref:`Slider <http-KSA.Slider>` object.
+
+
+
+
+
+
+
+.. _http-KSA.Toggle:
+
+.. rubric:: Toggle
+
+A check box with a label. Added to a window or a row.
+
+A ``Toggle`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/toggle/(id)/content
+
+   The text shown next to the toggle.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-KSA.Toggle>` object.
+
+   :resjson string value:
+
+.. http:put:: /ksa/toggle/(id)/content
+
+   The text shown next to the toggle.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-KSA.Toggle>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /ksa/toggle/(id)/checked
+
+   Whether the toggle is checked.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-KSA.Toggle>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/toggle/(id)/checked
+
+   Whether the toggle is checked.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-KSA.Toggle>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/toggle/(id)/changed
+
+   Whether the toggle has been clicked.
+
+   .. note::
+
+      A click sets this to ``true``, and it stays ``true`` until set to
+      ``false``. Setting :http:get:`/ksa/toggle/(id)/checked` leaves it unchanged.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-KSA.Toggle>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/toggle/(id)/changed
+
+   Whether the toggle has been clicked.
+
+   .. note::
+
+      A click sets this to ``true``, and it stays ``true`` until set to
+      ``false``. Setting :http:get:`/ksa/toggle/(id)/checked` leaves it unchanged.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-KSA.Toggle>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/toggle/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-KSA.Toggle>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/toggle/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-KSA.Toggle>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/toggle/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-KSA.Toggle>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/toggle/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-KSA.Toggle>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /ksa/toggle/(id)/remove
+
+   Remove the widget.
+
+
+   :param id: The identifier of the :ref:`Toggle <http-KSA.Toggle>` object.
+
+
+
+
+
+
+
+.. _http-KSA.Dropdown:
+
+.. rubric:: Dropdown
+
+A dropdown list of options. Added to a window or a row.
+
+A ``Dropdown`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/dropdown/(id)/label
+
+   The text shown next to the dropdown.
+
+
+   :param id: The identifier of the :ref:`Dropdown <http-KSA.Dropdown>` object.
+
+   :resjson string value:
+
+.. http:put:: /ksa/dropdown/(id)/label
+
+   The text shown next to the dropdown.
+
+
+   :param id: The identifier of the :ref:`Dropdown <http-KSA.Dropdown>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /ksa/dropdown/(id)/options
+
+   The options to choose from.
+
+   .. note::
+
+      Setting the options clears the selection if the selected index is no longer in
+      the list.
+
+
+   :param id: The identifier of the :ref:`Dropdown <http-KSA.Dropdown>` object.
+
+   :resjson list<string> value:
+
+.. http:put:: /ksa/dropdown/(id)/options
+
+   The options to choose from.
+
+   .. note::
+
+      Setting the options clears the selection if the selected index is no longer in
+      the list.
+
+
+   :param id: The identifier of the :ref:`Dropdown <http-KSA.Dropdown>` object.
+
+   :reqjson list<string> value: The new value.
+
+
+
+
+.. http:get:: /ksa/dropdown/(id)/selected-index
+
+   The index of the selected option, or -1 for none.
+
+   .. note::
+
+      Throws an exception if the index is out of range.
+
+
+   :param id: The identifier of the :ref:`Dropdown <http-KSA.Dropdown>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /ksa/dropdown/(id)/selected-index
+
+   The index of the selected option, or -1 for none.
+
+   .. note::
+
+      Throws an exception if the index is out of range.
+
+
+   :param id: The identifier of the :ref:`Dropdown <http-KSA.Dropdown>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /ksa/dropdown/(id)/changed
+
+   Whether an option has been chosen from the list.
+
+   .. note::
+
+      A choice sets this to ``true``, and it stays ``true`` until set to
+      ``false``. Setting :http:get:`/ksa/dropdown/(id)/selected-index` leaves it unchanged.
+
+
+   :param id: The identifier of the :ref:`Dropdown <http-KSA.Dropdown>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/dropdown/(id)/changed
+
+   Whether an option has been chosen from the list.
+
+   .. note::
+
+      A choice sets this to ``true``, and it stays ``true`` until set to
+      ``false``. Setting :http:get:`/ksa/dropdown/(id)/selected-index` leaves it unchanged.
+
+
+   :param id: The identifier of the :ref:`Dropdown <http-KSA.Dropdown>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/dropdown/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Dropdown <http-KSA.Dropdown>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/dropdown/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Dropdown <http-KSA.Dropdown>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/dropdown/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Dropdown <http-KSA.Dropdown>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/dropdown/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Dropdown <http-KSA.Dropdown>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /ksa/dropdown/(id)/remove
+
+   Remove the widget.
+
+
+   :param id: The identifier of the :ref:`Dropdown <http-KSA.Dropdown>` object.
+
+
+
+
+
+
+
+.. _http-KSA.Separator:
+
+.. rubric:: Separator
+
+A horizontal line between widgets. Added to a window or a row.
+
+A ``Separator`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/separator/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Separator <http-KSA.Separator>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/separator/(id)/visible
+
+   Whether the widget is visible.
+
+
+   :param id: The identifier of the :ref:`Separator <http-KSA.Separator>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/separator/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Separator <http-KSA.Separator>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/separator/(id)/enabled
+
+   Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+
+   :param id: The identifier of the :ref:`Separator <http-KSA.Separator>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:post:: /ksa/separator/(id)/remove
+
+   Remove the widget.
+
+
+   :param id: The identifier of the :ref:`Separator <http-KSA.Separator>` object.

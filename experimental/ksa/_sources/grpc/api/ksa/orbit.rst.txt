@@ -215,6 +215,24 @@ Orbit
 
       :Orbit.GetEccentricAnomalyResponse: ``value`` (``double``)
 
+   .. grpc:rpc:: GetSemiLatusRectum (Orbit.GetSemiLatusRectumRequest) returns (Orbit.GetSemiLatusRectumResponse)
+
+      The `semi-latus rectum <https://en.wikipedia.org/wiki/Conic_section#Conic_parameters>`_ of the orbit, in meters.
+
+      :Orbit.GetSemiLatusRectumRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetSemiLatusRectumResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetSpecificAngularMomentum (Orbit.GetSpecificAngularMomentumRequest) returns (Orbit.GetSpecificAngularMomentumResponse)
+
+      The specific angular momentum of the orbit, in :math:`\mathrm{m^{2}/s}`.
+
+      :Orbit.GetSpecificAngularMomentumRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetSpecificAngularMomentumResponse: ``value`` (``double``)
+
    .. grpc:rpc:: TrueAnomalyAtUT (Orbit.TrueAnomalyAtUTRequest) returns (Orbit.TrueAnomalyAtUTResponse)
 
       The true anomaly at the given time, in radians.
@@ -224,6 +242,27 @@ Orbit
          * ``ut`` (``double``): Universal time, in seconds.
 
       :Orbit.TrueAnomalyAtUTResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: MeanAnomalyAtUT (Orbit.MeanAnomalyAtUTRequest) returns (Orbit.MeanAnomalyAtUTResponse)
+
+      The mean anomaly at the given time, in radians.
+
+      :Orbit.MeanAnomalyAtUTRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+         * ``ut`` (``double``): Universal time, in seconds.
+
+      :Orbit.MeanAnomalyAtUTResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: EccentricAnomalyAtUT (Orbit.EccentricAnomalyAtUTRequest) returns (Orbit.EccentricAnomalyAtUTResponse)
+
+      The eccentric anomaly at the given time, in radians. For a hyperbolic orbit, this
+      is the hyperbolic anomaly.
+
+      :Orbit.EccentricAnomalyAtUTRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+         * ``ut`` (``double``): Universal time, in seconds.
+
+      :Orbit.EccentricAnomalyAtUTResponse: ``value`` (``double``)
 
    .. grpc:rpc:: UTAtTrueAnomaly (Orbit.UTAtTrueAnomalyRequest) returns (Orbit.UTAtTrueAnomalyResponse)
 
@@ -237,6 +276,24 @@ Orbit
 
       :Orbit.UTAtTrueAnomalyResponse: ``value`` (``double``)
 
+   .. grpc:rpc:: TrueAnomalyAtRadius (Orbit.TrueAnomalyAtRadiusRequest) returns (Orbit.TrueAnomalyAtRadiusResponse)
+
+      The true anomaly at which the orbit reaches the given distance from the center of
+      the body, in radians, between 0 and :math:`\pi`. Not a number if the orbit
+      never reaches it.
+
+      :Orbit.TrueAnomalyAtRadiusRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+         * ``radius`` (``double``): The distance from the center of the body, in meters.
+
+      :Orbit.TrueAnomalyAtRadiusResponse: ``value`` (``double``)
+
+      .. note::
+
+         The orbit also reaches the distance at the negative of this anomaly. Zero for a
+         circular orbit at the distance. Throws an exception if the distance is not
+         positive.
+
    .. grpc:rpc:: RadiusAt (Orbit.RadiusAtRequest) returns (Orbit.RadiusAtResponse)
 
       The distance from the center of the body being orbited at the given time, in
@@ -247,6 +304,16 @@ Orbit
          * ``ut`` (``double``): Universal time, in seconds.
 
       :Orbit.RadiusAtResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: SpeedAt (Orbit.SpeedAtRequest) returns (Orbit.SpeedAtResponse)
+
+      The orbital speed at the given time, in meters per second.
+
+      :Orbit.SpeedAtRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+         * ``ut`` (``double``): Universal time, in seconds.
+
+      :Orbit.SpeedAtResponse: ``value`` (``double``)
 
    .. grpc:rpc:: PositionAt (Orbit.PositionAtRequest) returns (Orbit.PositionAtResponse)
 
@@ -388,6 +455,62 @@ Orbit
          * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
 
       :Orbit.GetNextOrbitResponse: ``value`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+   .. grpc:rpc:: CreateFromElements (Orbit.CreateFromElementsRequest) returns (Orbit.CreateFromElementsResponse)
+
+      Create the orbit with the given elements around a body. The angles are those of
+      :grpc:service:`Orbit <krpc.ksa.OrbitService>`.
+
+      :Orbit.CreateFromElementsRequest:
+         * ``body`` (:grpc:service:`Body <krpc.ksa.BodyService>`): The body being orbited.
+         * ``semi_major_axis`` (``double``): The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+         * ``eccentricity`` (``double``): The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
+         * ``inclination`` (``double``): The inclination, in radians.
+         * ``longitude_of_ascending_node`` (``double``): The longitude of the ascending node, in radians.
+         * ``argument_of_periapsis`` (``double``): The argument of periapsis, in radians.
+         * ``mean_anomaly_at_epoch`` (``double``): The mean anomaly at the epoch, in radians.
+         * ``epoch`` (``double``): The universal time of the epoch, in seconds.
+
+      :Orbit.CreateFromElementsResponse: ``value`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      .. note::
+
+         The orbit is a single conic around ``body``, with no
+         :grpc:rpc:`OrbitService.GetNextOrbit <krpc.ksa.OrbitService.GetNextOrbit>`. It is held until :grpc:rpc:`OrbitService.Remove <krpc.ksa.OrbitService.Remove>` is called on it, or
+         the client that created it disconnects.
+
+   .. grpc:rpc:: CreateFromPositionAndVelocity (Orbit.CreateFromPositionAndVelocityRequest) returns (Orbit.CreateFromPositionAndVelocityResponse)
+
+      Create the orbit around a body through the given position and velocity.
+
+      :Orbit.CreateFromPositionAndVelocityRequest:
+         * ``body`` (:grpc:service:`Body <krpc.ksa.BodyService>`): The body being orbited.
+         * ``position`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The position, in meters, relative to where the body is now.
+         * ``velocity`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The velocity, in meters per second.
+         * ``ut`` (``double``): The universal time of the position and velocity, in seconds.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position and velocity.
+
+      :Orbit.CreateFromPositionAndVelocityResponse: ``value`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      .. note::
+
+         The orbit is a single conic around ``body``, with no
+         :grpc:rpc:`OrbitService.GetNextOrbit <krpc.ksa.OrbitService.GetNextOrbit>`. It is held until :grpc:rpc:`OrbitService.Remove <krpc.ksa.OrbitService.Remove>` is called on it, or
+         the client that created it disconnects.
+
+   .. grpc:rpc:: Remove (Orbit.RemoveRequest) returns (Orbit.RemoveResponse)
+
+      Remove an orbit created by :grpc:rpc:`OrbitService.CreateFromElements <krpc.ksa.OrbitService.CreateFromElements>` or
+      :grpc:rpc:`OrbitService.CreateFromPositionAndVelocity <krpc.ksa.OrbitService.CreateFromPositionAndVelocity>`.
+
+      :Orbit.RemoveRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.RemoveResponse: Empty
+
+      .. note::
+
+         Throws an exception if the orbit was not created by a client.
 
 .. grpc:enum:: OrbitTransition
 

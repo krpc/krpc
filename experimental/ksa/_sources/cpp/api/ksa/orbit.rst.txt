@@ -153,9 +153,42 @@ Orbit
 
    
 
+   .. function:: double semi_latus_rectum()
+
+      The `semi-latus rectum <https://en.wikipedia.org/wiki/Conic_section#Conic_parameters>`_ of the orbit, in meters.
+
+   
+
+   .. function:: double specific_angular_momentum()
+
+      The specific angular momentum of the orbit, in :math:`\mathrm{m^{2}/s}`.
+
+   
+
    .. function:: double true_anomaly_at_ut(double ut)
 
       The true anomaly at the given time, in radians.
+
+      :Parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+   
+
+   .. function:: double mean_anomaly_at_ut(double ut)
+
+      The mean anomaly at the given time, in radians.
+
+      :Parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+   
+
+   .. function:: double eccentric_anomaly_at_ut(double ut)
+
+      The eccentric anomaly at the given time, in radians. For a hyperbolic orbit, this
+      is the hyperbolic anomaly.
 
       :Parameters:
 
@@ -175,10 +208,38 @@ Orbit
 
    
 
+   .. function:: double true_anomaly_at_radius(double radius)
+
+      The true anomaly at which the orbit reaches the given distance from the center of
+      the body, in radians, between 0 and :math:`\pi`. Not a number if the orbit
+      never reaches it.
+
+      :Parameters:
+
+       * **radius** -- The distance from the center of the body, in meters.
+
+   
+
+      .. note::
+
+         The orbit also reaches the distance at the negative of this anomaly. Zero for a
+         circular orbit at the distance. Throws an exception if the distance is not
+         positive.
+
    .. function:: double radius_at(double ut)
 
       The distance from the center of the body being orbited at the given time, in
       meters.
+
+      :Parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+   
+
+   .. function:: double speed_at(double ut)
+
+      The orbital speed at the given time, in meters per second.
 
       :Parameters:
 
@@ -305,6 +366,62 @@ Orbit
       ``NULL`` if there is none.
 
    
+
+   .. function:: static Orbit create_from_elements(krpc::Connection& connection, Body body, double semi_major_axis, double eccentricity, double inclination, double longitude_of_ascending_node, double argument_of_periapsis, double mean_anomaly_at_epoch, double epoch)
+
+      Create the orbit with the given elements around a body. The angles are those of
+      :class:`Orbit`.
+
+      :Parameters:
+
+       * **body** -- The body being orbited.
+       * **semi_major_axis** -- The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+       * **eccentricity** -- The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
+       * **inclination** -- The inclination, in radians.
+       * **longitude_of_ascending_node** -- The longitude of the ascending node, in radians.
+       * **argument_of_periapsis** -- The argument of periapsis, in radians.
+       * **mean_anomaly_at_epoch** -- The mean anomaly at the epoch, in radians.
+       * **epoch** -- The universal time of the epoch, in seconds.
+
+   
+
+      .. note::
+
+         The orbit is a single conic around *body*, with no
+         :func:`Orbit::next_orbit`. It is held until :func:`Orbit::remove` is called on it, or
+         the client that created it disconnects.
+
+   .. function:: static Orbit create_from_position_and_velocity(krpc::Connection& connection, Body body, std::tuple<double, double, double> position, std::tuple<double, double, double> velocity, double ut, ReferenceFrame reference_frame)
+
+      Create the orbit around a body through the given position and velocity.
+
+      :Parameters:
+
+       * **body** -- The body being orbited.
+       * **position** -- The position, in meters, relative to where the body is now.
+       * **velocity** -- The velocity, in meters per second.
+       * **ut** -- The universal time of the position and velocity, in seconds.
+       * **reference_frame** -- The reference frame of the position and velocity.
+
+   
+
+      .. note::
+
+         The orbit is a single conic around *body*, with no
+         :func:`Orbit::next_orbit`. It is held until :func:`Orbit::remove` is called on it, or
+         the client that created it disconnects.
+
+   .. function:: void remove()
+
+      Remove an orbit created by :func:`Orbit::create_from_elements` or
+      :func:`Orbit::create_from_position_and_velocity`.
+
+
+   
+
+      .. note::
+
+         Throws an exception if the orbit was not created by a client.
 
 
 

@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>KSA &#8212; kRPC v0.2.0 documentation</title>
+    <title>KSA &#8212; kRPC v0.3.0 documentation</title>
   
   
   
@@ -26,23 +26,24 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5ab7b574" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'lua/api/ksa/ksa';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/external-links.js?v=e8892020"></script>
@@ -54,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.2.0" />
+  <meta name="docsearch:version" content="0.3.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -102,7 +103,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -206,14 +207,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -248,7 +249,7 @@
   
 
   
-    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -262,7 +263,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -333,14 +334,14 @@
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
   <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -386,8 +387,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -397,6 +400,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -410,8 +418,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -421,6 +431,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -434,8 +449,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -445,6 +462,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -458,8 +480,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -469,6 +493,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -482,8 +511,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -493,6 +524,42 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../js.html">JavaScript</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -506,8 +573,10 @@
 <li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
@@ -517,6 +586,42 @@
 <li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../http.html">HTTP</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/computer.html">Computer</a></li>
 </ul>
 </details></li>
 </ul>
@@ -532,8 +637,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/life-support.html">Life Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/space-weather.html">Space Weather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
@@ -546,6 +653,11 @@
 </ul>
 </details></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 </ul>
@@ -585,7 +697,7 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../../../index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     
@@ -616,179 +728,175 @@
                   
   <section id="ksa">
 <h1>KSA<a class="headerlink" href="#ksa" title="Link to this heading">#</a></h1>
-<p id="module-KSA">Provides functionality to interact with Kitten Space Agency.</p>
+<p id="lua-KSA">Provides functionality to interact with Kitten Space Agency.</p>
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.active_vehicle">
-<span class="sig-name descname"><span class="pre">active_vehicle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">KSA.Vehicle</span><a class="headerlink" href="#KSA.KSA.active_vehicle" title="Link to this definition">#</a></dt>
-<dd><p>The vehicle under the player’s control, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if the player controls a
-kitten on EVA.</p>
+<dt class="sig sig-object lua" id="lua-KSA.active_vehicle">
+<span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">active_vehicle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="vehicle.html#lua-KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">nil</span></code><a class="headerlink" href="#lua-KSA.active_vehicle" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle under the player’s control, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if there is none or the
+player controls a kitten on EVA.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="vehicle.html#KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Setting it moves the camera to the vehicle, as the switch vehicle key does. See
-<a class="reference internal" href="#KSA.KSA.active_kitten" title="KSA.KSA.active_kitten"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KSA.active_kitten</span></code></a> for a kitten on EVA.</p>
+<a class="reference internal" href="#lua-KSA.active_kitten" title="KSA.active_kitten"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KSA.active_kitten</span></code></a> for a kitten on EVA.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.vehicles">
-<span class="sig-name descname"><span class="pre">vehicles</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">List</span><a class="headerlink" href="#KSA.KSA.vehicles" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.vehicles">
+<span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">vehicles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">List</span></code><a class="headerlink" href="#lua-KSA.vehicles" title="Link to this definition">#</a></dt>
 <dd><p>The vehicles in the current system, excluding kittens on EVA.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.active_kitten">
-<span class="sig-name descname"><span class="pre">active_kitten</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">KSA.Kitten</span><a class="headerlink" href="#KSA.KSA.active_kitten" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.active_kitten">
+<span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">active_kitten</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="crew.html#lua-KSA.Kitten" title="KSA.Kitten"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.Kitten</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">nil</span></code><a class="headerlink" href="#lua-KSA.active_kitten" title="Link to this definition">#</a></dt>
 <dd><p>The kitten on EVA under the player’s control, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if the player
 controls a vehicle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="crew.html#KSA.Kitten" title="KSA.Kitten"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Kitten</span></code></a> or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
-</dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Setting it moves the camera to the kitten. Throws an exception if the kitten is not
-on EVA. See <a class="reference internal" href="#KSA.KSA.active_vehicle" title="KSA.KSA.active_vehicle"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KSA.active_vehicle</span></code></a> for a vehicle.</p>
+on EVA. See <a class="reference internal" href="#lua-KSA.active_vehicle" title="KSA.active_vehicle"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KSA.active_vehicle</span></code></a> for a vehicle.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.kittens">
-<span class="sig-name descname"><span class="pre">kittens</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Map</span><a class="headerlink" href="#KSA.KSA.kittens" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.kittens">
+<span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">kittens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Map</span></code><a class="headerlink" href="#lua-KSA.kittens" title="Link to this definition">#</a></dt>
 <dd><p>The kittens in the agency’s roster, including those killed in action, keyed by name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Map</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.camera">
-<span class="sig-name descname"><span class="pre">camera</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">KSA.Camera</span><a class="headerlink" href="#KSA.KSA.camera" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.camera">
+<span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">camera</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="camera.html#lua-KSA.Camera" title="KSA.Camera"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.Camera</span></code></a><a class="headerlink" href="#lua-KSA.camera" title="Link to this definition">#</a></dt>
 <dd><p>The game’s main camera.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="camera.html#KSA.Camera" title="KSA.Camera"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Camera</span></code></a></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.bodies">
-<span class="sig-name descname"><span class="pre">bodies</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Map</span><a class="headerlink" href="#KSA.KSA.bodies" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.bodies">
+<span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">bodies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Map</span></code><a class="headerlink" href="#lua-KSA.bodies" title="Link to this definition">#</a></dt>
 <dd><p>The planets, moons and stars in the current system, keyed by name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Map</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.ut">
-<span class="sig-name descname"><span class="pre">ut</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KSA.KSA.ut" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.ut">
+<span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">ut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-KSA.ut" title="Link to this definition">#</a></dt>
 <dd><p>The universal time, in seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.simulation_speed">
-<span class="sig-name descname"><span class="pre">simulation_speed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KSA.KSA.simulation_speed" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.simulation_speed">
+<span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">simulation_speed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-KSA.simulation_speed" title="Link to this definition">#</a></dt>
 <dd><p>The simulation speed, as a multiple of real time. Zero when paused.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Setting it stops a warp in progress, such as one started by <a class="reference internal" href="#lua-KSA.warp_to" title="KSA.warp_to"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.warp_to()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-KSA.life_support_enabled">
+<span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">life_support_enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KSA.life_support_enabled" title="Link to this definition">#</a></dt>
+<dd><p>Whether the crew use up supplies, as set when the game was created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="lua-KSA.radiation_enabled">
+<span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">radiation_enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KSA.radiation_enabled" title="Link to this definition">#</a></dt>
+<dd><p>Whether radiation harms the crew, as set when the game was created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.warp_to">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">warp_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ut</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.warp_to" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.warp_to">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">warp_to</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">ut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-KSA.warp_to" title="Link to this definition">#</a></dt>
 <dd><p>Warp to the given universal time, and return once the warp has finished.
 The game slows the warp down to normal speed toward the end.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ut</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The universal time to warp to, in seconds.</p>
+<dd class="field-odd"><p><strong>ut</strong> – The universal time to warp to, in seconds.</p>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Does nothing when the time is in the past. Returns early if the game stops the
-warp, for example when its menu pauses the game.</p>
+warp, for example when its menu pauses the game, or a vehicle’s supplies run out.</p>
 </div>
 </dd></dl>
 
 <dl class="lua attribute">
-<dt class="sig sig-object lua" id="KSA.KSA.vehicle_designs">
-<span class="sig-name descname"><span class="pre">vehicle_designs</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Map</span><a class="headerlink" href="#KSA.KSA.vehicle_designs" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.vehicle_designs">
+<span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">vehicle_designs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Map</span></code><a class="headerlink" href="#lua-KSA.vehicle_designs" title="Link to this definition">#</a></dt>
 <dd><p>The vehicle designs that can be launched, keyed by name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Map</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.launch_vehicle">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">launch_vehicle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em>, <em class="sig-param"><span class="pre">site</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.launch_vehicle" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.launch_vehicle">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">launch_vehicle</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">site</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="vehicle.html#lua-KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a><a class="headerlink" href="#lua-KSA.launch_vehicle" title="Link to this definition">#</a></dt>
 <dd><p>Launch a vehicle from a launch site, and make it the active vehicle. Returns once
 the vehicle is on the launch site.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the vehicle design. See <a class="reference internal" href="#KSA.KSA.vehicle_designs" title="KSA.KSA.vehicle_designs"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KSA.vehicle_designs</span></code></a>.</p></li>
-<li><p><strong>site</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the launch site. See <a class="reference internal" href="body.html#KSA.KSA.Body.launch_sites" title="KSA.KSA.Body.launch_sites"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KSA.Body.launch_sites</span></code></a>.</p></li>
+<li><p><strong>name</strong> – The name of the vehicle design. See <a class="reference internal" href="#lua-KSA.vehicle_designs" title="KSA.vehicle_designs"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KSA.vehicle_designs</span></code></a>.</p></li>
+<li><p><strong>site</strong> – The name of the launch site. See <a class="reference internal" href="body.html#lua-KSA.Body.launch_sites" title="KSA.Body.launch_sites"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">KSA.Body.launch_sites</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The vehicle. Its name is the vehicle’s name, with a number appended if another vehicle has that name.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="vehicle.html#KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -799,37 +907,34 @@ of the game’s kittens.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.save_exists">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">save_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.save_exists" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.save_exists">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">save_exists</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><a class="headerlink" href="#lua-KSA.save_exists" title="Link to this definition">#</a></dt>
 <dd><p>Whether a save with the given name exists.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – Name of the save.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+<dd class="field-odd"><p><strong>name</strong> – Name of the save.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.save">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.save" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.save">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-KSA.save" title="Link to this definition">#</a></dt>
 <dd><p>Save the game, replacing any save with the same name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – Name of the save.</p>
+<dd class="field-odd"><p><strong>name</strong> – Name of the save.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.load">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.load" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.load">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-KSA.load" title="Link to this definition">#</a></dt>
 <dd><p>Load a save, and return once it has loaded. The game is paused after loading.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – Name of the save.</p>
+<dd class="field-odd"><p><strong>name</strong> – Name of the save.</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -839,21 +944,18 @@ of the game’s kittens.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.take_screenshot">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">take_screenshot</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">scale</span> <span class="pre">=</span> <span class="pre">1</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">ui</span> <span class="pre">=</span> <span class="pre">false</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.take_screenshot" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.take_screenshot">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">take_screenshot</span></span><span class="p"><span class="pre">(</span></span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">scale</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">ui</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><a class="headerlink" href="#lua-KSA.take_screenshot" title="Link to this definition">#</a></dt>
 <dd><p>Save a screenshot, as the screenshot key does, and return once the file is written.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>scale</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The size of the image, as a multiple of the window size, from 1 to 8. The game reduces it to fit the graphics memory.</p></li>
-<li><p><strong>ui</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether to include the game’s windows. The image is then the size of the window.</p></li>
+<li><p><strong>scale</strong> – The size of the image, as a multiple of the window size, from 1 to 8. The game reduces it to fit the graphics memory. Defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+<li><p><strong>ui</strong> – Whether to include the game’s windows. The image is then the size of the window. Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The path of the PNG file, in the game’s screenshots folder.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -863,102 +965,131 @@ of the game’s kittens.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.show_message">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">show_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">text</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">duration</span> <span class="pre">=</span> <span class="pre">5.0</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">warning</span> <span class="pre">=</span> <span class="pre">false</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#KSA.show_message" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.show_message">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">show_message</span></span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">string</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">duration</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">warning</span></code><span class="p"><span class="pre">?</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">boolean</span></code><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#lua-KSA.show_message" title="Link to this definition">#</a></dt>
 <dd><p>Show a message in the middle of the screen.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>text</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The message.</p></li>
-<li><p><strong>duration</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – How long to show the message for, in seconds. The game shows a message for at least 2 seconds.</p></li>
-<li><p><strong>warning</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether to show the message in the warning color.</p></li>
+<li><p><strong>text</strong> – The message.</p></li>
+<li><p><strong>duration</strong> – How long to show the message for, in seconds. The game shows a message for at least 2 seconds. Defaults to <code class="docutils literal notranslate"><span class="pre">5.0</span></code>.</p></li>
+<li><p><strong>warning</strong> – Whether to show the message in the warning color. Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.transform_position">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">transform_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">from</span></em>, <em class="sig-param"><span class="pre">to</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.transform_position" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.raycast_distance">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">raycast_distance</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">number</span></code><a class="headerlink" href="#lua-KSA.raycast_distance" title="Link to this definition">#</a><br /></dt>
+<dd><p>The distance from a position to the first part of a vehicle along a ray, in
+meters. Infinite if the ray hits no part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> – The start of the ray, in meters.</p></li>
+<li><p><strong>direction</strong> – The direction of the ray.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame of the position and direction.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ray tests the meshes of the parts, as picking a part with the mouse does.
+It passes through terrain and kittens on EVA.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="lua-KSA.raycast_part">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">raycast_part</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">reference_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="parts.html#lua-KSA.Part" title="KSA.Part"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.Part</span></code></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">nil</span></code><a class="headerlink" href="#lua-KSA.raycast_part" title="Link to this definition">#</a><br /></dt>
+<dd><p>The first part of a vehicle along a ray, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if the ray hits no part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> – The start of the ray, in meters.</p></li>
+<li><p><strong>direction</strong> – The direction of the ray.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame of the position and direction.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ray tests the meshes of the parts, as picking a part with the mouse does.
+It passes through terrain and kittens on EVA.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="lua-KSA.transform_position">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">transform_position</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">from</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.transform_position" title="Link to this definition">#</a><br /></dt>
 <dd><p>Convert a position from one reference frame to another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position, in meters, in the frame <em>from</em>.</p></li>
-<li><p><strong>from</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame the position is in.</p></li>
-<li><p><strong>to</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame to convert the position to.</p></li>
+<li><p><strong>position</strong> – Position, in meters, in the frame <em>from</em>.</p></li>
+<li><p><strong>from</strong> – The reference frame the position is in.</p></li>
+<li><p><strong>to</strong> – The reference frame to convert the position to.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The position in the frame <em>to</em>.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.transform_direction">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">transform_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">direction</span></em>, <em class="sig-param"><span class="pre">from</span></em>, <em class="sig-param"><span class="pre">to</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.transform_direction" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.transform_direction">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">transform_direction</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">from</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.transform_direction" title="Link to this definition">#</a><br /></dt>
 <dd><p>Convert a direction from one reference frame to another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>direction</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Direction in the frame <em>from</em>.</p></li>
-<li><p><strong>from</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame the direction is in.</p></li>
-<li><p><strong>to</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame to convert the direction to.</p></li>
+<li><p><strong>direction</strong> – Direction in the frame <em>from</em>.</p></li>
+<li><p><strong>from</strong> – The reference frame the direction is in.</p></li>
+<li><p><strong>to</strong> – The reference frame to convert the direction to.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The direction in the frame <em>to</em>.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.transform_rotation">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">transform_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">rotation</span></em>, <em class="sig-param"><span class="pre">from</span></em>, <em class="sig-param"><span class="pre">to</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.transform_rotation" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.transform_rotation">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">transform_rotation</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">from</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.transform_rotation" title="Link to this definition">#</a><br /></dt>
 <dd><p>Convert a rotation from one reference frame to another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rotation</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Rotation in the frame <em>from</em>.</p></li>
-<li><p><strong>from</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame the rotation is in.</p></li>
-<li><p><strong>to</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame to convert the rotation to.</p></li>
+<li><p><strong>rotation</strong> – Rotation in the frame <em>from</em>.</p></li>
+<li><p><strong>from</strong> – The reference frame the rotation is in.</p></li>
+<li><p><strong>to</strong> – The reference frame to convert the rotation to.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The rotation in the frame <em>to</em>.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="lua staticmethod">
-<dt class="sig sig-object lua" id="KSA.transform_velocity">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">transform_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">velocity</span></em>, <em class="sig-param"><span class="pre">from</span></em>, <em class="sig-param"><span class="pre">to</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.transform_velocity" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="lua-KSA.transform_velocity">
+<span class="property"><span class="k"><span class="pre">staticmethod</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">transform_velocity</span></span><span class="p"><span class="pre">(</span></span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">velocity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">from</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><br /><span class="w">&#160;&#160;&#160; </span><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#lua-KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a><br /><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref lua lua-_auto docutils literal notranslate"><span class="pre">Tuple</span></code><a class="headerlink" href="#lua-KSA.transform_velocity" title="Link to this definition">#</a><br /></dt>
 <dd><p>Convert a velocity from one reference frame to another. The velocity of a point
 depends on its position in a rotating frame, so the position is also needed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position, in meters, in the frame <em>from</em>.</p></li>
-<li><p><strong>velocity</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Velocity, in meters per second, in the frame <em>from</em>.</p></li>
-<li><p><strong>from</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame the position and velocity are in.</p></li>
-<li><p><strong>to</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame to convert the velocity to.</p></li>
+<li><p><strong>position</strong> – Position, in meters, in the frame <em>from</em>.</p></li>
+<li><p><strong>velocity</strong> – Velocity, in meters per second, in the frame <em>from</em>.</p></li>
+<li><p><strong>from</strong> – The reference frame the position and velocity are in.</p></li>
+<li><p><strong>to</strong> – The reference frame to convert the velocity to.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The velocity in the frame <em>to</em>.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1000,7 +1131,7 @@ depends on its position in a rotating frame, so the position is also needed.</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -1026,8 +1157,8 @@ depends on its position in a rotating frame, so the position is also needed.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1060,7 +1191,7 @@ depends on its position in a rotating frame, so the position is also needed.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

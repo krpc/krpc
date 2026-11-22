@@ -1,0 +1,435 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KFS
+   :no-index:
+
+Computer
+========
+
+
+.. class:: Computer
+
+   A vehicle's flight computer, which runs a kFS program. Obtained from
+   :func:`KFS.computer`.
+
+   .. note::
+
+      A program is written in kC, a subset of C, or in kASM. The calls that change the
+      computer, and :meth:`KFS.Computer.writeGlobals`, take effect before the computer's next tick, and
+      return once they have. The computer ticks while the game is running and the vehicle is
+      in the physics bubble, so until then they wait. The game does not save a program.
+
+   .. method:: build(files)
+
+      Build a program, without loading it.
+
+      :param files: The source files, by name. A program with a ``.c`` file is kC, and one with only ``.kasm`` files is kASM.
+      :type files: ``Map`` from ``string`` to ``string``
+      :returns: The errors and warnings.
+      :rtype: ``Array`` of :class:`KFS.Diagnostic`
+      :Game Scenes: Flight
+
+   .. method:: load(files)
+
+      Build a program and load it onto the computer. Throws an exception if the program has
+      errors, or the computer rejects it.
+
+      :param files: The source files, by name, as for :meth:`KFS.Computer.build`.
+      :type files: ``Map`` from ``string`` to ``string``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The program is in standby once loaded. See :meth:`KFS.Computer.start`.
+
+   .. method:: start()
+
+      Start the loaded program. Throws an exception if no program is loaded.
+
+      :Game Scenes: Flight
+
+   .. method:: reset()
+
+      Restart the loaded program, as the reset button does. Throws an exception if no
+      program is loaded.
+
+      :Game Scenes: Flight
+
+   .. method:: stop()
+
+      Stop the program, and give the vehicle back to the pilot. The program stays loaded.
+
+      :Game Scenes: Flight
+
+   .. method:: kill()
+
+      Halt the program with the kill switch, and give the vehicle back to the pilot.
+
+      :Game Scenes: Flight
+
+   .. method:: getState()
+
+      The state of the computer.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KFS.ComputerState`
+      :Game Scenes: Flight
+
+   .. method:: getMode()
+
+      The control mode the loaded program claims.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KFS.ControlMode`
+      :Game Scenes: Flight
+
+   .. method:: getUnderControl()
+
+      Whether the program controls the vehicle: it is running, or halted with its last
+      commands held.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+   .. method:: getTickRate()
+
+      The ticks per second of the loaded program, or zero if no program is loaded.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getCyclesUsed()
+
+      The processor cycles the latest tick used.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``bigint``
+      :Game Scenes: Flight
+
+   .. method:: getCycleBudget()
+
+      The processor cycles a tick may use.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``bigint``
+      :Game Scenes: Flight
+
+   .. method:: getOverruns()
+
+      The number of ticks that ran past their budget since the program started.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``bigint``
+      :Game Scenes: Flight
+
+   .. method:: getTrap()
+
+      The error that halted the program, or ``null`` if no error halted it.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KFS.Trap` or ``null``
+      :Game Scenes: Flight
+
+   .. method:: getFault()
+
+      The game's error that halted the computer, or ``null`` if there is none.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string`` or ``null``
+      :Game Scenes: Flight
+
+   .. method:: getLog()
+
+      The computer's console: the lines the program logs, and the computer's own messages.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of ``string``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The computer keeps the last 4,096 lines, and a program logs at most 10 lines a
+         second.
+
+   .. method:: clearLog()
+
+      Clear the computer's console.
+
+      :Game Scenes: Flight
+
+   .. method:: getGlobals()
+
+      The paths of the loaded program's global variables, one for each number in them,
+      such as ``command.args[2]``.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of ``string``
+      :Game Scenes: Flight
+
+   .. method:: readGlobal(path)
+
+      The value of one of the program's global variables, as of its latest tick.
+
+      :param path: The path of the variable, as in :meth:`KFS.Computer.getGlobals`.
+      :type path: ``string``
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: writeGlobals(values)
+
+      Write the program's global variables. The program sees all of them from the same
+      tick.
+
+      :param values: The values, by the paths in :meth:`KFS.Computer.getGlobals`.
+      :type values: ``Map`` from ``string`` to ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A value is converted to the variable's type. Throws an exception if a value does not
+         fit, such as a fraction for an integer.
+
+   .. method:: getTraceChannels()
+
+      The names of the channels the program has traced to.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of ``string``
+      :Game Scenes: Flight
+
+   .. method:: trace(channel)
+
+      The latest value the program traced to a channel. Throws an exception if the program
+      has not traced to it.
+
+      :param channel: The name of the channel.
+      :type channel: ``string``
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+
+.. class:: ComputerState
+
+   The state of a flight computer. See :meth:`KFS.Computer.getState`.
+
+
+   .. attribute:: noSoftware
+
+      No program is loaded.
+
+
+   .. attribute:: standby
+
+      A program is loaded, and not running.
+
+
+   .. attribute:: boot
+
+      The program is running its initialization.
+
+
+   .. attribute:: running
+
+      The program is running.
+
+
+   .. attribute:: idle
+
+      The program is running, with no task to run.
+
+
+   .. attribute:: halted
+
+      The program has stopped, after a trap, a halt or the kill switch.
+
+
+
+.. class:: ControlMode
+
+   The control a program has of a vehicle. See :meth:`KFS.Computer.getMode`.
+
+
+   .. attribute:: pilot
+
+      The game's flight computer flies the vehicle, and the program steers it.
+
+
+   .. attribute:: fullControl
+
+      The program commands the thrusters, engines and gimbals itself. A program claims it
+      with ``#pragma kfs claim ALLOCATION``.
+
+
+
+.. class:: Diagnostic(fields)
+
+   An error or warning from building a program. See :meth:`KFS.Computer.build`.
+
+
+   .. attribute:: error
+
+      Whether it is an error. An error stops the program from being built.
+
+      :Type: ``boolean``
+
+   .. attribute:: code
+
+      The diagnostic's code, such as ``KC-E016``.
+
+      :Type: ``string``
+
+   .. attribute:: file
+
+      The source file.
+
+      :Type: ``string``
+
+   .. attribute:: line
+
+      The line in the source file, from 1. Zero for the whole file.
+
+      :Type: ``number``
+
+   .. attribute:: column
+
+      The column in the line, from 1.
+
+      :Type: ``number``
+
+   .. attribute:: message
+
+      The message.
+
+      :Type: ``string``
+
+   .. attribute:: hint
+
+      A hint at the fix, or ``null`` if there is none.
+
+      :Type: ``string`` or ``null``
+
+
+.. class:: Trap(fields)
+
+   The error that halted a program, and where it happened. See :meth:`KFS.Computer.getTrap`.
+
+
+   .. attribute:: code
+
+      The error.
+
+      :Type: :class:`KFS.TrapCode`
+
+   .. attribute:: function
+
+      The function that was running.
+
+      :Type: ``string``
+
+   .. attribute:: file
+
+      The source file, or ``null`` if it is not known.
+
+      :Type: ``string`` or ``null``
+
+   .. attribute:: line
+
+      The line in the source file, or zero if it is not known.
+
+      :Type: ``number``
+
+
+.. class:: TrapCode
+
+   The error that halted a program. See :attr:`KFS.Trap.code`.
+
+
+   .. attribute:: illegalOpcode
+
+      An instruction the processor does not have.
+
+
+   .. attribute:: operandOverflow
+
+      The operand stack overflowed.
+
+
+   .. attribute:: operandUnderflow
+
+      The operand stack underflowed.
+
+
+   .. attribute:: returnOverflow
+
+      The return stack overflowed.
+
+
+   .. attribute:: initOverrun
+
+      The initialization ran past its budget.
+
+
+   .. attribute:: stackOverflow
+
+      The stack overflowed.
+
+
+   .. attribute:: nullAccess
+
+      A read or write through a null pointer.
+
+
+   .. attribute:: badAddress
+
+      A read or write outside memory.
+
+
+   .. attribute:: readOnly
+
+      A write to read-only memory.
+
+
+   .. attribute:: misaligned
+
+      A misaligned read or write.
+
+
+   .. attribute:: divisionByZero
+
+      A division by zero.
+
+
+   .. attribute:: bounds
+
+      An array index out of bounds.
+
+
+   .. attribute:: user
+
+      A trap raised by the program.
+
+
+   .. attribute:: badJump
+
+      A jump to an invalid address.
+
+
+   .. attribute:: badSyscall
+
+      A call to a service that does not exist.
+
+
+   .. attribute:: badYield
+
+      A task yielded where it may not.
+
+
+   .. attribute:: memoryError
+
+      A memory error, such as a radiation upset.

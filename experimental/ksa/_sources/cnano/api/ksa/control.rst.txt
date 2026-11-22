@@ -17,6 +17,10 @@ Control
       partial strength. A held rotation input overrides the auto-pilot on its axis. The game
       releases the inputs when its window gains or loses focus, or the active vehicle changes.
 
+   .. macro:: KRPC_CLASS_KSA_CONTROL
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Control_Throttle(krpc_connection_t connection, float * returnValue, krpc_KSA_Control_t instance)
    .. function:: krpc_error_t krpc_KSA_Control_set_Throttle(krpc_connection_t connection, krpc_KSA_Control_t instance, float value)
 

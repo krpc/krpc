@@ -1,0 +1,264 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Camera
+======
+
+
+.. _http-KSA.Camera:
+
+.. rubric:: Camera
+
+The game's main camera. Obtained from :http:get:`/ksa/camera`.
+
+A ``Camera`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/camera/(id)/mode
+
+   The mode of the camera.
+
+   .. note::
+
+      Setting ``"iva"`` while the camera is not focused on a vehicle
+      with a crew seat sets ``"orbit"`` instead, as the game does. A
+      change of mode releases the active vehicle's held rotation and translation inputs.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :resjson KSA.CameraMode value:
+
+.. http:put:: /ksa/camera/(id)/mode
+
+   The mode of the camera.
+
+   .. note::
+
+      Setting ``"iva"`` while the camera is not focused on a vehicle
+      with a crew seat sets ``"orbit"`` instead, as the game does. A
+      change of mode releases the active vehicle's held rotation and translation inputs.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :reqjson KSA.CameraMode value: The new value.
+
+
+
+
+.. http:get:: /ksa/camera/(id)/azimuth
+
+   The angle of the camera around the focused object, in degrees. Throws an exception
+   in any mode other than orbit and map.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/camera/(id)/azimuth
+
+   The angle of the camera around the focused object, in degrees. Throws an exception
+   in any mode other than orbit and map.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/camera/(id)/elevation
+
+   The angle of the camera above the plane it orbits in, in degrees, between -90 and
+   90. Throws an exception in any mode other than orbit and map.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/camera/(id)/elevation
+
+   The angle of the camera above the plane it orbits in, in degrees, between -90 and
+   90. Throws an exception in any mode other than orbit and map.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/camera/(id)/distance
+
+   The distance from the camera to the focused object, in meters. Throws an exception
+   in any mode other than orbit and map.
+
+   .. note::
+
+      The camera moves smoothly to a new distance, and stays at least the focused object's
+      radius from it in map mode, and half its radius in orbit mode.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/camera/(id)/distance
+
+   The distance from the camera to the focused object, in meters. Throws an exception
+   in any mode other than orbit and map.
+
+   .. note::
+
+      The camera moves smoothly to a new distance, and stays at least the focused object's
+      radius from it in map mode, and half its radius in orbit mode.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/camera/(id)/field-of-view
+
+   The camera's vertical field of view, in degrees, between 15 and 120.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/camera/(id)/field-of-view
+
+   The camera's vertical field of view, in degrees, between 15 and 120.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/camera/(id)/focused-vehicle
+
+   Returns the vehicle the camera is focused on, or ``null`` if it is focused on
+   something else, and sets the focus to a vehicle.
+
+   .. note::
+
+      Setting the focus leaves the active vehicle as it is.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :resjson KSA.Vehicle? value:
+
+.. http:put:: /ksa/camera/(id)/focused-vehicle
+
+   Returns the vehicle the camera is focused on, or ``null`` if it is focused on
+   something else, and sets the focus to a vehicle.
+
+   .. note::
+
+      Setting the focus leaves the active vehicle as it is.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :reqjson KSA.Vehicle? value: The new value.
+
+
+
+
+.. http:get:: /ksa/camera/(id)/focused-body
+
+   Returns the body the camera is focused on, or ``null`` if it is focused on
+   something else, and sets the focus to a body.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :resjson KSA.Body? value:
+
+.. http:put:: /ksa/camera/(id)/focused-body
+
+   Returns the body the camera is focused on, or ``null`` if it is focused on
+   something else, and sets the focus to a body.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :reqjson KSA.Body? value: The new value.
+
+
+
+
+.. http:get:: /ksa/camera/(id)/focused-kitten
+
+   Returns the kitten on EVA the camera is focused on, or ``null`` if it is focused
+   on something else, and sets the focus to a kitten on EVA.
+
+   .. note::
+
+      Throws an exception if the kitten is not on EVA.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :resjson KSA.Kitten? value:
+
+.. http:put:: /ksa/camera/(id)/focused-kitten
+
+   Returns the kitten on EVA the camera is focused on, or ``null`` if it is focused
+   on something else, and sets the focus to a kitten on EVA.
+
+   .. note::
+
+      Throws an exception if the kitten is not on EVA.
+
+
+   :param id: The identifier of the :ref:`Camera <http-KSA.Camera>` object.
+
+   :reqjson KSA.Kitten? value: The new value.
+
+
+
+
+
+.. _http-KSA.CameraMode:
+
+.. rubric:: CameraMode
+
+The mode of the camera. See :http:get:`/ksa/camera/(id)/mode`.
+
+Passed and returned as the name of one of its values:
+
+
+``"orbit"``
+   Orbits the focused object.
+
+
+``"free"``
+   Flies freely.
+
+
+``"map"``
+   The map view.
+
+
+``"iva"``
+   Inside the vehicle, from a crew seat.
+
+
+``"fixed"``
+   Fixed to a part of the vehicle, such as a docking port.

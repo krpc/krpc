@@ -1,0 +1,54 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Reference Frame
+===============
+
+
+.. _http-KSA.ReferenceFrame:
+
+.. rubric:: ReferenceFrame
+
+A reference frame, in which positions, directions, rotations and velocities are given.
+Obtained from the reference frame properties of :ref:`Vehicle <http-KSA.Vehicle>` and
+:ref:`Body <http-KSA.Body>`, or created with :http:post:`/ksa/reference-frame/create-relative` and
+:http:post:`/ksa/reference-frame/create-hybrid`.
+
+.. note::
+
+   Every reference frame is right-handed. Positions are in meters, velocities in meters
+   per second, and angular velocities in radians per second. A rotation is a quaternion
+   ``(x, y, z, w)``.
+
+
+A ``ReferenceFrame`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:post:: /ksa/reference-frame/create-relative
+
+   Create a reference frame that is offset from a parent frame.
+
+
+   :reqjson KSA.ReferenceFrame reference_frame: The parent reference frame.
+   :reqjson tuple<double, double, double> position: The position of the origin in the parent frame, in meters. Defaults to ``(0, 0, 0)``. Optional, defaults to ``[0.0, 0.0, 0.0]``.
+   :reqjson tuple<double, double, double, double> rotation: The rotation of the frame relative to the parent frame. Defaults to ``(0, 0, 0, 1)``, no rotation. Optional, defaults to ``[0.0, 0.0, 0.0, 1.0]``.
+   :reqjson tuple<double, double, double> velocity: The velocity of the origin in the parent frame, in meters per second. Defaults to ``(0, 0, 0)``. Optional, defaults to ``[0.0, 0.0, 0.0]``.
+   :reqjson tuple<double, double, double> angular_velocity: The angular velocity of the frame relative to the parent frame, in radians per second, in the axes of the parent frame. Defaults to ``(0, 0, 0)``. Optional, defaults to ``[0.0, 0.0, 0.0]``.
+   :resjson KSA.ReferenceFrame value:
+
+
+
+
+
+.. http:post:: /ksa/reference-frame/create-hybrid
+
+   Create a reference frame that takes its components from other frames.
+
+
+   :reqjson KSA.ReferenceFrame position: The reference frame that gives the origin.
+   :reqjson KSA.ReferenceFrame? rotation: The reference frame that gives the axes. Defaults to *position*. Optional, defaults to ``null``.
+   :reqjson KSA.ReferenceFrame? velocity: The reference frame that gives the velocity of the origin. Defaults to *position*. Optional, defaults to ``null``.
+   :reqjson KSA.ReferenceFrame? angular_velocity: The reference frame that gives the angular velocity. Defaults to *position*. Optional, defaults to ``null``.
+   :resjson KSA.ReferenceFrame value:

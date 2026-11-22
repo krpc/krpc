@@ -1,0 +1,461 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Body
+====
+
+
+.. class:: Body
+
+   A planet, moon or star. See :func:`KSA.getBodies`.
+
+   .. method:: getName()
+
+      The name of the body.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``string``
+   
+
+   .. method:: getIsStar()
+
+      Whether the body is a star.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getMass()
+
+      The mass of the body, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getGravitationalParameter()
+
+      The standard gravitational parameter of the body, in cubic meters per second squared.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getRadius()
+
+      The radius of the body, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getAtmosphereRadius()
+
+      The radius of the top of the atmosphere, in meters. Zero for a body with no
+      atmosphere.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getHasAtmosphere()
+
+      Whether the body has an atmosphere.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getSeaLevelPressure()
+
+      The atmospheric pressure at the body's mean radius, in pascals. Zero for a body
+      with no atmosphere.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSeaLevelDensity()
+
+      The density of the atmosphere at the body's mean radius, in kilograms per cubic
+      meter. Zero for a body with no atmosphere.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getScaleHeight()
+
+      The height over which the atmospheric pressure falls by a factor of ``e`` at
+      sea level, in meters. Zero for a body with no atmosphere.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: pressureAt(altitude)
+
+      The atmospheric pressure at an altitude, in pascals. Zero for a body with no
+      atmosphere.
+
+      :param altitude: Altitude above the body's mean radius, in meters.
+      :type altitude: ``number``
+      :rtype: ``number``
+   
+
+   .. method:: densityAt(altitude)
+
+      The density of the atmosphere at an altitude, in kilograms per cubic meter. Zero
+      for a body with no atmosphere.
+
+      :param altitude: Altitude above the body's mean radius, in meters.
+      :type altitude: ``number``
+      :rtype: ``number``
+   
+
+   .. method:: temperatureAt(altitude)
+
+      The temperature of the atmosphere at an altitude, in kelvin. Zero for a body with
+      no atmosphere, or above the atmosphere.
+
+      :param altitude: Altitude above the body's mean radius, in meters.
+      :type altitude: ``number``
+      :rtype: ``number``
+   
+
+   .. method:: speedOfSoundAt(altitude)
+
+      The speed of sound in the atmosphere at an altitude, in meters per second. Zero for
+      a body with no atmosphere, or above the atmosphere.
+
+      :param altitude: Altitude above the body's mean radius, in meters.
+      :type altitude: ``number``
+      :rtype: ``number``
+   
+
+   .. method:: getAtmosphereOxygenFraction()
+
+      The fraction of the atmosphere that is oxygen, by volume. Zero for a body with no
+      atmosphere.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getAtmosphereMolarMass()
+
+      The mean molar mass of the atmosphere, in kilograms per mole. Zero for a body with
+      no atmosphere.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getHasOcean()
+
+      Whether the body has an ocean.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getOceanDensity()
+
+      The density of the ocean, in kilograms per cubic meter. Zero for a body with no
+      ocean.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getGeomagneticStormLevel()
+
+      The level of the geomagnetic storm at the body, from 0 for none to 5 for the most
+      severe. The G level of the game's space weather window. Zero for a body with no
+      magnetosphere.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getDstIndex()
+
+      The disturbance storm time index of the body, in teslas. It falls below zero in a
+      geomagnetic storm. Zero for a body with no magnetosphere.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSolarActivity()
+
+      The activity of a star, from 0 at the minimum of its cycle to 1 at the maximum.
+      Zero for a body that is not a star.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSolarActivityRising()
+
+      Whether the activity of a star is rising toward the maximum of its cycle.
+      False for a body that is not a star, or a star with no cycle.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getTimeToSolarActivityTurn()
+
+      The time until the activity of a star reaches the maximum or minimum of its cycle,
+      in seconds. Not a number for a body that is not a star, or a star with no cycle.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getCoronalMassEjectionsPerDay()
+
+      The mean number of coronal mass ejections a star throws out per day, at its
+      current activity. Zero for a body that is not a star.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getActiveRegionCount()
+
+      The number of active regions on a star, the sources of its eruptions. Zero for a
+      body that is not a star.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getRecentCoronalMassEjections()
+
+      The fast coronal mass ejections a star threw out in the last three days, as the
+      game's space weather window lists them. Empty for a body that is not a star.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.CoronalMassEjection`
+   
+
+   .. method:: getSurfaceGravity()
+
+      The acceleration due to gravity at the body's mean radius, in meters per second
+      squared.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getRotationalSpeed()
+
+      The rate at which the body rotates about its axis, in radians per second.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getRotationalPeriod()
+
+      The time the body takes to rotate once about its axis, relative to the stars, in
+      seconds. Infinite for a body that does not rotate.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSphereOfInfluence()
+
+      The radius of the body's sphere of influence, in meters. Not a number for a body
+      that orbits nothing.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getParent()
+
+      The body this body orbits, or ``null`` if it orbits nothing.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Body` or ``null``
+   
+
+   .. method:: getSatellites()
+
+      The bodies that orbit this body.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Body`
+   
+
+   .. method:: getOrbit()
+
+      The orbit of the body, or ``null`` if it orbits nothing.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Orbit` or ``null``
+   
+
+   .. method:: surfaceHeight(latitude, longitude)
+
+      The height of the terrain or the sea surface, whichever is higher, at a point on
+      the body, in meters above the body's mean radius.
+
+      :param latitude: Latitude, in degrees.
+      :type latitude: ``number``
+      :param longitude: Longitude, in degrees.
+      :type longitude: ``number``
+      :rtype: ``number``
+   
+
+   .. method:: bedrockHeight(latitude, longitude)
+
+      The height of the terrain at a point on the body, in meters above the body's mean
+      radius. Below the sea, this is the height of the sea floor.
+
+      :param latitude: Latitude, in degrees.
+      :type latitude: ``number``
+      :param longitude: Longitude, in degrees.
+      :type longitude: ``number``
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Zero for a body with no terrain, such as a gas giant.
+
+   .. method:: getLaunchSites()
+
+      The names of the launch sites on the body. See :func:`KSA.launchVehicle`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of ``string``
+   
+
+   .. method:: getBiomes()
+
+      The names of the body's biomes. Empty for a body with no biomes.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of ``string``
+   
+
+   .. method:: biomeAt(latitude, longitude)
+
+      The biome at a point on the body, or ``null`` if the body has no biomes.
+
+      :param latitude: Latitude, in degrees.
+      :type latitude: ``number``
+      :param longitude: Longitude, in degrees.
+      :type longitude: ``number``
+      :rtype: ``string`` or ``null``
+   
+
+   .. method:: getReferenceFrame()
+
+      The reference frame fixed to the body, with its origin at the body's center. The
+      z axis points to the north pole, the x axis to latitude and longitude zero, and the
+      y axis to latitude zero and longitude 90 degrees east. The frame rotates with the
+      body.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.ReferenceFrame`
+   
+
+   .. method:: getNonRotatingReferenceFrame()
+
+      The reference frame with its origin at the body's center that does not rotate. The
+      z axis points to the north pole, and the x and y axes are fixed relative to the
+      stars.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.ReferenceFrame`
+   
+
+   .. method:: position(referenceFrame)
+
+      The position of the center of the body, in meters.
+
+      :param referenceFrame: The reference frame of the position.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: velocity(referenceFrame)
+
+      The velocity of the body, in meters per second.
+
+      :param referenceFrame: The reference frame of the velocity.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: rotation(referenceFrame)
+
+      The rotation of :meth:`KSA.Body.getReferenceFrame` relative to the given frame.
+
+      :param referenceFrame: The reference frame of the rotation.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number, number]``
+   
+
+   .. method:: angularVelocity(referenceFrame)
+
+      The angular velocity of the body, in radians per second. The vector points along
+      the axis of rotation, and its length is the rate of rotation.
+
+      :param referenceFrame: The reference frame of the angular velocity.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: surfacePosition(latitude, longitude, referenceFrame)
+
+      The position of a point on the surface, at the body's mean radius, in meters.
+
+      :param latitude: Latitude, in degrees.
+      :type latitude: ``number``
+      :param longitude: Longitude, in degrees.
+      :type longitude: ``number``
+      :param referenceFrame: The reference frame of the position.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: latitudeAtPosition(position, referenceFrame)
+
+      The latitude of a position, in degrees.
+
+      :param position: Position, in meters.
+      :type position: ``[number, number, number]``
+      :param referenceFrame: The reference frame of the position.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``number``
+   
+
+   .. method:: longitudeAtPosition(position, referenceFrame)
+
+      The longitude of a position, in degrees.
+
+      :param position: Position, in meters.
+      :type position: ``[number, number, number]``
+      :param referenceFrame: The reference frame of the position.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``number``
+   
+
+   .. method:: altitudeAtPosition(position, referenceFrame)
+
+      The altitude of a position above the body's mean radius, in meters.
+
+      :param position: Position, in meters.
+      :type position: ``[number, number, number]``
+      :param referenceFrame: The reference frame of the position.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``number``

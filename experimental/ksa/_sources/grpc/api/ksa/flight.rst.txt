@@ -165,6 +165,45 @@ Flight
 
       :Flight.GetAtmosphereDensityResponse: ``value`` (``float``)
 
+   .. grpc:rpc:: GetStaticAirTemperature (Flight.GetStaticAirTemperatureRequest) returns (Flight.GetStaticAirTemperatureResponse)
+
+      The temperature of the atmosphere at the vehicle, in kelvin. Zero outside the
+      atmosphere.
+
+      :Flight.GetStaticAirTemperatureRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetStaticAirTemperatureResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSpeedOfSound (Flight.GetSpeedOfSoundRequest) returns (Flight.GetSpeedOfSoundResponse)
+
+      The speed of sound in the atmosphere at the vehicle, in meters per second. Zero
+      outside the atmosphere.
+
+      :Flight.GetSpeedOfSoundRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetSpeedOfSoundResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetMach (Flight.GetMachRequest) returns (Flight.GetMachResponse)
+
+      The speed of the vehicle relative to the surface, as a multiple of the speed of
+      sound. Zero outside the atmosphere.
+
+      :Flight.GetMachRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetMachResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetOutsideAir (Flight.GetOutsideAirRequest) returns (Flight.GetOutsideAirResponse)
+
+      Whether a kitten can breathe the air outside the vehicle.
+
+      :Flight.GetOutsideAirRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetOutsideAirResponse: ``value`` (:grpc:enum:`OutsideAir <krpc.ksa.OutsideAir>`)
+
    .. grpc:rpc:: GetDynamicPressure (Flight.GetDynamicPressureRequest) returns (Flight.GetDynamicPressureResponse)
 
       The dynamic pressure acting on the vehicle, in pascals.
@@ -173,6 +212,39 @@ Flight
          * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
 
       :Flight.GetDynamicPressureResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetDepth (Flight.GetDepthRequest) returns (Flight.GetDepthResponse)
+
+      The depth of the vehicle's center of mass below the ocean surface, in meters. Zero
+      above the surface.
+
+      :Flight.GetDepthRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetDepthResponse: ``value`` (``double``)
+
+      .. note::
+
+         The ocean surface includes its waves.
+
+   .. grpc:rpc:: GetSubmergedPortion (Flight.GetSubmergedPortionRequest) returns (Flight.GetSubmergedPortionResponse)
+
+      The fraction of the vehicle's volume below the ocean surface, between 0 and 1.
+
+      :Flight.GetSubmergedPortionRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetSubmergedPortionResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetBuoyantForce (Flight.GetBuoyantForceRequest) returns (Flight.GetBuoyantForceResponse)
+
+      The buoyant force on the vehicle from the ocean and the atmosphere, in newtons. It
+      acts against gravity.
+
+      :Flight.GetBuoyantForceRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetBuoyantForceResponse: ``value`` (``float``)
 
    .. grpc:rpc:: GetDoseRate (Flight.GetDoseRateRequest) returns (Flight.GetDoseRateResponse)
 
@@ -194,6 +266,65 @@ Flight
          * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
 
       :Flight.GetOrbitAverageDoseRateResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSolarWindSpeed (Flight.GetSolarWindSpeedRequest) returns (Flight.GetSolarWindSpeedResponse)
+
+      The speed of the solar wind at the vehicle, in :math:`\mathrm{m/s}`. Zero if no star
+      has a solar wind.
+
+      :Flight.GetSolarWindSpeedRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetSolarWindSpeedResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSolarWindPressure (Flight.GetSolarWindPressureRequest) returns (Flight.GetSolarWindPressureResponse)
+
+      The dynamic pressure of the solar wind at the vehicle, in pascals.
+
+      :Flight.GetSolarWindPressureRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetSolarWindPressureResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSolarWindNorthwardField (Flight.GetSolarWindNorthwardFieldRequest) returns (Flight.GetSolarWindNorthwardFieldResponse)
+
+      The northward component of the magnetic field carried by the solar wind at the
+      vehicle, in teslas. A southward field, a negative value, drives geomagnetic storms.
+
+      :Flight.GetSolarWindNorthwardFieldRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetSolarWindNorthwardFieldResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetProtonFlux (Flight.GetProtonFluxRequest) returns (Flight.GetProtonFluxResponse)
+
+      The flux of solar energetic protons at the vehicle during a solar particle event, in
+      protons per square centimeter per second per steradian. Zero outside an event.
+
+      :Flight.GetProtonFluxRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetProtonFluxResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetRadiationStormLevel (Flight.GetRadiationStormLevelRequest) returns (Flight.GetRadiationStormLevelResponse)
+
+      The level of the radiation storm at the vehicle, from 0 for none to 5 for the
+      most severe. The S level of the game's space weather window.
+
+      :Flight.GetRadiationStormLevelRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetRadiationStormLevelResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetIncomingCoronalMassEjections (Flight.GetIncomingCoronalMassEjectionsRequest) returns (Flight.GetIncomingCoronalMassEjectionsResponse)
+
+      The coronal mass ejections heading for the vehicle, as the game's space weather
+      window lists them.
+
+      :Flight.GetIncomingCoronalMassEjectionsRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetIncomingCoronalMassEjectionsResponse: ``value`` (``repeated`` :grpc:service:`CoronalMassEjection <krpc.ksa.CoronalMassEjectionService>`)
 
    .. grpc:rpc:: GetGForce (Flight.GetGForceRequest) returns (Flight.GetGForceResponse)
 
@@ -227,6 +358,67 @@ Flight
 
       :Flight.GetSideslipAngleResponse: ``value`` (``float``)
 
+   .. grpc:rpc:: GetDrag (Flight.GetDragRequest) returns (Flight.GetDragResponse)
+
+      The part of the aerodynamic force along the airflow, in newtons.
+
+      :Flight.GetDragRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetDragResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetLift (Flight.GetLiftRequest) returns (Flight.GetLiftResponse)
+
+      The part of the aerodynamic force across the airflow, in newtons.
+
+      :Flight.GetLiftRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetLiftResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: AerodynamicForce (Flight.AerodynamicForceRequest) returns (Flight.AerodynamicForceResponse)
+
+      The aerodynamic force on the vehicle, in newtons.
+
+      :Flight.AerodynamicForceRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the force.
+
+      :Flight.AerodynamicForceResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      .. note::
+
+         The game computes the force from the surfaces of the vehicle's hull.
+
+   .. grpc:rpc:: AerodynamicTorque (Flight.AerodynamicTorqueRequest) returns (Flight.AerodynamicTorqueResponse)
+
+      The aerodynamic torque on the vehicle about its center of mass, in
+      :math:`\mathrm{N \cdot m}`. The vector points along the axis of the torque.
+
+      :Flight.AerodynamicTorqueRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the torque.
+
+      :Flight.AerodynamicTorqueResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: SimulateAerodynamicForceAt (Flight.SimulateAerodynamicForceAtRequest) returns (Flight.SimulateAerodynamicForceAtResponse)
+
+      The aerodynamic force the vehicle would have at a given position and velocity, in
+      its current attitude and rotation, in newtons.
+
+      :Flight.SimulateAerodynamicForceAtRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+         * ``body`` (:grpc:service:`Body <krpc.ksa.BodyService>`): The body whose atmosphere the vehicle flies through.
+         * ``position`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The position, in meters.
+         * ``velocity`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The velocity, in meters per second.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position, velocity and force.
+
+      :Flight.SimulateAerodynamicForceAtResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      .. note::
+
+         The atmosphere moves with the body's rotation.
+
    .. grpc:rpc:: Prograde (Flight.ProgradeRequest) returns (Flight.ProgradeResponse)
 
       The unit vector of the vehicle's velocity relative to the surface.
@@ -258,3 +450,24 @@ Flight
          * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the direction.
 
       :Flight.RadialResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+.. grpc:enum:: OutsideAir
+
+   Whether a kitten can breathe the air outside a vehicle. See
+   :grpc:rpc:`FlightService.GetOutsideAir <krpc.ksa.FlightService.GetOutsideAir>`.
+
+   .. grpc:value:: OUTSIDE_AIR_NO_ATMOSPHERE
+
+      Outside the atmosphere, or at a body with none.
+
+   .. grpc:value:: OUTSIDE_AIR_NO_OXYGEN
+
+      An atmosphere with no oxygen.
+
+   .. grpc:value:: OUTSIDE_AIR_TOO_THIN
+
+      An atmosphere whose oxygen pressure is too low to breathe.
+
+   .. grpc:value:: OUTSIDE_AIR_BREATHABLE
+
+      Breathable air.

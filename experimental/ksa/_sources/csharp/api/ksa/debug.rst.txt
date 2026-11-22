@@ -38,8 +38,8 @@ Debug
 
        * **vehicle** -- The vehicle.
        * **body** -- The body to orbit.
-       * **semiMajorAxis** -- The semi-major axis, in meters.
-       * **eccentricity** -- The eccentricity.
+       * **semiMajorAxis** -- The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+       * **eccentricity** -- The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
        * **inclination** -- The inclination, in radians.
        * **longitudeOfAscendingNode** -- The longitude of the ascending node, in radians.
        * **argumentOfPeriapsis** -- The argument of periapsis, in radians.
@@ -146,7 +146,7 @@ Debug
 
    .. function:: static void FillResources(IConnection connection, Vehicle vehicle)
 
-      Fill the propellant, batteries and other consumables of a vehicle, as the game's
+      Fill the propellant and other substances in the tanks of a vehicle, as the game's
       refill command does.
 
       :parameters:
@@ -155,9 +155,14 @@ Debug
 
       :Game Scenes: All
 
+
+      .. note::
+
+         The batteries keep their charge.
+
    .. function:: static void EmptyResources(IConnection connection, Vehicle vehicle)
 
-      Empty the propellant, batteries and other consumables of a vehicle, as the game's
+      Empty the propellant and other substances in the tanks of a vehicle, as the game's
       empty command does.
 
       :parameters:
@@ -165,6 +170,11 @@ Debug
        * **vehicle** -- The vehicle.
 
       :Game Scenes: All
+
+
+      .. note::
+
+         The batteries keep their charge.
 
    .. function:: static Vehicle DuplicateVehicle(IConnection connection, Vehicle vehicle, string name)
 

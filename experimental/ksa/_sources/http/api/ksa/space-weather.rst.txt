@@ -1,0 +1,88 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Space Weather
+=============
+
+
+.. _http-KSA.CoronalMassEjection:
+
+.. rubric:: CoronalMassEjection
+
+A coronal mass ejection: a cloud of plasma thrown out by a star. One that reaches a body
+with a magnetosphere can cause a geomagnetic storm. See
+:http:get:`/ksa/body/(id)/recent-coronal-mass-ejections` and
+:http:get:`/ksa/flight/(id)/incoming-coronal-mass-ejections`.
+
+A ``CoronalMassEjection`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/coronal-mass-ejection/(id)/star
+
+   The star that threw out the ejection.
+
+
+   :param id: The identifier of the :ref:`CoronalMassEjection <http-KSA.CoronalMassEjection>` object.
+
+   :resjson KSA.Body value:
+
+
+
+
+.. http:get:: /ksa/coronal-mass-ejection/(id)/ut
+
+   The universal time at which the ejection left the star, in seconds.
+
+
+   :param id: The identifier of the :ref:`CoronalMassEjection <http-KSA.CoronalMassEjection>` object.
+
+   :resjson double value:
+
+
+
+
+.. http:get:: /ksa/coronal-mass-ejection/(id)/speed
+
+   The speed of the ejection as it leaves the star, in :math:`\mathrm{m/s}`.
+
+
+   :param id: The identifier of the :ref:`CoronalMassEjection <http-KSA.CoronalMassEjection>` object.
+
+   :resjson float value:
+
+
+
+
+.. http:post:: /ksa/coronal-mass-ejection/(id)/arrival-time
+
+   The universal time at which the shock of the ejection is forecast to reach the
+   vehicle, in seconds. Not a number if the ejection misses the vehicle, or has
+   already reached it.
+
+   .. note::
+
+      The forecast the game's space weather window shows. It is uncertain by up to
+      :http:post:`/ksa/coronal-mass-ejection/(id)/arrival-uncertainty`, which shrinks as the ejection nears.
+
+
+   :param id: The identifier of the :ref:`CoronalMassEjection <http-KSA.CoronalMassEjection>` object.
+
+   :reqjson KSA.Vehicle vehicle: The vehicle.
+   :resjson double value:
+
+
+
+
+
+.. http:post:: /ksa/coronal-mass-ejection/(id)/arrival-uncertainty
+
+   The uncertainty of :http:post:`/ksa/coronal-mass-ejection/(id)/arrival-time`, in seconds. Not a number if the
+   ejection misses the vehicle, or has already reached it.
+
+
+   :param id: The identifier of the :ref:`CoronalMassEjection <http-KSA.CoronalMassEjection>` object.
+
+   :reqjson KSA.Vehicle vehicle: The vehicle.
+   :resjson float value:

@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Life Support &#8212; kRPC v0.3.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=5ab7b574" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=e259d695"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'grpc/api/ksa/life-support';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <link rel="icon" href="../../../_static/logo-mark.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Body" href="body.html" />
+    <link rel="prev" title="Crew" href="crew.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="../../../_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../js.html">JavaScript</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../js/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../js/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../http.html">HTTP</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/life-support.html">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../http/api/kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../http/api/kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Life Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="space-weather.html">Space Weather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../messages.html">Messages</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kfs.html">kFS API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/kfs.html">Service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kfs/computer.html">Computer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../clients.html" class="nav-link">Clients</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../../grpc.html" class="nav-link">gRPC</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../ksa.html" class="nav-link">KSA API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Life Support</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="life-support">
+<h1>Life Support<a class="headerlink" href="#life-support" title="Link to this heading">#</a></h1>
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">LifeSupportService</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportService" title="Link to this definition">#</a></dt>
+<dd><p>How long the supplies of a vehicle, a habitat zone or a kitten’s suit last. Obtained
+from <a class="reference internal" href="vehicle.html#krpc.ksa.VehicleService.GetLifeSupport" title="krpc.ksa.VehicleService.GetLifeSupport"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetLifeSupport</span></code></a>, <a class="reference internal" href="#krpc.ksa.HabitatZoneService.GetLifeSupport" title="krpc.ksa.HabitatZoneService.GetLifeSupport"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">HabitatZoneService.GetLifeSupport</span></code></a> or
+<a class="reference internal" href="crew.html#krpc.ksa.KittenService.GetLifeSupport" title="krpc.ksa.KittenService.GetLifeSupport"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">KittenService.GetLifeSupport</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The times count down only while <a class="reference internal" href="ksa.html#krpc.ksa.KSAService.GetLifeSupportEnabled" title="krpc.ksa.KSAService.GetLifeSupportEnabled"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">KSAService.GetLifeSupportEnabled</span></code></a> is true. Air
+lasts forever in breathable air outside the vehicle.</p>
+</div>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportService.GetKittens">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetKittens</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetKittensRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetKittensResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportService.GetKittens" title="Link to this definition">#</a></dt>
+<dd><p>The number of kittens the supplies are shared between.</p>
+<dl class="field-list simple">
+<dt class="field-odd">LifeSupport.GetKittensRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportService" title="krpc.ksa.LifeSupportService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">LifeSupport</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">LifeSupport.GetKittensResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">sint32</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportService.GetAirMass">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetAirMass</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetAirMassRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetAirMassResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportService.GetAirMass" title="Link to this definition">#</a></dt>
+<dd><p>The mass of oxygen in the crew’s tanks, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">LifeSupport.GetAirMassRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportService" title="krpc.ksa.LifeSupportService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">LifeSupport</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">LifeSupport.GetAirMassResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportService.GetWaterMass">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetWaterMass</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetWaterMassRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetWaterMassResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportService.GetWaterMass" title="Link to this definition">#</a></dt>
+<dd><p>The mass of water in the crew’s tanks, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">LifeSupport.GetWaterMassRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportService" title="krpc.ksa.LifeSupportService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">LifeSupport</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">LifeSupport.GetWaterMassResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportService.GetMeals">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMeals</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetMealsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetMealsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportService.GetMeals" title="Link to this definition">#</a></dt>
+<dd><p>The number of meals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">LifeSupport.GetMealsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportService" title="krpc.ksa.LifeSupportService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">LifeSupport</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">LifeSupport.GetMealsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">sint32</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportService.GetAirTime">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetAirTime</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetAirTimeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetAirTimeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportService.GetAirTime" title="Link to this definition">#</a></dt>
+<dd><p>The time the air lasts, in seconds. Infinite with no crew, or in breathable air.</p>
+<dl class="field-list simple">
+<dt class="field-odd">LifeSupport.GetAirTimeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportService" title="krpc.ksa.LifeSupportService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">LifeSupport</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">LifeSupport.GetAirTimeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportService.GetScrubberTime">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetScrubberTime</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetScrubberTimeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetScrubberTimeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportService.GetScrubberTime" title="Link to this definition">#</a></dt>
+<dd><p>The time the carbon dioxide scrubbers last, in seconds. Infinite with no crew.</p>
+<dl class="field-list simple">
+<dt class="field-odd">LifeSupport.GetScrubberTimeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportService" title="krpc.ksa.LifeSupportService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">LifeSupport</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">LifeSupport.GetScrubberTimeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportService.GetWaterTime">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetWaterTime</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetWaterTimeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetWaterTimeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportService.GetWaterTime" title="Link to this definition">#</a></dt>
+<dd><p>The time the water lasts, in seconds. Infinite with no crew.</p>
+<dl class="field-list simple">
+<dt class="field-odd">LifeSupport.GetWaterTimeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportService" title="krpc.ksa.LifeSupportService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">LifeSupport</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">LifeSupport.GetWaterTimeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportService.GetFoodTime">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetFoodTime</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetFoodTimeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetFoodTimeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportService.GetFoodTime" title="Link to this definition">#</a></dt>
+<dd><p>The time the food lasts, in seconds. Infinite with no crew.</p>
+<dl class="field-list simple">
+<dt class="field-odd">LifeSupport.GetFoodTimeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportService" title="krpc.ksa.LifeSupportService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">LifeSupport</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">LifeSupport.GetFoodTimeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportService.GetTime">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTime</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetTimeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetTimeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportService.GetTime" title="Link to this definition">#</a></dt>
+<dd><p>The time until the first supply runs out, in seconds. A suit counts its air and
+scrubber only. Infinite with no crew.</p>
+<dl class="field-list simple">
+<dt class="field-odd">LifeSupport.GetTimeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportService" title="krpc.ksa.LifeSupportService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">LifeSupport</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">LifeSupport.GetTimeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportService.GetLimitingSupply">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetLimitingSupply</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetLimitingSupplyRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetLimitingSupplyResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportService.GetLimitingSupply" title="Link to this definition">#</a></dt>
+<dd><p>The supply that runs out first. Air when every time is infinite, as with no crew.</p>
+<dl class="field-list simple">
+<dt class="field-odd">LifeSupport.GetLimitingSupplyRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportService" title="krpc.ksa.LifeSupportService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">LifeSupport</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">LifeSupport.GetLimitingSupplyResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportSupply" title="krpc.ksa.LifeSupportSupply"><code class="xref grpc grpc-enum docutils literal notranslate"><span class="pre">LifeSupportSupply</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportService.GetLevel">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetLevel</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetLevelRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetLevelResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportService.GetLevel" title="Link to this definition">#</a></dt>
+<dd><p>How long the supplies last, as the game’s life support gauge shows it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">LifeSupport.GetLevelRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportService" title="krpc.ksa.LifeSupportService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">LifeSupport</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">LifeSupport.GetLevelResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportLevel" title="krpc.ksa.LifeSupportLevel"><code class="xref grpc grpc-enum docutils literal notranslate"><span class="pre">LifeSupportLevel</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportService.GetTimeToNextLevel">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTimeToNextLevel</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetTimeToNextLevelRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">LifeSupport.GetTimeToNextLevelResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportService.GetTimeToNextLevel" title="Link to this definition">#</a></dt>
+<dd><p>The time until <a class="reference internal" href="#krpc.ksa.LifeSupportService.GetLevel" title="krpc.ksa.LifeSupportService.GetLevel"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">LifeSupportService.GetLevel</span></code></a> next changes, in seconds. Infinite with no crew.</p>
+<dl class="field-list simple">
+<dt class="field-odd">LifeSupport.GetTimeToNextLevelRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportService" title="krpc.ksa.LifeSupportService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">LifeSupport</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">LifeSupport.GetTimeToNextLevelResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc enum">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportLevel">
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">LifeSupportLevel</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportLevel" title="Link to this definition">#</a></dt>
+<dd><p>How long the crew’s supplies last. See <a class="reference internal" href="#krpc.ksa.LifeSupportService.GetLevel" title="krpc.ksa.LifeSupportService.GetLevel"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">LifeSupportService.GetLevel</span></code></a>.</p>
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportLevel.LIFE_SUPPORT_LEVEL_OK">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">LIFE_SUPPORT_LEVEL_OK</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportLevel.LIFE_SUPPORT_LEVEL_OK" title="Link to this definition">#</a></dt>
+<dd><p>More than a day of supplies, or no crew.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportLevel.LIFE_SUPPORT_LEVEL_LOW">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">LIFE_SUPPORT_LEVEL_LOW</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportLevel.LIFE_SUPPORT_LEVEL_LOW" title="Link to this definition">#</a></dt>
+<dd><p>A day of supplies or less.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportLevel.LIFE_SUPPORT_LEVEL_CRITICAL">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">LIFE_SUPPORT_LEVEL_CRITICAL</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportLevel.LIFE_SUPPORT_LEVEL_CRITICAL" title="Link to this definition">#</a></dt>
+<dd><p>An hour of supplies or less.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportLevel.LIFE_SUPPORT_LEVEL_OUT">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">LIFE_SUPPORT_LEVEL_OUT</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportLevel.LIFE_SUPPORT_LEVEL_OUT" title="Link to this definition">#</a></dt>
+<dd><p>A supply has run out.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc enum">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportSupply">
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">LifeSupportSupply</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportSupply" title="Link to this definition">#</a></dt>
+<dd><p>A supply the crew needs. See <a class="reference internal" href="#krpc.ksa.LifeSupportService.GetLimitingSupply" title="krpc.ksa.LifeSupportService.GetLimitingSupply"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">LifeSupportService.GetLimitingSupply</span></code></a>.</p>
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportSupply.LIFE_SUPPORT_SUPPLY_AIR">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">LIFE_SUPPORT_SUPPLY_AIR</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportSupply.LIFE_SUPPORT_SUPPLY_AIR" title="Link to this definition">#</a></dt>
+<dd><p>Oxygen to breathe.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportSupply.LIFE_SUPPORT_SUPPLY_SCRUBBER">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">LIFE_SUPPORT_SUPPLY_SCRUBBER</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportSupply.LIFE_SUPPORT_SUPPLY_SCRUBBER" title="Link to this definition">#</a></dt>
+<dd><p>Lithium hydroxide canisters, which scrub carbon dioxide from the air.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportSupply.LIFE_SUPPORT_SUPPLY_WATER">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">LIFE_SUPPORT_SUPPLY_WATER</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportSupply.LIFE_SUPPORT_SUPPLY_WATER" title="Link to this definition">#</a></dt>
+<dd><p>Drinking water.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.LifeSupportSupply.LIFE_SUPPORT_SUPPLY_FOOD">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">LIFE_SUPPORT_SUPPLY_FOOD</span></span><a class="headerlink" href="#krpc.ksa.LifeSupportSupply.LIFE_SUPPORT_SUPPLY_FOOD" title="Link to this definition">#</a></dt>
+<dd><p>Meals.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatZoneService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">HabitatZoneService</span></span><a class="headerlink" href="#krpc.ksa.HabitatZoneService" title="Link to this definition">#</a></dt>
+<dd><p>The connected habitable parts of a vehicle, which share their crew’s supplies.
+Obtained from <a class="reference internal" href="vehicle.html#krpc.ksa.VehicleService.GetHabitatZones" title="krpc.ksa.VehicleService.GetHabitatZones"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetHabitatZones</span></code></a> or <a class="reference internal" href="#krpc.ksa.HabitatService.GetZone" title="krpc.ksa.HabitatService.GetZone"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">HabitatService.GetZone</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Parts join a zone through connections the crew can pass, such as an open docking
+port hatch.</p>
+</div>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatZoneService.GetVehicle">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetVehicle</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetVehicleRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetVehicleResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatZoneService.GetVehicle" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle the zone is in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">HabitatZone.GetVehicleRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">HabitatZone.GetVehicleResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="vehicle.html#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatZoneService.GetParts">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetParts</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetPartsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetPartsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatZoneService.GetParts" title="Link to this definition">#</a></dt>
+<dd><p>The parts in the zone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">HabitatZone.GetPartsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">HabitatZone.GetPartsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="parts.html#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatZoneService.GetHabitats">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetHabitats</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetHabitatsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetHabitatsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatZoneService.GetHabitats" title="Link to this definition">#</a></dt>
+<dd><p>The habitats in the zone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">HabitatZone.GetHabitatsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">HabitatZone.GetHabitatsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="#krpc.ksa.HabitatService" title="krpc.ksa.HabitatService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Habitat</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatZoneService.GetSeats">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSeats</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetSeatsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetSeatsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatZoneService.GetSeats" title="Link to this definition">#</a></dt>
+<dd><p>The crew seats in the zone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">HabitatZone.GetSeatsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">HabitatZone.GetSeatsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="crew.html#krpc.ksa.SeatService" title="krpc.ksa.SeatService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Seat</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatZoneService.GetCrew">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetCrew</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetCrewRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetCrewResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatZoneService.GetCrew" title="Link to this definition">#</a></dt>
+<dd><p>The kittens in the zone’s seats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">HabitatZone.GetCrewRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">HabitatZone.GetCrewResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="crew.html#krpc.ksa.KittenService" title="krpc.ksa.KittenService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Kitten</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatZoneService.GetLinkedZones">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetLinkedZones</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetLinkedZonesRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetLinkedZonesResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatZoneService.GetLinkedZones" title="Link to this definition">#</a></dt>
+<dd><p>The zones that join this one when closed docking port hatches between them open.</p>
+<dl class="field-list simple">
+<dt class="field-odd">HabitatZone.GetLinkedZonesRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">HabitatZone.GetLinkedZonesResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatZoneService.HatchesTo">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">HatchesTo</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.HatchesToRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.HatchesToResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatZoneService.HatchesTo" title="Link to this definition">#</a></dt>
+<dd><p>The closed docking port hatches that join this zone to a linked zone when they
+open.</p>
+<dl class="field-list simple">
+<dt class="field-odd">HabitatZone.HatchesToRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zone</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>): A zone in <a class="reference internal" href="#krpc.ksa.HabitatZoneService.GetLinkedZones" title="krpc.ksa.HabitatZoneService.GetLinkedZones"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">HabitatZoneService.GetLinkedZones</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">HabitatZone.HatchesToResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="parts.html#krpc.ksa.DockingPortService" title="krpc.ksa.DockingPortService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">DockingPort</span></code></a>)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the zone is not linked to this one.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatZoneService.GetHabitableVolume">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetHabitableVolume</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetHabitableVolumeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetHabitableVolumeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatZoneService.GetHabitableVolume" title="Link to this definition">#</a></dt>
+<dd><p>The volume the crew can live in, in cubic meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">HabitatZone.GetHabitableVolumeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">HabitatZone.GetHabitableVolumeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatZoneService.GetStorageVolume">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetStorageVolume</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetStorageVolumeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetStorageVolumeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatZoneService.GetStorageVolume" title="Link to this definition">#</a></dt>
+<dd><p>The volume for stored supplies, in cubic meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">HabitatZone.GetStorageVolumeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">HabitatZone.GetStorageVolumeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatZoneService.GetLifeSupport">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetLifeSupport</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetLifeSupportRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetLifeSupportResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatZoneService.GetLifeSupport" title="Link to this definition">#</a></dt>
+<dd><p>How long the zone’s supplies last its crew.</p>
+<dl class="field-list simple">
+<dt class="field-odd">HabitatZone.GetLifeSupportRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">HabitatZone.GetLifeSupportResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportService" title="krpc.ksa.LifeSupportService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">LifeSupport</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatZoneService.GetMissionSupplies">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMissionSupplies</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetMissionSuppliesRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.GetMissionSuppliesResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatZoneService.GetMissionSupplies" title="Link to this definition">#</a></dt>
+<dd><p>Whether the zone’s supplies last its crew through the vehicle’s mission. <code class="docutils literal notranslate"><span class="pre">null</span></code>
+without a feasible mission with time left, or while
+<a class="reference internal" href="ksa.html#krpc.ksa.KSAService.GetLifeSupportEnabled" title="krpc.ksa.KSAService.GetLifeSupportEnabled"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">KSAService.GetLifeSupportEnabled</span></code></a> is false.</p>
+<dl class="field-list simple">
+<dt class="field-odd">HabitatZone.GetMissionSuppliesRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">HabitatZone.GetMissionSuppliesResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.MissionSuppliesService" title="krpc.ksa.MissionSuppliesService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">MissionSupplies</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatZoneService.PlannedKittens">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PlannedKittens</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.PlannedKittensRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">HabitatZone.PlannedKittensResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatZoneService.PlannedKittens" title="Link to this definition">#</a></dt>
+<dd><p>The number of kittens planned in the zone for a leg of the vehicle’s mission. The
+plan defaults to the kittens seated in the zone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">HabitatZone.PlannedKittensRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">leg</span></code> (<a class="reference internal" href="#krpc.ksa.MissionLeg" title="krpc.ksa.MissionLeg"><code class="xref grpc grpc-enum docutils literal notranslate"><span class="pre">MissionLeg</span></code></a>): The leg.</p></li>
+</ul>
+</dd>
+<dt class="field-even">HabitatZone.PlannedKittensResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">sint32</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MissionService</span></span><a class="headerlink" href="#krpc.ksa.MissionService" title="Link to this definition">#</a></dt>
+<dd><p>The mission planned for a vehicle in the editor’s life support window. Obtained from
+<a class="reference internal" href="vehicle.html#krpc.ksa.VehicleService.GetMission" title="krpc.ksa.VehicleService.GetMission"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetMission</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game times the legs of the mission from the plan, and checks the supplies of each
+habitat zone against them. See <a class="reference internal" href="#krpc.ksa.HabitatZoneService.GetMissionSupplies" title="krpc.ksa.HabitatZoneService.GetMissionSupplies"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">HabitatZoneService.GetMissionSupplies</span></code></a>.</p>
+</div>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetDestination">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDestination</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetDestinationRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetDestinationResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetDestination" title="Link to this definition">#</a></dt>
+<dd><p>Where the mission goes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetDestinationRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetDestinationResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.MissionDestination" title="krpc.ksa.MissionDestination"><code class="xref grpc grpc-enum docutils literal notranslate"><span class="pre">MissionDestination</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetBody">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetBody</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetBodyRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetBodyResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetBody" title="Link to this definition">#</a></dt>
+<dd><p>The body the mission goes to, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has no destination. For a low
+orbit, this is the home body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetBodyRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetBodyResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="body.html#krpc.ksa.BodyService" title="krpc.ksa.BodyService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Body</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetArrival">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetArrival</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetArrivalRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetArrivalResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetArrival" title="Link to this definition">#</a></dt>
+<dd><p>What the mission does at its destination.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetArrivalRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetArrivalResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.MissionArrival" title="krpc.ksa.MissionArrival"><code class="xref grpc grpc-enum docutils literal notranslate"><span class="pre">MissionArrival</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetTrip">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTrip</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetTripRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetTripResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetTrip" title="Link to this definition">#</a></dt>
+<dd><p>Whether the mission comes back.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetTripRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetTripResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.MissionTrip" title="krpc.ksa.MissionTrip"><code class="xref grpc grpc-enum docutils literal notranslate"><span class="pre">MissionTrip</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetStay">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetStay</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetStayRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetStayResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetStay" title="Link to this definition">#</a></dt>
+<dd><p>The time planned at the destination, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetStayRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetStayResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game rounds a stay before a return up to the next transfer window home. See
+<a class="reference internal" href="#krpc.ksa.MissionService.GetStayTime" title="krpc.ksa.MissionService.GetStayTime"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">MissionService.GetStayTime</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetCustom">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetCustom</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetCustomRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetCustomResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetCustom" title="Link to this definition">#</a></dt>
+<dd><p>Whether the mission has a length set by the player, in place of legs timed from
+its destination. See <a class="reference internal" href="#krpc.ksa.MissionService.GetCustomLength" title="krpc.ksa.MissionService.GetCustomLength"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">MissionService.GetCustomLength</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetCustomRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetCustomResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetCustomLength">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetCustomLength</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetCustomLengthRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetCustomLengthResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetCustomLength" title="Link to this definition">#</a></dt>
+<dd><p>The length of a mission with <a class="reference internal" href="#krpc.ksa.MissionService.GetCustom" title="krpc.ksa.MissionService.GetCustom"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">MissionService.GetCustom</span></code></a> set, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetCustomLengthRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetCustomLengthResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetFeasible">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetFeasible</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetFeasibleRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetFeasibleResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetFeasible" title="Link to this definition">#</a></dt>
+<dd><p>Whether the game can time the legs of the mission. A mission with no destination,
+or a flyby with no way back, cannot be timed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetFeasibleRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetFeasibleResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The leg times are zero when this is false.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetOutTime">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetOutTime</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetOutTimeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetOutTimeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetOutTime" title="Link to this definition">#</a></dt>
+<dd><p>The planned time of the way out, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetOutTimeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetOutTimeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetStayTime">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetStayTime</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetStayTimeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetStayTimeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetStayTime" title="Link to this definition">#</a></dt>
+<dd><p>The planned time at the destination, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetStayTimeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetStayTimeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetBackTime">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetBackTime</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetBackTimeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetBackTimeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetBackTime" title="Link to this definition">#</a></dt>
+<dd><p>The planned time of the way back, in seconds. Zero for a one way trip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetBackTimeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetBackTimeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetReturnWait">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetReturnWait</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetReturnWaitRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetReturnWaitResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetReturnWait" title="Link to this definition">#</a></dt>
+<dd><p>The time from arriving at the destination until the next transfer window home, in
+seconds. Zero when there is no wait.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetReturnWaitRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetReturnWaitResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetTotalTime">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTotalTime</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetTotalTimeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetTotalTimeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetTotalTime" title="Link to this definition">#</a></dt>
+<dd><p>The planned length of the mission, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetTotalTimeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetTotalTimeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetTimeLeft">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTimeLeft</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetTimeLeftRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetTimeLeftResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetTimeLeft" title="Link to this definition">#</a></dt>
+<dd><p>The time left in the mission as planned, counted from the vehicle’s launch, in
+seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetTimeLeftRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetTimeLeftResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetArrivalUT">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetArrivalUT</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetArrivalUTRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetArrivalUTResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetArrivalUT" title="Link to this definition">#</a></dt>
+<dd><p>The universal time the vehicle arrived at the destination body, in seconds. Not a
+number until it has.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetArrivalUTRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetArrivalUTResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game records the arrival for a mission to another body.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionService.GetDepartureUT">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDepartureUT</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetDepartureUTRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Mission.GetDepartureUTResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionService.GetDepartureUT" title="Link to this definition">#</a></dt>
+<dd><p>The universal time the vehicle left the destination body, in seconds. Not a number
+until it has.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Mission.GetDepartureUTRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionService" title="krpc.ksa.MissionService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Mission</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Mission.GetDepartureUTResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc enum">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionDestination">
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MissionDestination</span></span><a class="headerlink" href="#krpc.ksa.MissionDestination" title="Link to this definition">#</a></dt>
+<dd><p>Where a mission goes. See <a class="reference internal" href="#krpc.ksa.MissionService.GetDestination" title="krpc.ksa.MissionService.GetDestination"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">MissionService.GetDestination</span></code></a>.</p>
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionDestination.MISSION_DESTINATION_NONE">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MISSION_DESTINATION_NONE</span></span><a class="headerlink" href="#krpc.ksa.MissionDestination.MISSION_DESTINATION_NONE" title="Link to this definition">#</a></dt>
+<dd><p>No destination.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionDestination.MISSION_DESTINATION_LOW_ORBIT">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MISSION_DESTINATION_LOW_ORBIT</span></span><a class="headerlink" href="#krpc.ksa.MissionDestination.MISSION_DESTINATION_LOW_ORBIT" title="Link to this definition">#</a></dt>
+<dd><p>A low orbit around the home body.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionDestination.MISSION_DESTINATION_BODY">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MISSION_DESTINATION_BODY</span></span><a class="headerlink" href="#krpc.ksa.MissionDestination.MISSION_DESTINATION_BODY" title="Link to this definition">#</a></dt>
+<dd><p>Another body, given by <a class="reference internal" href="#krpc.ksa.MissionService.GetBody" title="krpc.ksa.MissionService.GetBody"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">MissionService.GetBody</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc enum">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionArrival">
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MissionArrival</span></span><a class="headerlink" href="#krpc.ksa.MissionArrival" title="Link to this definition">#</a></dt>
+<dd><p>What a mission does at its destination. See <a class="reference internal" href="#krpc.ksa.MissionService.GetArrival" title="krpc.ksa.MissionService.GetArrival"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">MissionService.GetArrival</span></code></a>.</p>
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionArrival.MISSION_ARRIVAL_FLYBY">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MISSION_ARRIVAL_FLYBY</span></span><a class="headerlink" href="#krpc.ksa.MissionArrival.MISSION_ARRIVAL_FLYBY" title="Link to this definition">#</a></dt>
+<dd><p>Flies past it.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionArrival.MISSION_ARRIVAL_ORBIT">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MISSION_ARRIVAL_ORBIT</span></span><a class="headerlink" href="#krpc.ksa.MissionArrival.MISSION_ARRIVAL_ORBIT" title="Link to this definition">#</a></dt>
+<dd><p>Orbits it.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionArrival.MISSION_ARRIVAL_LAND">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MISSION_ARRIVAL_LAND</span></span><a class="headerlink" href="#krpc.ksa.MissionArrival.MISSION_ARRIVAL_LAND" title="Link to this definition">#</a></dt>
+<dd><p>Lands on it.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc enum">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionTrip">
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MissionTrip</span></span><a class="headerlink" href="#krpc.ksa.MissionTrip" title="Link to this definition">#</a></dt>
+<dd><p>Whether a mission comes back. See <a class="reference internal" href="#krpc.ksa.MissionService.GetTrip" title="krpc.ksa.MissionService.GetTrip"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">MissionService.GetTrip</span></code></a>.</p>
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionTrip.MISSION_TRIP_RETURN">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MISSION_TRIP_RETURN</span></span><a class="headerlink" href="#krpc.ksa.MissionTrip.MISSION_TRIP_RETURN" title="Link to this definition">#</a></dt>
+<dd><p>Goes and comes back.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionTrip.MISSION_TRIP_ONE_WAY">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MISSION_TRIP_ONE_WAY</span></span><a class="headerlink" href="#krpc.ksa.MissionTrip.MISSION_TRIP_ONE_WAY" title="Link to this definition">#</a></dt>
+<dd><p>Goes and stays.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc enum">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionLeg">
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MissionLeg</span></span><a class="headerlink" href="#krpc.ksa.MissionLeg" title="Link to this definition">#</a></dt>
+<dd><p>A leg of a mission. See <a class="reference internal" href="#krpc.ksa.HabitatZoneService.PlannedKittens" title="krpc.ksa.HabitatZoneService.PlannedKittens"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">HabitatZoneService.PlannedKittens</span></code></a>.</p>
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionLeg.MISSION_LEG_OUT">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MISSION_LEG_OUT</span></span><a class="headerlink" href="#krpc.ksa.MissionLeg.MISSION_LEG_OUT" title="Link to this definition">#</a></dt>
+<dd><p>The way out.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionLeg.MISSION_LEG_STAY">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MISSION_LEG_STAY</span></span><a class="headerlink" href="#krpc.ksa.MissionLeg.MISSION_LEG_STAY" title="Link to this definition">#</a></dt>
+<dd><p>The stay at the destination.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionLeg.MISSION_LEG_BACK">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MISSION_LEG_BACK</span></span><a class="headerlink" href="#krpc.ksa.MissionLeg.MISSION_LEG_BACK" title="Link to this definition">#</a></dt>
+<dd><p>The way back.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionSuppliesService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MissionSuppliesService</span></span><a class="headerlink" href="#krpc.ksa.MissionSuppliesService" title="Link to this definition">#</a></dt>
+<dd><p>Whether the supplies of a habitat zone last its crew through the vehicle’s mission, as
+the life support window shows it. Obtained from <a class="reference internal" href="#krpc.ksa.HabitatZoneService.GetMissionSupplies" title="krpc.ksa.HabitatZoneService.GetMissionSupplies"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">HabitatZoneService.GetMissionSupplies</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The check takes the legs left in the mission as planned, counted from the vehicle’s
+launch, and the kittens planned for each leg. The times are from now.</p>
+</div>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionSuppliesService.GetVerdict">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetVerdict</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MissionSupplies.GetVerdictRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MissionSupplies.GetVerdictResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionSuppliesService.GetVerdict" title="Link to this definition">#</a></dt>
+<dd><p>Whether the supplies last the mission.</p>
+<dl class="field-list simple">
+<dt class="field-odd">MissionSupplies.GetVerdictRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionSuppliesService" title="krpc.ksa.MissionSuppliesService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">MissionSupplies</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">MissionSupplies.GetVerdictResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.MissionSupplyVerdict" title="krpc.ksa.MissionSupplyVerdict"><code class="xref grpc grpc-enum docutils literal notranslate"><span class="pre">MissionSupplyVerdict</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionSuppliesService.GetShortBy">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetShortBy</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MissionSupplies.GetShortByRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MissionSupplies.GetShortByResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionSuppliesService.GetShortBy" title="Link to this definition">#</a></dt>
+<dd><p>The time by which the first supply to run out falls short of the end of the
+mission, in seconds. Zero when the supplies last.</p>
+<dl class="field-list simple">
+<dt class="field-odd">MissionSupplies.GetShortByRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionSuppliesService" title="krpc.ksa.MissionSuppliesService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">MissionSupplies</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">MissionSupplies.GetShortByResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionSuppliesService.GetFirstSupply">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetFirstSupply</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MissionSupplies.GetFirstSupplyRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MissionSupplies.GetFirstSupplyResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionSuppliesService.GetFirstSupply" title="Link to this definition">#</a></dt>
+<dd><p>The supply that runs out first.</p>
+<dl class="field-list simple">
+<dt class="field-odd">MissionSupplies.GetFirstSupplyRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionSuppliesService" title="krpc.ksa.MissionSuppliesService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">MissionSupplies</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">MissionSupplies.GetFirstSupplyResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportSupply" title="krpc.ksa.LifeSupportSupply"><code class="xref grpc grpc-enum docutils literal notranslate"><span class="pre">LifeSupportSupply</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionSuppliesService.TimeLeft">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">TimeLeft</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MissionSupplies.TimeLeftRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MissionSupplies.TimeLeftResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionSuppliesService.TimeLeft" title="Link to this definition">#</a></dt>
+<dd><p>The time until a supply runs out with the crew planned for each leg, in seconds.
+Infinite if it lasts the mission.</p>
+<dl class="field-list simple">
+<dt class="field-odd">MissionSupplies.TimeLeftRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionSuppliesService" title="krpc.ksa.MissionSuppliesService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">MissionSupplies</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">supply</span></code> (<a class="reference internal" href="#krpc.ksa.LifeSupportSupply" title="krpc.ksa.LifeSupportSupply"><code class="xref grpc grpc-enum docutils literal notranslate"><span class="pre">LifeSupportSupply</span></code></a>): The supply.</p></li>
+</ul>
+</dd>
+<dt class="field-even">MissionSupplies.TimeLeftResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Air lasts while the vehicle is in breathable air.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionSuppliesService.GetEnd">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetEnd</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MissionSupplies.GetEndRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MissionSupplies.GetEndResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MissionSuppliesService.GetEnd" title="Link to this definition">#</a></dt>
+<dd><p>The time until the zone has no crew left in the mission, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">MissionSupplies.GetEndRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MissionSuppliesService" title="krpc.ksa.MissionSuppliesService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">MissionSupplies</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">MissionSupplies.GetEndResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc enum">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionSupplyVerdict">
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MissionSupplyVerdict</span></span><a class="headerlink" href="#krpc.ksa.MissionSupplyVerdict" title="Link to this definition">#</a></dt>
+<dd><p>Whether a habitat zone has the supplies for a mission. See <a class="reference internal" href="#krpc.ksa.MissionSuppliesService.GetVerdict" title="krpc.ksa.MissionSuppliesService.GetVerdict"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">MissionSuppliesService.GetVerdict</span></code></a>.</p>
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionSupplyVerdict.MISSION_SUPPLY_VERDICT_UNUSED">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MISSION_SUPPLY_VERDICT_UNUSED</span></span><a class="headerlink" href="#krpc.ksa.MissionSupplyVerdict.MISSION_SUPPLY_VERDICT_UNUSED" title="Link to this definition">#</a></dt>
+<dd><p>The zone has no crew during the mission.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionSupplyVerdict.MISSION_SUPPLY_VERDICT_ENOUGH">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MISSION_SUPPLY_VERDICT_ENOUGH</span></span><a class="headerlink" href="#krpc.ksa.MissionSupplyVerdict.MISSION_SUPPLY_VERDICT_ENOUGH" title="Link to this definition">#</a></dt>
+<dd><p>The supplies last the mission.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.MissionSupplyVerdict.MISSION_SUPPLY_VERDICT_SHORT">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MISSION_SUPPLY_VERDICT_SHORT</span></span><a class="headerlink" href="#krpc.ksa.MissionSupplyVerdict.MISSION_SUPPLY_VERDICT_SHORT" title="Link to this definition">#</a></dt>
+<dd><p>A supply runs out before the end of the mission.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">HabitatService</span></span><a class="headerlink" href="#krpc.ksa.HabitatService" title="Link to this definition">#</a></dt>
+<dd><p>A habitable or storage space in a part, which holds meals and carbon dioxide scrubber
+canisters. Obtained from <a class="reference internal" href="parts.html#krpc.ksa.PartService.GetHabitats" title="krpc.ksa.PartService.GetHabitats"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">PartService.GetHabitats</span></code></a>.</p>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatService.GetPart">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPart</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetPartRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetPartResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatService.GetPart" title="Link to this definition">#</a></dt>
+<dd><p>The part the habitat is in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Habitat.GetPartRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatService" title="krpc.ksa.HabitatService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Habitat</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Habitat.GetPartResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="parts.html#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatService.GetZone">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetZone</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetZoneRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetZoneResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatService.GetZone" title="Link to this definition">#</a></dt>
+<dd><p>The habitat zone the habitat is in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Habitat.GetZoneRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatService" title="krpc.ksa.HabitatService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Habitat</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Habitat.GetZoneResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatZoneService" title="krpc.ksa.HabitatZoneService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">HabitatZone</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatService.GetHabitableVolume">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetHabitableVolume</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetHabitableVolumeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetHabitableVolumeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatService.GetHabitableVolume" title="Link to this definition">#</a></dt>
+<dd><p>The volume the crew can live in, in cubic meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Habitat.GetHabitableVolumeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatService" title="krpc.ksa.HabitatService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Habitat</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Habitat.GetHabitableVolumeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatService.GetStorageVolume">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetStorageVolume</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetStorageVolumeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetStorageVolumeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatService.GetStorageVolume" title="Link to this definition">#</a></dt>
+<dd><p>The volume for stored supplies, in cubic meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Habitat.GetStorageVolumeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatService" title="krpc.ksa.HabitatService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Habitat</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Habitat.GetStorageVolumeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatService.GetMeals">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMeals</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetMealsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetMealsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatService.GetMeals" title="Link to this definition">#</a></dt>
+<dd><p>The number of meals in the habitat.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Habitat.GetMealsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatService" title="krpc.ksa.HabitatService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Habitat</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Habitat.GetMealsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">sint32</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatService.GetCanisters">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetCanisters</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetCanistersRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetCanistersResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatService.GetCanisters" title="Link to this definition">#</a></dt>
+<dd><p>The number of carbon dioxide scrubber canisters in the habitat.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Habitat.GetCanistersRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatService" title="krpc.ksa.HabitatService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Habitat</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Habitat.GetCanistersResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">sint32</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatService.GetMealCapacity">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMealCapacity</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetMealCapacityRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetMealCapacityResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatService.GetMealCapacity" title="Link to this definition">#</a></dt>
+<dd><p>The number of meals the habitat holds when full.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Habitat.GetMealCapacityRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatService" title="krpc.ksa.HabitatService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Habitat</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Habitat.GetMealCapacityResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">sint32</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatService.GetCanisterCapacity">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetCanisterCapacity</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetCanisterCapacityRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.GetCanisterCapacityResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatService.GetCanisterCapacity" title="Link to this definition">#</a></dt>
+<dd><p>The number of carbon dioxide scrubber canisters the habitat holds when full.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Habitat.GetCanisterCapacityRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatService" title="krpc.ksa.HabitatService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Habitat</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Habitat.GetCanisterCapacityResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">sint32</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.HabitatService.Transfer">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Transfer</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.TransferRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Habitat.TransferResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.HabitatService.Transfer" title="Link to this definition">#</a></dt>
+<dd><p>Moves meals and canisters to another habitat in the same zone. Moves fewer when
+this habitat holds fewer, or the other has less room.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Habitat.TransferRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatService" title="krpc.ksa.HabitatService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Habitat</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">to</span></code> (<a class="reference internal" href="#krpc.ksa.HabitatService" title="krpc.ksa.HabitatService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Habitat</span></code></a>): The habitat to move the supplies to.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">meals</span></code> (<code class="docutils literal notranslate"><span class="pre">optional</span> <span class="pre">sint32</span></code>): The number of meals to move. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">canisters</span></code> (<code class="docutils literal notranslate"><span class="pre">optional</span> <span class="pre">sint32</span></code>): The number of canisters to move. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Habitat.TransferResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A kitten in the zone moves the supplies. Throws an exception if life support is
+disabled, the habitats are in different zones, or the zone has no crew able to
+move them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="crew.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Crew</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="body.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Body</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/grpc/api/ksa/life-support.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026 kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

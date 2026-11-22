@@ -1,0 +1,695 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Life Support
+============
+
+
+.. class:: LifeSupport
+
+   How long the supplies of a vehicle, a habitat zone or a kitten's suit last. Obtained
+   from :meth:`KSA.Vehicle.getLifeSupport`, :meth:`KSA.HabitatZone.getLifeSupport` or
+   :meth:`KSA.Kitten.getLifeSupport`.
+
+   .. note::
+
+      The times count down only while :func:`KSA.getLifeSupportEnabled` is true. Air
+      lasts forever in breathable air outside the vehicle.
+
+   .. method:: getKittens()
+
+      The number of kittens the supplies are shared between.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getAirMass()
+
+      The mass of oxygen in the crew's tanks, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getWaterMass()
+
+      The mass of water in the crew's tanks, in kilograms.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMeals()
+
+      The number of meals.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getAirTime()
+
+      The time the air lasts, in seconds. Infinite with no crew, or in breathable air.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getScrubberTime()
+
+      The time the carbon dioxide scrubbers last, in seconds. Infinite with no crew.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getWaterTime()
+
+      The time the water lasts, in seconds. Infinite with no crew.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getFoodTime()
+
+      The time the food lasts, in seconds. Infinite with no crew.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getTime()
+
+      The time until the first supply runs out, in seconds. A suit counts its air and
+      scrubber only. Infinite with no crew.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getLimitingSupply()
+
+      The supply that runs out first. Air when every time is infinite, as with no crew.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.LifeSupportSupply`
+   
+
+   .. method:: getLevel()
+
+      How long the supplies last, as the game's life support gauge shows it.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.LifeSupportLevel`
+   
+
+   .. method:: getTimeToNextLevel()
+
+      The time until :meth:`KSA.LifeSupport.getLevel` next changes, in seconds. Infinite with no crew.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+
+
+.. class:: LifeSupportLevel
+
+   How long the crew's supplies last. See :meth:`KSA.LifeSupport.getLevel`.
+
+
+   .. attribute:: ok
+
+      More than a day of supplies, or no crew.
+
+
+   .. attribute:: low
+
+      A day of supplies or less.
+
+
+   .. attribute:: critical
+
+      An hour of supplies or less.
+
+
+   .. attribute:: out
+
+      A supply has run out.
+
+
+
+.. class:: LifeSupportSupply
+
+   A supply the crew needs. See :meth:`KSA.LifeSupport.getLimitingSupply`.
+
+
+   .. attribute:: air
+
+      Oxygen to breathe.
+
+
+   .. attribute:: scrubber
+
+      Lithium hydroxide canisters, which scrub carbon dioxide from the air.
+
+
+   .. attribute:: water
+
+      Drinking water.
+
+
+   .. attribute:: food
+
+      Meals.
+
+
+
+.. class:: HabitatZone
+
+   The connected habitable parts of a vehicle, which share their crew's supplies.
+   Obtained from :meth:`KSA.Vehicle.getHabitatZones` or :meth:`KSA.Habitat.getZone`.
+
+   .. note::
+
+      Parts join a zone through connections the crew can pass, such as an open docking
+      port hatch.
+
+   .. method:: getVehicle()
+
+      The vehicle the zone is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Vehicle`
+   
+
+   .. method:: getParts()
+
+      The parts in the zone.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Part`
+   
+
+   .. method:: getHabitats()
+
+      The habitats in the zone.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Habitat`
+   
+
+   .. method:: getSeats()
+
+      The crew seats in the zone.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Seat`
+   
+
+   .. method:: getCrew()
+
+      The kittens in the zone's seats.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.Kitten`
+   
+
+   .. method:: getLinkedZones()
+
+      The zones that join this one when closed docking port hatches between them open.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``Array`` of :class:`KSA.HabitatZone`
+   
+
+   .. method:: hatchesTo(zone)
+
+      The closed docking port hatches that join this zone to a linked zone when they
+      open.
+
+      :param zone: A zone in :meth:`KSA.HabitatZone.getLinkedZones`.
+      :type zone: :class:`KSA.HabitatZone`
+      :rtype: ``Array`` of :class:`KSA.DockingPort`
+   
+
+      .. note::
+
+         Throws an exception if the zone is not linked to this one.
+
+   .. method:: getHabitableVolume()
+
+      The volume the crew can live in, in cubic meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getStorageVolume()
+
+      The volume for stored supplies, in cubic meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getLifeSupport()
+
+      How long the zone's supplies last its crew.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.LifeSupport`
+   
+
+   .. method:: getMissionSupplies()
+
+      Whether the zone's supplies last its crew through the vehicle's mission. ``null``
+      without a feasible mission with time left, or while
+      :func:`KSA.getLifeSupportEnabled` is false.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.MissionSupplies` or ``null``
+   
+
+   .. method:: plannedKittens(leg)
+
+      The number of kittens planned in the zone for a leg of the vehicle's mission. The
+      plan defaults to the kittens seated in the zone.
+
+      :param leg: The leg.
+      :type leg: :class:`KSA.MissionLeg`
+      :rtype: ``number``
+   
+
+
+
+.. class:: Mission
+
+   The mission planned for a vehicle in the editor's life support window. Obtained from
+   :meth:`KSA.Vehicle.getMission`.
+
+   .. note::
+
+      The game times the legs of the mission from the plan, and checks the supplies of each
+      habitat zone against them. See :meth:`KSA.HabitatZone.getMissionSupplies`.
+
+   .. method:: getDestination()
+
+      Where the mission goes.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.MissionDestination`
+   
+
+   .. method:: getBody()
+
+      The body the mission goes to, or ``null`` if it has no destination. For a low
+      orbit, this is the home body.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Body` or ``null``
+   
+
+   .. method:: getArrival()
+
+      What the mission does at its destination.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.MissionArrival`
+   
+
+   .. method:: getTrip()
+
+      Whether the mission comes back.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.MissionTrip`
+   
+
+   .. method:: getStay()
+
+      The time planned at the destination, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+      .. note::
+
+         The game rounds a stay before a return up to the next transfer window home. See
+         :meth:`KSA.Mission.getStayTime`.
+
+   .. method:: getCustom()
+
+      Whether the mission has a length set by the player, in place of legs timed from
+      its destination. See :meth:`KSA.Mission.getCustomLength`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+   .. method:: getCustomLength()
+
+      The length of a mission with :meth:`KSA.Mission.getCustom` set, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getFeasible()
+
+      Whether the game can time the legs of the mission. A mission with no destination,
+      or a flyby with no way back, cannot be timed.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+   
+
+      .. note::
+
+         The leg times are zero when this is false.
+
+   .. method:: getOutTime()
+
+      The planned time of the way out, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getStayTime()
+
+      The planned time at the destination, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getBackTime()
+
+      The planned time of the way back, in seconds. Zero for a one way trip.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getReturnWait()
+
+      The time from arriving at the destination until the next transfer window home, in
+      seconds. Zero when there is no wait.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getTotalTime()
+
+      The planned length of the mission, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getTimeLeft()
+
+      The time left in the mission as planned, counted from the vehicle's launch, in
+      seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getArrivalUT()
+
+      The universal time the vehicle arrived at the destination body, in seconds. Not a
+      number until it has.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+      .. note::
+
+         The game records the arrival for a mission to another body.
+
+   .. method:: getDepartureUT()
+
+      The universal time the vehicle left the destination body, in seconds. Not a number
+      until it has.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+
+
+.. class:: MissionDestination
+
+   Where a mission goes. See :meth:`KSA.Mission.getDestination`.
+
+
+   .. attribute:: none
+
+      No destination.
+
+
+   .. attribute:: lowOrbit
+
+      A low orbit around the home body.
+
+
+   .. attribute:: body
+
+      Another body, given by :meth:`KSA.Mission.getBody`.
+
+
+
+.. class:: MissionArrival
+
+   What a mission does at its destination. See :meth:`KSA.Mission.getArrival`.
+
+
+   .. attribute:: flyby
+
+      Flies past it.
+
+
+   .. attribute:: orbit
+
+      Orbits it.
+
+
+   .. attribute:: land
+
+      Lands on it.
+
+
+
+.. class:: MissionTrip
+
+   Whether a mission comes back. See :meth:`KSA.Mission.getTrip`.
+
+
+   .. attribute:: return
+
+      Goes and comes back.
+
+
+   .. attribute:: oneWay
+
+      Goes and stays.
+
+
+
+.. class:: MissionLeg
+
+   A leg of a mission. See :meth:`KSA.HabitatZone.plannedKittens`.
+
+
+   .. attribute:: out
+
+      The way out.
+
+
+   .. attribute:: stay
+
+      The stay at the destination.
+
+
+   .. attribute:: back
+
+      The way back.
+
+
+
+.. class:: MissionSupplies
+
+   Whether the supplies of a habitat zone last its crew through the vehicle's mission, as
+   the life support window shows it. Obtained from :meth:`KSA.HabitatZone.getMissionSupplies`.
+
+   .. note::
+
+      The check takes the legs left in the mission as planned, counted from the vehicle's
+      launch, and the kittens planned for each leg. The times are from now.
+
+   .. method:: getVerdict()
+
+      Whether the supplies last the mission.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.MissionSupplyVerdict`
+   
+
+   .. method:: getShortBy()
+
+      The time by which the first supply to run out falls short of the end of the
+      mission, in seconds. Zero when the supplies last.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getFirstSupply()
+
+      The supply that runs out first.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.LifeSupportSupply`
+   
+
+   .. method:: timeLeft(supply)
+
+      The time until a supply runs out with the crew planned for each leg, in seconds.
+      Infinite if it lasts the mission.
+
+      :param supply: The supply.
+      :type supply: :class:`KSA.LifeSupportSupply`
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Air lasts while the vehicle is in breathable air.
+
+   .. method:: getEnd()
+
+      The time until the zone has no crew left in the mission, in seconds.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+
+
+.. class:: MissionSupplyVerdict
+
+   Whether a habitat zone has the supplies for a mission. See :meth:`KSA.MissionSupplies.getVerdict`.
+
+
+   .. attribute:: unused
+
+      The zone has no crew during the mission.
+
+
+   .. attribute:: enough
+
+      The supplies last the mission.
+
+
+   .. attribute:: short
+
+      A supply runs out before the end of the mission.
+
+
+
+.. class:: Habitat
+
+   A habitable or storage space in a part, which holds meals and carbon dioxide scrubber
+   canisters. Obtained from :meth:`KSA.Part.getHabitats`.
+
+   .. method:: getPart()
+
+      The part the habitat is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+   
+
+   .. method:: getZone()
+
+      The habitat zone the habitat is in.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.HabitatZone`
+   
+
+   .. method:: getHabitableVolume()
+
+      The volume the crew can live in, in cubic meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getStorageVolume()
+
+      The volume for stored supplies, in cubic meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMeals()
+
+      The number of meals in the habitat.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getCanisters()
+
+      The number of carbon dioxide scrubber canisters in the habitat.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMealCapacity()
+
+      The number of meals the habitat holds when full.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getCanisterCapacity()
+
+      The number of carbon dioxide scrubber canisters the habitat holds when full.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: transfer(to[, meals[, canisters]])
+
+      Moves meals and canisters to another habitat in the same zone. Moves fewer when
+      this habitat holds fewer, or the other has less room.
+
+      :param to: The habitat to move the supplies to.
+      :type to: :class:`KSA.Habitat`
+      :param meals: The number of meals to move. Defaults to ``0``.
+      :type meals: ``number``
+      :param canisters: The number of canisters to move. Defaults to ``0``.
+      :type canisters: ``number``
+   
+
+      .. note::
+
+         A kitten in the zone moves the supplies. Throws an exception if life support is
+         disabled, the habitats are in different zones, or the zone has no crew able to
+         move them.

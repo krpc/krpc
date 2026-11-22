@@ -1,0 +1,635 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Life Support
+============
+
+
+.. type:: public class LifeSupport
+
+   How long the supplies of a vehicle, a habitat zone or a kitten's suit last. Obtained
+   from :meth:`Vehicle.getLifeSupport()`, :meth:`HabitatZone.getLifeSupport()` or
+   :meth:`Kitten.getLifeSupport()`.
+
+   .. note::
+
+      The times count down only while :meth:`KSA.getLifeSupportEnabled()` is true. Air
+      lasts forever in breathable air outside the vehicle.
+
+   .. method:: int getKittens()
+
+
+      The number of kittens the supplies are shared between.
+
+   
+
+   .. method:: float getAirMass()
+
+
+      The mass of oxygen in the crew's tanks, in kilograms.
+
+   
+
+   .. method:: float getWaterMass()
+
+
+      The mass of water in the crew's tanks, in kilograms.
+
+   
+
+   .. method:: int getMeals()
+
+
+      The number of meals.
+
+   
+
+   .. method:: float getAirTime()
+
+
+      The time the air lasts, in seconds. Infinite with no crew, or in breathable air.
+
+   
+
+   .. method:: float getScrubberTime()
+
+
+      The time the carbon dioxide scrubbers last, in seconds. Infinite with no crew.
+
+   
+
+   .. method:: float getWaterTime()
+
+
+      The time the water lasts, in seconds. Infinite with no crew.
+
+   
+
+   .. method:: float getFoodTime()
+
+
+      The time the food lasts, in seconds. Infinite with no crew.
+
+   
+
+   .. method:: float getTime()
+
+
+      The time until the first supply runs out, in seconds. A suit counts its air and
+      scrubber only. Infinite with no crew.
+
+   
+
+   .. method:: LifeSupportSupply getLimitingSupply()
+
+
+      The supply that runs out first. Air when every time is infinite, as with no crew.
+
+   
+
+   .. method:: LifeSupportLevel getLevel()
+
+
+      How long the supplies last, as the game's life support gauge shows it.
+
+   
+
+   .. method:: float getTimeToNextLevel()
+
+
+      The time until :meth:`LifeSupport.getLevel()` next changes, in seconds. Infinite with no crew.
+
+   
+
+
+
+.. type:: public enum LifeSupportLevel
+
+   How long the crew's supplies last. See :meth:`LifeSupport.getLevel()`.
+
+
+   .. field:: public LifeSupportLevel OK
+
+      More than a day of supplies, or no crew.
+
+
+   .. field:: public LifeSupportLevel LOW
+
+      A day of supplies or less.
+
+
+   .. field:: public LifeSupportLevel CRITICAL
+
+      An hour of supplies or less.
+
+
+   .. field:: public LifeSupportLevel OUT
+
+      A supply has run out.
+
+
+
+.. type:: public enum LifeSupportSupply
+
+   A supply the crew needs. See :meth:`LifeSupport.getLimitingSupply()`.
+
+
+   .. field:: public LifeSupportSupply AIR
+
+      Oxygen to breathe.
+
+
+   .. field:: public LifeSupportSupply SCRUBBER
+
+      Lithium hydroxide canisters, which scrub carbon dioxide from the air.
+
+
+   .. field:: public LifeSupportSupply WATER
+
+      Drinking water.
+
+
+   .. field:: public LifeSupportSupply FOOD
+
+      Meals.
+
+
+
+.. type:: public class HabitatZone
+
+   The connected habitable parts of a vehicle, which share their crew's supplies.
+   Obtained from :meth:`Vehicle.getHabitatZones()` or :meth:`Habitat.getZone()`.
+
+   .. note::
+
+      Parts join a zone through connections the crew can pass, such as an open docking
+      port hatch.
+
+   .. method:: Vehicle getVehicle()
+
+
+      The vehicle the zone is in.
+
+   
+
+   .. method:: java.util.List<Part> getParts()
+
+
+      The parts in the zone.
+
+   
+
+   .. method:: java.util.List<Habitat> getHabitats()
+
+
+      The habitats in the zone.
+
+   
+
+   .. method:: java.util.List<Seat> getSeats()
+
+
+      The crew seats in the zone.
+
+   
+
+   .. method:: java.util.List<Kitten> getCrew()
+
+
+      The kittens in the zone's seats.
+
+   
+
+   .. method:: java.util.List<HabitatZone> getLinkedZones()
+
+
+      The zones that join this one when closed docking port hatches between them open.
+
+   
+
+   .. method:: java.util.List<DockingPort> hatchesTo(HabitatZone zone)
+
+      The closed docking port hatches that join this zone to a linked zone when they
+      open.
+
+      :param HabitatZone zone: A zone in :meth:`HabitatZone.getLinkedZones()`.
+   
+
+      .. note::
+
+         Throws an exception if the zone is not linked to this one.
+
+   .. method:: float getHabitableVolume()
+
+
+      The volume the crew can live in, in cubic meters.
+
+   
+
+   .. method:: float getStorageVolume()
+
+
+      The volume for stored supplies, in cubic meters.
+
+   
+
+   .. method:: LifeSupport getLifeSupport()
+
+
+      How long the zone's supplies last its crew.
+
+   
+
+   .. method:: MissionSupplies getMissionSupplies()
+
+
+      Whether the zone's supplies last its crew through the vehicle's mission. ``null``
+      without a feasible mission with time left, or while
+      :meth:`KSA.getLifeSupportEnabled()` is false.
+
+   
+
+   .. method:: int plannedKittens(MissionLeg leg)
+
+      The number of kittens planned in the zone for a leg of the vehicle's mission. The
+      plan defaults to the kittens seated in the zone.
+
+      :param MissionLeg leg: The leg.
+   
+
+
+
+.. type:: public class Mission
+
+   The mission planned for a vehicle in the editor's life support window. Obtained from
+   :meth:`Vehicle.getMission()`.
+
+   .. note::
+
+      The game times the legs of the mission from the plan, and checks the supplies of each
+      habitat zone against them. See :meth:`HabitatZone.getMissionSupplies()`.
+
+   .. method:: MissionDestination getDestination()
+
+
+      Where the mission goes.
+
+   
+
+   .. method:: Body getBody()
+
+
+      The body the mission goes to, or ``null`` if it has no destination. For a low
+      orbit, this is the home body.
+
+   
+
+   .. method:: MissionArrival getArrival()
+
+
+      What the mission does at its destination.
+
+   
+
+   .. method:: MissionTrip getTrip()
+
+
+      Whether the mission comes back.
+
+   
+
+   .. method:: float getStay()
+
+
+      The time planned at the destination, in seconds.
+
+   
+
+      .. note::
+
+         The game rounds a stay before a return up to the next transfer window home. See
+         :meth:`Mission.getStayTime()`.
+
+   .. method:: boolean getCustom()
+
+
+      Whether the mission has a length set by the player, in place of legs timed from
+      its destination. See :meth:`Mission.getCustomLength()`.
+
+   
+
+   .. method:: float getCustomLength()
+
+
+      The length of a mission with :meth:`Mission.getCustom()` set, in seconds.
+
+   
+
+   .. method:: boolean getFeasible()
+
+
+      Whether the game can time the legs of the mission. A mission with no destination,
+      or a flyby with no way back, cannot be timed.
+
+   
+
+      .. note::
+
+         The leg times are zero when this is false.
+
+   .. method:: float getOutTime()
+
+
+      The planned time of the way out, in seconds.
+
+   
+
+   .. method:: float getStayTime()
+
+
+      The planned time at the destination, in seconds.
+
+   
+
+   .. method:: float getBackTime()
+
+
+      The planned time of the way back, in seconds. Zero for a one way trip.
+
+   
+
+   .. method:: float getReturnWait()
+
+
+      The time from arriving at the destination until the next transfer window home, in
+      seconds. Zero when there is no wait.
+
+   
+
+   .. method:: float getTotalTime()
+
+
+      The planned length of the mission, in seconds.
+
+   
+
+   .. method:: float getTimeLeft()
+
+
+      The time left in the mission as planned, counted from the vehicle's launch, in
+      seconds.
+
+   
+
+   .. method:: double getArrivalUT()
+
+
+      The universal time the vehicle arrived at the destination body, in seconds. Not a
+      number until it has.
+
+   
+
+      .. note::
+
+         The game records the arrival for a mission to another body.
+
+   .. method:: double getDepartureUT()
+
+
+      The universal time the vehicle left the destination body, in seconds. Not a number
+      until it has.
+
+   
+
+
+
+.. type:: public enum MissionDestination
+
+   Where a mission goes. See :meth:`Mission.getDestination()`.
+
+
+   .. field:: public MissionDestination NONE
+
+      No destination.
+
+
+   .. field:: public MissionDestination LOW_ORBIT
+
+      A low orbit around the home body.
+
+
+   .. field:: public MissionDestination BODY
+
+      Another body, given by :meth:`Mission.getBody()`.
+
+
+
+.. type:: public enum MissionArrival
+
+   What a mission does at its destination. See :meth:`Mission.getArrival()`.
+
+
+   .. field:: public MissionArrival FLYBY
+
+      Flies past it.
+
+
+   .. field:: public MissionArrival ORBIT
+
+      Orbits it.
+
+
+   .. field:: public MissionArrival LAND
+
+      Lands on it.
+
+
+
+.. type:: public enum MissionTrip
+
+   Whether a mission comes back. See :meth:`Mission.getTrip()`.
+
+
+   .. field:: public MissionTrip RETURN
+
+      Goes and comes back.
+
+
+   .. field:: public MissionTrip ONE_WAY
+
+      Goes and stays.
+
+
+
+.. type:: public enum MissionLeg
+
+   A leg of a mission. See :meth:`HabitatZone.plannedKittens(MissionLeg)`.
+
+
+   .. field:: public MissionLeg OUT
+
+      The way out.
+
+
+   .. field:: public MissionLeg STAY
+
+      The stay at the destination.
+
+
+   .. field:: public MissionLeg BACK
+
+      The way back.
+
+
+
+.. type:: public class MissionSupplies
+
+   Whether the supplies of a habitat zone last its crew through the vehicle's mission, as
+   the life support window shows it. Obtained from :meth:`HabitatZone.getMissionSupplies()`.
+
+   .. note::
+
+      The check takes the legs left in the mission as planned, counted from the vehicle's
+      launch, and the kittens planned for each leg. The times are from now.
+
+   .. method:: MissionSupplyVerdict getVerdict()
+
+
+      Whether the supplies last the mission.
+
+   
+
+   .. method:: float getShortBy()
+
+
+      The time by which the first supply to run out falls short of the end of the
+      mission, in seconds. Zero when the supplies last.
+
+   
+
+   .. method:: LifeSupportSupply getFirstSupply()
+
+
+      The supply that runs out first.
+
+   
+
+   .. method:: float timeLeft(LifeSupportSupply supply)
+
+      The time until a supply runs out with the crew planned for each leg, in seconds.
+      Infinite if it lasts the mission.
+
+      :param LifeSupportSupply supply: The supply.
+   
+
+      .. note::
+
+         Air lasts while the vehicle is in breathable air.
+
+   .. method:: float getEnd()
+
+
+      The time until the zone has no crew left in the mission, in seconds.
+
+   
+
+
+
+.. type:: public enum MissionSupplyVerdict
+
+   Whether a habitat zone has the supplies for a mission. See :meth:`MissionSupplies.getVerdict()`.
+
+
+   .. field:: public MissionSupplyVerdict UNUSED
+
+      The zone has no crew during the mission.
+
+
+   .. field:: public MissionSupplyVerdict ENOUGH
+
+      The supplies last the mission.
+
+
+   .. field:: public MissionSupplyVerdict SHORT
+
+      A supply runs out before the end of the mission.
+
+
+
+.. type:: public class Habitat
+
+   A habitable or storage space in a part, which holds meals and carbon dioxide scrubber
+   canisters. Obtained from :meth:`Part.getHabitats()`.
+
+   .. method:: Part getPart()
+
+
+      The part the habitat is in.
+
+   
+
+   .. method:: HabitatZone getZone()
+
+
+      The habitat zone the habitat is in.
+
+   
+
+   .. method:: float getHabitableVolume()
+
+
+      The volume the crew can live in, in cubic meters.
+
+   
+
+   .. method:: float getStorageVolume()
+
+
+      The volume for stored supplies, in cubic meters.
+
+   
+
+   .. method:: int getMeals()
+
+
+      The number of meals in the habitat.
+
+   
+
+   .. method:: int getCanisters()
+
+
+      The number of carbon dioxide scrubber canisters in the habitat.
+
+   
+
+   .. method:: int getMealCapacity()
+
+
+      The number of meals the habitat holds when full.
+
+   
+
+   .. method:: int getCanisterCapacity()
+
+
+      The number of carbon dioxide scrubber canisters the habitat holds when full.
+
+   
+
+   .. method:: void transfer(Habitat to, int meals, int canisters)
+
+      Moves meals and canisters to another habitat in the same zone. Moves fewer when
+      this habitat holds fewer, or the other has less room.
+
+      :param Habitat to: The habitat to move the supplies to.
+      :param int meals: The number of meals to move.
+      :param int canisters: The number of canisters to move.
+   
+
+      .. note::
+
+         A kitten in the zone moves the supplies. Throws an exception if life support is
+         disabled, the habitats are in different zones, or the zone has no crew able to
+         move them.

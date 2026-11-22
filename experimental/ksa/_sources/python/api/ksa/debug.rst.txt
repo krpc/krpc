@@ -32,8 +32,8 @@ Debug
 
       :param Vehicle vehicle: The vehicle.
       :param Body body: The body to orbit.
-      :param float semi_major_axis: The semi-major axis, in meters.
-      :param float eccentricity: The eccentricity.
+      :param float semi_major_axis: The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+      :param float eccentricity: The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
       :param float inclination: The inclination, in radians.
       :param float longitude_of_ascending_node: The longitude of the ascending node, in radians.
       :param float argument_of_periapsis: The argument of periapsis, in radians.
@@ -118,19 +118,27 @@ Debug
 
    .. staticmethod:: fill_resources(vehicle)
 
-      Fill the propellant, batteries and other consumables of a vehicle, as the game's
+      Fill the propellant and other substances in the tanks of a vehicle, as the game's
       refill command does.
 
       :param Vehicle vehicle: The vehicle.
    
 
+      .. note::
+
+         The batteries keep their charge.
+
    .. staticmethod:: empty_resources(vehicle)
 
-      Empty the propellant, batteries and other consumables of a vehicle, as the game's
+      Empty the propellant and other substances in the tanks of a vehicle, as the game's
       empty command does.
 
       :param Vehicle vehicle: The vehicle.
    
+
+      .. note::
+
+         The batteries keep their charge.
 
    .. staticmethod:: duplicate_vehicle(vehicle, name)
 

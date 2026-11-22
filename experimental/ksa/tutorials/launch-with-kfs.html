@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Launching with kFS &#8212; kRPC v0.3.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/lua.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=5ab7b574" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../_static/documentation_options.js?v=e259d695"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/launch-with-kfs';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/external-links.js?v=e8892020"></script>
+    <link rel="icon" href="../_static/logo-mark.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Clients" href="../clients.html" />
+    <link rel="prev" title="Raising an Orbit" href="raise-orbit.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.0" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="../_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="launch-into-orbit.html">Launching into Orbit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="circularize.html">Executing a Burn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="raise-orbit.html">Raising an Orbit</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Launching with kFS</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Launching with kFS</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="launching-with-kfs">
+<h1>Launching with kFS<a class="headerlink" href="#launching-with-kfs" title="Link to this heading">#</a></h1>
+<p>This tutorial launches the game’s Rocket with a kFS program flying the ascent. kFS is the
+game’s flight software: programs in kC, a subset of C, that run on a vehicle’s flight
+computer. The kRPC script loads the program, reads its telemetry, and tells it when to lift off
+and when to stage, so the two talk in both directions.</p>
+<p>The complete script is <a class="reference download internal" download="" href="../_downloads/7257b9ed6cbd011f6686a5695cf981ba/launch_with_kfs.py"><code class="xref download docutils literal notranslate"><span class="pre">launch_with_kfs.py</span></code></a>, and the program is
+<a class="reference download internal" download="" href="../_downloads/37aa67544b9a282dcb050db5bc087b0e/ascent.c"><code class="xref download docutils literal notranslate"><span class="pre">ascent.c</span></code></a>. Save them in the same
+folder.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>kFS is a prototype in the game. The script turns it on, as the game’s <code class="docutils literal notranslate"><span class="pre">kfs</span> <span class="pre">on</span></code> console
+command does.</p>
+</div>
+<section id="the-program">
+<h2>The Program<a class="headerlink" href="#the-program" title="Link to this heading">#</a></h2>
+<p>The program runs a task ten times a second. It subscribes to two of the messages the game
+publishes to it: the flight data, with the altitude and apoapsis, and the vehicle’s
+properties, with its engines:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma kfs tick_hz 10</span>
+<span class="cp">#pragma kfs subscribe MSG_FLIGHT_DATA flight</span>
+<span class="cp">#pragma kfs subscribe MSG_VEHICLE_PROPS props</span>
+<span class="cp">#pragma kfs task ascent rate_hz=10</span>
+</pre></div>
+</div>
+<p>The program shares two global variables with the script. The script reads the telemetry, and
+writes the request:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* The telemetry, which the client reads */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">phase</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">altitude</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">apoapsis</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">pitch</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">thrust</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">stages</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">telemetry_t</span><span class="p">;</span>
+
+<span class="n">telemetry_t</span><span class="w"> </span><span class="n">telemetry</span><span class="p">;</span>
+
+<span class="cm">/* The client's requests: lift off, and a count of the stagings it wants */</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">launch</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">stages</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">request_t</span><span class="p">;</span>
+
+<span class="n">request_t</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The program waits on the pad until the script asks it to lift off. It then points the rocket
+straight up and lights the first stage, with the game’s flight computer services. Once the
+engine has thrust, the ascent starts. The program steers along the same gravity turn as
+<a class="reference internal" href="launch-into-orbit.html"><span class="doc">Launching into Orbit</span></a>, and cuts the engines once the apoapsis reaches 400 km. The first stage
+runs dry on the way, at an apoapsis of about 360 km:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">telemetry</span><span class="p">.</span><span class="n">phase</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">PHASE_LAUNCH</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">request</span><span class="p">.</span><span class="n">launch</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="cm">/* Wait on the pad */</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">launched</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">kfs_hold_heading</span><span class="p">(</span><span class="n">HEADING</span><span class="p">,</span><span class="w"> </span><span class="mf">90.0f</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">DEG2RAD</span><span class="p">,</span><span class="w"> </span><span class="n">KFS_ROLL_UP</span><span class="p">);</span>
+<span class="w">            </span><span class="n">kfs_set_throttle</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">);</span>
+<span class="w">            </span><span class="n">kfs_engines_on</span><span class="p">();</span>
+<span class="w">            </span><span class="n">kfs_stage</span><span class="p">();</span>
+<span class="w">            </span><span class="n">launched</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1u</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">thrust</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">kfs_logf</span><span class="p">(</span><span class="s">"lift off"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">telemetry</span><span class="p">.</span><span class="n">phase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PHASE_ASCENT</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">telemetry</span><span class="p">.</span><span class="n">phase</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">PHASE_ASCENT</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="cm">/* Drop the spent stage and light the next one */</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">stages</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">staged</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">kfs_stage</span><span class="p">();</span>
+<span class="w">            </span><span class="n">kfs_stage</span><span class="p">();</span>
+<span class="w">            </span><span class="n">staged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">stages</span><span class="p">;</span>
+<span class="w">            </span><span class="n">kfs_logf</span><span class="p">(</span><span class="s">"staged %u"</span><span class="p">,</span><span class="w"> </span><span class="n">staged</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="cm">/* Acknowledge a staging once the next stage has thrust */</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">thrust</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">)</span>
+<span class="w">            </span><span class="n">telemetry</span><span class="p">.</span><span class="n">stages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">staged</span><span class="p">;</span>
+<span class="w">        </span><span class="n">telemetry</span><span class="p">.</span><span class="n">pitch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pitch_at</span><span class="p">(</span><span class="n">flight</span><span class="p">.</span><span class="n">altitude_m</span><span class="p">);</span>
+<span class="w">        </span><span class="n">kfs_hold_heading</span><span class="p">(</span><span class="n">HEADING</span><span class="p">,</span><span class="w"> </span><span class="n">telemetry</span><span class="p">.</span><span class="n">pitch</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">DEG2RAD</span><span class="p">,</span><span class="w"> </span><span class="n">KFS_ROLL_UP</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">flight</span><span class="p">.</span><span class="n">apoapsis_m</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">TARGET_ALTITUDE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">kfs_engines_off</span><span class="p">();</span>
+<span class="w">            </span><span class="n">kfs_hold_direction</span><span class="p">(</span><span class="n">KFS_VLF_PROGRADE</span><span class="p">,</span><span class="w"> </span><span class="n">KFS_ROLL_FREE</span><span class="p">);</span>
+<span class="w">            </span><span class="n">kfs_logf</span><span class="p">(</span><span class="s">"target apoapsis reached"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">telemetry</span><span class="p">.</span><span class="n">phase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PHASE_COAST</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">telemetry</span><span class="p">.</span><span class="n">altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">altitude_m</span><span class="p">;</span>
+<span class="w">    </span><span class="n">telemetry</span><span class="p">.</span><span class="n">apoapsis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">apoapsis_m</span><span class="p">;</span>
+<span class="w">    </span><span class="n">telemetry</span><span class="p">.</span><span class="n">thrust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">thrust</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The program stages only when the script asks. It acknowledges a staging in its telemetry once
+the next stage has thrust, so the script never asks twice for the same stage.</p>
+</section>
+<section id="loading-the-program">
+<h2>Loading the Program<a class="headerlink" href="#loading-the-program" title="Link to this heading">#</a></h2>
+<p>The script launches the vehicle, and seats a kitten in it. The flight computer obeys a program
+only while the vehicle is under control, and the Rocket launches with an empty seat. The script
+then loads the program onto the flight computer. <code class="docutils literal notranslate"><span class="pre">load</span></code> builds the program, and throws an
+exception with the compiler’s errors if it has any:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">kfs</span><span class="o">.</span><span class="n">available</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">vehicle</span> <span class="o">=</span> <span class="n">ksa</span><span class="o">.</span><span class="n">launch_vehicle</span><span class="p">(</span><span class="s2">"Rocket"</span><span class="p">,</span> <span class="s2">"CCSFS LC-39A"</span><span class="p">)</span>
+
+<span class="c1"># The flight computer obeys a program only on a vehicle under control,</span>
+<span class="c1"># so a kitten takes the Rocket's seat</span>
+<span class="n">kitten</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+    <span class="n">k</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ksa</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">vehicle</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">on_eva</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">killed_in_action</span>
+<span class="p">)</span>
+<span class="n">vehicle</span><span class="o">.</span><span class="n">seats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">kitten</span> <span class="o">=</span> <span class="n">kitten</span>
+
+<span class="c1"># The game updates the rocket's control state at its next frame</span>
+<span class="n">deadline</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="k">while</span> <span class="n">vehicle</span><span class="o">.</span><span class="n">control_state</span> <span class="o">!=</span> <span class="n">ksa</span><span class="o">.</span><span class="n">ControlState</span><span class="o">.</span><span class="n">controllable</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">deadline</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Cannot control the rocket: </span><span class="si">{</span><span class="n">vehicle</span><span class="o">.</span><span class="n">control_state</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Loading the program"</span><span class="p">)</span>
+<span class="n">computer</span> <span class="o">=</span> <span class="n">kfs</span><span class="o">.</span><span class="n">computer</span><span class="p">(</span><span class="n">vehicle</span><span class="p">)</span>
+<span class="n">computer</span><span class="o">.</span><span class="n">load</span><span class="p">({</span><span class="s2">"ascent.c"</span><span class="p">:</span> <span class="n">PROGRAM</span><span class="o">.</span><span class="n">read_text</span><span class="p">()})</span>
+<span class="n">computer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="reading-the-telemetry">
+<h2>Reading the Telemetry<a class="headerlink" href="#reading-the-telemetry" title="Link to this heading">#</a></h2>
+<p>Each field of the telemetry is a stream of <code class="docutils literal notranslate"><span class="pre">read_global</span></code>. The server reads the program’s
+memory after each of its ticks:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">telemetry</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""A stream of a field of the program's telemetry."""</span>
+    <span class="k">return</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">computer</span><span class="o">.</span><span class="n">read_global</span><span class="p">,</span> <span class="s2">"telemetry."</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+
+
+<span class="n">phase</span> <span class="o">=</span> <span class="n">telemetry</span><span class="p">(</span><span class="s2">"phase"</span><span class="p">)</span>
+<span class="n">altitude</span> <span class="o">=</span> <span class="n">telemetry</span><span class="p">(</span><span class="s2">"altitude"</span><span class="p">)</span>
+<span class="n">apoapsis</span> <span class="o">=</span> <span class="n">telemetry</span><span class="p">(</span><span class="s2">"apoapsis"</span><span class="p">)</span>
+<span class="n">pitch</span> <span class="o">=</span> <span class="n">telemetry</span><span class="p">(</span><span class="s2">"pitch"</span><span class="p">)</span>
+<span class="n">thrust</span> <span class="o">=</span> <span class="n">telemetry</span><span class="p">(</span><span class="s2">"thrust"</span><span class="p">)</span>
+<span class="n">stages</span> <span class="o">=</span> <span class="n">telemetry</span><span class="p">(</span><span class="s2">"stages"</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="lifting-off">
+<h2>Lifting Off<a class="headerlink" href="#lifting-off" title="Link to this heading">#</a></h2>
+<p>The script counts down, and writes the lift off request to the program.
+<code class="docutils literal notranslate"><span class="pre">write_globals</span></code> returns once the program can see the new value:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">count</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">..."</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Lift off"</span><span class="p">)</span>
+<span class="n">computer</span><span class="o">.</span><span class="n">write_globals</span><span class="p">({</span><span class="s2">"request.launch"</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+</pre></div>
+</div>
+</section>
+<section id="staging">
+<h2>Staging<a class="headerlink" href="#staging" title="Link to this heading">#</a></h2>
+<p>The script watches the thrust the program reports. When the first stage runs dry, it counts
+up the stagings it wants in the program’s request. It also streams the computer’s state, and
+stops if the program halts, such as on a trap:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">state</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">computer</span><span class="p">,</span> <span class="s2">"state"</span><span class="p">)</span>
+<span class="n">requested</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">last_report</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="k">while</span> <span class="n">phase</span><span class="p">()</span> <span class="o">!=</span> <span class="n">COAST</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">state</span><span class="p">()</span> <span class="o">==</span> <span class="n">kfs</span><span class="o">.</span><span class="n">ComputerState</span><span class="o">.</span><span class="n">halted</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The program halted: </span><span class="si">{</span><span class="n">computer</span><span class="o">.</span><span class="n">trap</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="c1"># Stage once the program reports no thrust, and has done the</span>
+    <span class="c1"># stagings asked for so far</span>
+    <span class="k">if</span> <span class="n">phase</span><span class="p">()</span> <span class="o">==</span> <span class="n">ASCENT</span> <span class="ow">and</span> <span class="n">thrust</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">stages</span><span class="p">()</span> <span class="o">==</span> <span class="n">requested</span><span class="p">:</span>
+        <span class="n">requested</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Staging at apoapsis </span><span class="si">{</span><span class="n">apoapsis</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> km"</span><span class="p">)</span>
+        <span class="n">computer</span><span class="o">.</span><span class="n">write_globals</span><span class="p">({</span><span class="s2">"request.stages"</span><span class="p">:</span> <span class="n">requested</span><span class="p">})</span>
+</pre></div>
+</div>
+</section>
+<section id="handing-back">
+<h2>Handing Back<a class="headerlink" href="#handing-back" title="Link to this heading">#</a></h2>
+<p>Once the engines are off, the script waits for the rocket to leave the atmosphere. It then
+stops the program, which hands the rocket back to the pilot, and prints the program’s log:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hand the rocket back to the pilot</span>
+<span class="n">computer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The program's log:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">computer</span><span class="o">.</span><span class="n">log</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  "</span> <span class="o">+</span> <span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The rocket is on its way to a 400 km apoapsis. <a class="reference internal" href="circularize.html"><span class="doc">Executing a Burn</span></a> makes the orbit circular.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="raise-orbit.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Raising an Orbit</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../clients.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Clients</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-program">The Program</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-program">Loading the Program</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-the-telemetry">Reading the Telemetry</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lifting-off">Lifting Off</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#staging">Staging</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#handing-back">Handing Back</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/tutorials/launch-with-kfs.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026 kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

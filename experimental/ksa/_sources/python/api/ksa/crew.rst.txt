@@ -51,6 +51,14 @@ Crew
       :rtype: bool
    
 
+   .. attribute:: cause_of_death
+
+      What killed the kitten, or ``None`` if it is alive.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`DeathCause` or None
+   
+
    .. attribute:: mission_count
 
       The number of missions the kitten has flown, including the current one.
@@ -119,6 +127,35 @@ Crew
       :rtype: bool
    
 
+   .. attribute:: time_to_radiation_sickness
+
+      The time until the kitten gets radiation sickness at its current dose rate, in
+      seconds. Infinite if it never does, or the kitten already has it.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         The game forecasts it for a kitten on a mission while
+         :attr:`radiation_enabled` is true.
+
+   .. attribute:: time_to_lethal_dose
+
+      The time until the kitten takes a lethal radiation dose at its current dose rate, in
+      seconds. Infinite if it never does.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         The game forecasts it for a kitten on a mission while
+         :attr:`radiation_enabled` is true, and only within a day of radiation
+         sickness.
+
    .. attribute:: time_until_fit_to_fly
 
       The time until the kitten has recovered from radiation sickness and can fly, resting
@@ -145,6 +182,49 @@ Crew
       :rtype: bool
    
 
+   .. attribute:: worst_condition
+
+      The kitten's worst condition across its supplies.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KittenCondition`
+   
+
+   .. method:: condition(supply)
+
+      The effect on the kitten of going without a supply.
+
+      :param LifeSupportSupply supply: The supply.
+      :rtype: :class:`KittenCondition`
+   
+
+   .. method:: time_without(supply)
+
+      The time the kitten has gone without a supply, in seconds. It counts down again
+      once the supply returns.
+
+      :param LifeSupportSupply supply: The supply.
+      :rtype: float
+   
+
+   .. method:: time_to_next_condition(supply)
+
+      The further time the kitten can go without a supply before its condition from the
+      supply worsens, in seconds. Infinite once the kitten is dead.
+
+      :param LifeSupportSupply supply: The supply.
+      :rtype: float
+   
+
+   .. attribute:: incapacitated
+
+      Whether the kitten is incapacitated by going without a supply. An incapacitated
+      kitten cannot fly the vehicle or move supplies.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
    .. attribute:: on_eva
 
       Whether the kitten is on EVA.
@@ -164,6 +244,14 @@ Crew
 
          Throws an exception if the kitten is not in a seat, or the vehicle has no EVA hatch.
 
+   .. attribute:: can_go_on_eva
+
+      Whether the kitten can go on EVA. See :meth:`Kitten.go_on_eva`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
    .. method:: board()
 
       Board the nearest vehicle with a free seat, and return once the kitten is in the
@@ -177,6 +265,15 @@ Crew
 
          Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
          within one meter.
+
+   .. attribute:: can_board
+
+      Whether the kitten is on EVA and an EVA hatch with a free seat is in range. See
+      :meth:`Kitten.board`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
 
    .. attribute:: locomotion_mode
 
@@ -204,6 +301,81 @@ Crew
       :param ReferenceFrame reference_frame: The reference frame of the velocity.
       :rtype: tuple(float, float, float)
    
+
+   .. attribute:: life_support
+
+      How long the supplies in the kitten's suit last, or ``None`` if the kitten is
+      not on EVA.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`LifeSupport` or None
+   
+
+      .. note::
+
+         The suit is filled from the kitten's habitat zone when it goes on EVA, and what is
+         left returns to the zone when it boards.
+
+   .. attribute:: carried_meals
+
+      The number of meals the kitten on EVA carries. Throws an exception if the kitten is
+      not on EVA.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. attribute:: carried_canisters
+
+      The number of carbon dioxide scrubber canisters the kitten on EVA carries. Throws an
+      exception if the kitten is not on EVA.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. method:: can_carry(habitat)
+
+      Whether the kitten can take supplies from or stow them in a habitat. See
+      :meth:`Kitten.take` and :meth:`Kitten.stow`.
+
+      :param Habitat habitat: The habitat.
+      :rtype: bool
+   
+
+   .. method:: take(habitat, [meals = 0], [canisters = 0])
+
+      Take meals and canisters from a habitat within reach, and return once the kitten
+      carries them. Takes fewer when the habitat holds fewer, or the kitten cannot carry
+      more.
+
+      :param Habitat habitat: The habitat, which must store supplies.
+      :param int meals: The number of meals to take.
+      :param int canisters: The number of canisters to take.
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA or is unwell, life support is
+         disabled, or the habitat stores no supplies or is out of reach. See
+         :meth:`Kitten.can_carry`.
+
+   .. method:: stow(habitat, [meals = 0], [canisters = 0])
+
+      Stow the meals and canisters the kitten carries in a habitat within reach, and
+      return once they are stowed. Stows fewer when the kitten carries fewer, or the
+      habitat has less room.
+
+      :param Habitat habitat: The habitat, which must store supplies.
+      :param int meals: The number of meals to stow.
+      :param int canisters: The number of canisters to stow.
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA or is unwell, life support is
+         disabled, or the habitat stores no supplies or is out of reach. See
+         :meth:`Kitten.can_carry`.
 
 
 
@@ -248,6 +420,225 @@ Crew
 
 
 
+.. class:: KittenCondition
+
+   The effect on a kitten of going without a supply. See :meth:`Kitten.condition`.
+
+
+   .. data:: healthy
+
+      Unaffected.
+
+
+   .. data:: warning
+
+      Going without, with no effect yet.
+
+
+   .. data:: degraded
+
+      Weakened, and unable to go on EVA.
+
+
+   .. data:: incapacitated
+
+      Unable to fly the vehicle or move supplies.
+
+
+   .. data:: dead
+
+      Dead.
+
+
+
+.. class:: DeathCause
+
+   What killed a kitten. See :attr:`Kitten.cause_of_death`.
+
+
+   .. data:: unknown
+
+      Not recorded.
+
+
+   .. data:: no_oxygen
+
+      Lack of oxygen.
+
+
+   .. data:: no_scrubber
+
+      Carbon dioxide, with no scrubber canisters left.
+
+
+   .. data:: no_water
+
+      Lack of water.
+
+
+   .. data:: no_food
+
+      Lack of food.
+
+
+   .. data:: radiation
+
+      A lethal radiation dose.
+
+
+   .. data:: ground_impact
+
+      Hitting the ground.
+
+
+   .. data:: ocean_impact
+
+      Hitting the ocean.
+
+
+   .. data:: collision
+
+      A collision.
+
+
+   .. data:: excessive_g_force
+
+      Excessive acceleration.
+
+
+   .. data:: aerodynamic_forces
+
+      Aerodynamic forces breaking up the vehicle.
+
+
+   .. data:: hydrodynamic_forces
+
+      Hydrodynamic forces breaking up the vehicle.
+
+
+   .. data:: fall
+
+      A fall on EVA.
+
+
+   .. data:: abandoned
+
+      Left in a vehicle that was abandoned.
+
+
+
+.. class:: CrewEvent
+
+   A kitten's most urgent coming event: its supplies running low, or its condition
+   worsening. Obtained from :attr:`Vehicle.crew_events` or
+   :attr:`Vehicle.next_crew_event`.
+
+   .. note::
+
+      As the game's crew clock, an event within a day is the worst stage the kitten reaches
+      in that time, and a later event is the soonest. The event is the game's forecast when it
+      is read from the vehicle. Read it again for a new forecast.
+
+   .. attribute:: kitten
+
+      The kitten.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Kitten`
+   
+
+   .. attribute:: stage
+
+      What happens to the kitten.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`CrewStage`
+   
+
+   .. attribute:: hazard
+
+      The cause of the event.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`CrewHazard`
+   
+
+   .. attribute:: ut
+
+      The universal time of the event, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: time_to
+
+      The time until the event, in seconds. Zero once its time has passed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: CrewStage
+
+   What happens to a kitten in a crew event. See :attr:`CrewEvent.stage`.
+
+
+   .. data:: low
+
+      The supply runs low.
+
+
+   .. data:: degraded
+
+      The kitten is weakened, and unable to go on EVA. For radiation, the kitten gets
+      radiation sickness.
+
+
+   .. data:: incapacitated
+
+      The kitten is unable to fly the vehicle or move supplies.
+
+
+   .. data:: dead
+
+      The kitten dies.
+
+
+
+.. class:: CrewHazard
+
+   The cause of a crew event. See :attr:`CrewEvent.hazard`.
+
+
+   .. data:: air
+
+      Running out of air.
+
+
+   .. data:: scrubber
+
+      Running out of carbon dioxide scrubber.
+
+
+   .. data:: water
+
+      Running out of water.
+
+
+   .. data:: food
+
+      Running out of food.
+
+
+   .. data:: radiation
+
+      The radiation dose.
+
+
+
 .. class:: Seat
 
    A crew seat. Obtained from :attr:`Part.seats`.
@@ -271,5 +662,6 @@ Crew
 
       .. note::
 
-         A kitten in another seat of the vehicle moves to this one. Throws an exception if
-         the kitten is killed in action, on EVA, or in another vehicle.
+         A kitten in another seat of the vehicle moves to this one, within its habitat zone.
+         Throws an exception if the kitten is killed in action, retired, on EVA, in another
+         vehicle, or incapacitated, or the seat is in another habitat zone.

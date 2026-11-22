@@ -13,8 +13,8 @@ Provides functionality to interact with Kitten Space Agency.
 
 .. attribute:: active_vehicle
 
-   The vehicle under the player's control, or ``None`` if the player controls a
-   kitten on EVA.
+   The vehicle under the player's control, or ``None`` if there is none or the
+   player controls a kitten on EVA.
 
    :Attribute: Can be read or written
    :rtype: :class:`Vehicle` or None
@@ -108,6 +108,32 @@ Provides functionality to interact with Kitten Space Agency.
    :rtype: float
    
 
+   .. note::
+
+      Setting it stops a warp in progress, such as one started by :meth:`warp_to`.
+
+
+
+
+.. attribute:: life_support_enabled
+
+   Whether the crew use up supplies, as set when the game was created.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: radiation_enabled
+
+   Whether radiation harms the crew, as set when the game was created.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: bool
+   
+
 
 
 
@@ -122,7 +148,7 @@ Provides functionality to interact with Kitten Space Agency.
    .. note::
 
       Does nothing when the time is in the past. Returns early if the game stops the
-      warp, for example when its menu pauses the game.
+      warp, for example when its menu pauses the game, or a vehicle's supplies run out.
 
 
 
@@ -217,6 +243,43 @@ Provides functionality to interact with Kitten Space Agency.
    :param float duration: How long to show the message for, in seconds. The game shows a message for at least 2 seconds.
    :param bool warning: Whether to show the message in the warning color.
    
+
+
+
+
+.. staticmethod:: raycast_distance(position, direction, reference_frame)
+
+   The distance from a position to the first part of a vehicle along a ray, in
+   meters. Infinite if the ray hits no part.
+
+   :param tuple position: The start of the ray, in meters.
+   :param tuple direction: The direction of the ray.
+   :param ReferenceFrame reference_frame: The reference frame of the position and direction.
+   :rtype: float
+   
+
+   .. note::
+
+      The ray tests the meshes of the parts, as picking a part with the mouse does.
+      It passes through terrain and kittens on EVA.
+
+
+
+
+.. staticmethod:: raycast_part(position, direction, reference_frame)
+
+   The first part of a vehicle along a ray, or ``None`` if the ray hits no part.
+
+   :param tuple position: The start of the ray, in meters.
+   :param tuple direction: The direction of the ray.
+   :param ReferenceFrame reference_frame: The reference frame of the position and direction.
+   :rtype: :class:`Part` or None
+   
+
+   .. note::
+
+      The ray tests the meshes of the parts, as picking a part with the mouse does.
+      It passes through terrain and kittens on EVA.
 
 
 

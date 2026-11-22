@@ -8,8 +8,8 @@ Vehicle
 
 .. type:: public class Vehicle
 
-   A vehicle in the current system. Obtained from :meth:`getActiveVehicle()`
-   or :meth:`getVehicles()`.
+   A vehicle in the current system. Obtained from :meth:`KSA.getActiveVehicle()`
+   or :meth:`KSA.getVehicles()`.
 
    .. note::
 
@@ -97,6 +97,13 @@ Vehicle
 
    
 
+   .. method:: float getDryMass()
+
+
+      The mass of the vehicle's parts, without propellant or supplies, in kilograms.
+
+   
+
    .. method:: float getPropellantMass()
 
 
@@ -127,6 +134,62 @@ Vehicle
       current atmospheric pressure, in seconds. Zero when no engine is active.
 
    
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getMomentOfInertia()
+
+
+      The vehicle's moments of inertia about the axes of :meth:`Vehicle.getReferenceFrame()`
+      through its center of mass, in :math:`\mathrm{kg \cdot m^{2}}`.
+
+   
+
+   .. method:: java.util.List<org.javatuples.Triplet<Double,Double,Double>> getInertiaTensor()
+
+
+      The vehicle's inertia tensor about its center of mass, along the axes of
+      :meth:`Vehicle.getReferenceFrame()`, in :math:`\mathrm{kg \cdot m^{2}}`, as its three rows.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getAvailableRCSTorque()
+
+
+      The torque the vehicle's RCS thrusters can give about each axis of its control
+      frame, in :math:`\mathrm{N \cdot m}`. Each is the smaller of the torques in the two
+      directions about the axis.
+
+   
+
+      .. note::
+
+         The control frame has the axes of :meth:`Vehicle.getReferenceFrame()`, unless the flight
+         computer steers along the thrust. The thrusters give this torque while
+         :meth:`Control.getRCS()` is on.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> acceleration(ReferenceFrame referenceFrame)
+
+      The vehicle's acceleration from the forces on it other than gravity, in
+      :math:`\mathrm{m/s^{2}}`.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the acceleration.
+   
+
+      .. note::
+
+         The game measures it over the last physics step. Its length divided by standard
+         gravity is :meth:`Flight.getGForce()`.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> angularAcceleration(ReferenceFrame referenceFrame)
+
+      The vehicle's angular acceleration, in :math:`\mathrm{rad/s^{2}}`. The vector points
+      along the axis of rotation.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the angular acceleration.
+   
+
+      .. note::
+
+         The game measures it over the last physics step.
 
    .. method:: float getPeakGLoad()
 
@@ -203,6 +266,81 @@ Vehicle
 
    
 
+   .. method:: boolean getControllable()
+
+
+      Whether the vehicle can be flown. A vehicle needs a control module, and a crewed
+      vehicle with every kitten incapacitated also needs a probe core.
+
+   
+
+   .. method:: boolean getHasControlModule()
+
+
+      Whether the vehicle has a control module, such as a capsule or a probe core.
+
+   
+
+   .. method:: ControlState getControlState()
+
+
+      Whether the vehicle can be flown, or why not.
+
+   
+
+      .. note::
+
+         This is the reason the game gives when the vehicle does not respond to its controls.
+
+   .. method:: java.util.List<CrewEvent> getCrewEvents()
+
+
+      The most urgent coming event of each kitten in the vehicle, most urgent first.
+
+   
+
+      .. note::
+
+         The order is the game's crew clock's: events within a day come first, the worst
+         first. Empty while :meth:`KSA.getLifeSupportEnabled()` and
+         :meth:`KSA.getRadiationEnabled()` are both false.
+
+   .. method:: CrewEvent getNextCrewEvent()
+
+
+      The most urgent of :meth:`Vehicle.getCrewEvents()`, or ``null`` if there is none.
+
+   
+
+   .. method:: LifeSupport getLifeSupport()
+
+
+      How long the supplies of the vehicle's worst habitat zone last its crew, or
+      ``null`` if the vehicle has no habitats.
+
+   
+
+   .. method:: Mission getMission()
+
+
+      The mission planned for the vehicle, or ``null`` if it has none.
+
+   
+
+   .. method:: java.util.List<HabitatZone> getHabitatZones()
+
+
+      The vehicle's habitat zones.
+
+   
+
+   .. method:: java.util.List<Habitat> getHabitats()
+
+
+      The vehicle's habitats.
+
+   
+
    .. method:: java.util.List<Engine> getEngines()
 
 
@@ -263,6 +401,13 @@ Vehicle
 
 
       The vehicle's power consumers.
+
+   
+
+   .. method:: java.util.List<Avionics> getAvionics()
+
+
+      The avionics of the vehicle's probe cores.
 
    
 
@@ -542,10 +687,61 @@ Vehicle
 
 
 
+.. type:: public enum ControlState
+
+   Whether a vehicle can be flown, or why not. See :meth:`Vehicle.getControlState()`.
+
+
+   .. field:: public ControlState CONTROLLABLE
+
+      The vehicle can be flown.
+
+
+   .. field:: public ControlState NO_CONTROL_MODULE
+
+      The vehicle has no control module, such as a capsule or a probe core.
+
+
+   .. field:: public ControlState NO_CREW
+
+      The capsules have no crew, and no probe core is on.
+
+
+   .. field:: public ControlState CREW_INCAPACITATED
+
+      Every kitten in the capsules is incapacitated, and no probe core is on.
+
+
+   .. field:: public ControlState PROBE_CORE_UNPOWERED
+
+      The probe core has no power.
+
+
+   .. field:: public ControlState PROBE_CORE_OFF
+
+      The probe core is switched off.
+
+
+   .. field:: public ControlState PROBE_CORE_FAILED
+
+      The probe core has failed from its radiation dose.
+
+
+   .. field:: public ControlState PROBE_CORE_STORM_STANDBY
+
+      The probe core is on standby for a radiation storm.
+
+
+   .. field:: public ControlState PROBE_CORE_REBOOTING
+
+      The probe core is rebooting after a radiation upset.
+
+
+
 .. type:: public class VehicleDesign
 
    A vehicle design that can be launched: one of the game's default vehicles, or a vehicle
-   saved by the player in the editor. Obtained from :meth:`getVehicleDesigns()`.
+   saved by the player in the editor. Obtained from :meth:`KSA.getVehicleDesigns()`.
 
    .. note::
 
@@ -554,7 +750,7 @@ Vehicle
    .. method:: String getName()
 
 
-      The name of the design, as passed to :meth:`launchVehicle(String, String)`.
+      The name of the design, as passed to :meth:`KSA.launchVehicle(String, String)`.
 
    
 

@@ -1,0 +1,652 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Life Support
+============
+
+
+.. type:: krpc_KSA_LifeSupport_t
+
+   How long the supplies of a vehicle, a habitat zone or a kitten's suit last. Obtained
+   from :func:`krpc_KSA_Vehicle_LifeSupport`, :func:`krpc_KSA_HabitatZone_LifeSupport` or
+   :func:`krpc_KSA_Kitten_LifeSupport`.
+
+   .. note::
+
+      The times count down only while :func:`krpc_KSA_LifeSupportEnabled` is true. Air
+      lasts forever in breathable air outside the vehicle.
+
+   .. macro:: KRPC_CLASS_KSA_LIFESUPPORT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_KSA_LifeSupport_Kittens(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_LifeSupport_t instance)
+
+      The number of kittens the supplies are shared between.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_LifeSupport_AirMass(krpc_connection_t connection, float * returnValue, krpc_KSA_LifeSupport_t instance)
+
+      The mass of oxygen in the crew's tanks, in kilograms.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_LifeSupport_WaterMass(krpc_connection_t connection, float * returnValue, krpc_KSA_LifeSupport_t instance)
+
+      The mass of water in the crew's tanks, in kilograms.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_LifeSupport_Meals(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_LifeSupport_t instance)
+
+      The number of meals.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_LifeSupport_AirTime(krpc_connection_t connection, float * returnValue, krpc_KSA_LifeSupport_t instance)
+
+      The time the air lasts, in seconds. Infinite with no crew, or in breathable air.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_LifeSupport_ScrubberTime(krpc_connection_t connection, float * returnValue, krpc_KSA_LifeSupport_t instance)
+
+      The time the carbon dioxide scrubbers last, in seconds. Infinite with no crew.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_LifeSupport_WaterTime(krpc_connection_t connection, float * returnValue, krpc_KSA_LifeSupport_t instance)
+
+      The time the water lasts, in seconds. Infinite with no crew.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_LifeSupport_FoodTime(krpc_connection_t connection, float * returnValue, krpc_KSA_LifeSupport_t instance)
+
+      The time the food lasts, in seconds. Infinite with no crew.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_LifeSupport_Time(krpc_connection_t connection, float * returnValue, krpc_KSA_LifeSupport_t instance)
+
+      The time until the first supply runs out, in seconds. A suit counts its air and
+      scrubber only. Infinite with no crew.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_LifeSupport_LimitingSupply(krpc_connection_t connection, krpc_KSA_LifeSupportSupply_t * returnValue, krpc_KSA_LifeSupport_t instance)
+
+      The supply that runs out first. Air when every time is infinite, as with no crew.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_LifeSupport_Level(krpc_connection_t connection, krpc_KSA_LifeSupportLevel_t * returnValue, krpc_KSA_LifeSupport_t instance)
+
+      How long the supplies last, as the game's life support gauge shows it.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_LifeSupport_TimeToNextLevel(krpc_connection_t connection, float * returnValue, krpc_KSA_LifeSupport_t instance)
+
+      The time until :func:`krpc_KSA_LifeSupport_Level` next changes, in seconds. Infinite with no crew.
+
+   
+
+
+
+.. type:: krpc_KSA_LifeSupportLevel_t
+
+   How long the crew's supplies last. See :func:`krpc_KSA_LifeSupport_Level`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_LIFESUPPORTLEVEL
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_LIFESUPPORTLEVEL_OK
+
+      More than a day of supplies, or no crew.
+
+
+   .. macro:: KRPC_KSA_LIFESUPPORTLEVEL_LOW
+
+      A day of supplies or less.
+
+
+   .. macro:: KRPC_KSA_LIFESUPPORTLEVEL_CRITICAL
+
+      An hour of supplies or less.
+
+
+   .. macro:: KRPC_KSA_LIFESUPPORTLEVEL_OUT
+
+      A supply has run out.
+
+
+
+.. type:: krpc_KSA_LifeSupportSupply_t
+
+   A supply the crew needs. See :func:`krpc_KSA_LifeSupport_LimitingSupply`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_LIFESUPPORTSUPPLY
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_LIFESUPPORTSUPPLY_AIR
+
+      Oxygen to breathe.
+
+
+   .. macro:: KRPC_KSA_LIFESUPPORTSUPPLY_SCRUBBER
+
+      Lithium hydroxide canisters, which scrub carbon dioxide from the air.
+
+
+   .. macro:: KRPC_KSA_LIFESUPPORTSUPPLY_WATER
+
+      Drinking water.
+
+
+   .. macro:: KRPC_KSA_LIFESUPPORTSUPPLY_FOOD
+
+      Meals.
+
+
+
+.. type:: krpc_KSA_HabitatZone_t
+
+   The connected habitable parts of a vehicle, which share their crew's supplies.
+   Obtained from :func:`krpc_KSA_Vehicle_HabitatZones` or :func:`krpc_KSA_Habitat_Zone`.
+
+   .. note::
+
+      Parts join a zone through connections the crew can pass, such as an open docking
+      port hatch.
+
+   .. macro:: KRPC_CLASS_KSA_HABITATZONE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_KSA_HabitatZone_Vehicle(krpc_connection_t connection, krpc_KSA_Vehicle_t * returnValue, krpc_KSA_HabitatZone_t instance)
+
+      The vehicle the zone is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_HabitatZone_Parts(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_HabitatZone_t instance)
+
+      The parts in the zone.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_HabitatZone_Habitats(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_HabitatZone_t instance)
+
+      The habitats in the zone.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_HabitatZone_Seats(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_HabitatZone_t instance)
+
+      The crew seats in the zone.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_HabitatZone_Crew(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_HabitatZone_t instance)
+
+      The kittens in the zone's seats.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_HabitatZone_LinkedZones(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_HabitatZone_t instance)
+
+      The zones that join this one when closed docking port hatches between them open.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_HabitatZone_HatchesTo(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_HabitatZone_t instance, krpc_KSA_HabitatZone_t zone)
+
+      The closed docking port hatches that join this zone to a linked zone when they
+      open.
+
+      :Parameters:
+
+       * **zone** -- A zone in :func:`krpc_KSA_HabitatZone_LinkedZones`.
+
+   
+
+      .. note::
+
+         Throws an exception if the zone is not linked to this one.
+
+   .. function:: krpc_error_t krpc_KSA_HabitatZone_HabitableVolume(krpc_connection_t connection, float * returnValue, krpc_KSA_HabitatZone_t instance)
+
+      The volume the crew can live in, in cubic meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_HabitatZone_StorageVolume(krpc_connection_t connection, float * returnValue, krpc_KSA_HabitatZone_t instance)
+
+      The volume for stored supplies, in cubic meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_HabitatZone_LifeSupport(krpc_connection_t connection, krpc_KSA_LifeSupport_t * returnValue, krpc_KSA_HabitatZone_t instance)
+
+      How long the zone's supplies last its crew.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_HabitatZone_MissionSupplies(krpc_connection_t connection, krpc_KSA_MissionSupplies_t * returnValue, krpc_KSA_HabitatZone_t instance)
+
+      Whether the zone's supplies last its crew through the vehicle's mission. ``nullptr``
+      without a feasible mission with time left, or while
+      :func:`krpc_KSA_LifeSupportEnabled` is false.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_HabitatZone_PlannedKittens(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_HabitatZone_t instance, krpc_KSA_MissionLeg_t leg)
+
+      The number of kittens planned in the zone for a leg of the vehicle's mission. The
+      plan defaults to the kittens seated in the zone.
+
+      :Parameters:
+
+       * **leg** -- The leg.
+
+   
+
+
+
+.. type:: krpc_KSA_Mission_t
+
+   The mission planned for a vehicle in the editor's life support window. Obtained from
+   :func:`krpc_KSA_Vehicle_Mission`.
+
+   .. note::
+
+      The game times the legs of the mission from the plan, and checks the supplies of each
+      habitat zone against them. See :func:`krpc_KSA_HabitatZone_MissionSupplies`.
+
+   .. macro:: KRPC_CLASS_KSA_MISSION
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_KSA_Mission_Destination(krpc_connection_t connection, krpc_KSA_MissionDestination_t * returnValue, krpc_KSA_Mission_t instance)
+
+      Where the mission goes.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Mission_Body(krpc_connection_t connection, krpc_KSA_Body_t * returnValue, krpc_KSA_Mission_t instance)
+
+      The body the mission goes to, or ``nullptr`` if it has no destination. For a low
+      orbit, this is the home body.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Mission_Arrival(krpc_connection_t connection, krpc_KSA_MissionArrival_t * returnValue, krpc_KSA_Mission_t instance)
+
+      What the mission does at its destination.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Mission_Trip(krpc_connection_t connection, krpc_KSA_MissionTrip_t * returnValue, krpc_KSA_Mission_t instance)
+
+      Whether the mission comes back.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Mission_Stay(krpc_connection_t connection, float * returnValue, krpc_KSA_Mission_t instance)
+
+      The time planned at the destination, in seconds.
+
+   
+
+      .. note::
+
+         The game rounds a stay before a return up to the next transfer window home. See
+         :func:`krpc_KSA_Mission_StayTime`.
+
+   .. function:: krpc_error_t krpc_KSA_Mission_Custom(krpc_connection_t connection, bool * returnValue, krpc_KSA_Mission_t instance)
+
+      Whether the mission has a length set by the player, in place of legs timed from
+      its destination. See :func:`krpc_KSA_Mission_CustomLength`.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Mission_CustomLength(krpc_connection_t connection, float * returnValue, krpc_KSA_Mission_t instance)
+
+      The length of a mission with :func:`krpc_KSA_Mission_Custom` set, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Mission_Feasible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Mission_t instance)
+
+      Whether the game can time the legs of the mission. A mission with no destination,
+      or a flyby with no way back, cannot be timed.
+
+   
+
+      .. note::
+
+         The leg times are zero when this is false.
+
+   .. function:: krpc_error_t krpc_KSA_Mission_OutTime(krpc_connection_t connection, float * returnValue, krpc_KSA_Mission_t instance)
+
+      The planned time of the way out, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Mission_StayTime(krpc_connection_t connection, float * returnValue, krpc_KSA_Mission_t instance)
+
+      The planned time at the destination, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Mission_BackTime(krpc_connection_t connection, float * returnValue, krpc_KSA_Mission_t instance)
+
+      The planned time of the way back, in seconds. Zero for a one way trip.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Mission_ReturnWait(krpc_connection_t connection, float * returnValue, krpc_KSA_Mission_t instance)
+
+      The time from arriving at the destination until the next transfer window home, in
+      seconds. Zero when there is no wait.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Mission_TotalTime(krpc_connection_t connection, float * returnValue, krpc_KSA_Mission_t instance)
+
+      The planned length of the mission, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Mission_TimeLeft(krpc_connection_t connection, float * returnValue, krpc_KSA_Mission_t instance)
+
+      The time left in the mission as planned, counted from the vehicle's launch, in
+      seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Mission_ArrivalUT(krpc_connection_t connection, double * returnValue, krpc_KSA_Mission_t instance)
+
+      The universal time the vehicle arrived at the destination body, in seconds. Not a
+      number until it has.
+
+   
+
+      .. note::
+
+         The game records the arrival for a mission to another body.
+
+   .. function:: krpc_error_t krpc_KSA_Mission_DepartureUT(krpc_connection_t connection, double * returnValue, krpc_KSA_Mission_t instance)
+
+      The universal time the vehicle left the destination body, in seconds. Not a number
+      until it has.
+
+   
+
+
+
+.. type:: krpc_KSA_MissionDestination_t
+
+   Where a mission goes. See :func:`krpc_KSA_Mission_Destination`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_MISSIONDESTINATION
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_MISSIONDESTINATION_NONE
+
+      No destination.
+
+
+   .. macro:: KRPC_KSA_MISSIONDESTINATION_LOWORBIT
+
+      A low orbit around the home body.
+
+
+   .. macro:: KRPC_KSA_MISSIONDESTINATION_BODY
+
+      Another body, given by :func:`krpc_KSA_Mission_Body`.
+
+
+
+.. type:: krpc_KSA_MissionArrival_t
+
+   What a mission does at its destination. See :func:`krpc_KSA_Mission_Arrival`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_MISSIONARRIVAL
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_MISSIONARRIVAL_FLYBY
+
+      Flies past it.
+
+
+   .. macro:: KRPC_KSA_MISSIONARRIVAL_ORBIT
+
+      Orbits it.
+
+
+   .. macro:: KRPC_KSA_MISSIONARRIVAL_LAND
+
+      Lands on it.
+
+
+
+.. type:: krpc_KSA_MissionTrip_t
+
+   Whether a mission comes back. See :func:`krpc_KSA_Mission_Trip`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_MISSIONTRIP
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_MISSIONTRIP_RETURN
+
+      Goes and comes back.
+
+
+   .. macro:: KRPC_KSA_MISSIONTRIP_ONEWAY
+
+      Goes and stays.
+
+
+
+.. type:: krpc_KSA_MissionLeg_t
+
+   A leg of a mission. See :func:`krpc_KSA_HabitatZone_PlannedKittens`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_MISSIONLEG
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_MISSIONLEG_OUT
+
+      The way out.
+
+
+   .. macro:: KRPC_KSA_MISSIONLEG_STAY
+
+      The stay at the destination.
+
+
+   .. macro:: KRPC_KSA_MISSIONLEG_BACK
+
+      The way back.
+
+
+
+.. type:: krpc_KSA_MissionSupplies_t
+
+   Whether the supplies of a habitat zone last its crew through the vehicle's mission, as
+   the life support window shows it. Obtained from :func:`krpc_KSA_HabitatZone_MissionSupplies`.
+
+   .. note::
+
+      The check takes the legs left in the mission as planned, counted from the vehicle's
+      launch, and the kittens planned for each leg. The times are from now.
+
+   .. macro:: KRPC_CLASS_KSA_MISSIONSUPPLIES
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_KSA_MissionSupplies_Verdict(krpc_connection_t connection, krpc_KSA_MissionSupplyVerdict_t * returnValue, krpc_KSA_MissionSupplies_t instance)
+
+      Whether the supplies last the mission.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_MissionSupplies_ShortBy(krpc_connection_t connection, float * returnValue, krpc_KSA_MissionSupplies_t instance)
+
+      The time by which the first supply to run out falls short of the end of the
+      mission, in seconds. Zero when the supplies last.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_MissionSupplies_FirstSupply(krpc_connection_t connection, krpc_KSA_LifeSupportSupply_t * returnValue, krpc_KSA_MissionSupplies_t instance)
+
+      The supply that runs out first.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_MissionSupplies_TimeLeft(krpc_connection_t connection, float * returnValue, krpc_KSA_MissionSupplies_t instance, krpc_KSA_LifeSupportSupply_t supply)
+
+      The time until a supply runs out with the crew planned for each leg, in seconds.
+      Infinite if it lasts the mission.
+
+      :Parameters:
+
+       * **supply** -- The supply.
+
+   
+
+      .. note::
+
+         Air lasts while the vehicle is in breathable air.
+
+   .. function:: krpc_error_t krpc_KSA_MissionSupplies_End(krpc_connection_t connection, float * returnValue, krpc_KSA_MissionSupplies_t instance)
+
+      The time until the zone has no crew left in the mission, in seconds.
+
+   
+
+
+
+.. type:: krpc_KSA_MissionSupplyVerdict_t
+
+   Whether a habitat zone has the supplies for a mission. See :func:`krpc_KSA_MissionSupplies_Verdict`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_MISSIONSUPPLYVERDICT
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_MISSIONSUPPLYVERDICT_UNUSED
+
+      The zone has no crew during the mission.
+
+
+   .. macro:: KRPC_KSA_MISSIONSUPPLYVERDICT_ENOUGH
+
+      The supplies last the mission.
+
+
+   .. macro:: KRPC_KSA_MISSIONSUPPLYVERDICT_SHORT
+
+      A supply runs out before the end of the mission.
+
+
+
+.. type:: krpc_KSA_Habitat_t
+
+   A habitable or storage space in a part, which holds meals and carbon dioxide scrubber
+   canisters. Obtained from :func:`krpc_KSA_Part_Habitats`.
+
+   .. macro:: KRPC_CLASS_KSA_HABITAT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_KSA_Habitat_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Habitat_t instance)
+
+      The part the habitat is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Habitat_Zone(krpc_connection_t connection, krpc_KSA_HabitatZone_t * returnValue, krpc_KSA_Habitat_t instance)
+
+      The habitat zone the habitat is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Habitat_HabitableVolume(krpc_connection_t connection, float * returnValue, krpc_KSA_Habitat_t instance)
+
+      The volume the crew can live in, in cubic meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Habitat_StorageVolume(krpc_connection_t connection, float * returnValue, krpc_KSA_Habitat_t instance)
+
+      The volume for stored supplies, in cubic meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Habitat_Meals(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Habitat_t instance)
+
+      The number of meals in the habitat.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Habitat_Canisters(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Habitat_t instance)
+
+      The number of carbon dioxide scrubber canisters in the habitat.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Habitat_MealCapacity(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Habitat_t instance)
+
+      The number of meals the habitat holds when full.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Habitat_CanisterCapacity(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Habitat_t instance)
+
+      The number of carbon dioxide scrubber canisters the habitat holds when full.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Habitat_Transfer(krpc_connection_t connection, krpc_KSA_Habitat_t instance, krpc_KSA_Habitat_t to, int32_t meals, int32_t canisters)
+
+      Moves meals and canisters to another habitat in the same zone. Moves fewer when
+      this habitat holds fewer, or the other has less room.
+
+      :Parameters:
+
+       * **to** -- The habitat to move the supplies to.
+       * **meals** -- The number of meals to move.
+       * **canisters** -- The number of canisters to move.
+
+   
+
+      .. note::
+
+         A kitten in the zone moves the supplies. Throws an exception if life support is
+         disabled, the habitats are in different zones, or the zone has no crew able to
+         move them.

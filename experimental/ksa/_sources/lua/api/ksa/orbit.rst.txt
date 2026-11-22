@@ -23,7 +23,6 @@ Orbit
       The body being orbited.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Body`
 
    .. attribute:: apoapsis: number
 
@@ -31,35 +30,30 @@ Orbit
       Not a number for a parabolic or hyperbolic orbit.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: periapsis: number
 
       The periapsis of the orbit, in meters, from the center of the body being orbited.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: apoapsis_altitude: number
 
       The apoapsis of the orbit, in meters, above the mean radius of the body being orbited.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: periapsis_altitude: number
 
       The periapsis of the orbit, in meters, above the mean radius of the body being orbited.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: semi_major_axis: number
 
       The semi-major axis of the orbit, in meters. Negative for a hyperbolic orbit.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: semi_minor_axis: number
 
@@ -67,35 +61,30 @@ Orbit
       hyperbolic orbit.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: speed: number
 
       The current orbital speed, in meters per second.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: radius: number
 
       The current distance from the center of the body being orbited, in meters.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: period: number
 
       The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: mean_motion: number
 
       The mean angular motion of the orbit, in radians per second.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: specific_energy: number
 
@@ -103,7 +92,6 @@ Orbit
       mass, in joules per kilogram. Negative for an elliptical orbit.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: time_to_apoapsis: number
 
@@ -111,7 +99,6 @@ Orbit
       hyperbolic orbit.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: time_to_periapsis: number
 
@@ -119,7 +106,6 @@ Orbit
       hyperbolic orbit has passed it.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: eccentricity: number
 
@@ -127,7 +113,6 @@ Orbit
       of the orbit.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: inclination: number
 
@@ -135,21 +120,18 @@ Orbit
       of the orbit, in radians, against the equator of the body being orbited.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: longitude_of_ascending_node: number
 
       The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: argument_of_periapsis: number
 
       The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: true_anomaly: number
 
@@ -157,7 +139,6 @@ Orbit
       in radians.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: mean_anomaly: number
 
@@ -165,81 +146,116 @@ Orbit
       in radians.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: eccentric_anomaly: number
 
       The current `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_, in radians. For a hyperbolic orbit, this is the hyperbolic anomaly.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. method:: true_anomaly_at_ut(ut)
+   .. attribute:: semi_latus_rectum: number
+
+      The `semi-latus rectum <https://en.wikipedia.org/wiki/Conic_section#Conic_parameters>`_ of the orbit, in meters.
+
+      :Attribute: Read-only, cannot be set
+
+   .. attribute:: specific_angular_momentum: number
+
+      The specific angular momentum of the orbit, in :math:`\mathrm{m^{2}/s}`.
+
+      :Attribute: Read-only, cannot be set
+
+   .. method:: true_anomaly_at_ut(ut: number): number
 
       The true anomaly at the given time, in radians.
 
-      :param number ut: Universal time, in seconds.
-      :rtype: number
+      :param ut: Universal time, in seconds.
 
-   .. method:: ut_at_true_anomaly(true_anomaly)
+   .. method:: mean_anomaly_at_ut(ut: number): number
+
+      The mean anomaly at the given time, in radians.
+
+      :param ut: Universal time, in seconds.
+
+   .. method:: eccentric_anomaly_at_ut(ut: number): number
+
+      The eccentric anomaly at the given time, in radians. For a hyperbolic orbit, this
+      is the hyperbolic anomaly.
+
+      :param ut: Universal time, in seconds.
+
+   .. method:: ut_at_true_anomaly(true_anomaly: number): number
 
       The next universal time, from now, at which the orbit reaches the given true
       anomaly, in seconds. Not a number if it never does, such as beyond the asymptote of
       a hyperbolic orbit.
 
-      :param number true_anomaly: True anomaly, in radians.
-      :rtype: number
+      :param true_anomaly: True anomaly, in radians.
 
-   .. method:: radius_at(ut)
+   .. method:: true_anomaly_at_radius(radius: number): number
+
+      The true anomaly at which the orbit reaches the given distance from the center of
+      the body, in radians, between 0 and :math:`\pi`. Not a number if the orbit
+      never reaches it.
+
+      :param radius: The distance from the center of the body, in meters.
+
+      .. note::
+
+         The orbit also reaches the distance at the negative of this anomaly. Zero for a
+         circular orbit at the distance. Throws an exception if the distance is not
+         positive.
+
+   .. method:: radius_at(ut: number): number
 
       The distance from the center of the body being orbited at the given time, in
       meters.
 
-      :param number ut: Universal time, in seconds.
-      :rtype: number
+      :param ut: Universal time, in seconds.
 
-   .. method:: position_at(ut, reference_frame)
+   .. method:: speed_at(ut: number): number
+
+      The orbital speed at the given time, in meters per second.
+
+      :param ut: Universal time, in seconds.
+
+   .. method:: position_at(ut: number, reference_frame: KSA.ReferenceFrame): Tuple
 
       The position on the orbit at the given time, in meters, relative to where the body
       being orbited is now.
 
-      :param number ut: Universal time, in seconds.
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
-      :rtype: Tuple
+      :param ut: Universal time, in seconds.
+      :param reference_frame: The reference frame of the position.
 
-   .. method:: velocity_at(ut, reference_frame)
+   .. method:: velocity_at(ut: number, reference_frame: KSA.ReferenceFrame): Tuple
 
       The orbital velocity at the given time, in meters per second, relative to the body
       being orbited and along the axes of the given frame.
 
-      :param number ut: Universal time, in seconds.
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the velocity.
-      :rtype: Tuple
+      :param ut: Universal time, in seconds.
+      :param reference_frame: The reference frame of the velocity.
 
-   .. method:: relative_inclination(orbit)
+   .. method:: relative_inclination(orbit: KSA.Orbit): number
 
       The inclination of the orbit relative to another orbit, in radians.
 
-      :param KSA.Orbit orbit: The other orbit.
-      :rtype: number
+      :param orbit: The other orbit.
 
-   .. method:: true_anomaly_at_an(orbit)
+   .. method:: true_anomaly_at_an(orbit: KSA.Orbit): number
 
       The true anomaly of the ascending node with another orbit, in radians.
 
-      :param KSA.Orbit orbit: The other orbit.
-      :rtype: number
+      :param orbit: The other orbit.
 
       .. note::
 
          Throws an exception if the orbits are around different bodies.
 
-   .. method:: true_anomaly_at_dn(orbit)
+   .. method:: true_anomaly_at_dn(orbit: KSA.Orbit): number
 
       The true anomaly of the descending node with another orbit, in radians.
 
-      :param KSA.Orbit orbit: The other orbit.
-      :rtype: number
+      :param orbit: The other orbit.
 
       .. note::
 
@@ -251,7 +267,6 @@ Orbit
       in seconds. Not a number if there is none.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -264,7 +279,6 @@ Orbit
       meters. Not a number if there is none.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
       .. note::
 
@@ -277,7 +291,6 @@ Orbit
       orbit of a body.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: end_ut: number
 
@@ -285,14 +298,12 @@ Orbit
       does not end, such as the orbit of a body.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
    .. attribute:: end_transition: KSA.OrbitTransition
 
       How the orbit ends.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.OrbitTransition`
 
    .. attribute:: time_to_soi_change: number
 
@@ -300,15 +311,59 @@ Orbit
       number if it does neither.
 
       :Attribute: Read-only, cannot be set
-      :rtype: number
 
-   .. attribute:: next_orbit: KSA.Orbit
+   .. attribute:: next_orbit: KSA.Orbit | nil
 
       The orbit that follows this one after it enters or leaves a sphere of influence, or
       ``nil`` if there is none.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`KSA.Orbit` or ``Types.none``
+
+   .. staticmethod:: create_from_elements(body: KSA.Body, semi_major_axis: number, eccentricity: number, inclination: number, longitude_of_ascending_node: number, argument_of_periapsis: number, mean_anomaly_at_epoch: number, epoch: number): KSA.Orbit
+
+      Create the orbit with the given elements around a body. The angles are those of
+      :class:`KSA.Orbit`.
+
+      :param body: The body being orbited.
+      :param semi_major_axis: The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+      :param eccentricity: The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
+      :param inclination: The inclination, in radians.
+      :param longitude_of_ascending_node: The longitude of the ascending node, in radians.
+      :param argument_of_periapsis: The argument of periapsis, in radians.
+      :param mean_anomaly_at_epoch: The mean anomaly at the epoch, in radians.
+      :param epoch: The universal time of the epoch, in seconds.
+
+      .. note::
+
+         The orbit is a single conic around *body*, with no
+         :attr:`KSA.Orbit.next_orbit`. It is held until :meth:`KSA.Orbit.remove` is called on it, or
+         the client that created it disconnects.
+
+   .. staticmethod:: create_from_position_and_velocity(body: KSA.Body, position: Tuple, velocity: Tuple, ut: number, reference_frame: KSA.ReferenceFrame): KSA.Orbit
+
+      Create the orbit around a body through the given position and velocity.
+
+      :param body: The body being orbited.
+      :param position: The position, in meters, relative to where the body is now.
+      :param velocity: The velocity, in meters per second.
+      :param ut: The universal time of the position and velocity, in seconds.
+      :param reference_frame: The reference frame of the position and velocity.
+
+      .. note::
+
+         The orbit is a single conic around *body*, with no
+         :attr:`KSA.Orbit.next_orbit`. It is held until :meth:`KSA.Orbit.remove` is called on it, or
+         the client that created it disconnects.
+
+   .. method:: remove()
+
+      Remove an orbit created by :meth:`KSA.Orbit.create_from_elements` or
+      :meth:`KSA.Orbit.create_from_position_and_velocity`.
+
+
+      .. note::
+
+         Throws an exception if the orbit was not created by a client.
 
 
 

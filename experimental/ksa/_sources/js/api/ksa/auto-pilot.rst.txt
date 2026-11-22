@@ -1,0 +1,239 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Auto-Pilot
+==========
+
+
+.. class:: AutoPilot
+
+   The vehicle's flight computer, which steers the vehicle with its reaction control
+   thrusters and engine gimbals. Obtained from :meth:`KSA.Vehicle.getAutoPilot`.
+
+   .. note::
+
+      The auto-pilot points the vehicle in the direction set by :meth:`KSA.AutoPilot.getMode`, once
+      engaged. It is the game's own flight computer, so the game's flight computer
+      controls change the same settings. Changing a setting throws an exception while a kFS
+      program controls the vehicle.
+
+   .. method:: engage()
+
+      Engage the auto-pilot.
+
+      :Game Scenes: Flight
+
+   .. method:: disengage()
+
+      Disengage the auto-pilot.
+
+      :Game Scenes: Flight
+
+   .. method:: getEngaged()
+
+      Whether the auto-pilot is engaged.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :meth:`KSA.Control.getStabilization`.
+
+   .. method:: getMode()
+               setMode(value)
+
+      The direction the auto-pilot points the vehicle in.
+
+      :Property: Can be read or written
+      :rtype: :class:`KSA.AutoPilotMode`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting :attr:`KSA.AutoPilotMode.attitude` targets the vehicle's current pitch,
+         heading and roll. Setting :attr:`KSA.AutoPilotMode.other` throws an exception.
+
+   .. method:: getTargetPitch()
+               setTargetPitch(value)
+
+      The target pitch, in degrees, between -90° and +90°.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it sets :meth:`KSA.AutoPilot.getMode` to :attr:`KSA.AutoPilotMode.attitude`.
+         Returns NaN in any other mode.
+
+   .. method:: getTargetHeading()
+               setTargetHeading(value)
+
+      The target heading, in degrees, between 0° and 360°.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it sets :meth:`KSA.AutoPilot.getMode` to :attr:`KSA.AutoPilotMode.attitude`.
+         Returns NaN in any other mode.
+
+   .. method:: getTargetRoll()
+               setTargetRoll(value)
+
+      The target roll, in degrees. NaN when the auto-pilot does not control roll.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting a number sets :meth:`KSA.AutoPilot.getMode` to :attr:`KSA.AutoPilotMode.attitude`.
+         Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
+         :attr:`KSA.AutoPilotMode.attitude`.
+
+   .. method:: targetPitchAndHeading(pitch, heading)
+
+      Set the target pitch and heading, and the mode to
+      :attr:`KSA.AutoPilotMode.attitude`.
+
+      :param pitch: Target pitch, in degrees, between -90° and +90°.
+      :type pitch: ``number``
+      :param heading: Target heading, in degrees, between 0° and 360°.
+      :type heading: ``number``
+      :Game Scenes: Flight
+
+   .. method:: targetDirection(direction, referenceFrame)
+
+      Point the vehicle in a direction, and set the mode to
+      :attr:`KSA.AutoPilotMode.attitude`. Sets :meth:`KSA.AutoPilot.getTargetPitch` and
+      :meth:`KSA.AutoPilot.getTargetHeading` to the direction at the time of the call, so the target
+      stays fixed relative to the surface.
+
+      :param direction: The direction to point in.
+      :type direction: ``[number, number, number]``
+      :param referenceFrame: The reference frame of the direction.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :Game Scenes: Flight
+
+   .. method:: getError()
+
+      The angle between the direction the vehicle points in and the target direction,
+      in degrees. NaN when the auto-pilot is not engaged.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: getRollError()
+
+      The angle between the vehicle's roll and the target roll, in degrees.
+      NaN when the auto-pilot is not engaged.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+      :Game Scenes: Flight
+
+   .. method:: wait()
+
+      Wait until the vehicle points in the target direction, and has the target roll
+      if it has one. Returns when the errors are within twice the flight computer's
+      angle deadband, which defaults to 1°.
+      Throws an exception if the auto-pilot is not engaged.
+
+      :Game Scenes: Flight
+
+   .. method:: getAutoBurn()
+               setAutoBurn(value)
+
+      Whether the flight computer executes the next burn in
+      :meth:`KSA.Vehicle.getBurns`. It points the vehicle along the burn, fires the
+      engines at :meth:`KSA.Burn.getIgnitionTime`, and stops once the burn is complete.
+
+      :Property: Can be read or written
+      :rtype: ``boolean``
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The flight computer clears it when the burn completes, and removes the burn if
+         another follows it. The engines fire only at normal speed, so warp to shortly before
+         the burn with :func:`KSA.warpTo`. Setting it with no burn planned throws an
+         exception.
+
+
+
+.. class:: AutoPilotMode
+
+   The direction the auto-pilot points the vehicle in.
+   See :meth:`KSA.AutoPilot.getMode`.
+
+
+   .. attribute:: attitude
+
+      The pitch, heading and roll set by :meth:`KSA.AutoPilot.getTargetPitch`,
+      :meth:`KSA.AutoPilot.getTargetHeading` and :meth:`KSA.AutoPilot.getTargetRoll`.
+
+
+   .. attribute:: hold
+
+      Holds the vehicle's rotation at zero, relative to the stars.
+
+
+   .. attribute:: prograde
+
+      The direction of the vehicle's orbital velocity.
+
+
+   .. attribute:: retrograde
+
+      The opposite of :attr:`KSA.AutoPilotMode.prograde`.
+
+
+   .. attribute:: normal
+
+      Normal to the orbital plane, along the orbit's angular momentum.
+
+
+   .. attribute:: antiNormal
+
+      The opposite of :attr:`KSA.AutoPilotMode.normal`.
+
+
+   .. attribute:: radialOut
+
+      Away from the center of the body being orbited.
+
+
+   .. attribute:: radialIn
+
+      Toward the center of the body being orbited.
+
+
+   .. attribute:: surfacePrograde
+
+      The direction of the vehicle's velocity relative to the surface.
+
+
+   .. attribute:: surfaceRetrograde
+
+      The opposite of :attr:`KSA.AutoPilotMode.surfacePrograde`.
+
+
+   .. attribute:: other
+
+      A target set in the game, which the API does not cover.

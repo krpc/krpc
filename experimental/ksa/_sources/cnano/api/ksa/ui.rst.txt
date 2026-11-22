@@ -15,6 +15,10 @@ UI
       The windows are removed when the client that added them disconnects. For messages on
       the screen, see :func:`krpc_KSA_ShowMessage`.
 
+   .. macro:: KRPC_CLASS_KSA_UI
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_UI_AddWindow(krpc_connection_t connection, krpc_KSA_Window_t * returnValue, const char * title, bool visible)
 
       Add a window, with no widgets.
@@ -46,6 +50,10 @@ UI
 
       The window fits its widgets until its size is set. Closing the window makes it
       invisible. The window is hidden with the game's UI.
+
+   .. macro:: KRPC_CLASS_KSA_WINDOW
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Window_Title(krpc_connection_t connection, char * * returnValue, krpc_KSA_Window_t instance)
    .. function:: krpc_error_t krpc_KSA_Window_set_Title(krpc_connection_t connection, krpc_KSA_Window_t instance, const char * value)
@@ -193,6 +201,10 @@ UI
 
    A row of widgets, laid out from left to right. Added to a window or a row.
 
+   .. macro:: KRPC_CLASS_KSA_ROW
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Row_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Row_t instance)
    .. function:: krpc_error_t krpc_KSA_Row_set_Visible(krpc_connection_t connection, krpc_KSA_Row_t instance, bool value)
 
@@ -313,6 +325,10 @@ UI
 
    A line of text. Added to a window or a row.
 
+   .. macro:: KRPC_CLASS_KSA_LABEL
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Label_Content(krpc_connection_t connection, char * * returnValue, krpc_KSA_Label_t instance)
    .. function:: krpc_error_t krpc_KSA_Label_set_Content(krpc_connection_t connection, krpc_KSA_Label_t instance, const char * value)
 
@@ -346,6 +362,10 @@ UI
 .. type:: krpc_KSA_Button_t
 
    A button. Added to a window or a row.
+
+   .. macro:: KRPC_CLASS_KSA_BUTTON
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Button_Content(krpc_connection_t connection, char * * returnValue, krpc_KSA_Button_t instance)
    .. function:: krpc_error_t krpc_KSA_Button_set_Content(krpc_connection_t connection, krpc_KSA_Button_t instance, const char * value)
@@ -397,6 +417,10 @@ UI
 
       While the field is being edited, the game clears the rotation and translation inputs
       of the controlled vehicle each frame.
+
+   .. macro:: KRPC_CLASS_KSA_INPUTFIELD
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_InputField_Label(krpc_connection_t connection, char * * returnValue, krpc_KSA_InputField_t instance)
    .. function:: krpc_error_t krpc_KSA_InputField_set_Label(krpc_connection_t connection, krpc_KSA_InputField_t instance, const char * value)
@@ -450,6 +474,10 @@ UI
 .. type:: krpc_KSA_Slider_t
 
    A horizontal slider. Added to a window or a row.
+
+   .. macro:: KRPC_CLASS_KSA_SLIDER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Slider_Label(krpc_connection_t connection, char * * returnValue, krpc_KSA_Slider_t instance)
    .. function:: krpc_error_t krpc_KSA_Slider_set_Label(krpc_connection_t connection, krpc_KSA_Slider_t instance, const char * value)
@@ -526,6 +554,10 @@ UI
 
    A check box with a label. Added to a window or a row.
 
+   .. macro:: KRPC_CLASS_KSA_TOGGLE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Toggle_Content(krpc_connection_t connection, char * * returnValue, krpc_KSA_Toggle_t instance)
    .. function:: krpc_error_t krpc_KSA_Toggle_set_Content(krpc_connection_t connection, krpc_KSA_Toggle_t instance, const char * value)
 
@@ -578,6 +610,10 @@ UI
 .. type:: krpc_KSA_Dropdown_t
 
    A dropdown list of options. Added to a window or a row.
+
+   .. macro:: KRPC_CLASS_KSA_DROPDOWN
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Dropdown_Label(krpc_connection_t connection, char * * returnValue, krpc_KSA_Dropdown_t instance)
    .. function:: krpc_error_t krpc_KSA_Dropdown_set_Label(krpc_connection_t connection, krpc_KSA_Dropdown_t instance, const char * value)
@@ -647,6 +683,10 @@ UI
 .. type:: krpc_KSA_Separator_t
 
    A horizontal line between widgets. Added to a window or a row.
+
+   .. macro:: KRPC_CLASS_KSA_SEPARATOR
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Separator_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Separator_t instance)
    .. function:: krpc_error_t krpc_KSA_Separator_set_Visible(krpc_connection_t connection, krpc_KSA_Separator_t instance, bool value)

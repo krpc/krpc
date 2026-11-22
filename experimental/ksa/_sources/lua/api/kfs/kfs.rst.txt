@@ -1,0 +1,40 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KFS
+
+Service
+=======
+
+
+.. module:: KFS
+
+Provides access to kFS, the game's flight software: programs that run on a vehicle's
+flight computer.
+
+.. note::
+
+   kFS is a prototype in the game, and is off until it is turned on, by setting
+   :attr:`KFS.available` or with the game's ``kfs on`` console command. This service
+   follows the prototype, and changes with it.
+
+
+
+.. attribute:: available: boolean
+
+   Returns whether kFS is on, and turns it on or off.
+
+   :Attribute: Can be read or written
+
+   .. note::
+
+      Turning it off stops every program, and gives each vehicle back to the pilot, as the
+      game's ``kfs off`` console command does.
+
+
+
+
+.. staticmethod:: computer(vehicle: KSA.Vehicle): KFS.Computer
+
+   The flight computer of a vehicle. Throws an exception if kFS is off.
+
+   :param vehicle: The vehicle.

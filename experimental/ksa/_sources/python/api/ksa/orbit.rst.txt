@@ -195,9 +195,42 @@ Orbit
       :rtype: float
    
 
+   .. attribute:: semi_latus_rectum
+
+      The `semi-latus rectum <https://en.wikipedia.org/wiki/Conic_section#Conic_parameters>`_ of the orbit, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: specific_angular_momentum
+
+      The specific angular momentum of the orbit, in :math:`\mathrm{m^{2}/s}`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
    .. method:: true_anomaly_at_ut(ut)
 
       The true anomaly at the given time, in radians.
+
+      :param float ut: Universal time, in seconds.
+      :rtype: float
+   
+
+   .. method:: mean_anomaly_at_ut(ut)
+
+      The mean anomaly at the given time, in radians.
+
+      :param float ut: Universal time, in seconds.
+      :rtype: float
+   
+
+   .. method:: eccentric_anomaly_at_ut(ut)
+
+      The eccentric anomaly at the given time, in radians. For a hyperbolic orbit, this
+      is the hyperbolic anomaly.
 
       :param float ut: Universal time, in seconds.
       :rtype: float
@@ -213,10 +246,34 @@ Orbit
       :rtype: float
    
 
+   .. method:: true_anomaly_at_radius(radius)
+
+      The true anomaly at which the orbit reaches the given distance from the center of
+      the body, in radians, between 0 and :math:`\pi`. Not a number if the orbit
+      never reaches it.
+
+      :param float radius: The distance from the center of the body, in meters.
+      :rtype: float
+   
+
+      .. note::
+
+         The orbit also reaches the distance at the negative of this anomaly. Zero for a
+         circular orbit at the distance. Throws an exception if the distance is not
+         positive.
+
    .. method:: radius_at(ut)
 
       The distance from the center of the body being orbited at the given time, in
       meters.
+
+      :param float ut: Universal time, in seconds.
+      :rtype: float
+   
+
+   .. method:: speed_at(ut)
+
+      The orbital speed at the given time, in meters per second.
 
       :param float ut: Universal time, in seconds.
       :rtype: float
@@ -345,6 +402,57 @@ Orbit
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Orbit` or None
    
+
+   .. staticmethod:: create_from_elements(body, semi_major_axis, eccentricity, inclination, longitude_of_ascending_node, argument_of_periapsis, mean_anomaly_at_epoch, epoch)
+
+      Create the orbit with the given elements around a body. The angles are those of
+      :class:`Orbit`.
+
+      :param Body body: The body being orbited.
+      :param float semi_major_axis: The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+      :param float eccentricity: The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
+      :param float inclination: The inclination, in radians.
+      :param float longitude_of_ascending_node: The longitude of the ascending node, in radians.
+      :param float argument_of_periapsis: The argument of periapsis, in radians.
+      :param float mean_anomaly_at_epoch: The mean anomaly at the epoch, in radians.
+      :param float epoch: The universal time of the epoch, in seconds.
+      :rtype: :class:`Orbit`
+   
+
+      .. note::
+
+         The orbit is a single conic around *body*, with no
+         :attr:`Orbit.next_orbit`. It is held until :meth:`Orbit.remove` is called on it, or
+         the client that created it disconnects.
+
+   .. staticmethod:: create_from_position_and_velocity(body, position, velocity, ut, reference_frame)
+
+      Create the orbit around a body through the given position and velocity.
+
+      :param Body body: The body being orbited.
+      :param tuple position: The position, in meters, relative to where the body is now.
+      :param tuple velocity: The velocity, in meters per second.
+      :param float ut: The universal time of the position and velocity, in seconds.
+      :param ReferenceFrame reference_frame: The reference frame of the position and velocity.
+      :rtype: :class:`Orbit`
+   
+
+      .. note::
+
+         The orbit is a single conic around *body*, with no
+         :attr:`Orbit.next_orbit`. It is held until :meth:`Orbit.remove` is called on it, or
+         the client that created it disconnects.
+
+   .. method:: remove()
+
+      Remove an orbit created by :meth:`Orbit.create_from_elements` or
+      :meth:`Orbit.create_from_position_and_velocity`.
+
+   
+
+      .. note::
+
+         Throws an exception if the orbit was not created by a client.
 
 
 

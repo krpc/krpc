@@ -92,6 +92,12 @@ Vehicle
 
       :Game Scenes: All
 
+   .. property:: float DryMass { get; }
+
+      The mass of the vehicle's parts, without propellant or supplies, in kilograms.
+
+      :Game Scenes: All
+
    .. property:: float PropellantMass { get; }
 
       The mass of the propellant in the vehicle, in kilograms.
@@ -118,6 +124,68 @@ Vehicle
       current atmospheric pressure, in seconds. Zero when no engine is active.
 
       :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> MomentOfInertia { get; }
+
+      The vehicle's moments of inertia about the axes of :prop:`Vehicle.ReferenceFrame`
+      through its center of mass, in :math:`\mathrm{kg \cdot m^{2}}`.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<System.Tuple<double,double,double>> InertiaTensor { get; }
+
+      The vehicle's inertia tensor about its center of mass, along the axes of
+      :prop:`Vehicle.ReferenceFrame`, in :math:`\mathrm{kg \cdot m^{2}}`, as its three rows.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> AvailableRCSTorque { get; }
+
+      The torque the vehicle's RCS thrusters can give about each axis of its control
+      frame, in :math:`\mathrm{N \cdot m}`. Each is the smaller of the torques in the two
+      directions about the axis.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The control frame has the axes of :prop:`Vehicle.ReferenceFrame`, unless the flight
+         computer steers along the thrust. The thrusters give this torque while
+         :prop:`Control.RCS` is on.
+
+   .. function:: System.Tuple<double,double,double> Acceleration(ReferenceFrame referenceFrame)
+
+      The vehicle's acceleration from the forces on it other than gravity, in
+      :math:`\mathrm{m/s^{2}}`.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the acceleration.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The game measures it over the last physics step. Its length divided by standard
+         gravity is :prop:`Flight.GForce`.
+
+   .. function:: System.Tuple<double,double,double> AngularAcceleration(ReferenceFrame referenceFrame)
+
+      The vehicle's angular acceleration, in :math:`\mathrm{rad/s^{2}}`. The vector points
+      along the axis of rotation.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the angular acceleration.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The game measures it over the last physics step.
 
    .. property:: float PeakGLoad { get; }
 
@@ -188,6 +256,74 @@ Vehicle
 
       :Game Scenes: All
 
+   .. property:: bool Controllable { get; }
+
+      Whether the vehicle can be flown. A vehicle needs a control module, and a crewed
+      vehicle with every kitten incapacitated also needs a probe core.
+
+      :Game Scenes: All
+
+   .. property:: bool HasControlModule { get; }
+
+      Whether the vehicle has a control module, such as a capsule or a probe core.
+
+      :Game Scenes: All
+
+   .. property:: ControlState ControlState { get; }
+
+      Whether the vehicle can be flown, or why not.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is the reason the game gives when the vehicle does not respond to its controls.
+
+   .. property:: System.Collections.Generic.IList<CrewEvent> CrewEvents { get; }
+
+      The most urgent coming event of each kitten in the vehicle, most urgent first.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The order is the game's crew clock's: events within a day come first, the worst
+         first. Empty while :prop:`KSA.LifeSupportEnabled <KSA.KSA.LifeSupportEnabled>` and
+         :prop:`KSA.RadiationEnabled <KSA.KSA.RadiationEnabled>` are both false.
+
+   .. property:: CrewEvent NextCrewEvent { get; }
+
+      The most urgent of :prop:`Vehicle.CrewEvents`, or ``null`` if there is none.
+
+      :Game Scenes: All
+
+   .. property:: LifeSupport LifeSupport { get; }
+
+      How long the supplies of the vehicle's worst habitat zone last its crew, or
+      ``null`` if the vehicle has no habitats.
+
+      :Game Scenes: All
+
+   .. property:: Mission Mission { get; }
+
+      The mission planned for the vehicle, or ``null`` if it has none.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<HabitatZone> HabitatZones { get; }
+
+      The vehicle's habitat zones.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Habitat> Habitats { get; }
+
+      The vehicle's habitats.
+
+      :Game Scenes: All
+
    .. property:: System.Collections.Generic.IList<Engine> Engines { get; }
 
       The vehicle's engines.
@@ -239,6 +375,12 @@ Vehicle
    .. property:: System.Collections.Generic.IList<PowerConsumer> PowerConsumers { get; }
 
       The vehicle's power consumers.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Avionics> Avionics { get; }
+
+      The avionics of the vehicle's probe cores.
 
       :Game Scenes: All
 
@@ -510,6 +652,57 @@ Vehicle
    .. enumerator:: Bottomed
 
       At rest on terrain and in the ocean.
+
+
+
+.. enum:: ControlState
+
+   Whether a vehicle can be flown, or why not. See :prop:`Vehicle.ControlState`.
+
+
+   .. enumerator:: Controllable
+
+      The vehicle can be flown.
+
+
+   .. enumerator:: NoControlModule
+
+      The vehicle has no control module, such as a capsule or a probe core.
+
+
+   .. enumerator:: NoCrew
+
+      The capsules have no crew, and no probe core is on.
+
+
+   .. enumerator:: CrewIncapacitated
+
+      Every kitten in the capsules is incapacitated, and no probe core is on.
+
+
+   .. enumerator:: ProbeCoreUnpowered
+
+      The probe core has no power.
+
+
+   .. enumerator:: ProbeCoreOff
+
+      The probe core is switched off.
+
+
+   .. enumerator:: ProbeCoreFailed
+
+      The probe core has failed from its radiation dose.
+
+
+   .. enumerator:: ProbeCoreStormStandby
+
+      The probe core is on standby for a radiation storm.
+
+
+   .. enumerator:: ProbeCoreRebooting
+
+      The probe core is rebooting after a radiation upset.
 
 
 

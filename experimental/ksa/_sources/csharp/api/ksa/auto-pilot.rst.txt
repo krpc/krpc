@@ -15,7 +15,8 @@ Auto-Pilot
 
       The auto-pilot points the vehicle in the direction set by :prop:`AutoPilot.Mode`, once
       engaged. It is the game's own flight computer, so the game's flight computer
-      controls change the same settings.
+      controls change the same settings. Changing a setting throws an exception while a kFS
+      program controls the vehicle.
 
    .. function:: void Engage()
 

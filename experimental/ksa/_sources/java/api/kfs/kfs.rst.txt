@@ -1,0 +1,39 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KFS
+
+Service
+=======
+
+
+.. type:: public class KFS
+
+   Provides access to kFS, the game's flight software: programs that run on a vehicle's
+   flight computer.
+
+   .. note::
+
+      kFS is a prototype in the game, and is off until it is turned on, by setting
+      :meth:`KFS.getAvailable()` or with the game's ``kfs on`` console command. This service
+      follows the prototype, and changes with it.
+
+   .. method:: boolean getAvailable()
+
+   .. method:: void setAvailable(boolean value)
+
+      Returns whether kFS is on, and turns it on or off.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Turning it off stops every program, and gives each vehicle back to the pilot, as the
+         game's ``kfs off`` console command does.
+
+   .. method:: Computer computer(KSA.Vehicle vehicle)
+
+      The flight computer of a vehicle. Throws an exception if kFS is off.
+
+      :param KSA.Vehicle vehicle: The vehicle.
+      :Game Scenes: Flight

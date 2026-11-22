@@ -1,0 +1,406 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.kfs
+
+Computer
+========
+
+.. grpc:service:: ComputerService
+
+   A vehicle's flight computer, which runs a kFS program. Obtained from
+   :grpc:rpc:`KFSService.Computer <krpc.kfs.KFSService.Computer>`.
+
+   .. note::
+
+      A program is written in kC, a subset of C, or in kASM. The calls that change the
+      computer, and :grpc:rpc:`ComputerService.WriteGlobals <krpc.kfs.ComputerService.WriteGlobals>`, take effect before the computer's next tick, and
+      return once they have. The computer ticks while the game is running and the vehicle is
+      in the physics bubble, so until then they wait. The game does not save a program.
+
+   .. grpc:rpc:: Build (Computer.BuildRequest) returns (Computer.BuildResponse)
+
+      Build a program, without loading it.
+
+      :Computer.BuildRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+         * ``files`` (``map<string, string>``): The source files, by name. A program with a ``.c`` file is kC, and one with only ``.kasm`` files is kASM.
+
+      :Computer.BuildResponse: ``value`` (``repeated`` :grpc:message:`Diagnostic <krpc.kfs.Diagnostic>`): The errors and warnings.
+
+   .. grpc:rpc:: Load (Computer.LoadRequest) returns (Computer.LoadResponse)
+
+      Build a program and load it onto the computer. Throws an exception if the program has
+      errors, or the computer rejects it.
+
+      :Computer.LoadRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+         * ``files`` (``map<string, string>``): The source files, by name, as for :grpc:rpc:`ComputerService.Build <krpc.kfs.ComputerService.Build>`.
+
+      :Computer.LoadResponse: Empty
+
+      .. note::
+
+         The program is in standby once loaded. See :grpc:rpc:`ComputerService.Start <krpc.kfs.ComputerService.Start>`.
+
+   .. grpc:rpc:: Start (Computer.StartRequest) returns (Computer.StartResponse)
+
+      Start the loaded program. Throws an exception if no program is loaded.
+
+      :Computer.StartRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.StartResponse: Empty
+
+   .. grpc:rpc:: Reset (Computer.ResetRequest) returns (Computer.ResetResponse)
+
+      Restart the loaded program, as the reset button does. Throws an exception if no
+      program is loaded.
+
+      :Computer.ResetRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.ResetResponse: Empty
+
+   .. grpc:rpc:: Stop (Computer.StopRequest) returns (Computer.StopResponse)
+
+      Stop the program, and give the vehicle back to the pilot. The program stays loaded.
+
+      :Computer.StopRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.StopResponse: Empty
+
+   .. grpc:rpc:: Kill (Computer.KillRequest) returns (Computer.KillResponse)
+
+      Halt the program with the kill switch, and give the vehicle back to the pilot.
+
+      :Computer.KillRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.KillResponse: Empty
+
+   .. grpc:rpc:: GetState (Computer.GetStateRequest) returns (Computer.GetStateResponse)
+
+      The state of the computer.
+
+      :Computer.GetStateRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.GetStateResponse: ``value`` (:grpc:enum:`ComputerState <krpc.kfs.ComputerState>`)
+
+   .. grpc:rpc:: GetMode (Computer.GetModeRequest) returns (Computer.GetModeResponse)
+
+      The control mode the loaded program claims.
+
+      :Computer.GetModeRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.GetModeResponse: ``value`` (:grpc:enum:`ControlMode <krpc.kfs.ControlMode>`)
+
+   .. grpc:rpc:: GetUnderControl (Computer.GetUnderControlRequest) returns (Computer.GetUnderControlResponse)
+
+      Whether the program controls the vehicle: it is running, or halted with its last
+      commands held.
+
+      :Computer.GetUnderControlRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.GetUnderControlResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetTickRate (Computer.GetTickRateRequest) returns (Computer.GetTickRateResponse)
+
+      The ticks per second of the loaded program, or zero if no program is loaded.
+
+      :Computer.GetTickRateRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.GetTickRateResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetCyclesUsed (Computer.GetCyclesUsedRequest) returns (Computer.GetCyclesUsedResponse)
+
+      The processor cycles the latest tick used.
+
+      :Computer.GetCyclesUsedRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.GetCyclesUsedResponse: ``value`` (``sint64``)
+
+   .. grpc:rpc:: GetCycleBudget (Computer.GetCycleBudgetRequest) returns (Computer.GetCycleBudgetResponse)
+
+      The processor cycles a tick may use.
+
+      :Computer.GetCycleBudgetRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.GetCycleBudgetResponse: ``value`` (``sint64``)
+
+   .. grpc:rpc:: GetOverruns (Computer.GetOverrunsRequest) returns (Computer.GetOverrunsResponse)
+
+      The number of ticks that ran past their budget since the program started.
+
+      :Computer.GetOverrunsRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.GetOverrunsResponse: ``value`` (``sint64``)
+
+   .. grpc:rpc:: GetTrap (Computer.GetTrapRequest) returns (Computer.GetTrapResponse)
+
+      The error that halted the program, or ``null`` if no error halted it.
+
+      :Computer.GetTrapRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.GetTrapResponse: ``value`` (:grpc:message:`Trap <krpc.kfs.Trap>`)
+
+   .. grpc:rpc:: GetFault (Computer.GetFaultRequest) returns (Computer.GetFaultResponse)
+
+      The game's error that halted the computer, or ``null`` if there is none.
+
+      :Computer.GetFaultRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.GetFaultResponse: ``value`` (``optional string``)
+
+   .. grpc:rpc:: GetLog (Computer.GetLogRequest) returns (Computer.GetLogResponse)
+
+      The computer's console: the lines the program logs, and the computer's own messages.
+
+      :Computer.GetLogRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.GetLogResponse: ``value`` (``repeated string``)
+
+      .. note::
+
+         The computer keeps the last 4,096 lines, and a program logs at most 10 lines a
+         second.
+
+   .. grpc:rpc:: ClearLog (Computer.ClearLogRequest) returns (Computer.ClearLogResponse)
+
+      Clear the computer's console.
+
+      :Computer.ClearLogRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.ClearLogResponse: Empty
+
+   .. grpc:rpc:: GetGlobals (Computer.GetGlobalsRequest) returns (Computer.GetGlobalsResponse)
+
+      The paths of the loaded program's global variables, one for each number in them,
+      such as ``command.args[2]``.
+
+      :Computer.GetGlobalsRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.GetGlobalsResponse: ``value`` (``repeated string``)
+
+   .. grpc:rpc:: ReadGlobal (Computer.ReadGlobalRequest) returns (Computer.ReadGlobalResponse)
+
+      The value of one of the program's global variables, as of its latest tick.
+
+      :Computer.ReadGlobalRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+         * ``path`` (``string``): The path of the variable, as in :grpc:rpc:`ComputerService.GetGlobals <krpc.kfs.ComputerService.GetGlobals>`.
+
+      :Computer.ReadGlobalResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: WriteGlobals (Computer.WriteGlobalsRequest) returns (Computer.WriteGlobalsResponse)
+
+      Write the program's global variables. The program sees all of them from the same
+      tick.
+
+      :Computer.WriteGlobalsRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+         * ``values`` (``map<string, double>``): The values, by the paths in :grpc:rpc:`ComputerService.GetGlobals <krpc.kfs.ComputerService.GetGlobals>`.
+
+      :Computer.WriteGlobalsResponse: Empty
+
+      .. note::
+
+         A value is converted to the variable's type. Throws an exception if a value does not
+         fit, such as a fraction for an integer.
+
+   .. grpc:rpc:: GetTraceChannels (Computer.GetTraceChannelsRequest) returns (Computer.GetTraceChannelsResponse)
+
+      The names of the channels the program has traced to.
+
+      :Computer.GetTraceChannelsRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+
+      :Computer.GetTraceChannelsResponse: ``value`` (``repeated string``)
+
+   .. grpc:rpc:: Trace (Computer.TraceRequest) returns (Computer.TraceResponse)
+
+      The latest value the program traced to a channel. Throws an exception if the program
+      has not traced to it.
+
+      :Computer.TraceRequest:
+         * ``this`` (:grpc:service:`Computer <krpc.kfs.ComputerService>`)
+         * ``channel`` (``string``): The name of the channel.
+
+      :Computer.TraceResponse: ``value`` (``float``)
+
+.. grpc:enum:: ComputerState
+
+   The state of a flight computer. See :grpc:rpc:`ComputerService.GetState <krpc.kfs.ComputerService.GetState>`.
+
+   .. grpc:value:: COMPUTER_STATE_NO_SOFTWARE
+
+      No program is loaded.
+
+   .. grpc:value:: COMPUTER_STATE_STANDBY
+
+      A program is loaded, and not running.
+
+   .. grpc:value:: COMPUTER_STATE_BOOT
+
+      The program is running its initialization.
+
+   .. grpc:value:: COMPUTER_STATE_RUNNING
+
+      The program is running.
+
+   .. grpc:value:: COMPUTER_STATE_IDLE
+
+      The program is running, with no task to run.
+
+   .. grpc:value:: COMPUTER_STATE_HALTED
+
+      The program has stopped, after a trap, a halt or the kill switch.
+
+.. grpc:enum:: ControlMode
+
+   The control a program has of a vehicle. See :grpc:rpc:`ComputerService.GetMode <krpc.kfs.ComputerService.GetMode>`.
+
+   .. grpc:value:: CONTROL_MODE_PILOT
+
+      The game's flight computer flies the vehicle, and the program steers it.
+
+   .. grpc:value:: CONTROL_MODE_FULL_CONTROL
+
+      The program commands the thrusters, engines and gimbals itself. A program claims it
+      with ``#pragma kfs claim ALLOCATION``.
+
+.. grpc:message:: Diagnostic
+
+   An error or warning from building a program. See :grpc:rpc:`ComputerService.Build <krpc.kfs.ComputerService.Build>`.
+
+   .. grpc:field:: error
+
+      Whether it is an error. An error stops the program from being built.
+
+   .. grpc:field:: code
+
+      The diagnostic's code, such as ``KC-E016``.
+
+   .. grpc:field:: file
+
+      The source file.
+
+   .. grpc:field:: line
+
+      The line in the source file, from 1. Zero for the whole file.
+
+   .. grpc:field:: column
+
+      The column in the line, from 1.
+
+   .. grpc:field:: message
+
+      The message.
+
+   .. grpc:field:: hint
+
+      A hint at the fix, or ``null`` if there is none.
+
+.. grpc:message:: Trap
+
+   The error that halted a program, and where it happened. See :grpc:rpc:`ComputerService.GetTrap <krpc.kfs.ComputerService.GetTrap>`.
+
+   .. grpc:field:: code
+
+      The error.
+
+   .. grpc:field:: function
+
+      The function that was running.
+
+   .. grpc:field:: file
+
+      The source file, or ``null`` if it is not known.
+
+   .. grpc:field:: line
+
+      The line in the source file, or zero if it is not known.
+
+.. grpc:enum:: TrapCode
+
+   The error that halted a program. See :grpc:field:`code <krpc.kfs.Trap.code>`.
+
+   .. grpc:value:: TRAP_CODE_ILLEGAL_OPCODE
+
+      An instruction the processor does not have.
+
+   .. grpc:value:: TRAP_CODE_OPERAND_OVERFLOW
+
+      The operand stack overflowed.
+
+   .. grpc:value:: TRAP_CODE_OPERAND_UNDERFLOW
+
+      The operand stack underflowed.
+
+   .. grpc:value:: TRAP_CODE_RETURN_OVERFLOW
+
+      The return stack overflowed.
+
+   .. grpc:value:: TRAP_CODE_INIT_OVERRUN
+
+      The initialization ran past its budget.
+
+   .. grpc:value:: TRAP_CODE_STACK_OVERFLOW
+
+      The stack overflowed.
+
+   .. grpc:value:: TRAP_CODE_NULL_ACCESS
+
+      A read or write through a null pointer.
+
+   .. grpc:value:: TRAP_CODE_BAD_ADDRESS
+
+      A read or write outside memory.
+
+   .. grpc:value:: TRAP_CODE_READ_ONLY
+
+      A write to read-only memory.
+
+   .. grpc:value:: TRAP_CODE_MISALIGNED
+
+      A misaligned read or write.
+
+   .. grpc:value:: TRAP_CODE_DIVISION_BY_ZERO
+
+      A division by zero.
+
+   .. grpc:value:: TRAP_CODE_BOUNDS
+
+      An array index out of bounds.
+
+   .. grpc:value:: TRAP_CODE_USER
+
+      A trap raised by the program.
+
+   .. grpc:value:: TRAP_CODE_BAD_JUMP
+
+      A jump to an invalid address.
+
+   .. grpc:value:: TRAP_CODE_BAD_SYSCALL
+
+      A call to a service that does not exist.
+
+   .. grpc:value:: TRAP_CODE_BAD_YIELD
+
+      A task yielded where it may not.
+
+   .. grpc:value:: TRAP_CODE_MEMORY_ERROR
+
+      A memory error, such as a radiation upset.

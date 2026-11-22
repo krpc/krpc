@@ -15,97 +15,89 @@ Drawing
       The objects are drawn every frame until removed, and are removed when the client that
       added them disconnects. Lines are drawn at the game's fixed gizmo width.
 
-   .. staticmethod:: add_line(start, end, reference_frame, [visible = true])
+   .. staticmethod:: add_line(start: Tuple, end: Tuple, reference_frame: KSA.ReferenceFrame, visible?: boolean): KSA.Line
 
       Draw a line between two positions.
 
-      :param Tuple start: The position of the start of the line, in meters.
-      :param Tuple end: The position of the end of the line, in meters.
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the positions.
-      :param boolean visible: Whether the line is visible.
-      :rtype: :class:`KSA.Line`
+      :param start: The position of the start of the line, in meters.
+      :param end: The position of the end of the line, in meters.
+      :param reference_frame: The reference frame of the positions.
+      :param visible: Whether the line is visible. Defaults to ``true``.
 
-   .. staticmethod:: add_direction(direction, reference_frame, [length = 1e+01], [visible = true])
+   .. staticmethod:: add_direction(direction: Tuple, reference_frame: KSA.ReferenceFrame, length?: number, visible?: boolean): KSA.Line
 
       Draw a line from the origin of a reference frame in a direction.
 
-      :param Tuple direction: The direction of the line.
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the direction.
-      :param number length: The length of the line, in meters.
-      :param boolean visible: Whether the line is visible.
-      :rtype: :class:`KSA.Line`
+      :param direction: The direction of the line.
+      :param reference_frame: The reference frame of the direction.
+      :param length: The length of the line, in meters. Defaults to ``1e+01``.
+      :param visible: Whether the line is visible. Defaults to ``true``.
 
-   .. staticmethod:: add_polyline(vertices, reference_frame, [closed = false], [visible = true])
+   .. staticmethod:: add_polyline(vertices: List, reference_frame: KSA.ReferenceFrame, closed?: boolean, visible?: boolean): KSA.Polyline
 
       Draw a line through a list of positions.
 
-      :param List vertices: The positions the line passes through, in meters.
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the positions.
-      :param boolean closed: Whether the line joins the last position back to the first.
-      :param boolean visible: Whether the line is visible.
-      :rtype: :class:`KSA.Polyline`
+      :param vertices: The positions the line passes through, in meters.
+      :param reference_frame: The reference frame of the positions.
+      :param closed: Whether the line joins the last position back to the first. Defaults to ``false``.
+      :param visible: Whether the line is visible. Defaults to ``true``.
 
-   .. staticmethod:: add_circle(center, normal, radius, reference_frame, [visible = true])
+   .. staticmethod:: add_circle(center: Tuple, normal: Tuple, radius: number, reference_frame: KSA.ReferenceFrame, visible?: boolean): KSA.Circle
 
       Draw a circle.
 
-      :param Tuple center: The position of the center of the circle, in meters.
-      :param Tuple normal: The direction normal to the plane of the circle.
-      :param number radius: The radius of the circle, in meters.
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the position and direction.
-      :param boolean visible: Whether the circle is visible.
-      :rtype: :class:`KSA.Circle`
+      :param center: The position of the center of the circle, in meters.
+      :param normal: The direction normal to the plane of the circle.
+      :param radius: The radius of the circle, in meters.
+      :param reference_frame: The reference frame of the position and direction.
+      :param visible: Whether the circle is visible. Defaults to ``true``.
 
-   .. staticmethod:: add_arc(center, normal, start_direction, angle, radius, reference_frame, [visible = true])
+   .. staticmethod:: add_arc(center: Tuple, normal: Tuple, start_direction: Tuple, angle: number, radius: number, reference_frame: KSA.ReferenceFrame, visible?: boolean): KSA.Arc
 
       Draw an arc of a circle.
 
-      :param Tuple center: The position of the center of the arc's circle, in meters.
-      :param Tuple normal: The direction normal to the plane of the arc.
-      :param Tuple start_direction: The direction from the center to the start of the arc.
-      :param number angle: The angle the arc turns through, counterclockwise about the normal, in radians.
-      :param number radius: The radius of the arc, in meters.
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the position and directions.
-      :param boolean visible: Whether the arc is visible.
-      :rtype: :class:`KSA.Arc`
+      :param center: The position of the center of the arc's circle, in meters.
+      :param normal: The direction normal to the plane of the arc.
+      :param start_direction: The direction from the center to the start of the arc.
+      :param angle: The angle the arc turns through, counterclockwise about the normal, in radians.
+      :param radius: The radius of the arc, in meters.
+      :param reference_frame: The reference frame of the position and directions.
+      :param visible: Whether the arc is visible. Defaults to ``true``.
 
-   .. staticmethod:: add_box(center, size, rotation, reference_frame, [visible = true])
+   .. staticmethod:: add_box(center: Tuple, size: Tuple, rotation: Tuple, reference_frame: KSA.ReferenceFrame, visible?: boolean): KSA.Box
 
       Draw the edges of a box.
 
-      :param Tuple center: The position of the center of the box, in meters.
-      :param Tuple size: The lengths of the box's edges along its x, y and z axes, in meters.
-      :param Tuple rotation: The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the position and rotation.
-      :param boolean visible: Whether the box is visible.
-      :rtype: :class:`KSA.Box`
+      :param center: The position of the center of the box, in meters.
+      :param size: The lengths of the box's edges along its x, y and z axes, in meters.
+      :param rotation: The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+      :param reference_frame: The reference frame of the position and rotation.
+      :param visible: Whether the box is visible. Defaults to ``true``.
 
-   .. staticmethod:: add_sphere(center, radius, reference_frame, [visible = true])
+   .. staticmethod:: add_sphere(center: Tuple, radius: number, reference_frame: KSA.ReferenceFrame, visible?: boolean): KSA.Sphere
 
       Draw a solid sphere.
 
-      :param Tuple center: The position of the center of the sphere, in meters.
-      :param number radius: The radius of the sphere, in meters.
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
-      :param boolean visible: Whether the sphere is visible.
-      :rtype: :class:`KSA.Sphere`
+      :param center: The position of the center of the sphere, in meters.
+      :param radius: The radius of the sphere, in meters.
+      :param reference_frame: The reference frame of the position.
+      :param visible: Whether the sphere is visible. Defaults to ``true``.
 
-   .. staticmethod:: add_text(text, position, reference_frame, [size = 16.0], [visible = true])
+   .. staticmethod:: add_text(text: string, position: Tuple, reference_frame: KSA.ReferenceFrame, size?: number, visible?: boolean): KSA.Text
 
       Draw text over the scene, centered on a position.
 
-      :param string text: The text.
-      :param Tuple position: The position of the center of the text, in meters.
-      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
-      :param number size: The height of the font, in pixels.
-      :param boolean visible: Whether the text is visible.
-      :rtype: :class:`KSA.Text`
+      :param text: The text.
+      :param position: The position of the center of the text, in meters.
+      :param reference_frame: The reference frame of the position.
+      :param size: The height of the font, in pixels. Defaults to ``16.0``.
+      :param visible: Whether the text is visible. Defaults to ``true``.
 
-   .. staticmethod:: clear([client_only = false])
+   .. staticmethod:: clear(client_only?: boolean)
 
       Remove the drawing objects.
 
-      :param boolean client_only: Whether to remove only the objects added by the calling client.
+      :param client_only: Whether to remove only the objects added by the calling client. Defaults to ``false``.
 
 
 
@@ -118,35 +110,30 @@ Drawing
       The start position of the line, in meters.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: end: Tuple
 
       The end position of the line, in meters.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: reference_frame: KSA.ReferenceFrame
 
       The reference frame for the positions and directions of the object.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.ReferenceFrame`
 
    .. attribute:: visible: boolean
 
       Whether the object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: color: StdLib.ColorRGB
 
       The color of the object, as an RGB triple with components from 0 to 1.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGB`
 
    .. method:: remove()
 
@@ -163,35 +150,30 @@ Drawing
       The points the line passes through, in meters.
 
       :Attribute: Can be read or written
-      :rtype: List
 
    .. attribute:: closed: boolean
 
       Whether the line joins the last point back to the first.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: reference_frame: KSA.ReferenceFrame
 
       The reference frame for the positions and directions of the object.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.ReferenceFrame`
 
    .. attribute:: visible: boolean
 
       Whether the object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: color: StdLib.ColorRGB
 
       The color of the object, as an RGB triple with components from 0 to 1.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGB`
 
    .. method:: remove()
 
@@ -208,42 +190,36 @@ Drawing
       The position of the center of the circle, in meters.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: normal: Tuple
 
       The direction normal to the plane of the circle, as a unit vector.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: radius: number
 
       The radius of the circle, in meters.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: reference_frame: KSA.ReferenceFrame
 
       The reference frame for the positions and directions of the object.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.ReferenceFrame`
 
    .. attribute:: visible: boolean
 
       Whether the object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: color: StdLib.ColorRGB
 
       The color of the object, as an RGB triple with components from 0 to 1.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGB`
 
    .. method:: remove()
 
@@ -260,21 +236,18 @@ Drawing
       The position of the center of the arc's circle, in meters.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: normal: Tuple
 
       The direction normal to the plane of the arc, as a unit vector.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: start_direction: Tuple
 
       The direction from the center to the start of the arc, as a unit vector.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
       .. note::
 
@@ -285,35 +258,30 @@ Drawing
       The angle the arc turns through, counterclockwise about :attr:`KSA.Arc.normal`, in radians.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: radius: number
 
       The radius of the arc, in meters.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: reference_frame: KSA.ReferenceFrame
 
       The reference frame for the positions and directions of the object.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.ReferenceFrame`
 
    .. attribute:: visible: boolean
 
       Whether the object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: color: StdLib.ColorRGB
 
       The color of the object, as an RGB triple with components from 0 to 1.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGB`
 
    .. method:: remove()
 
@@ -330,42 +298,36 @@ Drawing
       The position of the center of the box, in meters.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: size: Tuple
 
       The lengths of the box's edges along its x, y and z axes, in meters.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: rotation: Tuple
 
       The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: reference_frame: KSA.ReferenceFrame
 
       The reference frame for the positions and directions of the object.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.ReferenceFrame`
 
    .. attribute:: visible: boolean
 
       Whether the object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: color: StdLib.ColorRGB
 
       The color of the object, as an RGB triple with components from 0 to 1.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGB`
 
    .. method:: remove()
 
@@ -382,35 +344,30 @@ Drawing
       The position of the center of the sphere, in meters.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: radius: number
 
       The radius of the sphere, in meters.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: reference_frame: KSA.ReferenceFrame
 
       The reference frame for the positions and directions of the object.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.ReferenceFrame`
 
    .. attribute:: visible: boolean
 
       Whether the object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: color: StdLib.ColorRGB
 
       The color of the object, as an RGB triple with components from 0 to 1.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGB`
 
    .. method:: remove()
 
@@ -431,42 +388,36 @@ Drawing
       The text.
 
       :Attribute: Can be read or written
-      :rtype: string
 
    .. attribute:: position: Tuple
 
       The position of the center of the text, in meters.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
 
    .. attribute:: size: number
 
       The height of the font, in pixels.
 
       :Attribute: Can be read or written
-      :rtype: number
 
    .. attribute:: reference_frame: KSA.ReferenceFrame
 
       The reference frame for the positions and directions of the object.
 
       :Attribute: Can be read or written
-      :rtype: :class:`KSA.ReferenceFrame`
 
    .. attribute:: visible: boolean
 
       Whether the object is visible.
 
       :Attribute: Can be read or written
-      :rtype: boolean
 
    .. attribute:: color: StdLib.ColorRGB
 
       The color of the object, as an RGB triple with components from 0 to 1.
 
       :Attribute: Can be read or written
-      :rtype: :class:`StdLib.ColorRGB`
 
    .. method:: remove()
 

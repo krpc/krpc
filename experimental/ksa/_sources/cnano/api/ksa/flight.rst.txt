@@ -11,6 +11,10 @@ Flight
    Flight telemetry for a vehicle, relative to the surface of the body it orbits.
    Obtained from :func:`krpc_KSA_Vehicle_Flight`.
 
+   .. macro:: KRPC_CLASS_KSA_FLIGHT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Flight_MeanAltitude(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
 
       The altitude above the mean radius of the body, in meters.
@@ -119,9 +123,61 @@ Flight
 
       :Game Scenes: Flight
 
+   .. function:: krpc_error_t krpc_KSA_Flight_StaticAirTemperature(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
+
+      The temperature of the atmosphere at the vehicle, in kelvin. Zero outside the
+      atmosphere.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_SpeedOfSound(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
+
+      The speed of sound in the atmosphere at the vehicle, in meters per second. Zero
+      outside the atmosphere.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_Mach(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
+
+      The speed of the vehicle relative to the surface, as a multiple of the speed of
+      sound. Zero outside the atmosphere.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_OutsideAir(krpc_connection_t connection, krpc_KSA_OutsideAir_t * returnValue, krpc_KSA_Flight_t instance)
+
+      Whether a kitten can breathe the air outside the vehicle.
+
+      :Game Scenes: Flight
+
    .. function:: krpc_error_t krpc_KSA_Flight_DynamicPressure(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
 
       The dynamic pressure acting on the vehicle, in pascals.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_Depth(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The depth of the vehicle's center of mass below the ocean surface, in meters. Zero
+      above the surface.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The ocean surface includes its waves.
+
+   .. function:: krpc_error_t krpc_KSA_Flight_SubmergedPortion(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
+
+      The fraction of the vehicle's volume below the ocean surface, between 0 and 1.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_BuoyantForce(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
+
+      The buoyant force on the vehicle from the ocean and the atmosphere, in newtons. It
+      acts against gravity.
 
       :Game Scenes: Flight
 
@@ -137,6 +193,47 @@ Flight
       The radiation dose rate averaged over the vehicle's orbit, in sieverts per second.
       Includes any solar particle event under way. Not a number if the body has no
       magnetosphere, or the orbit dips below the surface.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_SolarWindSpeed(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
+
+      The speed of the solar wind at the vehicle, in :math:`\mathrm{m/s}`. Zero if no star
+      has a solar wind.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_SolarWindPressure(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
+
+      The dynamic pressure of the solar wind at the vehicle, in pascals.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_SolarWindNorthwardField(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
+
+      The northward component of the magnetic field carried by the solar wind at the
+      vehicle, in teslas. A southward field, a negative value, drives geomagnetic storms.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_ProtonFlux(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
+
+      The flux of solar energetic protons at the vehicle during a solar particle event, in
+      protons per square centimeter per second per steradian. Zero outside an event.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_RadiationStormLevel(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Flight_t instance)
+
+      The level of the radiation storm at the vehicle, from 0 for none to 5 for the
+      most severe. The S level of the game's space weather window.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_IncomingCoronalMassEjections(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Flight_t instance)
+
+      The coronal mass ejections heading for the vehicle, as the game's space weather
+      window lists them.
 
       :Game Scenes: Flight
 
@@ -162,6 +259,63 @@ Flight
       the right of the velocity.
 
       :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_Drag(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
+
+      The part of the aerodynamic force along the airflow, in newtons.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_Lift(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
+
+      The part of the aerodynamic force across the airflow, in newtons.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_AerodynamicForce(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Flight_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The aerodynamic force on the vehicle, in newtons.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the force.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game computes the force from the surfaces of the vehicle's hull.
+
+   .. function:: krpc_error_t krpc_KSA_Flight_AerodynamicTorque(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Flight_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The aerodynamic torque on the vehicle about its center of mass, in
+      :math:`\mathrm{N \cdot m}`. The vector points along the axis of the torque.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the torque.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_SimulateAerodynamicForceAt(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Flight_t instance, krpc_KSA_Body_t body, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_t * velocity, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The aerodynamic force the vehicle would have at a given position and velocity, in
+      its current attitude and rotation, in newtons.
+
+      :Parameters:
+
+       * **body** -- The body whose atmosphere the vehicle flies through.
+       * **position** -- The position, in meters.
+       * **velocity** -- The velocity, in meters per second.
+       * **referenceFrame** -- The reference frame of the position, velocity and force.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The atmosphere moves with the body's rotation.
 
    .. function:: krpc_error_t krpc_KSA_Flight_Prograde(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Flight_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
 
@@ -194,3 +348,35 @@ Flight
        * **referenceFrame** -- The reference frame of the direction.
 
       :Game Scenes: Flight
+
+
+
+.. type:: krpc_KSA_OutsideAir_t
+
+   Whether a kitten can breathe the air outside a vehicle. See
+   :func:`krpc_KSA_Flight_OutsideAir`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_OUTSIDEAIR
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_OUTSIDEAIR_NOATMOSPHERE
+
+      Outside the atmosphere, or at a body with none.
+
+
+   .. macro:: KRPC_KSA_OUTSIDEAIR_NOOXYGEN
+
+      An atmosphere with no oxygen.
+
+
+   .. macro:: KRPC_KSA_OUTSIDEAIR_TOOTHIN
+
+      An atmosphere whose oxygen pressure is too low to breathe.
+
+
+   .. macro:: KRPC_KSA_OUTSIDEAIR_BREATHABLE
+
+      Breathable air.

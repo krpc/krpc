@@ -1,0 +1,1190 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Drawing
+=======
+
+
+.. _http-KSA.Drawing:
+
+.. rubric:: Drawing
+
+Draws lines, shapes and text in the scene, each placed in a reference frame.
+
+.. note::
+
+   The objects are drawn every frame until removed, and are removed when the client that
+   added them disconnects. Lines are drawn at the game's fixed gizmo width.
+
+
+A ``Drawing`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:post:: /ksa/drawing/add-line
+
+   Draw a line between two positions.
+
+
+   :reqjson tuple<double, double, double> start: The position of the start of the line, in meters.
+   :reqjson tuple<double, double, double> end: The position of the end of the line, in meters.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the positions.
+   :reqjson bool visible: Whether the line is visible. Optional, defaults to ``true``.
+   :resjson KSA.Line value:
+
+
+
+
+
+.. http:post:: /ksa/drawing/add-direction
+
+   Draw a line from the origin of a reference frame in a direction.
+
+
+   :reqjson tuple<double, double, double> direction: The direction of the line.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the direction.
+   :reqjson float length: The length of the line, in meters. Optional, defaults to ``1e+01``.
+   :reqjson bool visible: Whether the line is visible. Optional, defaults to ``true``.
+   :resjson KSA.Line value:
+
+
+
+
+
+.. http:post:: /ksa/drawing/add-polyline
+
+   Draw a line through a list of positions.
+
+
+   :reqjson list<tuple<double, double, double>> vertices: The positions the line passes through, in meters.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the positions.
+   :reqjson bool closed: Whether the line joins the last position back to the first. Optional, defaults to ``false``.
+   :reqjson bool visible: Whether the line is visible. Optional, defaults to ``true``.
+   :resjson KSA.Polyline value:
+
+
+
+
+
+.. http:post:: /ksa/drawing/add-circle
+
+   Draw a circle.
+
+
+   :reqjson tuple<double, double, double> center: The position of the center of the circle, in meters.
+   :reqjson tuple<double, double, double> normal: The direction normal to the plane of the circle.
+   :reqjson float radius: The radius of the circle, in meters.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position and direction.
+   :reqjson bool visible: Whether the circle is visible. Optional, defaults to ``true``.
+   :resjson KSA.Circle value:
+
+
+
+
+
+.. http:post:: /ksa/drawing/add-arc
+
+   Draw an arc of a circle.
+
+
+   :reqjson tuple<double, double, double> center: The position of the center of the arc's circle, in meters.
+   :reqjson tuple<double, double, double> normal: The direction normal to the plane of the arc.
+   :reqjson tuple<double, double, double> start_direction: The direction from the center to the start of the arc.
+   :reqjson float angle: The angle the arc turns through, counterclockwise about the normal, in radians.
+   :reqjson float radius: The radius of the arc, in meters.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position and directions.
+   :reqjson bool visible: Whether the arc is visible. Optional, defaults to ``true``.
+   :resjson KSA.Arc value:
+
+
+
+
+
+.. http:post:: /ksa/drawing/add-box
+
+   Draw the edges of a box.
+
+
+   :reqjson tuple<double, double, double> center: The position of the center of the box, in meters.
+   :reqjson tuple<double, double, double> size: The lengths of the box's edges along its x, y and z axes, in meters.
+   :reqjson tuple<double, double, double, double> rotation: The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position and rotation.
+   :reqjson bool visible: Whether the box is visible. Optional, defaults to ``true``.
+   :resjson KSA.Box value:
+
+
+
+
+
+.. http:post:: /ksa/drawing/add-sphere
+
+   Draw a solid sphere.
+
+
+   :reqjson tuple<double, double, double> center: The position of the center of the sphere, in meters.
+   :reqjson float radius: The radius of the sphere, in meters.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position.
+   :reqjson bool visible: Whether the sphere is visible. Optional, defaults to ``true``.
+   :resjson KSA.Sphere value:
+
+
+
+
+
+.. http:post:: /ksa/drawing/add-text
+
+   Draw text over the scene, centered on a position.
+
+
+   :reqjson string text: The text.
+   :reqjson tuple<double, double, double> position: The position of the center of the text, in meters.
+   :reqjson KSA.ReferenceFrame reference_frame: The reference frame of the position.
+   :reqjson float size: The height of the font, in pixels. Optional, defaults to ``16.0``.
+   :reqjson bool visible: Whether the text is visible. Optional, defaults to ``true``.
+   :resjson KSA.Text value:
+
+
+
+
+
+.. http:post:: /ksa/drawing/clear
+
+   Remove the drawing objects.
+
+
+   :reqjson bool client_only: Whether to remove only the objects added by the calling client. Optional, defaults to ``false``.
+
+
+
+
+
+
+.. _http-KSA.Line:
+
+.. rubric:: Line
+
+A line. Created using :http:post:`/ksa/drawing/add-line` or :http:post:`/ksa/drawing/add-direction`.
+
+A ``Line`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/line/(id)/start
+
+   The start position of the line, in meters.
+
+
+   :param id: The identifier of the :ref:`Line <http-KSA.Line>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /ksa/line/(id)/start
+
+   The start position of the line, in meters.
+
+
+   :param id: The identifier of the :ref:`Line <http-KSA.Line>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /ksa/line/(id)/end
+
+   The end position of the line, in meters.
+
+
+   :param id: The identifier of the :ref:`Line <http-KSA.Line>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /ksa/line/(id)/end
+
+   The end position of the line, in meters.
+
+
+   :param id: The identifier of the :ref:`Line <http-KSA.Line>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /ksa/line/(id)/reference-frame
+
+   The reference frame for the positions and directions of the object.
+
+
+   :param id: The identifier of the :ref:`Line <http-KSA.Line>` object.
+
+   :resjson KSA.ReferenceFrame value:
+
+.. http:put:: /ksa/line/(id)/reference-frame
+
+   The reference frame for the positions and directions of the object.
+
+
+   :param id: The identifier of the :ref:`Line <http-KSA.Line>` object.
+
+   :reqjson KSA.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /ksa/line/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Line <http-KSA.Line>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/line/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Line <http-KSA.Line>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/line/(id)/color
+
+   The color of the object, as an RGB triple with components from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Line <http-KSA.Line>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /ksa/line/(id)/color
+
+   The color of the object, as an RGB triple with components from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Line <http-KSA.Line>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:post:: /ksa/line/(id)/remove
+
+   Remove the object.
+
+
+   :param id: The identifier of the :ref:`Line <http-KSA.Line>` object.
+
+
+
+
+
+
+
+.. _http-KSA.Polyline:
+
+.. rubric:: Polyline
+
+A line through a list of points. Created using :http:post:`/ksa/drawing/add-polyline`.
+
+A ``Polyline`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/polyline/(id)/vertices
+
+   The points the line passes through, in meters.
+
+
+   :param id: The identifier of the :ref:`Polyline <http-KSA.Polyline>` object.
+
+   :resjson list<tuple<double, double, double>> value:
+
+.. http:put:: /ksa/polyline/(id)/vertices
+
+   The points the line passes through, in meters.
+
+
+   :param id: The identifier of the :ref:`Polyline <http-KSA.Polyline>` object.
+
+   :reqjson list<tuple<double, double, double>> value: The new value.
+
+
+
+
+.. http:get:: /ksa/polyline/(id)/closed
+
+   Whether the line joins the last point back to the first.
+
+
+   :param id: The identifier of the :ref:`Polyline <http-KSA.Polyline>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/polyline/(id)/closed
+
+   Whether the line joins the last point back to the first.
+
+
+   :param id: The identifier of the :ref:`Polyline <http-KSA.Polyline>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/polyline/(id)/reference-frame
+
+   The reference frame for the positions and directions of the object.
+
+
+   :param id: The identifier of the :ref:`Polyline <http-KSA.Polyline>` object.
+
+   :resjson KSA.ReferenceFrame value:
+
+.. http:put:: /ksa/polyline/(id)/reference-frame
+
+   The reference frame for the positions and directions of the object.
+
+
+   :param id: The identifier of the :ref:`Polyline <http-KSA.Polyline>` object.
+
+   :reqjson KSA.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /ksa/polyline/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Polyline <http-KSA.Polyline>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/polyline/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Polyline <http-KSA.Polyline>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/polyline/(id)/color
+
+   The color of the object, as an RGB triple with components from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Polyline <http-KSA.Polyline>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /ksa/polyline/(id)/color
+
+   The color of the object, as an RGB triple with components from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Polyline <http-KSA.Polyline>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:post:: /ksa/polyline/(id)/remove
+
+   Remove the object.
+
+
+   :param id: The identifier of the :ref:`Polyline <http-KSA.Polyline>` object.
+
+
+
+
+
+
+
+.. _http-KSA.Circle:
+
+.. rubric:: Circle
+
+A circle. Created using :http:post:`/ksa/drawing/add-circle`.
+
+A ``Circle`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/circle/(id)/center
+
+   The position of the center of the circle, in meters.
+
+
+   :param id: The identifier of the :ref:`Circle <http-KSA.Circle>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /ksa/circle/(id)/center
+
+   The position of the center of the circle, in meters.
+
+
+   :param id: The identifier of the :ref:`Circle <http-KSA.Circle>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /ksa/circle/(id)/normal
+
+   The direction normal to the plane of the circle, as a unit vector.
+
+
+   :param id: The identifier of the :ref:`Circle <http-KSA.Circle>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /ksa/circle/(id)/normal
+
+   The direction normal to the plane of the circle, as a unit vector.
+
+
+   :param id: The identifier of the :ref:`Circle <http-KSA.Circle>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /ksa/circle/(id)/radius
+
+   The radius of the circle, in meters.
+
+
+   :param id: The identifier of the :ref:`Circle <http-KSA.Circle>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/circle/(id)/radius
+
+   The radius of the circle, in meters.
+
+
+   :param id: The identifier of the :ref:`Circle <http-KSA.Circle>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/circle/(id)/reference-frame
+
+   The reference frame for the positions and directions of the object.
+
+
+   :param id: The identifier of the :ref:`Circle <http-KSA.Circle>` object.
+
+   :resjson KSA.ReferenceFrame value:
+
+.. http:put:: /ksa/circle/(id)/reference-frame
+
+   The reference frame for the positions and directions of the object.
+
+
+   :param id: The identifier of the :ref:`Circle <http-KSA.Circle>` object.
+
+   :reqjson KSA.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /ksa/circle/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Circle <http-KSA.Circle>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/circle/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Circle <http-KSA.Circle>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/circle/(id)/color
+
+   The color of the object, as an RGB triple with components from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Circle <http-KSA.Circle>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /ksa/circle/(id)/color
+
+   The color of the object, as an RGB triple with components from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Circle <http-KSA.Circle>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:post:: /ksa/circle/(id)/remove
+
+   Remove the object.
+
+
+   :param id: The identifier of the :ref:`Circle <http-KSA.Circle>` object.
+
+
+
+
+
+
+
+.. _http-KSA.Arc:
+
+.. rubric:: Arc
+
+An arc of a circle. Created using :http:post:`/ksa/drawing/add-arc`.
+
+A ``Arc`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/arc/(id)/center
+
+   The position of the center of the arc's circle, in meters.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /ksa/arc/(id)/center
+
+   The position of the center of the arc's circle, in meters.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /ksa/arc/(id)/normal
+
+   The direction normal to the plane of the arc, as a unit vector.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /ksa/arc/(id)/normal
+
+   The direction normal to the plane of the arc, as a unit vector.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /ksa/arc/(id)/start-direction
+
+   The direction from the center to the start of the arc, as a unit vector.
+
+   .. note::
+
+      The part of the direction along :http:get:`/ksa/arc/(id)/normal` is ignored.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /ksa/arc/(id)/start-direction
+
+   The direction from the center to the start of the arc, as a unit vector.
+
+   .. note::
+
+      The part of the direction along :http:get:`/ksa/arc/(id)/normal` is ignored.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /ksa/arc/(id)/angle
+
+   The angle the arc turns through, counterclockwise about :http:get:`/ksa/arc/(id)/normal`, in radians.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/arc/(id)/angle
+
+   The angle the arc turns through, counterclockwise about :http:get:`/ksa/arc/(id)/normal`, in radians.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/arc/(id)/radius
+
+   The radius of the arc, in meters.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/arc/(id)/radius
+
+   The radius of the arc, in meters.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/arc/(id)/reference-frame
+
+   The reference frame for the positions and directions of the object.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :resjson KSA.ReferenceFrame value:
+
+.. http:put:: /ksa/arc/(id)/reference-frame
+
+   The reference frame for the positions and directions of the object.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :reqjson KSA.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /ksa/arc/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/arc/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/arc/(id)/color
+
+   The color of the object, as an RGB triple with components from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /ksa/arc/(id)/color
+
+   The color of the object, as an RGB triple with components from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:post:: /ksa/arc/(id)/remove
+
+   Remove the object.
+
+
+   :param id: The identifier of the :ref:`Arc <http-KSA.Arc>` object.
+
+
+
+
+
+
+
+.. _http-KSA.Box:
+
+.. rubric:: Box
+
+The edges of a box. Created using :http:post:`/ksa/drawing/add-box`.
+
+A ``Box`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/box/(id)/center
+
+   The position of the center of the box, in meters.
+
+
+   :param id: The identifier of the :ref:`Box <http-KSA.Box>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /ksa/box/(id)/center
+
+   The position of the center of the box, in meters.
+
+
+   :param id: The identifier of the :ref:`Box <http-KSA.Box>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /ksa/box/(id)/size
+
+   The lengths of the box's edges along its x, y and z axes, in meters.
+
+
+   :param id: The identifier of the :ref:`Box <http-KSA.Box>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /ksa/box/(id)/size
+
+   The lengths of the box's edges along its x, y and z axes, in meters.
+
+
+   :param id: The identifier of the :ref:`Box <http-KSA.Box>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /ksa/box/(id)/rotation
+
+   The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+
+
+   :param id: The identifier of the :ref:`Box <http-KSA.Box>` object.
+
+   :resjson tuple<double, double, double, double> value:
+
+.. http:put:: /ksa/box/(id)/rotation
+
+   The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+
+
+   :param id: The identifier of the :ref:`Box <http-KSA.Box>` object.
+
+   :reqjson tuple<double, double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /ksa/box/(id)/reference-frame
+
+   The reference frame for the positions and directions of the object.
+
+
+   :param id: The identifier of the :ref:`Box <http-KSA.Box>` object.
+
+   :resjson KSA.ReferenceFrame value:
+
+.. http:put:: /ksa/box/(id)/reference-frame
+
+   The reference frame for the positions and directions of the object.
+
+
+   :param id: The identifier of the :ref:`Box <http-KSA.Box>` object.
+
+   :reqjson KSA.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /ksa/box/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Box <http-KSA.Box>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/box/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Box <http-KSA.Box>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/box/(id)/color
+
+   The color of the object, as an RGB triple with components from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Box <http-KSA.Box>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /ksa/box/(id)/color
+
+   The color of the object, as an RGB triple with components from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Box <http-KSA.Box>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:post:: /ksa/box/(id)/remove
+
+   Remove the object.
+
+
+   :param id: The identifier of the :ref:`Box <http-KSA.Box>` object.
+
+
+
+
+
+
+
+.. _http-KSA.Sphere:
+
+.. rubric:: Sphere
+
+A solid sphere. Created using :http:post:`/ksa/drawing/add-sphere`.
+
+A ``Sphere`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/sphere/(id)/center
+
+   The position of the center of the sphere, in meters.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-KSA.Sphere>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /ksa/sphere/(id)/center
+
+   The position of the center of the sphere, in meters.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-KSA.Sphere>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /ksa/sphere/(id)/radius
+
+   The radius of the sphere, in meters.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-KSA.Sphere>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/sphere/(id)/radius
+
+   The radius of the sphere, in meters.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-KSA.Sphere>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/sphere/(id)/reference-frame
+
+   The reference frame for the positions and directions of the object.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-KSA.Sphere>` object.
+
+   :resjson KSA.ReferenceFrame value:
+
+.. http:put:: /ksa/sphere/(id)/reference-frame
+
+   The reference frame for the positions and directions of the object.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-KSA.Sphere>` object.
+
+   :reqjson KSA.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /ksa/sphere/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-KSA.Sphere>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/sphere/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-KSA.Sphere>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/sphere/(id)/color
+
+   The color of the object, as an RGB triple with components from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-KSA.Sphere>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /ksa/sphere/(id)/color
+
+   The color of the object, as an RGB triple with components from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-KSA.Sphere>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:post:: /ksa/sphere/(id)/remove
+
+   Remove the object.
+
+
+   :param id: The identifier of the :ref:`Sphere <http-KSA.Sphere>` object.
+
+
+
+
+
+
+
+.. _http-KSA.Text:
+
+.. rubric:: Text
+
+Text drawn over the scene, centered on a position. Created using :http:post:`/ksa/drawing/add-text`.
+
+.. note::
+
+   The text is hidden with the game's UI.
+
+
+A ``Text`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/text/(id)/content
+
+   The text.
+
+
+   :param id: The identifier of the :ref:`Text <http-KSA.Text>` object.
+
+   :resjson string value:
+
+.. http:put:: /ksa/text/(id)/content
+
+   The text.
+
+
+   :param id: The identifier of the :ref:`Text <http-KSA.Text>` object.
+
+   :reqjson string value: The new value.
+
+
+
+
+.. http:get:: /ksa/text/(id)/position
+
+   The position of the center of the text, in meters.
+
+
+   :param id: The identifier of the :ref:`Text <http-KSA.Text>` object.
+
+   :resjson tuple<double, double, double> value:
+
+.. http:put:: /ksa/text/(id)/position
+
+   The position of the center of the text, in meters.
+
+
+   :param id: The identifier of the :ref:`Text <http-KSA.Text>` object.
+
+   :reqjson tuple<double, double, double> value: The new value.
+
+
+
+
+.. http:get:: /ksa/text/(id)/size
+
+   The height of the font, in pixels.
+
+
+   :param id: The identifier of the :ref:`Text <http-KSA.Text>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/text/(id)/size
+
+   The height of the font, in pixels.
+
+
+   :param id: The identifier of the :ref:`Text <http-KSA.Text>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/text/(id)/reference-frame
+
+   The reference frame for the positions and directions of the object.
+
+
+   :param id: The identifier of the :ref:`Text <http-KSA.Text>` object.
+
+   :resjson KSA.ReferenceFrame value:
+
+.. http:put:: /ksa/text/(id)/reference-frame
+
+   The reference frame for the positions and directions of the object.
+
+
+   :param id: The identifier of the :ref:`Text <http-KSA.Text>` object.
+
+   :reqjson KSA.ReferenceFrame value: The new value.
+
+
+
+
+.. http:get:: /ksa/text/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Text <http-KSA.Text>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/text/(id)/visible
+
+   Whether the object is visible.
+
+
+   :param id: The identifier of the :ref:`Text <http-KSA.Text>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/text/(id)/color
+
+   The color of the object, as an RGB triple with components from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Text <http-KSA.Text>` object.
+
+   :resjson StdLib.ColorRGB value:
+
+.. http:put:: /ksa/text/(id)/color
+
+   The color of the object, as an RGB triple with components from 0 to 1.
+
+
+   :param id: The identifier of the :ref:`Text <http-KSA.Text>` object.
+
+   :reqjson StdLib.ColorRGB value: The new value.
+
+
+
+
+.. http:post:: /ksa/text/(id)/remove
+
+   Remove the object.
+
+
+   :param id: The identifier of the :ref:`Text <http-KSA.Text>` object.

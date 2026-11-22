@@ -19,6 +19,10 @@ Reference Frame
       per second, and angular velocities in radians per second. A rotation is a quaternion
       ``(x, y, z, w)``.
 
+   .. macro:: KRPC_CLASS_KSA_REFERENCEFRAME
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_ReferenceFrame_CreateRelative(krpc_connection_t connection, krpc_KSA_ReferenceFrame_t * returnValue, krpc_KSA_ReferenceFrame_t referenceFrame, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_double_t * rotation, const krpc_tuple_double_double_double_t * velocity, const krpc_tuple_double_double_double_t * angularVelocity)
 
       Create a reference frame that is offset from a parent frame.

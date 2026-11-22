@@ -1,0 +1,322 @@
+.. default-domain:: http
+.. highlight:: json
+
+
+Control
+=======
+
+
+.. _http-KSA.Control:
+
+.. rubric:: Control
+
+The controls of a vehicle: engines, manual inputs, stabilization and sequences.
+Obtained from :http:get:`/ksa/vehicle/(id)/control`.
+
+.. note::
+
+   The rotation and translation inputs act as held keys. Each is on or off, with no
+   partial strength. A held rotation input overrides the auto-pilot on its axis. The game
+   releases the inputs when its window gains or loses focus, or the active vehicle changes.
+
+
+A ``Control`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /ksa/control/(id)/throttle
+
+   The manual throttle. A value between 0 and 1.
+
+   .. note::
+
+      The game raises a value below the vehicle's minimum throttle to the minimum.
+      The engines fire only while :http:get:`/ksa/control/(id)/engine-on` is set.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :resjson float value:
+
+.. http:put:: /ksa/control/(id)/throttle
+
+   The manual throttle. A value between 0 and 1.
+
+   .. note::
+
+      The game raises a value below the vehicle's minimum throttle to the minimum.
+      The engines fire only while :http:get:`/ksa/control/(id)/engine-on` is set.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :reqjson float value: The new value.
+
+
+
+
+.. http:get:: /ksa/control/(id)/engine-on
+
+   Whether the engines are ignited.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/control/(id)/engine-on
+
+   Whether the engines are ignited.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/control/(id)/pitch
+
+   The pitch input: 1 for pitch up, -1 for pitch down, 0 for neither.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /ksa/control/(id)/pitch
+
+   The pitch input: 1 for pitch up, -1 for pitch down, 0 for neither.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /ksa/control/(id)/yaw
+
+   The yaw input: 1 for yaw right, -1 for yaw left, 0 for neither.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /ksa/control/(id)/yaw
+
+   The yaw input: 1 for yaw right, -1 for yaw left, 0 for neither.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /ksa/control/(id)/roll
+
+   The roll input: 1 for roll right, -1 for roll left, 0 for neither.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /ksa/control/(id)/roll
+
+   The roll input: 1 for roll right, -1 for roll left, 0 for neither.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /ksa/control/(id)/forward
+
+   The forward translation input: 1 for forward, -1 for backward, 0 for neither.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /ksa/control/(id)/forward
+
+   The forward translation input: 1 for forward, -1 for backward, 0 for neither.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /ksa/control/(id)/right
+
+   The right translation input: 1 for right, -1 for left, 0 for neither.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /ksa/control/(id)/right
+
+   The right translation input: 1 for right, -1 for left, 0 for neither.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /ksa/control/(id)/up
+
+   The up translation input: 1 for up, -1 for down, 0 for neither.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /ksa/control/(id)/up
+
+   The up translation input: 1 for up, -1 for down, 0 for neither.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:get:: /ksa/control/(id)/pulse
+
+   Whether the rotation and translation inputs fire the thrusters in short pulses.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/control/(id)/pulse
+
+   Whether the rotation and translation inputs fire the thrusters in short pulses.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/control/(id)/stabilization
+
+   Whether the flight computer is controlling the vehicle's attitude.
+
+   .. note::
+
+      Setting it to ``true`` holds the current attitude.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/control/(id)/stabilization
+
+   Whether the flight computer is controlling the vehicle's attitude.
+
+   .. note::
+
+      Setting it to ``true`` holds the current attitude.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/control/(id)/rcs
+
+   Whether the flight computer may use the reaction control thrusters for attitude
+   control.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/control/(id)/rcs
+
+   Whether the flight computer may use the reaction control thrusters for attitude
+   control.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/control/(id)/lights
+
+   Whether the vehicle's lights are switched on, as the lights key does.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :resjson bool value:
+
+.. http:put:: /ksa/control/(id)/lights
+
+   Whether the vehicle's lights are switched on, as the lights key does.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :reqjson bool value: The new value.
+
+
+
+
+.. http:get:: /ksa/control/(id)/active-sequence
+
+   The number of the most recently activated sequence.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :resjson int32 value:
+
+
+
+
+.. http:post:: /ksa/control/(id)/activate-next-sequence
+
+   Activates the next sequence, as the staging key does.
+
+   .. note::
+
+      Throws an exception if the vehicle is not the :http:get:`/ksa/active-vehicle`.
+
+
+   :param id: The identifier of the :ref:`Control <http-KSA.Control>` object.
+
+   :resjson list<KSA.Vehicle> value: The vehicles that separated from this one.

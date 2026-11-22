@@ -1,0 +1,603 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+Life Support
+============
+
+
+.. class:: LifeSupport
+
+   How long the supplies of a vehicle, a habitat zone or a kitten's suit last. Obtained
+   from :prop:`Vehicle.LifeSupport`, :prop:`HabitatZone.LifeSupport` or
+   :prop:`Kitten.LifeSupport`.
+
+   .. note::
+
+      The times count down only while :prop:`KSA.LifeSupportEnabled <KSA.KSA.LifeSupportEnabled>` is true. Air
+      lasts forever in breathable air outside the vehicle.
+
+   .. property:: int Kittens { get; }
+
+      The number of kittens the supplies are shared between.
+
+      :Game Scenes: All
+
+   .. property:: float AirMass { get; }
+
+      The mass of oxygen in the crew's tanks, in kilograms.
+
+      :Game Scenes: All
+
+   .. property:: float WaterMass { get; }
+
+      The mass of water in the crew's tanks, in kilograms.
+
+      :Game Scenes: All
+
+   .. property:: int Meals { get; }
+
+      The number of meals.
+
+      :Game Scenes: All
+
+   .. property:: float AirTime { get; }
+
+      The time the air lasts, in seconds. Infinite with no crew, or in breathable air.
+
+      :Game Scenes: All
+
+   .. property:: float ScrubberTime { get; }
+
+      The time the carbon dioxide scrubbers last, in seconds. Infinite with no crew.
+
+      :Game Scenes: All
+
+   .. property:: float WaterTime { get; }
+
+      The time the water lasts, in seconds. Infinite with no crew.
+
+      :Game Scenes: All
+
+   .. property:: float FoodTime { get; }
+
+      The time the food lasts, in seconds. Infinite with no crew.
+
+      :Game Scenes: All
+
+   .. property:: float Time { get; }
+
+      The time until the first supply runs out, in seconds. A suit counts its air and
+      scrubber only. Infinite with no crew.
+
+      :Game Scenes: All
+
+   .. property:: LifeSupportSupply LimitingSupply { get; }
+
+      The supply that runs out first. Air when every time is infinite, as with no crew.
+
+      :Game Scenes: All
+
+   .. property:: LifeSupportLevel Level { get; }
+
+      How long the supplies last, as the game's life support gauge shows it.
+
+      :Game Scenes: All
+
+   .. property:: float TimeToNextLevel { get; }
+
+      The time until :prop:`LifeSupport.Level` next changes, in seconds. Infinite with no crew.
+
+      :Game Scenes: All
+
+
+
+.. enum:: LifeSupportLevel
+
+   How long the crew's supplies last. See :prop:`LifeSupport.Level`.
+
+
+   .. enumerator:: Ok
+
+      More than a day of supplies, or no crew.
+
+
+   .. enumerator:: Low
+
+      A day of supplies or less.
+
+
+   .. enumerator:: Critical
+
+      An hour of supplies or less.
+
+
+   .. enumerator:: Out
+
+      A supply has run out.
+
+
+
+.. enum:: LifeSupportSupply
+
+   A supply the crew needs. See :prop:`LifeSupport.LimitingSupply`.
+
+
+   .. enumerator:: Air
+
+      Oxygen to breathe.
+
+
+   .. enumerator:: Scrubber
+
+      Lithium hydroxide canisters, which scrub carbon dioxide from the air.
+
+
+   .. enumerator:: Water
+
+      Drinking water.
+
+
+   .. enumerator:: Food
+
+      Meals.
+
+
+
+.. class:: HabitatZone
+
+   The connected habitable parts of a vehicle, which share their crew's supplies.
+   Obtained from :prop:`Vehicle.HabitatZones` or :prop:`Habitat.Zone`.
+
+   .. note::
+
+      Parts join a zone through connections the crew can pass, such as an open docking
+      port hatch.
+
+   .. property:: Vehicle Vehicle { get; }
+
+      The vehicle the zone is in.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Part> Parts { get; }
+
+      The parts in the zone.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Habitat> Habitats { get; }
+
+      The habitats in the zone.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Seat> Seats { get; }
+
+      The crew seats in the zone.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Kitten> Crew { get; }
+
+      The kittens in the zone's seats.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<HabitatZone> LinkedZones { get; }
+
+      The zones that join this one when closed docking port hatches between them open.
+
+      :Game Scenes: All
+
+   .. function:: System.Collections.Generic.IList<DockingPort> HatchesTo(HabitatZone zone)
+
+      The closed docking port hatches that join this zone to a linked zone when they
+      open.
+
+      :parameters:
+
+       * **zone** -- A zone in :prop:`HabitatZone.LinkedZones`.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the zone is not linked to this one.
+
+   .. property:: float HabitableVolume { get; }
+
+      The volume the crew can live in, in cubic meters.
+
+      :Game Scenes: All
+
+   .. property:: float StorageVolume { get; }
+
+      The volume for stored supplies, in cubic meters.
+
+      :Game Scenes: All
+
+   .. property:: LifeSupport LifeSupport { get; }
+
+      How long the zone's supplies last its crew.
+
+      :Game Scenes: All
+
+   .. property:: MissionSupplies MissionSupplies { get; }
+
+      Whether the zone's supplies last its crew through the vehicle's mission. ``null``
+      without a feasible mission with time left, or while
+      :prop:`KSA.LifeSupportEnabled <KSA.KSA.LifeSupportEnabled>` is false.
+
+      :Game Scenes: All
+
+   .. function:: int PlannedKittens(MissionLeg leg)
+
+      The number of kittens planned in the zone for a leg of the vehicle's mission. The
+      plan defaults to the kittens seated in the zone.
+
+      :parameters:
+
+       * **leg** -- The leg.
+
+      :Game Scenes: All
+
+
+
+.. class:: Mission
+
+   The mission planned for a vehicle in the editor's life support window. Obtained from
+   :prop:`Vehicle.Mission`.
+
+   .. note::
+
+      The game times the legs of the mission from the plan, and checks the supplies of each
+      habitat zone against them. See :prop:`HabitatZone.MissionSupplies`.
+
+   .. property:: MissionDestination Destination { get; }
+
+      Where the mission goes.
+
+      :Game Scenes: All
+
+   .. property:: Body Body { get; }
+
+      The body the mission goes to, or ``null`` if it has no destination. For a low
+      orbit, this is the home body.
+
+      :Game Scenes: All
+
+   .. property:: MissionArrival Arrival { get; }
+
+      What the mission does at its destination.
+
+      :Game Scenes: All
+
+   .. property:: MissionTrip Trip { get; }
+
+      Whether the mission comes back.
+
+      :Game Scenes: All
+
+   .. property:: float Stay { get; }
+
+      The time planned at the destination, in seconds.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The game rounds a stay before a return up to the next transfer window home. See
+         :prop:`Mission.StayTime`.
+
+   .. property:: bool Custom { get; }
+
+      Whether the mission has a length set by the player, in place of legs timed from
+      its destination. See :prop:`Mission.CustomLength`.
+
+      :Game Scenes: All
+
+   .. property:: float CustomLength { get; }
+
+      The length of a mission with :prop:`Mission.Custom` set, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: bool Feasible { get; }
+
+      Whether the game can time the legs of the mission. A mission with no destination,
+      or a flyby with no way back, cannot be timed.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The leg times are zero when this is false.
+
+   .. property:: float OutTime { get; }
+
+      The planned time of the way out, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float StayTime { get; }
+
+      The planned time at the destination, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float BackTime { get; }
+
+      The planned time of the way back, in seconds. Zero for a one way trip.
+
+      :Game Scenes: All
+
+   .. property:: float ReturnWait { get; }
+
+      The time from arriving at the destination until the next transfer window home, in
+      seconds. Zero when there is no wait.
+
+      :Game Scenes: All
+
+   .. property:: float TotalTime { get; }
+
+      The planned length of the mission, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float TimeLeft { get; }
+
+      The time left in the mission as planned, counted from the vehicle's launch, in
+      seconds.
+
+      :Game Scenes: All
+
+   .. property:: double ArrivalUT { get; }
+
+      The universal time the vehicle arrived at the destination body, in seconds. Not a
+      number until it has.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The game records the arrival for a mission to another body.
+
+   .. property:: double DepartureUT { get; }
+
+      The universal time the vehicle left the destination body, in seconds. Not a number
+      until it has.
+
+      :Game Scenes: All
+
+
+
+.. enum:: MissionDestination
+
+   Where a mission goes. See :prop:`Mission.Destination`.
+
+
+   .. enumerator:: None
+
+      No destination.
+
+
+   .. enumerator:: LowOrbit
+
+      A low orbit around the home body.
+
+
+   .. enumerator:: Body
+
+      Another body, given by :prop:`Mission.Body`.
+
+
+
+.. enum:: MissionArrival
+
+   What a mission does at its destination. See :prop:`Mission.Arrival`.
+
+
+   .. enumerator:: Flyby
+
+      Flies past it.
+
+
+   .. enumerator:: Orbit
+
+      Orbits it.
+
+
+   .. enumerator:: Land
+
+      Lands on it.
+
+
+
+.. enum:: MissionTrip
+
+   Whether a mission comes back. See :prop:`Mission.Trip`.
+
+
+   .. enumerator:: Return
+
+      Goes and comes back.
+
+
+   .. enumerator:: OneWay
+
+      Goes and stays.
+
+
+
+.. enum:: MissionLeg
+
+   A leg of a mission. See :meth:`HabitatZone.PlannedKittens`.
+
+
+   .. enumerator:: Out
+
+      The way out.
+
+
+   .. enumerator:: Stay
+
+      The stay at the destination.
+
+
+   .. enumerator:: Back
+
+      The way back.
+
+
+
+.. class:: MissionSupplies
+
+   Whether the supplies of a habitat zone last its crew through the vehicle's mission, as
+   the life support window shows it. Obtained from :prop:`HabitatZone.MissionSupplies`.
+
+   .. note::
+
+      The check takes the legs left in the mission as planned, counted from the vehicle's
+      launch, and the kittens planned for each leg. The times are from now.
+
+   .. property:: MissionSupplyVerdict Verdict { get; }
+
+      Whether the supplies last the mission.
+
+      :Game Scenes: All
+
+   .. property:: float ShortBy { get; }
+
+      The time by which the first supply to run out falls short of the end of the
+      mission, in seconds. Zero when the supplies last.
+
+      :Game Scenes: All
+
+   .. property:: LifeSupportSupply FirstSupply { get; }
+
+      The supply that runs out first.
+
+      :Game Scenes: All
+
+   .. function:: float TimeLeft(LifeSupportSupply supply)
+
+      The time until a supply runs out with the crew planned for each leg, in seconds.
+      Infinite if it lasts the mission.
+
+      :parameters:
+
+       * **supply** -- The supply.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Air lasts while the vehicle is in breathable air.
+
+   .. property:: float End { get; }
+
+      The time until the zone has no crew left in the mission, in seconds.
+
+      :Game Scenes: All
+
+
+
+.. enum:: MissionSupplyVerdict
+
+   Whether a habitat zone has the supplies for a mission. See :prop:`MissionSupplies.Verdict`.
+
+
+   .. enumerator:: Unused
+
+      The zone has no crew during the mission.
+
+
+   .. enumerator:: Enough
+
+      The supplies last the mission.
+
+
+   .. enumerator:: Short
+
+      A supply runs out before the end of the mission.
+
+
+
+.. class:: Habitat
+
+   A habitable or storage space in a part, which holds meals and carbon dioxide scrubber
+   canisters. Obtained from :prop:`Part.Habitats`.
+
+   .. property:: Part Part { get; }
+
+      The part the habitat is in.
+
+      :Game Scenes: All
+
+   .. property:: HabitatZone Zone { get; }
+
+      The habitat zone the habitat is in.
+
+      :Game Scenes: All
+
+   .. property:: float HabitableVolume { get; }
+
+      The volume the crew can live in, in cubic meters.
+
+      :Game Scenes: All
+
+   .. property:: float StorageVolume { get; }
+
+      The volume for stored supplies, in cubic meters.
+
+      :Game Scenes: All
+
+   .. property:: int Meals { get; }
+
+      The number of meals in the habitat.
+
+      :Game Scenes: All
+
+   .. property:: int Canisters { get; }
+
+      The number of carbon dioxide scrubber canisters in the habitat.
+
+      :Game Scenes: All
+
+   .. property:: int MealCapacity { get; }
+
+      The number of meals the habitat holds when full.
+
+      :Game Scenes: All
+
+   .. property:: int CanisterCapacity { get; }
+
+      The number of carbon dioxide scrubber canisters the habitat holds when full.
+
+      :Game Scenes: All
+
+   .. function:: void Transfer(Habitat to, int meals = 0, int canisters = 0)
+
+      Moves meals and canisters to another habitat in the same zone. Moves fewer when
+      this habitat holds fewer, or the other has less room.
+
+      :parameters:
+
+       * **to** -- The habitat to move the supplies to.
+       * **meals** -- The number of meals to move.
+       * **canisters** -- The number of canisters to move.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         A kitten in the zone moves the supplies. Throws an exception if life support is
+         disabled, the habitats are in different zones, or the zone has no crew able to
+         move them.

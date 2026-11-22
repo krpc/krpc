@@ -11,6 +11,10 @@ Crew
    A kitten in the agency's roster. Obtained from :func:`krpc_KSA_Kittens`,
    :func:`krpc_KSA_Vehicle_Crew` or :func:`krpc_KSA_Seat_Kitten`.
 
+   .. macro:: KRPC_CLASS_KSA_KITTEN
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
    .. function:: krpc_error_t krpc_KSA_Kitten_Name(krpc_connection_t connection, char * * returnValue, krpc_KSA_Kitten_t instance)
 
       The kitten's name, which is unique in the roster.
@@ -38,6 +42,12 @@ Crew
    .. function:: krpc_error_t krpc_KSA_Kitten_KilledInAction(krpc_connection_t connection, bool * returnValue, krpc_KSA_Kitten_t instance)
 
       Whether the kitten has been killed in action.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_CauseOfDeath(krpc_connection_t connection, krpc_KSA_DeathCause_t * returnValue, bool * returnValueIsNull, krpc_KSA_Kitten_t instance)
+
+      What killed the kitten, or ``nullptr`` if it is alive.
 
    
 
@@ -93,6 +103,31 @@ Crew
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Kitten_TimeToRadiationSickness(krpc_connection_t connection, float * returnValue, krpc_KSA_Kitten_t instance)
+
+      The time until the kitten gets radiation sickness at its current dose rate, in
+      seconds. Infinite if it never does, or the kitten already has it.
+
+   
+
+      .. note::
+
+         The game forecasts it for a kitten on a mission while
+         :func:`krpc_KSA_RadiationEnabled` is true.
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_TimeToLethalDose(krpc_connection_t connection, float * returnValue, krpc_KSA_Kitten_t instance)
+
+      The time until the kitten takes a lethal radiation dose at its current dose rate, in
+      seconds. Infinite if it never does.
+
+   
+
+      .. note::
+
+         The game forecasts it for a kitten on a mission while
+         :func:`krpc_KSA_RadiationEnabled` is true, and only within a day of radiation
+         sickness.
+
    .. function:: krpc_error_t krpc_KSA_Kitten_TimeUntilFitToFly(krpc_connection_t connection, float * returnValue, krpc_KSA_Kitten_t instance)
 
       The time until the kitten has recovered from radiation sickness and can fly, resting
@@ -110,6 +145,51 @@ Crew
    .. function:: krpc_error_t krpc_KSA_Kitten_Retired(krpc_connection_t connection, bool * returnValue, krpc_KSA_Kitten_t instance)
 
       Whether the kitten has retired, having reached its lifetime radiation dose limit.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_WorstCondition(krpc_connection_t connection, krpc_KSA_KittenCondition_t * returnValue, krpc_KSA_Kitten_t instance)
+
+      The kitten's worst condition across its supplies.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_Condition(krpc_connection_t connection, krpc_KSA_KittenCondition_t * returnValue, krpc_KSA_Kitten_t instance, krpc_KSA_LifeSupportSupply_t supply)
+
+      The effect on the kitten of going without a supply.
+
+      :Parameters:
+
+       * **supply** -- The supply.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_TimeWithout(krpc_connection_t connection, float * returnValue, krpc_KSA_Kitten_t instance, krpc_KSA_LifeSupportSupply_t supply)
+
+      The time the kitten has gone without a supply, in seconds. It counts down again
+      once the supply returns.
+
+      :Parameters:
+
+       * **supply** -- The supply.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_TimeToNextCondition(krpc_connection_t connection, float * returnValue, krpc_KSA_Kitten_t instance, krpc_KSA_LifeSupportSupply_t supply)
+
+      The further time the kitten can go without a supply before its condition from the
+      supply worsens, in seconds. Infinite once the kitten is dead.
+
+      :Parameters:
+
+       * **supply** -- The supply.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_Incapacitated(krpc_connection_t connection, bool * returnValue, krpc_KSA_Kitten_t instance)
+
+      Whether the kitten is incapacitated by going without a supply. An incapacitated
+      kitten cannot fly the vehicle or move supplies.
 
    
 
@@ -131,6 +211,12 @@ Crew
 
          Throws an exception if the kitten is not in a seat, or the vehicle has no EVA hatch.
 
+   .. function:: krpc_error_t krpc_KSA_Kitten_CanGoOnEva(krpc_connection_t connection, bool * returnValue, krpc_KSA_Kitten_t instance)
+
+      Whether the kitten can go on EVA. See :func:`krpc_KSA_Kitten_GoOnEva`.
+
+   
+
    .. function:: krpc_error_t krpc_KSA_Kitten_Board(krpc_connection_t connection, krpc_KSA_Vehicle_t * returnValue, krpc_KSA_Kitten_t instance)
 
       Board the nearest vehicle with a free seat, and return once the kitten is in the
@@ -144,6 +230,13 @@ Crew
 
          Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
          within one meter.
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_CanBoard(krpc_connection_t connection, bool * returnValue, krpc_KSA_Kitten_t instance)
+
+      Whether the kitten is on EVA and an EVA hatch with a free seat is in range. See
+      :func:`krpc_KSA_Kitten_Board`.
+
+   
 
    .. function:: krpc_error_t krpc_KSA_Kitten_LocomotionMode(krpc_connection_t connection, krpc_KSA_LocomotionMode_t * returnValue, krpc_KSA_Kitten_t instance)
 
@@ -174,11 +267,93 @@ Crew
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Kitten_LifeSupport(krpc_connection_t connection, krpc_KSA_LifeSupport_t * returnValue, krpc_KSA_Kitten_t instance)
+
+      How long the supplies in the kitten's suit last, or ``nullptr`` if the kitten is
+      not on EVA.
+
+   
+
+      .. note::
+
+         The suit is filled from the kitten's habitat zone when it goes on EVA, and what is
+         left returns to the zone when it boards.
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_CarriedMeals(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Kitten_t instance)
+
+      The number of meals the kitten on EVA carries. Throws an exception if the kitten is
+      not on EVA.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_CarriedCanisters(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Kitten_t instance)
+
+      The number of carbon dioxide scrubber canisters the kitten on EVA carries. Throws an
+      exception if the kitten is not on EVA.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_CanCarry(krpc_connection_t connection, bool * returnValue, krpc_KSA_Kitten_t instance, krpc_KSA_Habitat_t habitat)
+
+      Whether the kitten can take supplies from or stow them in a habitat. See
+      :func:`krpc_KSA_Kitten_Take` and :func:`krpc_KSA_Kitten_Stow`.
+
+      :Parameters:
+
+       * **habitat** -- The habitat.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_Take(krpc_connection_t connection, krpc_KSA_Kitten_t instance, krpc_KSA_Habitat_t habitat, int32_t meals, int32_t canisters)
+
+      Take meals and canisters from a habitat within reach, and return once the kitten
+      carries them. Takes fewer when the habitat holds fewer, or the kitten cannot carry
+      more.
+
+      :Parameters:
+
+       * **habitat** -- The habitat, which must store supplies.
+       * **meals** -- The number of meals to take.
+       * **canisters** -- The number of canisters to take.
+
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA or is unwell, life support is
+         disabled, or the habitat stores no supplies or is out of reach. See
+         :func:`krpc_KSA_Kitten_CanCarry`.
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_Stow(krpc_connection_t connection, krpc_KSA_Kitten_t instance, krpc_KSA_Habitat_t habitat, int32_t meals, int32_t canisters)
+
+      Stow the meals and canisters the kitten carries in a habitat within reach, and
+      return once they are stowed. Stows fewer when the kitten carries fewer, or the
+      habitat has less room.
+
+      :Parameters:
+
+       * **habitat** -- The habitat, which must store supplies.
+       * **meals** -- The number of meals to stow.
+       * **canisters** -- The number of canisters to stow.
+
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA or is unwell, life support is
+         disabled, or the habitat stores no supplies or is out of reach. See
+         :func:`krpc_KSA_Kitten_CanCarry`.
+
 
 
 .. type:: krpc_KSA_LocomotionMode_t
 
    How a kitten on EVA is moving. See :func:`krpc_KSA_Kitten_LocomotionMode`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_LOCOMOTIONMODE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 
    .. macro:: KRPC_KSA_LOCOMOTIONMODE_MMU
@@ -217,9 +392,246 @@ Crew
 
 
 
+.. type:: krpc_KSA_KittenCondition_t
+
+   The effect on a kitten of going without a supply. See :func:`krpc_KSA_Kitten_Condition`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_KITTENCONDITION
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_KITTENCONDITION_HEALTHY
+
+      Unaffected.
+
+
+   .. macro:: KRPC_KSA_KITTENCONDITION_WARNING
+
+      Going without, with no effect yet.
+
+
+   .. macro:: KRPC_KSA_KITTENCONDITION_DEGRADED
+
+      Weakened, and unable to go on EVA.
+
+
+   .. macro:: KRPC_KSA_KITTENCONDITION_INCAPACITATED
+
+      Unable to fly the vehicle or move supplies.
+
+
+   .. macro:: KRPC_KSA_KITTENCONDITION_DEAD
+
+      Dead.
+
+
+
+.. type:: krpc_KSA_DeathCause_t
+
+   What killed a kitten. See :func:`krpc_KSA_Kitten_CauseOfDeath`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_DEATHCAUSE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_DEATHCAUSE_UNKNOWN
+
+      Not recorded.
+
+
+   .. macro:: KRPC_KSA_DEATHCAUSE_NOOXYGEN
+
+      Lack of oxygen.
+
+
+   .. macro:: KRPC_KSA_DEATHCAUSE_NOSCRUBBER
+
+      Carbon dioxide, with no scrubber canisters left.
+
+
+   .. macro:: KRPC_KSA_DEATHCAUSE_NOWATER
+
+      Lack of water.
+
+
+   .. macro:: KRPC_KSA_DEATHCAUSE_NOFOOD
+
+      Lack of food.
+
+
+   .. macro:: KRPC_KSA_DEATHCAUSE_RADIATION
+
+      A lethal radiation dose.
+
+
+   .. macro:: KRPC_KSA_DEATHCAUSE_GROUNDIMPACT
+
+      Hitting the ground.
+
+
+   .. macro:: KRPC_KSA_DEATHCAUSE_OCEANIMPACT
+
+      Hitting the ocean.
+
+
+   .. macro:: KRPC_KSA_DEATHCAUSE_COLLISION
+
+      A collision.
+
+
+   .. macro:: KRPC_KSA_DEATHCAUSE_EXCESSIVEGFORCE
+
+      Excessive acceleration.
+
+
+   .. macro:: KRPC_KSA_DEATHCAUSE_AERODYNAMICFORCES
+
+      Aerodynamic forces breaking up the vehicle.
+
+
+   .. macro:: KRPC_KSA_DEATHCAUSE_HYDRODYNAMICFORCES
+
+      Hydrodynamic forces breaking up the vehicle.
+
+
+   .. macro:: KRPC_KSA_DEATHCAUSE_FALL
+
+      A fall on EVA.
+
+
+   .. macro:: KRPC_KSA_DEATHCAUSE_ABANDONED
+
+      Left in a vehicle that was abandoned.
+
+
+
+.. type:: krpc_KSA_CrewEvent_t
+
+   A kitten's most urgent coming event: its supplies running low, or its condition
+   worsening. Obtained from :func:`krpc_KSA_Vehicle_CrewEvents` or
+   :func:`krpc_KSA_Vehicle_NextCrewEvent`.
+
+   .. note::
+
+      As the game's crew clock, an event within a day is the worst stage the kitten reaches
+      in that time, and a later event is the soonest. The event is the game's forecast when it
+      is read from the vehicle. Read it again for a new forecast.
+
+   .. macro:: KRPC_CLASS_KSA_CREWEVENT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_KSA_CrewEvent_Kitten(krpc_connection_t connection, krpc_KSA_Kitten_t * returnValue, krpc_KSA_CrewEvent_t instance)
+
+      The kitten.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_CrewEvent_Stage(krpc_connection_t connection, krpc_KSA_CrewStage_t * returnValue, krpc_KSA_CrewEvent_t instance)
+
+      What happens to the kitten.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_CrewEvent_Hazard(krpc_connection_t connection, krpc_KSA_CrewHazard_t * returnValue, krpc_KSA_CrewEvent_t instance)
+
+      The cause of the event.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_CrewEvent_UT(krpc_connection_t connection, double * returnValue, krpc_KSA_CrewEvent_t instance)
+
+      The universal time of the event, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_CrewEvent_TimeTo(krpc_connection_t connection, float * returnValue, krpc_KSA_CrewEvent_t instance)
+
+      The time until the event, in seconds. Zero once its time has passed.
+
+   
+
+
+
+.. type:: krpc_KSA_CrewStage_t
+
+   What happens to a kitten in a crew event. See :func:`krpc_KSA_CrewEvent_Stage`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_CREWSTAGE
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_CREWSTAGE_LOW
+
+      The supply runs low.
+
+
+   .. macro:: KRPC_KSA_CREWSTAGE_DEGRADED
+
+      The kitten is weakened, and unable to go on EVA. For radiation, the kitten gets
+      radiation sickness.
+
+
+   .. macro:: KRPC_KSA_CREWSTAGE_INCAPACITATED
+
+      The kitten is unable to fly the vehicle or move supplies.
+
+
+   .. macro:: KRPC_KSA_CREWSTAGE_DEAD
+
+      The kitten dies.
+
+
+
+.. type:: krpc_KSA_CrewHazard_t
+
+   The cause of a crew event. See :func:`krpc_KSA_CrewEvent_Hazard`.
+
+   .. macro:: KRPC_ENUMERATION_KSA_CREWHAZARD
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_KSA_CREWHAZARD_AIR
+
+      Running out of air.
+
+
+   .. macro:: KRPC_KSA_CREWHAZARD_SCRUBBER
+
+      Running out of carbon dioxide scrubber.
+
+
+   .. macro:: KRPC_KSA_CREWHAZARD_WATER
+
+      Running out of water.
+
+
+   .. macro:: KRPC_KSA_CREWHAZARD_FOOD
+
+      Running out of food.
+
+
+   .. macro:: KRPC_KSA_CREWHAZARD_RADIATION
+
+      The radiation dose.
+
+
+
 .. type:: krpc_KSA_Seat_t
 
    A crew seat. Obtained from :func:`krpc_KSA_Part_Seats`.
+
+   .. macro:: KRPC_CLASS_KSA_SEAT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
    .. function:: krpc_error_t krpc_KSA_Seat_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Seat_t instance)
 
@@ -237,5 +649,6 @@ Crew
 
       .. note::
 
-         A kitten in another seat of the vehicle moves to this one. Throws an exception if
-         the kitten is killed in action, on EVA, or in another vehicle.
+         A kitten in another seat of the vehicle moves to this one, within its habitat zone.
+         Throws an exception if the kitten is killed in action, retired, on EVA, in another
+         vehicle, or incapacitated, or the seat is in another habitat zone.

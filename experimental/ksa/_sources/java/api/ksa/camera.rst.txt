@@ -8,7 +8,7 @@ Camera
 
 .. type:: public class Camera
 
-   The game's main camera. Obtained from :meth:`getCamera()`.
+   The game's main camera. Obtained from :meth:`KSA.getCamera()`.
 
    .. method:: CameraMode getMode()
 
@@ -20,8 +20,8 @@ Camera
 
       .. note::
 
-         Setting :meth:`CameraMode.IVA` while the camera is not focused on a vehicle
-         with a crew seat sets :meth:`CameraMode.ORBIT` instead, as the game does. A
+         Setting :field:`CameraMode.IVA` while the camera is not focused on a vehicle
+         with a crew seat sets :field:`CameraMode.ORBIT` instead, as the game does. A
          change of mode releases the active vehicle's held rotation and translation inputs.
 
    .. method:: float getAzimuth()

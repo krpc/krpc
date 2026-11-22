@@ -1,0 +1,514 @@
+.. default-domain:: js
+.. highlight:: js
+.. module:: KSA
+   :no-index:
+
+Orbit
+=====
+
+
+.. class:: Orbit
+
+   An orbit. Obtained from :meth:`KSA.Vehicle.getOrbit`, :meth:`KSA.Body.getOrbit`,
+   :meth:`KSA.Burn.getOrbit` or :meth:`KSA.Orbit.getNextOrbit`.
+
+   .. note::
+
+      An orbit follows the game's prediction as the trajectory changes. A predicted orbit, from
+      :meth:`KSA.Orbit.getNextOrbit` or :meth:`KSA.Burn.getOrbit`, is a position in the vehicle's or the
+      burn's predicted trajectory, and throws an exception while the trajectory is too short to
+      reach it.
+
+   .. method:: getBody()
+
+      The body being orbited.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Body`
+   
+
+   .. method:: getApoapsis()
+
+      The apoapsis of the orbit, in meters, from the center of the body being orbited.
+      Not a number for a parabolic or hyperbolic orbit.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getPeriapsis()
+
+      The periapsis of the orbit, in meters, from the center of the body being orbited.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getApoapsisAltitude()
+
+      The apoapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getPeriapsisAltitude()
+
+      The periapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSemiMajorAxis()
+
+      The semi-major axis of the orbit, in meters. Negative for a hyperbolic orbit.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSemiMinorAxis()
+
+      The semi-minor axis of the orbit, in meters. Not a number for a parabolic or
+      hyperbolic orbit.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSpeed()
+
+      The current orbital speed, in meters per second.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getRadius()
+
+      The current distance from the center of the body being orbited, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getPeriod()
+
+      The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMeanMotion()
+
+      The mean angular motion of the orbit, in radians per second.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSpecificEnergy()
+
+      The specific orbital energy, the sum of the kinetic and potential energy per unit
+      mass, in joules per kilogram. Negative for an elliptical orbit.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getTimeToApoapsis()
+
+      The time until the next apoapsis, in seconds. Not a number for a parabolic or
+      hyperbolic orbit.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getTimeToPeriapsis()
+
+      The time until the next periapsis, in seconds. Negative once a parabolic or
+      hyperbolic orbit has passed it.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getEccentricity()
+
+      The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+      of the orbit.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getInclination()
+
+      The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+      of the orbit, in radians, against the equator of the body being orbited.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getLongitudeOfAscendingNode()
+
+      The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getArgumentOfPeriapsis()
+
+      The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getTrueAnomaly()
+
+      The current `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_,
+      in radians.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getMeanAnomaly()
+
+      The current `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_,
+      in radians.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getEccentricAnomaly()
+
+      The current `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_, in radians. For a hyperbolic orbit, this is the hyperbolic anomaly.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSemiLatusRectum()
+
+      The `semi-latus rectum <https://en.wikipedia.org/wiki/Conic_section#Conic_parameters>`_ of the orbit, in meters.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getSpecificAngularMomentum()
+
+      The specific angular momentum of the orbit, in :math:`\mathrm{m^{2}/s}`.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: trueAnomalyAtUT(ut)
+
+      The true anomaly at the given time, in radians.
+
+      :param ut: Universal time, in seconds.
+      :type ut: ``number``
+      :rtype: ``number``
+   
+
+   .. method:: meanAnomalyAtUT(ut)
+
+      The mean anomaly at the given time, in radians.
+
+      :param ut: Universal time, in seconds.
+      :type ut: ``number``
+      :rtype: ``number``
+   
+
+   .. method:: eccentricAnomalyAtUT(ut)
+
+      The eccentric anomaly at the given time, in radians. For a hyperbolic orbit, this
+      is the hyperbolic anomaly.
+
+      :param ut: Universal time, in seconds.
+      :type ut: ``number``
+      :rtype: ``number``
+   
+
+   .. method:: utAtTrueAnomaly(trueAnomaly)
+
+      The next universal time, from now, at which the orbit reaches the given true
+      anomaly, in seconds. Not a number if it never does, such as beyond the asymptote of
+      a hyperbolic orbit.
+
+      :param trueAnomaly: True anomaly, in radians.
+      :type trueAnomaly: ``number``
+      :rtype: ``number``
+   
+
+   .. method:: trueAnomalyAtRadius(radius)
+
+      The true anomaly at which the orbit reaches the given distance from the center of
+      the body, in radians, between 0 and :math:`\pi`. Not a number if the orbit
+      never reaches it.
+
+      :param radius: The distance from the center of the body, in meters.
+      :type radius: ``number``
+      :rtype: ``number``
+   
+
+      .. note::
+
+         The orbit also reaches the distance at the negative of this anomaly. Zero for a
+         circular orbit at the distance. Throws an exception if the distance is not
+         positive.
+
+   .. method:: radiusAt(ut)
+
+      The distance from the center of the body being orbited at the given time, in
+      meters.
+
+      :param ut: Universal time, in seconds.
+      :type ut: ``number``
+      :rtype: ``number``
+   
+
+   .. method:: speedAt(ut)
+
+      The orbital speed at the given time, in meters per second.
+
+      :param ut: Universal time, in seconds.
+      :type ut: ``number``
+      :rtype: ``number``
+   
+
+   .. method:: positionAt(ut, referenceFrame)
+
+      The position on the orbit at the given time, in meters, relative to where the body
+      being orbited is now.
+
+      :param ut: Universal time, in seconds.
+      :type ut: ``number``
+      :param referenceFrame: The reference frame of the position.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: velocityAt(ut, referenceFrame)
+
+      The orbital velocity at the given time, in meters per second, relative to the body
+      being orbited and along the axes of the given frame.
+
+      :param ut: Universal time, in seconds.
+      :type ut: ``number``
+      :param referenceFrame: The reference frame of the velocity.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: ``[number, number, number]``
+   
+
+   .. method:: relativeInclination(orbit)
+
+      The inclination of the orbit relative to another orbit, in radians.
+
+      :param orbit: The other orbit.
+      :type orbit: :class:`KSA.Orbit`
+      :rtype: ``number``
+   
+
+   .. method:: trueAnomalyAtAN(orbit)
+
+      The true anomaly of the ascending node with another orbit, in radians.
+
+      :param orbit: The other orbit.
+      :type orbit: :class:`KSA.Orbit`
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Throws an exception if the orbits are around different bodies.
+
+   .. method:: trueAnomalyAtDN(orbit)
+
+      The true anomaly of the descending node with another orbit, in radians.
+
+      :param orbit: The other orbit.
+      :type orbit: :class:`KSA.Orbit`
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Throws an exception if the orbits are around different bodies.
+
+   .. method:: getTimeOfClosestApproach()
+
+      The universal time of the closest approach on this orbit to the vehicle's target,
+      in seconds. Not a number if there is none.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+         worker thread, so a new target shows here shortly after it is set.
+
+   .. method:: getDistanceAtClosestApproach()
+
+      The distance at the closest approach on this orbit to the vehicle's target, in
+      meters. Not a number if there is none.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+      .. note::
+
+         Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+         worker thread, so a new target shows here shortly after it is set.
+
+   .. method:: getStartUT()
+
+      The universal time at which this orbit starts, in seconds. Not a number for the
+      orbit of a body.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getEndUT()
+
+      The universal time at which this orbit ends, in seconds. Infinite for an orbit that
+      does not end, such as the orbit of a body.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getEndTransition()
+
+      How the orbit ends.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.OrbitTransition`
+   
+
+   .. method:: getTimeToSOIChange()
+
+      The time until the orbit enters or leaves a sphere of influence, in seconds. Not a
+      number if it does neither.
+
+      :Property: Read-only, cannot be set
+      :rtype: ``number``
+   
+
+   .. method:: getNextOrbit()
+
+      The orbit that follows this one after it enters or leaves a sphere of influence, or
+      ``null`` if there is none.
+
+      :Property: Read-only, cannot be set
+      :rtype: :class:`KSA.Orbit` or ``null``
+   
+
+   .. function:: createFromElements(body, semiMajorAxis, eccentricity, inclination, longitudeOfAscendingNode, argumentOfPeriapsis, meanAnomalyAtEpoch, epoch)
+
+      Create the orbit with the given elements around a body. The angles are those of
+      :class:`KSA.Orbit`.
+
+      :param body: The body being orbited.
+      :type body: :class:`KSA.Body`
+      :param semiMajorAxis: The semi-major axis, in meters. Negative or positive for a hyperbolic orbit.
+      :type semiMajorAxis: ``number``
+      :param eccentricity: The eccentricity. Below 1 for an elliptical orbit, and above 1 for a hyperbolic one.
+      :type eccentricity: ``number``
+      :param inclination: The inclination, in radians.
+      :type inclination: ``number``
+      :param longitudeOfAscendingNode: The longitude of the ascending node, in radians.
+      :type longitudeOfAscendingNode: ``number``
+      :param argumentOfPeriapsis: The argument of periapsis, in radians.
+      :type argumentOfPeriapsis: ``number``
+      :param meanAnomalyAtEpoch: The mean anomaly at the epoch, in radians.
+      :type meanAnomalyAtEpoch: ``number``
+      :param epoch: The universal time of the epoch, in seconds.
+      :type epoch: ``number``
+      :rtype: :class:`KSA.Orbit`
+   
+
+      .. note::
+
+         The orbit is a single conic around *body*, with no
+         :meth:`KSA.Orbit.getNextOrbit`. It is held until :meth:`KSA.Orbit.remove` is called on it, or
+         the client that created it disconnects.
+
+   .. function:: createFromPositionAndVelocity(body, position, velocity, ut, referenceFrame)
+
+      Create the orbit around a body through the given position and velocity.
+
+      :param body: The body being orbited.
+      :type body: :class:`KSA.Body`
+      :param position: The position, in meters, relative to where the body is now.
+      :type position: ``[number, number, number]``
+      :param velocity: The velocity, in meters per second.
+      :type velocity: ``[number, number, number]``
+      :param ut: The universal time of the position and velocity, in seconds.
+      :type ut: ``number``
+      :param referenceFrame: The reference frame of the position and velocity.
+      :type referenceFrame: :class:`KSA.ReferenceFrame`
+      :rtype: :class:`KSA.Orbit`
+   
+
+      .. note::
+
+         The orbit is a single conic around *body*, with no
+         :meth:`KSA.Orbit.getNextOrbit`. It is held until :meth:`KSA.Orbit.remove` is called on it, or
+         the client that created it disconnects.
+
+   .. method:: remove()
+
+      Remove an orbit created by :meth:`KSA.Orbit.createFromElements` or
+      :meth:`KSA.Orbit.createFromPositionAndVelocity`.
+
+   
+
+      .. note::
+
+         Throws an exception if the orbit was not created by a client.
+
+
+
+.. class:: OrbitTransition
+
+   How an orbit ends. See :meth:`KSA.Orbit.getEndTransition`.
+
+
+   .. attribute:: none
+
+      The orbit does not end.
+
+
+   .. attribute:: encounter
+
+      The orbit enters the sphere of influence of another body.
+
+
+   .. attribute:: escape
+
+      The orbit leaves the sphere of influence of the body being orbited.
+
+
+   .. attribute:: impact
+
+      The orbit hits the surface of the body being orbited.
+
+
+   .. attribute:: burn
+
+      The orbit ends at a planned burn.

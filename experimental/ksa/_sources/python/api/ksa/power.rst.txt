@@ -164,6 +164,259 @@ Power
       :rtype: float
    
 
+   .. attribute:: has_power_switch
+
+      Whether the part has a power switch, as a probe core does.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: mode
+
+      The setting of the power switch.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`PowerMode`
+   
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+   .. attribute:: standby_in_storms
+
+      Whether the part goes on standby, drawing no power, while a radiation storm is under
+      way at the vehicle.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+      .. note::
+
+         The game takes a storm of level 1 or worse on the S scale, as
+         :attr:`Flight.radiation_storm_level` gives. Throws an exception if the part has
+         no power switch.
+
+   .. attribute:: status
+
+      The power status of the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`PowerStatus`
+   
+
+      .. note::
+
+         Throws an exception if the part has no power switch.
+
+
+
+.. class:: PowerMode
+
+   The setting of a power switch. See :attr:`PowerConsumer.mode`.
+
+
+   .. data:: off
+
+      Switched off.
+
+
+   .. data:: auto
+
+      On standby while another control module flies the vehicle, and on when none can.
+
+
+   .. data:: on
+
+      Switched on.
+
+
+
+.. class:: PowerStatus
+
+   The power status of a part with a power switch. See :attr:`PowerConsumer.status`.
+
+
+   .. data:: off
+
+      Switched off.
+
+
+   .. data:: standby
+
+      On standby, while another control module flies the vehicle or a radiation storm is under way.
+
+
+   .. data:: rebooting
+
+      Rebooting after a radiation upset.
+
+
+   .. data:: on
+
+      On, with power.
+
+
+   .. data:: low
+
+      On, with power for less than five minutes.
+
+
+   .. data:: out
+
+      Out of power.
+
+
+   .. data:: failed
+
+      Failed from its radiation dose.
+
+
+
+.. class:: PowerForecast
+
+   The charge, draw and supply of the electrical circuit a part is on, and how long its
+   batteries last. Obtained from :attr:`Part.power_forecast`.
+
+   .. note::
+
+      A circuit is the parts joined by connections that carry electricity. This is the
+      forecast the game shows for a probe core.
+
+   .. attribute:: has_battery
+
+      Whether the circuit has a battery.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: charge
+
+      The energy stored in the circuit's batteries, in joules.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: draw
+
+      The power the parts on the circuit draw, in watts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: supply
+
+      The power the solar panels and generators on the circuit supply, in watts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: time_left
+
+      The time until the batteries run out, in seconds. Infinite while the supply meets
+      the draw, and zero when the batteries are empty or there are none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: Avionics
+
+   The avionics of a probe core, which radiation wears out and upsets. Obtained from
+   :attr:`Part.avionics` or :attr:`Vehicle.avionics`.
+
+   .. note::
+
+      The avionics take a dose only while :attr:`radiation_enabled` is true. Switched
+      off or on standby, they take half the dose and no upsets.
+
+   .. attribute:: part
+
+      The part the avionics are in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: health
+
+      The health of the avionics.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`AvionicsHealth`
+   
+
+   .. attribute:: dose
+
+      The radiation dose the avionics have taken, in grays of silicon.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: tolerance
+
+      The dose at which the avionics fail, in grays of silicon.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: dose_rate
+
+      The rate at which the avionics take a dose, in grays of silicon per second,
+      averaged over about an hour. Not a number until the avionics have taken a dose.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: time_left
+
+      The time until the avionics fail at :attr:`Avionics.dose_rate`, in seconds. Infinite
+      while they take no dose, and zero once they have failed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: rebooting
+
+      Whether the avionics are rebooting after a radiation upset.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+
+
+.. class:: AvionicsHealth
+
+   The health of avionics. See :attr:`Avionics.health`.
+
+
+   .. data:: ok
+
+      Working.
+
+
+   .. data:: worn
+
+      Working, with a dose of at least four fifths of the tolerance.
+
+
+   .. data:: failed
+
+      Failed for good, at the tolerance.
+
 
 
 .. class:: Light
