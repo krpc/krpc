@@ -40,8 +40,11 @@ A release preparation pull request takes `main` from the version being released 
    assembly version of `KRPC.Core.dll`, which every game mod ships.
 3. `tools/release/02-bump-version.py` - sets `version` in `config.bzl` to the next version to work
    towards, and commits. Builds from `main` are then stamped as pre-releases of that version.
-4. Push the branch, open the pull request, and add it to the merge queue once its checks pass. A
-   pull request merged in the meantime lands its fragment on the next version.
+4. Push the branch, open the pull request, and run every CI job on it by hand:
+   `gh workflow run ci.yml --ref release-vx.y.z`. The pull request and the merge queue skip the
+   daily jobs, such as Windows and the CMake and vcpkg builds. Add the pull request to the merge
+   queue once its checks and the manual run pass. A pull request merged in the meantime lands its
+   fragment on the next version.
 5. Once it merges, check out the fold commit, the parent of the bump commit:
    `git checkout <bump commit>^`. The remaining steps run from there.
 6. `tools/release/10-preflight.py` - checks the release can start, and publishes nothing, so run

@@ -8,7 +8,9 @@ configs of `.bazelrc`.
 
 | Workflow | Runs on | Does |
 | --- | --- | --- |
-| `ci` | pull request, merge queue, push to `main`, manual | Builds and tests everything, and keeps the caches |
+| `ci` | pull request, merge queue, push to `main`, manual, `daily` | Builds and tests everything, and keeps the caches |
+| `daily` | 04:37 UTC each day, manual | Runs `ci` on `main` with the daily jobs |
+| `prune-caches` | push to `main`, manual | Deletes the caches no later run can restore |
 | `flaky-tests` | completion of a `ci` run | Comments on the pull request when a test passed only on a retry |
 | `changelog-hints` | pull request (`pull_request_target`) | Comments on the pull request about its changelog fragment |
 | `docs` | push to `main`, `v*` tag | Publishes the documentation site to `gh-pages` |
@@ -44,12 +46,13 @@ Each component is built and tested in a job of its own, on Linux and on Windows.
 component then shows as the job that failed, and the jobs run in parallel. Jobs that differ only
 in their Bazel targets and artifact are entries of the `linux` and `windows` matrices, a few
 lines each. A job stays outside a matrix when it produces more than one artifact, runs something
-other than Bazel, saves a cache on a push, or is named in another job's `needs`, which cannot
-address a single matrix entry.
+other than Bazel, saves a cache on a push, runs on other events than the matrix, or is named in
+another job's `needs`. A job-level `if` and `needs` cannot address a single matrix entry.
 
-The doc examples are compiled and clang-tidied in Linux jobs of their own, and compiled on
-Windows in `build-docs-examples`. The C++ examples take most of the Linux time, as each parses
-every generated service header. `test-docs-examples` takes the other languages.
+The doc examples are compiled and clang-tidied in Linux jobs of their own. The C++ examples take
+most of that time, as each parses every generated service header. `build-docs-examples` compiles
+the other languages on Linux, and every language on Windows. `test-docs-clangtidy-cnano`
+clang-tidies the C-nano examples.
 
 `doc/BUILD.bazel` splits the C++ examples into `CPP_SHARDS` shards, each a job,
 `test-docs-examples-cpp-<n>`. A job builds its shard's `compile-scripts-cpp-<n>` and tests its
@@ -72,6 +75,31 @@ Windows runs everything Linux runs, except these:
   which shows the client compiles there.
 
 Releases are built on Linux, so only the Linux jobs upload artifacts.
+
+### Daily Jobs
+
+Some jobs run once a day, and in a manual run, but not for a pull request or in the merge queue:
+
+- **The Windows jobs.** They check on Windows what the Linux jobs check, so a failure only
+  Windows catches is rare enough to find a day later.
+- **The jobs that check what only a release uses.** These are the CMake and vcpkg consumer
+  builds and `test-tool-packages`.
+- **`linux-build-benchmarks`.** The benchmarks only need to keep compiling.
+
+The daily jobs make up much of a full run's job time, which the concurrency limit (see
+[Limits](#limits)) turns into wall time. A release runs them by hand before its release
+preparation pull request merges, as the release guides say.
+
+`daily` calls `ci` as a reusable workflow with the `daily` input, which the daily jobs' conditions
+test. A scheduled run calls `ci` unless the last daily run that passed it tested the commit
+`main` is at, and is under five days old (`tools/ci/daily_due.py`). A failed or cancelled run
+does not count, so a red commit runs again the next day. The five days keep the daily jobs'
+caches inside the 7-day expiry (see [Caches](#caches)), with a day to spare for a late or dropped
+scheduled run.
+
+A manual run of `daily` always calls `ci`. A manual run of `ci` on a branch also runs the daily
+jobs, which tests a change to them before it merges. GitHub emails a failed scheduled run to the
+last person to change its schedule.
 
 ### Linux
 
@@ -97,7 +125,12 @@ causes in fastbuild.
 
 ### Limits
 
-The workflow token is read-only. A new push to a pull request cancels the run it superseded.
+The workflow token is read-only, except in `prune-caches`, which deletes caches. It is a
+workflow of its own, as a workflow that `daily` calls cannot be granted more than `daily` has.
+
+A new push to a pull request cancels the run it superseded. The concurrency group is the pull
+request's head ref. Merge queue runs, pushes and manual runs have none, and take the run id, so
+nothing cancels them.
 Every job times out after 30 minutes, about twice the longest job on a cache miss, so a hung job
 gives its runner back instead of holding it for six hours.
 
@@ -119,6 +152,8 @@ all-digit sha as a number. `KRPC.Core` takes `core_version`, which the action le
 and Windows runners with Python and .NET but no Bazel. `tools/ci/smoke_test_tools.py` then runs
 each krpctools command once, as a user would. It checks what the Bazel tests cannot: the package
 installs, its entry points run, and the bundled .NET tools start on the runner's dotnet host.
+The conformance command drives the Python client's testee, whose protobuf module the job
+generates with `grpcio-tools`.
 
 ### The Solution Build
 
@@ -154,7 +189,19 @@ every later Bazel command in a job uses it. Both include `ci`. Keeping the setti
 GitHub evicts a cache unused for 7 days, and the least recently used ones over the repository's
 10 GB. A cache saved by a pull request run is visible only to that pull request, and one saved
 by a merge queue run is lost with the queue's branch. So the caches later runs restore are saved
-by the push run on `main`, which builds only to fill a missing cache.
+by the push run on `main`, which builds only to fill a missing cache. Each of its jobs checks its
+keys without restoring them. The Bazel download cache is the exception: it is restored, as
+computing the C++ disk cache key fetches repositories. The daily jobs run on `main` only in the
+daily run, which saves their caches.
+
+The daily jobs' caches are touched once a day at most, so they are the least recently used, and
+the first evicted. Two things keep them:
+
+- **`prune-caches`.** A push to `main` deletes the caches of closed pull requests and of deleted
+  branches, such as merge queue branches (`tools/ci/prune_caches.py`). No later run can restore
+  them, but they count towards the 10 GB.
+- **The five-day rule.** A daily run calls `ci` at least every five days, even with `main`
+  unchanged.
 
 GitHub updates its runner images often, the Windows image about once a week. A cache keyed on
 the image version would then go stale every week. A vcpkg cache miss rebuilds protobuf from
@@ -271,10 +318,15 @@ cancel each other, as a release moves a tag and `main` together and both push to
   its package's suite. A new suite goes in `//:test` and in a job.
 - A new job goes in the `needs` of `all-checks-passed`. A new artifact goes in the list in
   `copy-artifacts`.
-- A cache that later runs restore must be saved by the push run on `main`.
+- A cache that later runs restore must be saved by the push run on `main`, or for a daily job
+  by the daily run.
 - `pull_request_target` and `workflow_run` workflows run from `main`, so `changelog-hints` and
   `flaky-tests` cannot be tested by the pull request that changes them. Test them after merge.
-- The push run's cache jobs and `copy-artifacts` also run only after merge.
+- The push run's cache jobs, `copy-artifacts` and `prune-caches` also run only after merge.
+  `prune-caches` can be run by hand.
+- A Windows job, or one whose checks can wait a day, takes the condition of the other daily jobs.
+- `flaky-tests` reports the flakes of a pull request or merge queue run. A daily run's flakes are
+  in the job summaries only.
 - `//tools/ci:test` tests the CI scripts, and runs in `test-build-scripts`.
 - `//tools/deps:test` checks the dependency pins against `tools/deps/deps.toml`, and runs in
   `test-build-scripts`.

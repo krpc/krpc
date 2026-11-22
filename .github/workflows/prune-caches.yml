@@ -1,0 +1,32 @@
+name: prune-caches
+
+# Deletes the caches no later run can restore. A workflow of its own, so ci
+# keeps the read-only token the daily workflow's call to it requires.
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+  pull-requests: read
+
+# Runs one at a time, as two would list and delete the same caches
+concurrency:
+  group: prune-caches
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+        with:
+          sparse-checkout: tools/ci
+      - name: prune
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 tools/ci/prune_caches.py --repo "$GITHUB_REPOSITORY"

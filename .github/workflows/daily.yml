@@ -1,0 +1,40 @@
+name: daily
+
+# Runs ci with its daily jobs. tools/ci/daily_due.py decides whether a scheduled
+# run calls ci.
+on:
+  schedule:
+    # 04:37 UTC, off peak and away from the start of the hour, which is busiest
+    - cron: "37 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  packages: read
+
+jobs:
+  due:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      due: ${{ github.event_name != 'schedule' || steps.check.outputs.due == 'true' }}
+    steps:
+      - name: checkout
+        if: github.event_name == 'schedule'
+        uses: actions/checkout@v7
+        with:
+          sparse-checkout: tools/ci
+      - name: check
+        id: check
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 tools/ci/daily_due.py --repo "$GITHUB_REPOSITORY" --sha "$GITHUB_SHA"
+
+  ci:
+    needs: due
+    if: needs.due.outputs.due == 'true'
+    uses: ./.github/workflows/ci.yml
+    with:
+      daily: true
