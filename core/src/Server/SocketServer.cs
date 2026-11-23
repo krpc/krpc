@@ -48,6 +48,10 @@ namespace KRPC.Server
         ulong closedClientsBytesRead;
         ulong closedClientsBytesWritten;
 
+        // How long the listener thread waits for a connection before checking for a stop, in
+        // microseconds
+        const int ListenPoll = 100000;
+
         /// <summary>
         /// A server whose log lines start with the given name.
         /// </summary>
@@ -102,10 +106,9 @@ namespace KRPC.Server
             startedEvent.WaitOne (500);
             if (!running) {
                 Logger.WriteLine (logName + ": failed to start server, timed out waiting for the listener to start", Logger.Severity.Error);
-                // Closing the socket ends the listener thread's blocking accept
                 stopping = true;
-                listener.Close ();
                 listenerThread.Join ();
+                listener.Close ();
                 listener = null;
                 throw new ServerException ("Failed to start server, timed out waiting for the listener to start");
             }
@@ -123,9 +126,11 @@ namespace KRPC.Server
                 return;
             Logger.WriteLine (logName + ": stop requested", Logger.Severity.Debug);
             stopping = true;
-            listener.Close ();
-            if (!listenerThread.Join (3000))
+            if (!listenerThread.Join (3000)) {
+                listener.Close ();
                 throw new ServerException ("Failed to stop the listener thread (timed out after 3 seconds)");
+            }
+            listener.Close ();
             lock (acceptedLock) {
                 foreach (var client in accepted)
                     DisconnectClient (client, true);
@@ -225,8 +230,11 @@ namespace KRPC.Server
             try {
                 running = true;
                 startedEvent.Set ();
-                while (true) {
-                    // Block until a client connects to the server
+                // The thread ends before the socket closes. Closing a socket does not end an
+                // accept blocked on it on macOS.
+                while (!stopping) {
+                    if (!listener.Poll (ListenPoll, SelectMode.SelectRead))
+                        continue;
                     var socket = listener.Accept ();
                     var client = Accepted (socket);
                     Logger.WriteLine (logName + ".Listener: client connected (" + client.Address + ")", Logger.Severity.Debug);
@@ -235,8 +243,10 @@ namespace KRPC.Server
                     // Ends the server's wait for calls, so that its update adds the client
                     Arrivals.Set ();
                 }
+                Logger.WriteLine (logName + ".Listener: stopped", Logger.Severity.Debug);
             } catch (Exception e) {
-                // Stop closes the socket to end the blocking accept, which then throws
+                // A stop that timed out closes the socket, which ends a blocked accept on Linux
+                // and Windows
                 if (stopping) {
                     Logger.WriteLine (logName + ".Listener: stopped", Logger.Severity.Debug);
                 } else {
