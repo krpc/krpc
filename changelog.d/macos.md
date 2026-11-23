@@ -21,3 +21,4 @@
 
 - Fix a stream value that arrives during a callback's first call being dropped when the stream
   ends soon after (#1412)
+- Fix closing a connection on macOS hanging while streams are open (#1412)

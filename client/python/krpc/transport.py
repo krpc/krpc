@@ -40,19 +40,21 @@ class MalformedSize(Exception):
     has more than 32 bits."""
 
 
-def _readable(sock: socket.socket, timeout: float | None) -> bool:
-    """Whether the socket has data to read, or has closed, within the timeout. poll takes a
-    socket of any number, where select takes one below FD_SETSIZE. Windows has no poll."""
+def _readable(socks: list[socket.socket], timeout: float | None) -> bool:
+    """Whether one of the sockets has data to read, or has closed, within the timeout. poll
+    takes a socket of any number, where select takes one below FD_SETSIZE. Windows has no
+    poll."""
     if timeout is not None and timeout > _MAXIMUM_WAIT:
         timeout = None
     if not hasattr(select, "poll"):
         try:
-            return bool(select.select([sock], [], [], timeout)[0])
+            return bool(select.select(socks, [], [], timeout)[0])
         except ValueError as exn:
             raise OSError("Connection closed") from exn
     poller = select.poll()
     try:
-        poller.register(sock, select.POLLIN)
+        for sock in socks:
+            poller.register(sock, select.POLLIN)
     except ValueError as exn:
         raise OSError("Connection closed") from exn
     return bool(poller.poll(None if timeout is None else math.ceil(timeout * 1000)))
@@ -68,9 +70,13 @@ class Transport:
         self._buffer = bytearray()
         # When a read last received a byte
         self._progress = time.perf_counter()
+        # A pair of sockets that wakes wait_readable once the transport closes. Shutting
+        # down the socket wakes a poll on it on Linux, but not on macOS.
+        self._wake: tuple[socket.socket, socket.socket] | None = None
 
     def connect(self) -> None:
         self._socket = self._open()
+        self._wake = socket.socketpair()
 
     def _open(self) -> socket.socket:
         """Open a socket to the server."""
@@ -78,6 +84,11 @@ class Transport:
 
     def close(self) -> None:
         """Close the socket. A thread blocked reading it returns."""
+        if self._wake is not None:
+            try:
+                self._wake[1].send(b"\0")
+            except OSError:
+                pass
         if self._socket is not None:
             try:
                 self._socket.shutdown(socket.SHUT_RDWR)
@@ -91,6 +102,7 @@ class Transport:
 
     def __del__(self) -> None:
         self.close()
+        self.release()
 
     def send_request(self, request: KRPC.Request) -> None:
         """Send a Message holding a request"""
@@ -149,7 +161,7 @@ class Transport:
     def _fill(self, timeout: float | None = None) -> None:
         """Read a block from the socket into the buffer. Blocks until at least one
         byte has been read, or raises ReadTimeout once the timeout passes."""
-        if timeout is not None and not _readable(self._socket, timeout):
+        if timeout is not None and not _readable([self._socket], timeout):
             raise ReadTimeout("Timed out waiting for data from the server")
         data = self._socket.recv(_READ_SIZE)
         if not data:
@@ -179,7 +191,15 @@ class Transport:
     def wait_readable(self, timeout: float | None = None) -> bool:
         """Wait until the socket has data to read, or the connection has closed. Returns
         False if neither happens within the timeout."""
-        return _readable(self._socket, timeout)
+        if self._wake is None:
+            return _readable([self._socket], timeout)
+        return _readable([self._socket, self._wake[0]], timeout)
+
+    def release(self) -> None:
+        """Close the sockets that wake wait_readable, once no thread waits in it."""
+        if self._wake is not None:
+            for sock in self._wake:
+                sock.close()
 
     def discard(self, timeout: float) -> None:
         """Read and discard what arrives within the timeout. Raises OSError once the
