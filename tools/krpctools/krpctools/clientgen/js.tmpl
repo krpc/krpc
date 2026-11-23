@@ -9,11 +9,11 @@
 {{ line }}
 {% endfor %}
 {% if members %}
-export interface Service extends RemoteService<"{{ service_name }}"> {
+export interface Service extends {{ remote_service }}<"{{ service_name }}"> {
 {{ members }}
 }
 {% else %}
-export interface Service extends RemoteService<"{{ service_name }}"> {}
+export interface Service extends {{ remote_service }}<"{{ service_name }}"> {}
 {% endif %}
 {% for x in classes %}
 
@@ -21,11 +21,11 @@ export interface Service extends RemoteService<"{{ service_name }}"> {}
 {{ line }}
 {% endfor %}
 {% if x.members %}
-export interface {{ x.name }} extends RemoteObject<"{{ x.brand }}"> {
+export interface {{ x.name }} extends {{ x.base }}<"{{ x.brand }}"> {
 {{ x.members }}
 }
 {% else %}
-export interface {{ x.name }} extends RemoteObject<"{{ x.brand }}"> {}
+export interface {{ x.name }} extends {{ x.base }}<"{{ x.brand }}"> {}
 {% endif %}
 {% endfor %}
 {% for x in enumerations %}
@@ -45,11 +45,11 @@ export const {{ x.name }} = declareEnumeration<Service["{{ x.name }}"]>({{ x.arg
 {{ line }}
 {% endfor %}
 {% if x.fields %}
-export interface {{ x.name }} extends RemoteStruct<"{{ x.brand }}"> {
+export interface {{ x.name }} extends {{ x.base }}<"{{ x.brand }}"> {
 {{ x.fields }}
 }
 {% else %}
-export interface {{ x.name }} extends RemoteStruct<"{{ x.brand }}"> {}
+export interface {{ x.name }} extends {{ x.base }}<"{{ x.brand }}"> {}
 {% endif %}
 {% for line in x.deprecated %}
 {{ line }}
@@ -76,11 +76,11 @@ type ClientService = Service;
  * and a method returns its value. */
 export declare namespace Server {
 {% if server_members %}
-  interface Service extends ServerObject<"{{ service_name }}"> {
+  interface Service extends {{ server_object }}<"{{ service_name }}"> {
 {{ server_members }}
   }
 {% else %}
-  interface Service extends ServerObject<"{{ service_name }}"> {}
+  interface Service extends {{ server_object }}<"{{ service_name }}"> {}
 {% endif %}
 {% for x in server_classes %}
 
@@ -88,11 +88,11 @@ export declare namespace Server {
   {{ line }}
 {% endfor %}
 {% if x.members %}
-  interface {{ x.name }} extends ServerObject<"{{ x.brand }}"> {
+  interface {{ x.name }} extends {{ server_object }}<"{{ x.brand }}"> {
 {{ x.members }}
   }
 {% else %}
-  interface {{ x.name }} extends ServerObject<"{{ x.brand }}"> {}
+  interface {{ x.name }} extends {{ server_object }}<"{{ x.brand }}"> {}
 {% endif %}
 {% endfor %}
 }
