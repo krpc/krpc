@@ -1034,6 +1034,12 @@ Service documentation string.
 
 
 
+.. class:: ClientService
+
+   A class named after the alias of the service in the generated JavaScript.
+
+
+
 .. class:: Connection
 
    A class named Connection.
@@ -1092,6 +1098,12 @@ Service documentation string.
 
 
 
+.. class:: ExtensionMethods
+
+   A class named after the class that reaches a service in the generated C# code.
+
+
+
 .. class:: IConnection
 
    A class named IConnection.
@@ -1141,7 +1153,7 @@ Service documentation string.
 
       A method named after a method of java.lang.Object.
 
-   .. method:: instance_parameters(client: number, connection: number, instance: number, return_value: number, return_value_is_null: number, null: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number): number
+   .. method:: instance_parameters(client: number, connection: number, instance: number, return_value: number, return_value_is_null: number, null: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number, procedure_call: number): number
 
       A method with parameters named after names in the generated code.
 
@@ -1149,7 +1161,13 @@ Service documentation string.
 
       A method named after the Python client package.
 
-   .. staticmethod:: parameters(client: number, connection: number, instance: number, return_value: number, return_value_is_null: number, null: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number): number
+   .. staticmethod:: make_struct(bound: number): TestService.NamesStruct
+
+      A structure with the given value in its field named Bound.
+
+      :param bound: The value.
+
+   .. staticmethod:: parameters(client: number, connection: number, instance: number, return_value: number, return_value_is_null: number, null: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number, procedure_call: number): number
 
       A static method with parameters named after names in the generated code.
 
@@ -1180,6 +1198,12 @@ Service documentation string.
 
       :param x: Defaults to ``0/0``.
       :param y: Defaults to ``krpc.limits.SINT32_MAX``.
+
+
+
+.. class:: None
+
+   A class named after a keyword of Python.
 
 
 
@@ -1222,6 +1246,18 @@ Service documentation string.
 .. class:: Serializable
 
    A class named Serializable.
+
+
+
+.. class:: Server
+
+   A class named after the namespace of server forms in the generated JavaScript.
+
+
+
+.. class:: Service
+
+   A class named after the class a generated module or namespace declares for its service.
 
 
 
@@ -1300,6 +1336,12 @@ Service documentation string.
 
 
       :Attribute: Read-only, cannot be set
+
+
+
+.. class:: TestServiceConnection
+
+   A class named after the connection type of the generated Python module.
 
 
 
@@ -1478,6 +1520,11 @@ Service documentation string.
    .. attribute:: class: number
 
       A value.
+
+
+   .. attribute:: bound: number
+
+      A value named after the class of static methods bound to a connection.
 
 
 

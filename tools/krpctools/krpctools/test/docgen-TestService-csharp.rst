@@ -1183,6 +1183,12 @@
 
 
 
+.. class:: ClientService
+
+   A class named after the alias of the service in the generated JavaScript.
+
+
+
 .. class:: Connection
 
    A class named Connection.
@@ -1250,6 +1256,12 @@
 
 
 
+.. class:: ExtensionMethods_
+
+   A class named after the class that reaches a service in the generated C# code.
+
+
+
 .. class:: IConnection
 
    A class named IConnection.
@@ -1314,11 +1326,12 @@
 
       :Game Scenes: All
 
-   .. function:: int InstanceParameters(int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke)
+   .. function:: int InstanceParameters(int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke, int procedureCall)
 
       A method with parameters named after names in the generated code.
 
       :parameters:
+
 
 
 
@@ -1344,11 +1357,22 @@
 
       :Game Scenes: All
 
-   .. function:: static int Parameters(IConnection connection, int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke)
+   .. function:: static NamesStruct MakeStruct(IConnection connection, int bound)
+
+      A structure with the given value in its field named Bound.
+
+      :parameters:
+
+       * **bound** -- The value.
+
+      :Game Scenes: All
+
+   .. function:: static int Parameters(IConnection connection, int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke, int procedureCall)
 
       A static method with parameters named after names in the generated code.
 
       :parameters:
+
 
 
 
@@ -1410,6 +1434,12 @@
 
 
 
+.. class:: None
+
+   A class named after a keyword of Python.
+
+
+
 .. class:: Object
 
    A class named Object.
@@ -1449,6 +1479,18 @@
 .. class:: Serializable
 
    A class named Serializable.
+
+
+
+.. class:: Server
+
+   A class named after the namespace of server forms in the generated JavaScript.
+
+
+
+.. class:: Service_
+
+   A class named after the class a generated module or namespace declares for its service.
 
 
 
@@ -1577,6 +1619,12 @@
 
 
       :Game Scenes: All
+
+
+
+.. class:: TestServiceConnection
+
+   A class named after the connection type of the generated Python module.
 
 
 
@@ -1733,7 +1781,7 @@
 
    A structure whose fields are named after names in the generated code.
 
-   .. function:: NamesStruct(int other, int result, int java, int krpc, int class_)
+   .. function:: NamesStruct(int other, int result, int java, int krpc, int class_, int bound_)
 
       Construct a NamesStruct from the values of its fields.
 
@@ -1757,6 +1805,10 @@
    .. property:: int Class { get; }
 
       A value.
+
+   .. property:: int Bound_ { get; }
+
+      A value named after the class of static methods bound to a connection.
 
 
 .. struct:: PartlyDeprecatedStruct

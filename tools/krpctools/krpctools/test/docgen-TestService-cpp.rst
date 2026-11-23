@@ -1191,6 +1191,12 @@
 
 
 
+.. class:: ClientService
+
+   A class named after the alias of the service in the generated JavaScript.
+
+
+
 .. class:: Connection
 
    A class named Connection.
@@ -1259,6 +1265,12 @@
 
 
 
+.. class:: ExtensionMethods
+
+   A class named after the class that reaches a service in the generated C# code.
+
+
+
 .. class:: IConnection
 
    A class named IConnection.
@@ -1323,11 +1335,12 @@
 
    
 
-   .. function:: int32_t instance_parameters(int32_t client, int32_t connection, int32_t instance, int32_t return_value, int32_t return_value_is_null, int32_t null, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke)
+   .. function:: int32_t instance_parameters(int32_t client, int32_t connection, int32_t instance, int32_t return_value, int32_t return_value_is_null, int32_t null, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke, int32_t procedure_call)
 
       A method with parameters named after names in the generated code.
 
       :Parameters:
+
 
 
 
@@ -1353,11 +1366,22 @@
 
    
 
-   .. function:: static int32_t parameters(krpc::Connection& connection, int32_t client, int32_t connection, int32_t instance, int32_t return_value, int32_t return_value_is_null, int32_t null, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke)
+   .. function:: static NamesStruct make_struct(krpc::Connection& connection, int32_t bound)
+
+      A structure with the given value in its field named Bound.
+
+      :Parameters:
+
+       * **bound** -- The value.
+
+   
+
+   .. function:: static int32_t parameters(krpc::Connection& connection, int32_t client, int32_t connection, int32_t instance, int32_t return_value, int32_t return_value_is_null, int32_t null, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke, int32_t procedure_call)
 
       A static method with parameters named after names in the generated code.
 
       :Parameters:
+
 
 
 
@@ -1421,6 +1445,12 @@
 
 
 
+.. class:: None
+
+   A class named after a keyword of Python.
+
+
+
 .. class:: Object
 
    A class named Object.
@@ -1460,6 +1490,18 @@
 .. class:: Serializable
 
    A class named Serializable.
+
+
+
+.. class:: Server
+
+   A class named after the namespace of server forms in the generated JavaScript.
+
+
+
+.. class:: Service
+
+   A class named after the class a generated module or namespace declares for its service.
 
 
 
@@ -1590,6 +1632,12 @@
 
 
    
+
+
+
+.. class:: TestServiceConnection
+
+   A class named after the connection type of the generated Python module.
 
 
 
@@ -1769,6 +1817,10 @@
    .. member:: int32_t class
 
       A value.
+
+   .. member:: int32_t bound
+
+      A value named after the class of static methods bound to a connection.
 
 
 .. namespace:: krpc::services::TestService

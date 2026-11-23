@@ -1404,6 +1404,13 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void TestEscapedStructField ()
+        {
+            // The generated property of the field Bound is Bound_
+            Assert.AreEqual (3, Evaluate (() => Names.MakeStruct (Connection, 3).Bound_));
+        }
+
+        [Test]
         public void TestNestedStructField ()
         {
             var testService = Connection.TestService ();

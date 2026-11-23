@@ -253,6 +253,7 @@ py_binary(
 test_suite(
     name = "test",
     tests = [
+        ":client-names-test",
         ":cnano-prefixes-test",
         ":conformance-test",
         ":krpctoolstest",
@@ -350,6 +351,38 @@ native_py_test(
         "//client/conformance:names.json",
     ],
     main = "naming_test.py",
+    deps = [
+        ":krpctools_lib",
+        "@krpc_pypi//pytest",
+    ],
+)
+
+# The copies of each client's escaped names, against the lists clientgen escapes with
+native_py_test(
+    name = "client-names-test",
+    size = "small",
+    srcs = ["client_names_test.py"],
+    args = [
+        "csharp-compiler=$(rootpath //client/csharp:src/FunctionCompiler.cs)",
+        "csharp-test=$(rootpath //client/csharp:test/ConnectionNamesTest.cs)",
+        "js-conventions=$(rootpath //client/js:conformance/conventions.json)",
+        "js-naming=$(rootpath //client/js:src/naming.ts)",
+        "lua-connection=$(rootpath //client/lua:krpc/connection.lua)",
+        "lua-conventions=$(rootpath //client/lua:conformance/conventions.json)",
+        "lua-service=$(rootpath //client/lua:krpc/service.lua)",
+        "python-conventions=$(rootpath //client/python:conformance/conventions.json)",
+    ],
+    data = [
+        "//client/csharp:src/FunctionCompiler.cs",
+        "//client/csharp:test/ConnectionNamesTest.cs",
+        "//client/js:conformance/conventions.json",
+        "//client/js:src/naming.ts",
+        "//client/lua:conformance/conventions.json",
+        "//client/lua:krpc/connection.lua",
+        "//client/lua:krpc/service.lua",
+        "//client/python:conformance/conventions.json",
+    ],
+    main = "client_names_test.py",
     deps = [
         ":krpctools_lib",
         "@krpc_pypi//pytest",

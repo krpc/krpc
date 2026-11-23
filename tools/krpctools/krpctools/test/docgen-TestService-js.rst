@@ -1469,6 +1469,12 @@ Service documentation string.
 
 
 
+.. class:: ClientService_
+
+   A class named after the alias of the service in the generated JavaScript.
+
+
+
 .. class:: Connection
 
    A class named Connection.
@@ -1539,6 +1545,12 @@ Service documentation string.
 
 
 
+.. class:: ExtensionMethods
+
+   A class named after the class that reaches a service in the generated C# code.
+
+
+
 .. class:: IConnection
 
    A class named IConnection.
@@ -1603,7 +1615,7 @@ Service documentation string.
       :rtype: ``number``
    
 
-   .. method:: instanceParameters(client, connection, instance, returnValue, returnValueIsNull, null, krpc, java, com, org, nameof, self, cls, invoke)
+   .. method:: instanceParameters(client, connection, instance, returnValue, returnValueIsNull, null, krpc, java, com, org, nameof, self, cls, invoke, procedureCall)
 
       A method with parameters named after names in the generated code.
 
@@ -1635,6 +1647,8 @@ Service documentation string.
       :type cls: ``number``
       :param invoke:
       :type invoke: ``number``
+      :param procedureCall:
+      :type procedureCall: ``number``
       :rtype: ``number``
    
 
@@ -1645,7 +1659,16 @@ Service documentation string.
       :rtype: ``number``
    
 
-   .. function:: parameters(client, connection, instance, returnValue, returnValueIsNull, null, krpc, java, com, org, nameof, self, cls, invoke)
+   .. function:: makeStruct(bound)
+
+      A structure with the given value in its field named Bound.
+
+      :param bound: The value.
+      :type bound: ``number``
+      :rtype: :class:`TestService.NamesStruct`
+   
+
+   .. function:: parameters(client, connection, instance, returnValue, returnValueIsNull, null, krpc, java, com, org, nameof, self, cls, invoke, procedureCall)
 
       A static method with parameters named after names in the generated code.
 
@@ -1677,6 +1700,8 @@ Service documentation string.
       :type cls: ``number``
       :param invoke:
       :type invoke: ``number``
+      :param procedureCall:
+      :type procedureCall: ``number``
       :rtype: ``number``
    
 
@@ -1728,6 +1753,12 @@ Service documentation string.
 
 
 
+.. class:: None
+
+   A class named after a keyword of Python.
+
+
+
 .. class:: Object
 
    A class named Object.
@@ -1769,6 +1800,18 @@ Service documentation string.
 .. class:: Serializable
 
    A class named Serializable.
+
+
+
+.. class:: Server_
+
+   A class named after the namespace of server forms in the generated JavaScript.
+
+
+
+.. class:: Service_
+
+   A class named after the class a generated module or namespace declares for its service.
 
 
 
@@ -1907,6 +1950,12 @@ Service documentation string.
       :Property: Read-only, cannot be set
       :rtype: ``string``
    
+
+
+
+.. class:: TestServiceConnection
+
+   A class named after the connection type of the generated Python module.
 
 
 
@@ -2091,6 +2140,12 @@ Service documentation string.
    .. attribute:: class
 
       A value.
+
+      :Type: ``number``
+
+   .. attribute:: bound
+
+      A value named after the class of static methods bound to a connection.
 
       :Type: ``number``
 

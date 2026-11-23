@@ -3,6 +3,46 @@ using KRPC.Service.Attributes;
 namespace TestServer.Names
 {
     /// <summary>
+    /// A class named after the class a generated module or namespace declares for its service.
+    /// </summary>
+    [KRPCClass (Service = "TestService")]
+    public sealed class Service
+    {
+    }
+
+    /// <summary>
+    /// A class named after the class that reaches a service in the generated C# code.
+    /// </summary>
+    [KRPCClass (Service = "TestService")]
+    public sealed class ExtensionMethods
+    {
+    }
+
+    /// <summary>
+    /// A class named after the namespace of server forms in the generated JavaScript.
+    /// </summary>
+    [KRPCClass (Service = "TestService")]
+    public sealed class Server
+    {
+    }
+
+    /// <summary>
+    /// A class named after the alias of the service in the generated JavaScript.
+    /// </summary>
+    [KRPCClass (Service = "TestService")]
+    public sealed class ClientService
+    {
+    }
+
+    /// <summary>
+    /// A class named after the connection type of the generated Python module.
+    /// </summary>
+    [KRPCClass (Service = "TestService")]
+    public sealed class TestServiceConnection
+    {
+    }
+
+    /// <summary>
     /// A class named Client.
     /// </summary>
     [KRPCClass (Service = "TestService")]
@@ -171,6 +211,14 @@ namespace TestServer.Names
     }
 
     /// <summary>
+    /// A class named after a keyword of Python.
+    /// </summary>
+    [KRPCClass (Service = "TestService")]
+    public sealed class None
+    {
+    }
+
+    /// <summary>
     /// A class named ClassBase.
     /// </summary>
     [KRPCClass (Service = "TestService")]
@@ -248,6 +296,16 @@ namespace TestServer.Names
         }
 
         /// <summary>
+        /// A structure with the given value in its field named Bound.
+        /// </summary>
+        /// <param name="bound">The value.</param>
+        [KRPCMethod]
+        public static NamesStruct MakeStruct (int bound)
+        {
+            return new NamesStruct { Bound = bound };
+        }
+
+        /// <summary>
         /// A static method named after the method that binds the static methods of a class
         /// to a connection.
         /// </summary>
@@ -297,18 +355,18 @@ namespace TestServer.Names
         /// A static method with parameters named after names in the generated code.
         /// </summary>
         [KRPCMethod]
-        public static int Parameters (int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke)
+        public static int Parameters (int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke, int procedureCall)
         {
-            return client + connection + instance + returnValue + returnValueIsNull + NULL + krpc + java + com + org + nameof + self + cls + invoke;
+            return client + connection + instance + returnValue + returnValueIsNull + NULL + krpc + java + com + org + nameof + self + cls + invoke + procedureCall;
         }
 
         /// <summary>
         /// A method with parameters named after names in the generated code.
         /// </summary>
         [KRPCMethod]
-        public int InstanceParameters (int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke)
+        public int InstanceParameters (int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke, int procedureCall)
         {
-            return client + connection + instance + returnValue + returnValueIsNull + NULL + krpc + java + com + org + nameof + self + cls + invoke;
+            return client + connection + instance + returnValue + returnValueIsNull + NULL + krpc + java + com + org + nameof + self + cls + invoke + procedureCall;
         }
     }
 
@@ -347,6 +405,12 @@ namespace TestServer.Names
         /// </summary>
         [KRPCProperty]
         public int Class { get; set; }
+
+        /// <summary>
+        /// A value named after the class of static methods bound to a connection.
+        /// </summary>
+        [KRPCProperty]
+        public int Bound { get; set; }
     }
 
     /// <summary>

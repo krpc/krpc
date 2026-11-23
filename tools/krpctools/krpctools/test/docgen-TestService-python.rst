@@ -1343,6 +1343,12 @@ Service documentation string.
 
 
 
+.. class:: ClientService
+
+   A class named after the alias of the service in the generated JavaScript.
+
+
+
 .. class:: Connection
 
    A class named Connection.
@@ -1412,6 +1418,12 @@ Service documentation string.
 
 
 
+.. class:: ExtensionMethods
+
+   A class named after the class that reaches a service in the generated C# code.
+
+
+
 .. class:: IConnection
 
    A class named IConnection.
@@ -1476,7 +1488,7 @@ Service documentation string.
       :rtype: int
    
 
-   .. method:: instance_parameters(client, connection, instance, return_value, return_value_is_null, null, krpc, java, com, org, nameof, self, cls, invoke)
+   .. method:: instance_parameters(client, connection, instance, return_value, return_value_is_null, null, krpc, java, com, org, nameof, self, cls, invoke, procedure_call)
 
       A method with parameters named after names in the generated code.
 
@@ -1494,6 +1506,7 @@ Service documentation string.
       :param int self:
       :param int cls:
       :param int invoke:
+      :param int procedure_call:
       :rtype: int
    
 
@@ -1504,7 +1517,15 @@ Service documentation string.
       :rtype: int
    
 
-   .. staticmethod:: parameters(client, connection, instance, return_value, return_value_is_null, null, krpc, java, com, org, nameof, self, cls, invoke)
+   .. staticmethod:: make_struct(bound)
+
+      A structure with the given value in its field named Bound.
+
+      :param int bound: The value.
+      :rtype: :class:`NamesStruct`
+   
+
+   .. staticmethod:: parameters(client, connection, instance, return_value, return_value_is_null, null, krpc, java, com, org, nameof, self, cls, invoke, procedure_call)
 
       A static method with parameters named after names in the generated code.
 
@@ -1522,6 +1543,7 @@ Service documentation string.
       :param int self:
       :param int cls:
       :param int invoke:
+      :param int procedure_call:
       :rtype: int
    
 
@@ -1568,6 +1590,12 @@ Service documentation string.
 
 
 
+.. class:: None_
+
+   A class named after a keyword of Python.
+
+
+
 .. class:: Object
 
    A class named Object.
@@ -1609,6 +1637,18 @@ Service documentation string.
 .. class:: Serializable
 
    A class named Serializable.
+
+
+
+.. class:: Server
+
+   A class named after the namespace of server forms in the generated JavaScript.
+
+
+
+.. class:: Service
+
+   A class named after the class a generated module or namespace declares for its service.
 
 
 
@@ -1731,6 +1771,12 @@ Service documentation string.
       :Attribute: Read-only, cannot be set
       :rtype: str
    
+
+
+
+.. class:: TestServiceConnection_
+
+   A class named after the connection type of the generated Python module.
 
 
 
@@ -1883,7 +1929,7 @@ Service documentation string.
       :rtype: int
 
 
-.. class:: NamesStruct(other, result, java, krpc, class)
+.. class:: NamesStruct(other, result, java, krpc, class, bound)
 
    A structure whose fields are named after names in the generated code.
 
@@ -1915,6 +1961,12 @@ Service documentation string.
    .. attribute:: class
 
       A value.
+
+      :rtype: int
+
+   .. attribute:: bound
+
+      A value named after the class of static methods bound to a connection.
 
       :rtype: int
 

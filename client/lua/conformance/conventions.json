@@ -17,6 +17,18 @@
   "naming": {
     "case": "snake",
     "accessors": true,
-    "exceptions": false
+    "exceptions": false,
+    "service_escapes": [
+      "cast",
+      "catch",
+      "class_of",
+      "close",
+      "compile",
+      "get_call",
+      "get_call_template",
+      "is_a",
+      "run"
+    ],
+    "type_escapes": []
   }
 }

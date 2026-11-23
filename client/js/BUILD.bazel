@@ -14,11 +14,13 @@ load("//tools/krpctools:clientgen.bzl", "clientgen_js_index", "clientgen_service
 
 exports_files([
     "CHANGELOG.md",
+    "conformance/conventions.json",
     "conformance/expected-failures.txt",
     "conformance/unsupported.txt",
     "package.json",
     "pnpm-lock.yaml",
     "pnpm-workspace.yaml",
+    "src/naming.ts",
 ])
 
 npm_link_all_packages(name = "node_modules")

@@ -885,6 +885,12 @@
 
 
 
+.. type:: public class ClientService
+
+   A class named after the alias of the service in the generated JavaScript.
+
+
+
 .. type:: public class Connection
 
    A class named Connection.
@@ -951,6 +957,12 @@
 
 
 
+.. type:: public class ExtensionMethods
+
+   A class named after the class that reaches a service in the generated C# code.
+
+
+
 .. type:: public class IConnection
 
    A class named IConnection.
@@ -1010,7 +1022,7 @@
 
    
 
-   .. method:: int instanceParameters(int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke)
+   .. method:: int instanceParameters(int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke, int procedureCall)
 
       A method with parameters named after names in the generated code.
 
@@ -1028,6 +1040,7 @@
       :param int self:
       :param int cls:
       :param int invoke:
+      :param int procedureCall:
    
 
    .. method:: int krpc_()
@@ -1036,7 +1049,14 @@
 
    
 
-   .. method:: static int parameters(Connection connection, int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke)
+   .. method:: static NamesStruct makeStruct(Connection connection, int bound)
+
+      A structure with the given value in its field named Bound.
+
+      :param int bound: The value.
+   
+
+   .. method:: static int parameters(Connection connection, int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke, int procedureCall)
 
       A static method with parameters named after names in the generated code.
 
@@ -1054,6 +1074,7 @@
       :param int self:
       :param int cls:
       :param int invoke:
+      :param int procedureCall:
    
 
    .. method:: int getProperty()
@@ -1093,6 +1114,12 @@
       :param double x:
       :param int y:
    
+
+
+
+.. type:: public class None
+
+   A class named after a keyword of Python.
 
 
 
@@ -1136,6 +1163,18 @@
 .. type:: public class Serializable
 
    A class named Serializable.
+
+
+
+.. type:: public class Server
+
+   A class named after the namespace of server forms in the generated JavaScript.
+
+
+
+.. type:: public class Service
+
+   A class named after the class a generated module or namespace declares for its service.
 
 
 
@@ -1247,6 +1286,12 @@
 
 
    
+
+
+
+.. type:: public class TestServiceConnection
+
+   A class named after the connection type of the generated Python module.
 
 
 
@@ -1403,7 +1448,7 @@
 
    A structure whose fields are named after names in the generated code.
 
-   .. constructor:: public NamesStruct(int other, int result, int java, int krpc, int class)
+   .. constructor:: public NamesStruct(int other, int result, int java, int krpc, int class, int bound)
 
       Construct a NamesStruct from the values of its fields.
 
@@ -1427,6 +1472,10 @@
    .. method:: int getClass_()
 
       A value.
+
+   .. method:: int getBound()
+
+      A value named after the class of static methods bound to a connection.
 
 
 .. type:: public class PartlyDeprecatedStruct

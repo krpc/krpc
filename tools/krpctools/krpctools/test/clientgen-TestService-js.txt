@@ -262,6 +262,11 @@ export interface Service extends RemoteService<"TestService"> {
     [Symbol.hasInstance](value: unknown): value is Client;
     readonly prototype: Client;
   };
+  /** A class named after the alias of the service in the generated JavaScript. */
+  readonly ClientService_: {
+    [Symbol.hasInstance](value: unknown): value is ClientService_;
+    readonly prototype: ClientService_;
+  };
   /** A class named Connection. */
   readonly Connection: {
     [Symbol.hasInstance](value: unknown): value is Connection;
@@ -302,6 +307,11 @@ export interface Service extends RemoteService<"TestService"> {
     [Symbol.hasInstance](value: unknown): value is Exception;
     readonly prototype: Exception;
   };
+  /** A class named after the class that reaches a service in the generated C# code. */
+  readonly ExtensionMethods: {
+    [Symbol.hasInstance](value: unknown): value is ExtensionMethods;
+    readonly prototype: ExtensionMethods;
+  };
   /** A class named IConnection. */
   readonly IConnection: {
     [Symbol.hasInstance](value: unknown): value is IConnection;
@@ -331,10 +341,21 @@ export interface Service extends RemoteService<"TestService"> {
      * to a connection.
      */
     bind(): Promise<number>;
+    /**
+     * A structure with the given value in its field named Bound.
+     *
+     * @param bound - The value.
+     */
+    makeStruct(bound: number): Promise<NamesStruct>;
     /** A static method with parameters named after names in the generated code. */
-    parameters(client: number, connection: number, instance: number, returnValue: number, returnValueIsNull: number, null_: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number): Promise<number>;
+    parameters(client: number, connection: number, instance: number, returnValue: number, returnValueIsNull: number, null_: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number, procedureCall: number): Promise<number>;
     /** A method named after a C++ integer type. */
     uint64T(): Promise<number>;
+  };
+  /** A class named after a keyword of Python. */
+  readonly None: {
+    [Symbol.hasInstance](value: unknown): value is None;
+    readonly prototype: None;
   };
   /** A class named Object. */
   readonly Object: {
@@ -366,6 +387,16 @@ export interface Service extends RemoteService<"TestService"> {
     [Symbol.hasInstance](value: unknown): value is Serializable;
     readonly prototype: Serializable;
   };
+  /** A class named after the namespace of server forms in the generated JavaScript. */
+  readonly Server_: {
+    [Symbol.hasInstance](value: unknown): value is Server_;
+    readonly prototype: Server_;
+  };
+  /** A class named after the class a generated module or namespace declares for its service. */
+  readonly Service_: {
+    [Symbol.hasInstance](value: unknown): value is Service_;
+    readonly prototype: Service_;
+  };
   /** A class named Stream. */
   readonly Stream: {
     [Symbol.hasInstance](value: unknown): value is Stream;
@@ -394,6 +425,11 @@ export interface Service extends RemoteService<"TestService"> {
     staticNullableObject(value: TestClass | null): Promise<TestClass | null>;
     staticOptionalArguments(x: string, y?: string, z?: string, obj?: TestClass | null): Promise<string>;
     staticOptionalArguments(x: string, options: { y?: string; z?: string; obj?: TestClass | null }): Promise<string>;
+  };
+  /** A class named after the connection type of the generated Python module. */
+  readonly TestServiceConnection: {
+    [Symbol.hasInstance](value: unknown): value is TestServiceConnection;
+    readonly prototype: TestServiceConnection;
   };
   /** A class named Tuple. */
   readonly Tuple: {
@@ -483,7 +519,7 @@ export interface Service extends RemoteService<"TestService"> {
   };
   /** A structure whose fields are named after names in the generated code. */
   readonly NamesStruct: {
-    new (fields: { readonly other: number; readonly result: number; readonly java: number; readonly krpc: number; readonly class: number }): NamesStruct;
+    new (fields: { readonly other: number; readonly result: number; readonly java: number; readonly krpc: number; readonly class: number; readonly bound: number }): NamesStruct;
     [Symbol.hasInstance](value: unknown): value is NamesStruct;
   };
   /** Partly deprecated struct documentation string. */
@@ -542,6 +578,9 @@ export interface ClassBase extends _RemoteObject<"TestService.ClassBase"> {}
 /** A class named Client. */
 export interface Client extends _RemoteObject<"TestService.Client"> {}
 
+/** A class named after the alias of the service in the generated JavaScript. */
+export interface ClientService_ extends _RemoteObject<"TestService.ClientService"> {}
+
 /** A class named Connection. */
 export interface Connection extends _RemoteObject<"TestService.Connection"> {}
 
@@ -589,6 +628,9 @@ export interface Event extends _RemoteObject<"TestService.Event"> {}
 /** A class named Exception. */
 export interface Exception extends _RemoteObject<"TestService.Exception"> {}
 
+/** A class named after the class that reaches a service in the generated C# code. */
+export interface ExtensionMethods extends _RemoteObject<"TestService.ExtensionMethods"> {}
+
 /** A class named IConnection. */
 export interface IConnection extends _RemoteObject<"TestService.IConnection"> {}
 
@@ -612,7 +654,7 @@ export interface Names extends _RemoteObject<"TestService.Names"> {
   /** A method named after a method of java.lang.Object. */
   hashCode(): Promise<number>;
   /** A method with parameters named after names in the generated code. */
-  instanceParameters(client: number, connection: number, instance: number, returnValue: number, returnValueIsNull: number, null_: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number): Promise<number>;
+  instanceParameters(client: number, connection: number, instance: number, returnValue: number, returnValueIsNull: number, null_: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number, procedureCall: number): Promise<number>;
   /** A method named after the Python client package. */
   krpc(): Promise<number>;
   /** A method named after a method of java.lang.Object. */
@@ -632,6 +674,9 @@ export interface Names extends _RemoteObject<"TestService.Names"> {
   /** A property declared after the property named Property. */
   setValue(value: number): Promise<void>;
 }
+
+/** A class named after a keyword of Python. */
+export interface None extends _RemoteObject<"TestService.None"> {}
 
 /** A class named Object. */
 export interface Object extends _RemoteObject<"TestService.Object"> {
@@ -653,6 +698,12 @@ export interface RemoteObject extends _RemoteObject<"TestService.RemoteObject"> 
 
 /** A class named Serializable. */
 export interface Serializable extends _RemoteObject<"TestService.Serializable"> {}
+
+/** A class named after the namespace of server forms in the generated JavaScript. */
+export interface Server_ extends _RemoteObject<"TestService.Server"> {}
+
+/** A class named after the class a generated module or namespace declares for its service. */
+export interface Service_ extends _RemoteObject<"TestService.Service"> {}
 
 /** A class named Stream. */
 export interface Stream extends _RemoteObject<"TestService.Stream"> {}
@@ -684,6 +735,9 @@ export interface TestClass extends _RemoteObject<"TestService.TestClass"> {
   setStringPropertyPrivateGet(value: string): Promise<void>;
   getStringPropertyPrivateSet(): Promise<string>;
 }
+
+/** A class named after the connection type of the generated Python module. */
+export interface TestServiceConnection extends _RemoteObject<"TestService.TestServiceConnection"> {}
 
 /** A class named Tuple. */
 export interface Tuple extends _RemoteObject<"TestService.Tuple"> {}
@@ -753,8 +807,10 @@ export interface NamesStruct extends RemoteStruct<"TestService.NamesStruct"> {
   readonly krpc: number;
   /** A value. */
   readonly class: number;
+  /** A value named after the class of static methods bound to a connection. */
+  readonly bound: number;
 }
-export const NamesStruct = declareStruct<Service["NamesStruct"]>("TestService", "NamesStruct", [["other"], ["result"], ["java"], ["krpc"], ["class"]]);
+export const NamesStruct = declareStruct<Service["NamesStruct"]>("TestService", "NamesStruct", [["other"], ["result"], ["java"], ["krpc"], ["class"], ["bound"]]);
 
 /** Partly deprecated struct documentation string. */
 export interface PartlyDeprecatedStruct extends RemoteStruct<"TestService.PartlyDeprecatedStruct"> {
@@ -1074,6 +1130,10 @@ export declare namespace Server {
     readonly Client: {
       [Symbol.hasInstance](value: unknown): value is Client;
     };
+    /** A class named after the alias of the service in the generated JavaScript. */
+    readonly ClientService_: {
+      [Symbol.hasInstance](value: unknown): value is ClientService_;
+    };
     /** A class named Connection. */
     readonly Connection: {
       [Symbol.hasInstance](value: unknown): value is Connection;
@@ -1108,6 +1168,10 @@ export declare namespace Server {
     readonly Exception: {
       [Symbol.hasInstance](value: unknown): value is Exception;
     };
+    /** A class named after the class that reaches a service in the generated C# code. */
+    readonly ExtensionMethods: {
+      [Symbol.hasInstance](value: unknown): value is ExtensionMethods;
+    };
     /** A class named IConnection. */
     readonly IConnection: {
       [Symbol.hasInstance](value: unknown): value is IConnection;
@@ -1132,10 +1196,20 @@ export declare namespace Server {
        * to a connection.
        */
       bind(): number;
+      /**
+       * A structure with the given value in its field named Bound.
+       *
+       * @param bound - The value.
+       */
+      makeStruct(bound: number): NamesStruct;
       /** A static method with parameters named after names in the generated code. */
-      parameters(client: number, connection: number, instance: number, returnValue: number, returnValueIsNull: number, null_: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number): number;
+      parameters(client: number, connection: number, instance: number, returnValue: number, returnValueIsNull: number, null_: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number, procedureCall: number): number;
       /** A method named after a C++ integer type. */
       uint64T(): number;
+    };
+    /** A class named after a keyword of Python. */
+    readonly None: {
+      [Symbol.hasInstance](value: unknown): value is None;
     };
     /** A class named Object. */
     readonly Object: {
@@ -1160,6 +1234,14 @@ export declare namespace Server {
     /** A class named Serializable. */
     readonly Serializable: {
       [Symbol.hasInstance](value: unknown): value is Serializable;
+    };
+    /** A class named after the namespace of server forms in the generated JavaScript. */
+    readonly Server_: {
+      [Symbol.hasInstance](value: unknown): value is Server_;
+    };
+    /** A class named after the class a generated module or namespace declares for its service. */
+    readonly Service_: {
+      [Symbol.hasInstance](value: unknown): value is Service_;
     };
     /** A class named Stream. */
     readonly Stream: {
@@ -1186,6 +1268,10 @@ export declare namespace Server {
       staticNullableObject(value: TestClass | null): TestClass | null;
       staticOptionalArguments(x: string, y?: string, z?: string, obj?: TestClass | null): string;
       staticOptionalArguments(x: string, options: { y?: string; z?: string; obj?: TestClass | null }): string;
+    };
+    /** A class named after the connection type of the generated Python module. */
+    readonly TestServiceConnection: {
+      [Symbol.hasInstance](value: unknown): value is TestServiceConnection;
     };
     /** A class named Tuple. */
     readonly Tuple: {
@@ -1253,6 +1339,9 @@ export declare namespace Server {
   /** A class named Client. */
   interface Client extends ServerObject<"TestService.Client"> {}
 
+  /** A class named after the alias of the service in the generated JavaScript. */
+  interface ClientService_ extends ServerObject<"TestService.ClientService"> {}
+
   /** A class named Connection. */
   interface Connection extends ServerObject<"TestService.Connection"> {}
 
@@ -1294,6 +1383,9 @@ export declare namespace Server {
   /** A class named Exception. */
   interface Exception extends ServerObject<"TestService.Exception"> {}
 
+  /** A class named after the class that reaches a service in the generated C# code. */
+  interface ExtensionMethods extends ServerObject<"TestService.ExtensionMethods"> {}
+
   /** A class named IConnection. */
   interface IConnection extends ServerObject<"TestService.IConnection"> {}
 
@@ -1317,7 +1409,7 @@ export declare namespace Server {
     /** A method named after a method of java.lang.Object. */
     hashCode(): number;
     /** A method with parameters named after names in the generated code. */
-    instanceParameters(client: number, connection: number, instance: number, returnValue: number, returnValueIsNull: number, null_: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number): number;
+    instanceParameters(client: number, connection: number, instance: number, returnValue: number, returnValueIsNull: number, null_: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number, procedureCall: number): number;
     /** A method named after the Python client package. */
     krpc(): number;
     /** A method named after a method of java.lang.Object. */
@@ -1333,6 +1425,9 @@ export declare namespace Server {
     /** A property declared after the property named Property. */
     value: number;
   }
+
+  /** A class named after a keyword of Python. */
+  interface None extends ServerObject<"TestService.None"> {}
 
   /** A class named Object. */
   interface Object extends ServerObject<"TestService.Object"> {
@@ -1354,6 +1449,12 @@ export declare namespace Server {
 
   /** A class named Serializable. */
   interface Serializable extends ServerObject<"TestService.Serializable"> {}
+
+  /** A class named after the namespace of server forms in the generated JavaScript. */
+  interface Server_ extends ServerObject<"TestService.Server"> {}
+
+  /** A class named after the class a generated module or namespace declares for its service. */
+  interface Service_ extends ServerObject<"TestService.Service"> {}
 
   /** A class named Stream. */
   interface Stream extends ServerObject<"TestService.Stream"> {}
@@ -1382,6 +1483,9 @@ export declare namespace Server {
     readonly stringPropertyPrivateSet: string;
   }
 
+  /** A class named after the connection type of the generated Python module. */
+  interface TestServiceConnection extends ServerObject<"TestService.TestServiceConnection"> {}
+
   /** A class named Tuple. */
   interface Tuple extends ServerObject<"TestService.Tuple"> {}
 
@@ -1398,26 +1502,32 @@ declare module "@krpc-org/krpc" {
     "TestService.ByteString": Server.ByteString;
     "TestService.ClassBase": Server.ClassBase;
     "TestService.Client": Server.Client;
+    "TestService.ClientService": Server.ClientService_;
     "TestService.Connection": Server.Connection;
     "TestService.DeprecatedClass": Server.DeprecatedClass;
     "TestService.DocEnum": Server.DocEnum;
     "TestService.Encoder": Server.Encoder;
     "TestService.Event": Server.Event;
     "TestService.Exception": Server.Exception;
+    "TestService.ExtensionMethods": Server.ExtensionMethods;
     "TestService.IConnection": Server.IConnection;
     "TestService.IEquatable": Server.IEquatable;
     "TestService.List": Server.List;
     "TestService.NamedTuple": Server.NamedTuple;
     "TestService.Names": Server.Names;
+    "TestService.None": Server.None;
     "TestService.Object": Server.Object;
     "TestService.Optional": Server.Optional;
     "TestService.Override": Server.Override;
     "TestService.RPCException": Server.RPCException;
     "TestService.RemoteObject": Server.RemoteObject;
     "TestService.Serializable": Server.Serializable;
+    "TestService.Server": Server.Server_;
+    "TestService.Service": Server.Service_;
     "TestService.Stream": Server.Stream;
     "TestService.String": Server.String;
     "TestService.TestClass": Server.TestClass;
+    "TestService.TestServiceConnection": Server.TestServiceConnection;
     "TestService.Tuple": Server.Tuple;
     "TestService.TypeSpecs": Server.TypeSpecs;
     "TestService.UInt64": Server.UInt64;
@@ -1427,26 +1537,32 @@ declare module "@krpc-org/krpc" {
     "TestService.ByteString": ByteString;
     "TestService.ClassBase": ClassBase;
     "TestService.Client": Client;
+    "TestService.ClientService": ClientService_;
     "TestService.Connection": Connection;
     "TestService.DeprecatedClass": DeprecatedClass;
     "TestService.DocEnum": DocEnum;
     "TestService.Encoder": Encoder;
     "TestService.Event": Event;
     "TestService.Exception": Exception;
+    "TestService.ExtensionMethods": ExtensionMethods;
     "TestService.IConnection": IConnection;
     "TestService.IEquatable": IEquatable;
     "TestService.List": List;
     "TestService.NamedTuple": NamedTuple;
     "TestService.Names": Names;
+    "TestService.None": None;
     "TestService.Object": Object;
     "TestService.Optional": Optional;
     "TestService.Override": Override;
     "TestService.RPCException": RPCException;
     "TestService.RemoteObject": RemoteObject;
     "TestService.Serializable": Serializable;
+    "TestService.Server": Server_;
+    "TestService.Service": Service_;
     "TestService.Stream": Stream;
     "TestService.String": String;
     "TestService.TestClass": TestClass;
+    "TestService.TestServiceConnection": TestServiceConnection;
     "TestService.Tuple": Tuple;
     "TestService.TypeSpecs": TypeSpecs;
     "TestService.UInt64": UInt64;

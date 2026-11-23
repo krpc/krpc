@@ -1460,6 +1460,17 @@ an object takes it as ``(id)``.
 
 
 
+.. _http-TestService.ClientService:
+
+.. rubric:: ClientService
+
+A class named after the alias of the service in the generated JavaScript.
+
+A ``ClientService`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
 .. _http-TestService.Connection:
 
 .. rubric:: Connection
@@ -1584,6 +1595,17 @@ an object takes it as ``(id)``.
 A class named Exception.
 
 A ``Exception`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.ExtensionMethods:
+
+.. rubric:: ExtensionMethods
+
+A class named after the class that reaches a service in the generated C# code.
+
+A ``ExtensionMethods`` object is passed and returned as its identifier, a number. A path that acts on
 an object takes it as ``(id)``.
 
 
@@ -1727,6 +1749,7 @@ an object takes it as ``(id)``.
    :reqjson int32 self:
    :reqjson int32 cls:
    :reqjson int32 invoke:
+   :reqjson int32 procedure_call:
    :resjson int32 value:
 
 
@@ -1741,6 +1764,18 @@ an object takes it as ``(id)``.
    :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
 
    :resjson int32 value:
+
+
+
+
+
+.. http:post:: /test-service/names/make-struct
+
+   A structure with the given value in its field named Bound.
+
+
+   :reqjson int32 bound: The value.
+   :resjson TestService.NamesStruct value:
 
 
 
@@ -1765,6 +1800,7 @@ an object takes it as ``(id)``.
    :reqjson int32 self:
    :reqjson int32 cls:
    :reqjson int32 invoke:
+   :reqjson int32 procedure_call:
    :resjson int32 value:
 
 
@@ -1855,6 +1891,17 @@ an object takes it as ``(id)``.
 
 
 
+.. _http-TestService.None:
+
+.. rubric:: None
+
+A class named after a keyword of Python.
+
+A ``None`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
 .. _http-TestService.Object:
 
 .. rubric:: Object
@@ -1929,6 +1976,28 @@ an object takes it as ``(id)``.
 A class named Serializable.
 
 A ``Serializable`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.Server:
+
+.. rubric:: Server
+
+A class named after the namespace of server forms in the generated JavaScript.
+
+A ``Server`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
+.. _http-TestService.Service:
+
+.. rubric:: Service
+
+A class named after the class a generated module or namespace declares for its service.
+
+A ``Service`` object is passed and returned as its identifier, a number. A path that acts on
 an object takes it as ``(id)``.
 
 
@@ -2144,6 +2213,17 @@ an object takes it as ``(id)``.
 
 
 
+.. _http-TestService.TestServiceConnection:
+
+.. rubric:: TestServiceConnection
+
+A class named after the connection type of the generated Python module.
+
+A ``TestServiceConnection`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+
 .. _http-TestService.Tuple:
 
 .. rubric:: Tuple
@@ -2339,6 +2419,10 @@ Passed and returned as an object with these fields:
 
 ``class`` (int32)
    A value.
+
+
+``bound`` (int32)
+   A value named after the class of static methods bound to a connection.
 
 
 

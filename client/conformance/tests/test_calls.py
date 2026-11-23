@@ -208,7 +208,7 @@ def expected_members(services, service_name, name, style):
     if style.exceptions:
         types.append(service.exceptions)
     for typs in types:
-        names.update(x.name for x in typs)
+        names.update(style.type(service_name, x.name) for x in typs)
     return names
 
 
@@ -681,7 +681,7 @@ def test_exposed_members(connected, control, roster):
     services = control.krpc.get_services()
     if not service:
         expected = {
-            style.convert(x.name)
+            style.service(x.name)
             for x in services.services
             if exposes_a_service(services, x)
         }
@@ -706,6 +706,22 @@ def test_member_name_case(client, server, scripted_server):
     )
     try:
         assert client.members("Names", "Names") == {x[case] for x in NAMES}
+    finally:
+        client.close()
+
+
+@profile("definitions")
+def test_service_named_as_a_connection_member(client, server, scripted_server):
+    """A service named as a member of the client's connection, such as ``Close``, takes a
+    trailing ``_``, as ``close_``. A type named as a declaration the client makes beside the
+    service's types does too, as the exposed members of ``TestService`` show."""
+    service = KRPC.Service(name="Close", procedures=[KRPC.Procedure(name="Ping")])
+    with_definitions(client, server, scripted_server, service)
+    try:
+        style = client.conventions.naming
+        assert style.service("Close") == style.convert("Close") + "_"
+        assert style.service("Close") in client.members("", "")
+        client.invoke("Close", "Ping")
     finally:
         client.close()
 

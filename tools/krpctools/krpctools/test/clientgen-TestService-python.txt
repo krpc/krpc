@@ -144,6 +144,10 @@ class NamesStruct(_NamedTuple):
     """
     A value.
     """
+    bound: _builtins.int
+    """
+    A value named after the class of static methods bound to a connection.
+    """
 
 
 class PartlyDeprecatedStruct(_NamedTuple):
@@ -259,6 +263,15 @@ class Client(_DeclaredObject, metaclass=_DeclaredClass):
 
 
 
+class ClientService(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named after the alias of the service in the generated JavaScript.
+    """
+    _service_name = "TestService"
+    _class_name = "ClientService"
+
+
+
 class Connection(_DeclaredObject, metaclass=_DeclaredClass):
     """
     A class named Connection.
@@ -359,6 +372,15 @@ class Exception(_DeclaredObject, metaclass=_DeclaredClass):
 
 
 
+class ExtensionMethods(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named after the class that reaches a service in the generated C# code.
+    """
+    _service_name = "TestService"
+    _class_name = "ExtensionMethods"
+
+
+
 class IConnection(_DeclaredObject, metaclass=_DeclaredClass):
     """
     A class named IConnection.
@@ -448,7 +470,7 @@ class Names(_DeclaredObject, metaclass=_DeclaredClass):
         """
         raise _declaration("TestService", "Names")
 
-    def instance_parameters(self, client: _builtins.int, connection: _builtins.int, instance: _builtins.int, return_value: _builtins.int, return_value_is_null: _builtins.int, null: _builtins.int, krpc: _builtins.int, java: _builtins.int, com: _builtins.int, org: _builtins.int, nameof: _builtins.int, self_: _builtins.int, cls_: _builtins.int, invoke: _builtins.int) -> _builtins.int:
+    def instance_parameters(self, client: _builtins.int, connection: _builtins.int, instance: _builtins.int, return_value: _builtins.int, return_value_is_null: _builtins.int, null: _builtins.int, krpc: _builtins.int, java: _builtins.int, com: _builtins.int, org: _builtins.int, nameof: _builtins.int, self_: _builtins.int, cls_: _builtins.int, invoke: _builtins.int, procedure_call: _builtins.int) -> _builtins.int:
         """
         A method with parameters named after names in the generated code.
         """
@@ -482,7 +504,16 @@ class Names(_DeclaredObject, metaclass=_DeclaredClass):
         raise _declaration("TestService", "Names")
 
     @_builtins.staticmethod
-    def parameters(client: _builtins.int, connection: _builtins.int, instance: _builtins.int, return_value: _builtins.int, return_value_is_null: _builtins.int, null: _builtins.int, krpc: _builtins.int, java: _builtins.int, com: _builtins.int, org: _builtins.int, nameof: _builtins.int, self_: _builtins.int, cls_: _builtins.int, invoke: _builtins.int) -> _builtins.int:
+    def make_struct(bound: _builtins.int) -> NamesStruct:
+        """
+        A structure with the given value in its field named Bound.
+
+        :param bound: The value.
+        """
+        raise _declaration("TestService", "Names")
+
+    @_builtins.staticmethod
+    def parameters(client: _builtins.int, connection: _builtins.int, instance: _builtins.int, return_value: _builtins.int, return_value_is_null: _builtins.int, null: _builtins.int, krpc: _builtins.int, java: _builtins.int, com: _builtins.int, org: _builtins.int, nameof: _builtins.int, self_: _builtins.int, cls_: _builtins.int, invoke: _builtins.int, procedure_call: _builtins.int) -> _builtins.int:
         """
         A static method with parameters named after names in the generated code.
         """
@@ -494,6 +525,15 @@ class Names(_DeclaredObject, metaclass=_DeclaredClass):
         A method named after a C++ integer type.
         """
         raise _declaration("TestService", "Names")
+
+
+
+class None_(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named after a keyword of Python.
+    """
+    _service_name = "TestService"
+    _class_name = "None"
 
 
 
@@ -555,6 +595,24 @@ class Serializable(_DeclaredObject, metaclass=_DeclaredClass):
     """
     _service_name = "TestService"
     _class_name = "Serializable"
+
+
+
+class Server(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named after the namespace of server forms in the generated JavaScript.
+    """
+    _service_name = "TestService"
+    _class_name = "Server"
+
+
+
+class Service(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named after the class a generated module or namespace declares for its service.
+    """
+    _service_name = "TestService"
+    _class_name = "Service"
 
 
 
@@ -660,6 +718,15 @@ class TestClass(_DeclaredObject, metaclass=_DeclaredClass):
 
 
 
+class TestServiceConnection_(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named after the connection type of the generated Python module.
+    """
+    _service_name = "TestService"
+    _class_name = "TestServiceConnection"
+
+
+
 class Tuple(_DeclaredObject, metaclass=_DeclaredClass):
     """
     A class named Tuple.
@@ -693,26 +760,32 @@ if TYPE_CHECKING:
     _type_ByteString = ByteString
     _type_ClassBase = ClassBase
     _type_Client = Client
+    _type_ClientService = ClientService
     _type_Connection = Connection
     _type_DeprecatedClass = DeprecatedClass
     _type_DocEnum = DocEnum
     _type_Encoder = Encoder
     _type_Event = Event
     _type_Exception = Exception
+    _type_ExtensionMethods = ExtensionMethods
     _type_IConnection = IConnection
     _type_IEquatable = IEquatable
     _type_List = List
     _type_NamedTuple = NamedTuple
     _type_Names = Names
+    _type_None_ = None_
     _type_Object = Object
     _type_Optional = Optional
     _type_Override = Override
     _type_RPCException = RPCException
     _type_RemoteObject = RemoteObject
     _type_Serializable = Serializable
+    _type_Server = Server
+    _type_Service = Service
     _type_Stream = Stream
     _type_String = String
     _type_TestClass = TestClass
+    _type_TestServiceConnection_ = TestServiceConnection_
     _type_Tuple = Tuple
     _type_TypeSpecs = TypeSpecs
     _type_UInt64 = UInt64
@@ -744,26 +817,32 @@ class TestService(metaclass=_DeclaredClass):
     ByteString: type[_type_ByteString] = ByteString
     ClassBase: type[_type_ClassBase] = ClassBase
     Client: type[_type_Client] = Client
+    ClientService: type[_type_ClientService] = ClientService
     Connection: type[_type_Connection] = Connection
     DeprecatedClass: type[_type_DeprecatedClass] = DeprecatedClass
     DocEnum: type[_type_DocEnum] = DocEnum
     Encoder: type[_type_Encoder] = Encoder
     Event: type[_type_Event] = Event
     Exception: type[_type_Exception] = Exception
+    ExtensionMethods: type[_type_ExtensionMethods] = ExtensionMethods
     IConnection: type[_type_IConnection] = IConnection
     IEquatable: type[_type_IEquatable] = IEquatable
     List: type[_type_List] = List
     NamedTuple: type[_type_NamedTuple] = NamedTuple
     Names: type[_type_Names] = Names
+    None_: type[_type_None_] = None_
     Object: type[_type_Object] = Object
     Optional: type[_type_Optional] = Optional
     Override: type[_type_Override] = Override
     RPCException: type[_type_RPCException] = RPCException
     RemoteObject: type[_type_RemoteObject] = RemoteObject
     Serializable: type[_type_Serializable] = Serializable
+    Server: type[_type_Server] = Server
+    Service: type[_type_Service] = Service
     Stream: type[_type_Stream] = Stream
     String: type[_type_String] = String
     TestClass: type[_type_TestClass] = TestClass
+    TestServiceConnection_: type[_type_TestServiceConnection_] = TestServiceConnection_
     Tuple: type[_type_Tuple] = Tuple
     TypeSpecs: type[_type_TypeSpecs] = TypeSpecs
     UInt64: type[_type_UInt64] = UInt64

@@ -13,6 +13,8 @@ exports_files([
     "CHANGELOG.md",
     "conformance/expected-failures.txt",
     "conformance/unsupported.txt",
+    "src/FunctionCompiler.cs",
+    "test/ConnectionNamesTest.cs",
 ])
 
 services = clientgen_services("csharp")

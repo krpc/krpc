@@ -43,26 +43,32 @@ class TestService : public ::krpc::RemoteService {
   class ByteString;
   class ClassBase;
   class Client;
+  class ClientService;
   class Connection;
   class DeprecatedClass;
   class DocEnum;
   class Encoder;
   class Event;
   class Exception;
+  class ExtensionMethods;
   class IConnection;
   class IEquatable;
   class List;
   class NamedTuple;
   class Names;
+  class None;
   class Object;
   class Optional;
   class Override;
   class RPCException;
   class RemoteObject;
   class Serializable;
+  class Server;
+  class Service;
   class Stream;
   class String;
   class TestClass;
+  class TestServiceConnection;
   class Tuple;
   class TypeSpecs;
   class UInt64;
@@ -1319,6 +1325,15 @@ class TestService : public ::krpc::RemoteService {
   };
 
   /**
+   * A class named after the alias of the service in the generated JavaScript.
+   */
+  class ClientService : public ::krpc::RemoteObject<ClientService> {
+   public:
+    ClientService();
+    ClientService(const ::krpc::Connection& connection, ::std::uint64_t id);
+  };
+
+  /**
    * A class named Connection.
    */
   class Connection : public ::krpc::RemoteObject<Connection> {
@@ -1469,6 +1484,15 @@ class TestService : public ::krpc::RemoteService {
   };
 
   /**
+   * A class named after the class that reaches a service in the generated C# code.
+   */
+  class ExtensionMethods : public ::krpc::RemoteObject<ExtensionMethods> {
+   public:
+    ExtensionMethods();
+    ExtensionMethods(const ::krpc::Connection& connection, ::std::uint64_t id);
+  };
+
+  /**
    * A class named IConnection.
    */
   class IConnection : public ::krpc::RemoteObject<IConnection> {
@@ -1535,7 +1559,7 @@ class TestService : public ::krpc::RemoteService {
     /**
      * A method with parameters named after names in the generated code.
      */
-    ::std::int32_t instance_parameters(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke);
+    ::std::int32_t instance_parameters(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke, ::std::int32_t procedure_call);
 
     /**
      * A method named after the Python client package.
@@ -1560,9 +1584,16 @@ class TestService : public ::krpc::RemoteService {
     static ::std::int32_t bind_(::krpc::Connection& connection);
 
     /**
+     * A structure with the given value in its field named Bound.
+     * @param connection A connection object.
+     * @param bound The value.
+     */
+    static ::krpc::services::TestService::NamesStruct make_struct(::krpc::Connection& connection, ::std::int32_t bound);
+
+    /**
      * A static method with parameters named after names in the generated code.
      */
-    static ::std::int32_t parameters(::krpc::Connection& connection, ::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke);
+    static ::std::int32_t parameters(::krpc::Connection& connection, ::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke, ::std::int32_t procedure_call);
 
     /**
      * A method named after a C++ integer type.
@@ -1597,7 +1628,7 @@ class TestService : public ::krpc::RemoteService {
 
     ::krpc::Stream<::std::int32_t> hash_code_stream();
 
-    ::krpc::Stream<::std::int32_t> instance_parameters_stream(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke);
+    ::krpc::Stream<::std::int32_t> instance_parameters_stream(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke, ::std::int32_t procedure_call);
 
     ::krpc::Stream<::std::int32_t> krpc_stream();
 
@@ -1607,7 +1638,9 @@ class TestService : public ::krpc::RemoteService {
 
     static ::krpc::Stream<::std::int32_t> bind__stream(::krpc::Connection& connection);
 
-    static ::krpc::Stream<::std::int32_t> parameters_stream(::krpc::Connection& connection, ::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke);
+    static ::krpc::Stream<::krpc::services::TestService::NamesStruct> make_struct_stream(::krpc::Connection& connection, ::std::int32_t bound);
+
+    static ::krpc::Stream<::std::int32_t> parameters_stream(::krpc::Connection& connection, ::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke, ::std::int32_t procedure_call);
 
     static ::krpc::Stream<::std::int32_t> uint_64t_stream(::krpc::Connection& connection);
 
@@ -1623,7 +1656,7 @@ class TestService : public ::krpc::RemoteService {
 
     ::krpc::schema::ProcedureCall hash_code_call();
 
-    ::krpc::schema::ProcedureCall instance_parameters_call(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke);
+    ::krpc::schema::ProcedureCall instance_parameters_call(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke, ::std::int32_t procedure_call);
 
     ::krpc::schema::ProcedureCall krpc_call();
 
@@ -1633,7 +1666,9 @@ class TestService : public ::krpc::RemoteService {
 
     static ::krpc::schema::ProcedureCall bind__call(::krpc::Connection& connection);
 
-    static ::krpc::schema::ProcedureCall parameters_call(::krpc::Connection& connection, ::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke);
+    static ::krpc::schema::ProcedureCall make_struct_call(::krpc::Connection& connection, ::std::int32_t bound);
+
+    static ::krpc::schema::ProcedureCall parameters_call(::krpc::Connection& connection, ::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke, ::std::int32_t procedure_call);
 
     static ::krpc::schema::ProcedureCall uint_64t_call(::krpc::Connection& connection);
 
@@ -1663,6 +1698,8 @@ class TestService : public ::krpc::RemoteService {
 
     static ::krpc::schema::ProcedureCall bind__call_template();
 
+    static ::krpc::schema::ProcedureCall make_struct_call_template();
+
     static ::krpc::schema::ProcedureCall parameters_call_template();
 
     static ::krpc::schema::ProcedureCall uint_64t_call_template();
@@ -1689,9 +1726,15 @@ class TestService : public ::krpc::RemoteService {
       ::std::int32_t bind_() const;
 
       /**
+       * A structure with the given value in its field named Bound.
+       * @param bound The value.
+       */
+      ::krpc::services::TestService::NamesStruct make_struct(::std::int32_t bound) const;
+
+      /**
        * A static method with parameters named after names in the generated code.
        */
-      ::std::int32_t parameters(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke) const;
+      ::std::int32_t parameters(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke, ::std::int32_t procedure_call) const;
 
       /**
        * A method named after a C++ integer type.
@@ -1708,6 +1751,15 @@ class TestService : public ::krpc::RemoteService {
      * @return The bound methods.
      */
     static Bound bind(const ::krpc::Connection& connection);
+  };
+
+  /**
+   * A class named after a keyword of Python.
+   */
+  class None : public ::krpc::RemoteObject<None> {
+   public:
+    None();
+    None(const ::krpc::Connection& connection, ::std::uint64_t id);
   };
 
   /**
@@ -1773,6 +1825,24 @@ class TestService : public ::krpc::RemoteService {
    public:
     Serializable();
     Serializable(const ::krpc::Connection& connection, ::std::uint64_t id);
+  };
+
+  /**
+   * A class named after the namespace of server forms in the generated JavaScript.
+   */
+  class Server : public ::krpc::RemoteObject<Server> {
+   public:
+    Server();
+    Server(const ::krpc::Connection& connection, ::std::uint64_t id);
+  };
+
+  /**
+   * A class named after the class a generated module or namespace declares for its service.
+   */
+  class Service : public ::krpc::RemoteObject<Service> {
+   public:
+    Service();
+    Service(const ::krpc::Connection& connection, ::std::uint64_t id);
   };
 
   /**
@@ -1962,6 +2032,15 @@ class TestService : public ::krpc::RemoteService {
   };
 
   /**
+   * A class named after the connection type of the generated Python module.
+   */
+  class TestServiceConnection : public ::krpc::RemoteObject<TestServiceConnection> {
+   public:
+    TestServiceConnection();
+    TestServiceConnection(const ::krpc::Connection& connection, ::std::uint64_t id);
+  };
+
+  /**
    * A class named Tuple.
    */
   class Tuple : public ::krpc::RemoteObject<Tuple> {
@@ -2068,14 +2147,18 @@ value(value), old_value(old_value) {}
      * A value.
      */
     ::std::int32_t class_;
+    /**
+     * A value named after the class of static methods bound to a connection.
+     */
+    ::std::int32_t bound;
 
-    NamesStruct() : other(), result(), java(), krpc(), class_() {}
+    NamesStruct() : other(), result(), java(), krpc(), class_(), bound() {}
 
-    NamesStruct(::std::int32_t other, ::std::int32_t result, ::std::int32_t java, ::std::int32_t krpc, ::std::int32_t class_) :
-other(other), result(result), java(java), krpc(krpc), class_(class_) {}
+    NamesStruct(::std::int32_t other, ::std::int32_t result, ::std::int32_t java, ::std::int32_t krpc, ::std::int32_t class_, ::std::int32_t bound) :
+other(other), result(result), java(java), krpc(krpc), class_(class_), bound(bound) {}
 
     bool operator==(const NamesStruct& other) const {
-      return this->other == other.other && this->result == other.result && this->java == other.java && this->krpc == other.krpc && this->class_ == other.class_;
+      return this->other == other.other && this->result == other.result && this->java == other.java && this->krpc == other.krpc && this->class_ == other.class_ && this->bound == other.bound;
     }
 
     bool operator!=(const NamesStruct& other) const {
@@ -2101,6 +2184,10 @@ other(other), result(result), java(java), krpc(krpc), class_(class_) {}
       if (other.krpc < this->krpc)
         return false;
       if (this->class_ < other.class_)
+        return true;
+      if (other.class_ < this->class_)
+        return false;
+      if (this->bound < other.bound)
         return true;
       return false;
     }
@@ -2465,6 +2552,7 @@ namespace encoder {
     structMessage.add_items(encode_item(value.java));
     structMessage.add_items(encode_item(value.krpc));
     structMessage.add_items(encode_item(value.class_));
+    structMessage.add_items(encode_item(value.bound));
     return krpc::encoder::encode(structMessage);
   }
 
@@ -2589,13 +2677,14 @@ namespace decoder {
   inline void decode(services::TestService::NamesStruct& value, const std::string& data, ::krpc::Connection* connection) {
     static thread_local krpc::schema::Tuple structMessage;
     if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
-    if (structMessage.items_size() < 5)
+    if (structMessage.items_size() < 6)
       throw EncodingError("Value for NamesStruct does not have all of its fields");
     decode_item(value.other, structMessage.items(0), connection);
     decode_item(value.result, structMessage.items(1), connection);
     decode_item(value.java, structMessage.items(2), connection);
     decode_item(value.krpc, structMessage.items(3), connection);
     decode_item(value.class_, structMessage.items(4), connection);
+    decode_item(value.bound, structMessage.items(5), connection);
   }
 
   // Fields are only ever appended to a structure, so a value from a newer server may carry
@@ -2685,6 +2774,7 @@ inline std::size_t hash_value(const services::TestService::NamesStruct& value) {
   hash_combine(&seed, hash_value(value.java));
   hash_combine(&seed, hash_value(value.krpc));
   hash_combine(&seed, hash_value(value.class_));
+  hash_combine(&seed, hash_value(value.bound));
   return seed;
 }
 
@@ -5996,6 +6086,12 @@ inline TestService::Client::Client():
 inline TestService::Client::Client(const ::krpc::Connection& connection, ::std::uint64_t id):
   ::krpc::RemoteObject<Client>(connection, "TestService::Client", id) {}
 
+inline TestService::ClientService::ClientService():
+  ::krpc::RemoteObject<ClientService>("TestService::ClientService") {}
+
+inline TestService::ClientService::ClientService(const ::krpc::Connection& connection, ::std::uint64_t id):
+  ::krpc::RemoteObject<ClientService>(connection, "TestService::ClientService", id) {}
+
 inline TestService::Connection::Connection():
   ::krpc::RemoteObject<Connection>("TestService::Connection") {}
 
@@ -6166,6 +6262,12 @@ inline TestService::Exception::Exception():
 inline TestService::Exception::Exception(const ::krpc::Connection& connection, ::std::uint64_t id):
   ::krpc::RemoteObject<Exception>(connection, "TestService::Exception", id) {}
 
+inline TestService::ExtensionMethods::ExtensionMethods():
+  ::krpc::RemoteObject<ExtensionMethods>("TestService::ExtensionMethods") {}
+
+inline TestService::ExtensionMethods::ExtensionMethods(const ::krpc::Connection& connection, ::std::uint64_t id):
+  ::krpc::RemoteObject<ExtensionMethods>(connection, "TestService::ExtensionMethods", id) {}
+
 inline TestService::IConnection::IConnection():
   ::krpc::RemoteObject<IConnection>("TestService::IConnection") {}
 
@@ -6236,9 +6338,9 @@ inline ::std::int32_t TestService::Names::hash_code() {
   return _result;
 }
 
-inline ::std::int32_t TestService::Names::instance_parameters(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke) {
+inline ::std::int32_t TestService::Names::instance_parameters(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke, ::std::int32_t procedure_call) {
   ::std::vector<::krpc::encoder::Value> _args;
-  _args.reserve(15);
+  _args.reserve(16);
   _args.push_back(::krpc::encoder::encode_arg(*this));
   _args.push_back(::krpc::encoder::encode_arg(client));
   _args.push_back(::krpc::encoder::encode_arg(connection_));
@@ -6254,6 +6356,7 @@ inline ::std::int32_t TestService::Names::instance_parameters(::std::int32_t cli
   _args.push_back(::krpc::encoder::encode_arg(self));
   _args.push_back(::krpc::encoder::encode_arg(cls));
   _args.push_back(::krpc::encoder::encode_arg(invoke));
+  _args.push_back(::krpc::encoder::encode_arg(procedure_call));
   auto _data = this->_connection.invoke("TestService", "Names_InstanceParameters", _args, ::krpc::Connection::Returns::value);
   ::std::int32_t _result{};
   ::krpc::decoder::decode_result(_result, _data, &this->_connection);
@@ -6336,9 +6439,19 @@ inline ::std::int32_t TestService::Names::bind_(::krpc::Connection& _connection)
   return _result;
 }
 
-inline ::std::int32_t TestService::Names::parameters(::krpc::Connection& _connection, ::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke) {
+inline ::krpc::services::TestService::NamesStruct TestService::Names::make_struct(::krpc::Connection& _connection, ::std::int32_t bound) {
     ::std::vector<::krpc::encoder::Value> _args;
-  _args.reserve(14);
+  _args.reserve(1);
+  _args.push_back(::krpc::encoder::encode_arg(bound));
+  auto _data = _connection.invoke("TestService", "Names_static_MakeStruct", _args, ::krpc::Connection::Returns::value);
+    ::krpc::services::TestService::NamesStruct _result{};
+  ::krpc::decoder::decode_result(_result, _data, &_connection);
+  return _result;
+}
+
+inline ::std::int32_t TestService::Names::parameters(::krpc::Connection& _connection, ::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke, ::std::int32_t procedure_call) {
+    ::std::vector<::krpc::encoder::Value> _args;
+  _args.reserve(15);
   _args.push_back(::krpc::encoder::encode_arg(client));
   _args.push_back(::krpc::encoder::encode_arg(connection_));
   _args.push_back(::krpc::encoder::encode_arg(instance));
@@ -6353,6 +6466,7 @@ inline ::std::int32_t TestService::Names::parameters(::krpc::Connection& _connec
   _args.push_back(::krpc::encoder::encode_arg(self));
   _args.push_back(::krpc::encoder::encode_arg(cls));
   _args.push_back(::krpc::encoder::encode_arg(invoke));
+  _args.push_back(::krpc::encoder::encode_arg(procedure_call));
   auto _data = _connection.invoke("TestService", "Names_static_Parameters", _args, ::krpc::Connection::Returns::value);
     ::std::int32_t _result{};
   ::krpc::decoder::decode_result(_result, _data, &_connection);
@@ -6394,9 +6508,9 @@ inline ::krpc::Stream<::std::int32_t> TestService::Names::hash_code_stream() {
   return ::krpc::Stream<::std::int32_t>(this->_connection, this->_connection.build_call("TestService", "Names_HashCode", _args));
 }
 
-inline ::krpc::Stream<::std::int32_t> TestService::Names::instance_parameters_stream(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke) {
+inline ::krpc::Stream<::std::int32_t> TestService::Names::instance_parameters_stream(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke, ::std::int32_t procedure_call) {
   ::std::vector<::krpc::encoder::Value> _args;
-  _args.reserve(15);
+  _args.reserve(16);
   _args.push_back(::krpc::encoder::encode_arg(*this));
   _args.push_back(::krpc::encoder::encode_arg(client));
   _args.push_back(::krpc::encoder::encode_arg(connection_));
@@ -6412,6 +6526,7 @@ inline ::krpc::Stream<::std::int32_t> TestService::Names::instance_parameters_st
   _args.push_back(::krpc::encoder::encode_arg(self));
   _args.push_back(::krpc::encoder::encode_arg(cls));
   _args.push_back(::krpc::encoder::encode_arg(invoke));
+  _args.push_back(::krpc::encoder::encode_arg(procedure_call));
   return ::krpc::Stream<::std::int32_t>(this->_connection, this->_connection.build_call("TestService", "Names_InstanceParameters", _args));
 }
 
@@ -6457,9 +6572,16 @@ inline ::krpc::Stream<::std::int32_t> TestService::Names::bind__stream(::krpc::C
   return ::krpc::Stream<::std::int32_t>(_connection, _connection.build_call("TestService", "Names_static_Bind"));
 }
 
-inline ::krpc::Stream<::std::int32_t> TestService::Names::parameters_stream(::krpc::Connection& _connection, ::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke) {
+inline ::krpc::Stream<::krpc::services::TestService::NamesStruct> TestService::Names::make_struct_stream(::krpc::Connection& _connection, ::std::int32_t bound) {
   ::std::vector<::krpc::encoder::Value> _args;
-  _args.reserve(14);
+  _args.reserve(1);
+  _args.push_back(::krpc::encoder::encode_arg(bound));
+  return ::krpc::Stream<::krpc::services::TestService::NamesStruct>(_connection, _connection.build_call("TestService", "Names_static_MakeStruct", _args));
+}
+
+inline ::krpc::Stream<::std::int32_t> TestService::Names::parameters_stream(::krpc::Connection& _connection, ::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke, ::std::int32_t procedure_call) {
+  ::std::vector<::krpc::encoder::Value> _args;
+  _args.reserve(15);
   _args.push_back(::krpc::encoder::encode_arg(client));
   _args.push_back(::krpc::encoder::encode_arg(connection_));
   _args.push_back(::krpc::encoder::encode_arg(instance));
@@ -6474,6 +6596,7 @@ inline ::krpc::Stream<::std::int32_t> TestService::Names::parameters_stream(::kr
   _args.push_back(::krpc::encoder::encode_arg(self));
   _args.push_back(::krpc::encoder::encode_arg(cls));
   _args.push_back(::krpc::encoder::encode_arg(invoke));
+  _args.push_back(::krpc::encoder::encode_arg(procedure_call));
   return ::krpc::Stream<::std::int32_t>(_connection, _connection.build_call("TestService", "Names_static_Parameters", _args));
 }
 
@@ -6509,9 +6632,9 @@ inline ::krpc::schema::ProcedureCall TestService::Names::hash_code_call() {
   return this->_connection.build_call("TestService", "Names_HashCode", _args);
 }
 
-inline ::krpc::schema::ProcedureCall TestService::Names::instance_parameters_call(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke) {
+inline ::krpc::schema::ProcedureCall TestService::Names::instance_parameters_call(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke, ::std::int32_t procedure_call) {
   ::std::vector<::krpc::encoder::Value> _args;
-  _args.reserve(15);
+  _args.reserve(16);
   _args.push_back(::krpc::encoder::encode_arg(*this));
   _args.push_back(::krpc::encoder::encode_arg(client));
   _args.push_back(::krpc::encoder::encode_arg(connection_));
@@ -6527,6 +6650,7 @@ inline ::krpc::schema::ProcedureCall TestService::Names::instance_parameters_cal
   _args.push_back(::krpc::encoder::encode_arg(self));
   _args.push_back(::krpc::encoder::encode_arg(cls));
   _args.push_back(::krpc::encoder::encode_arg(invoke));
+  _args.push_back(::krpc::encoder::encode_arg(procedure_call));
   return this->_connection.build_call("TestService", "Names_InstanceParameters", _args);
 }
 
@@ -6588,9 +6712,16 @@ inline ::krpc::schema::ProcedureCall TestService::Names::bind__call(::krpc::Conn
   return _connection.build_call("TestService", "Names_static_Bind");
 }
 
-inline ::krpc::schema::ProcedureCall TestService::Names::parameters_call(::krpc::Connection& _connection, ::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke) {
+inline ::krpc::schema::ProcedureCall TestService::Names::make_struct_call(::krpc::Connection& _connection, ::std::int32_t bound) {
   ::std::vector<::krpc::encoder::Value> _args;
-  _args.reserve(14);
+  _args.reserve(1);
+  _args.push_back(::krpc::encoder::encode_arg(bound));
+  return _connection.build_call("TestService", "Names_static_MakeStruct", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::Names::parameters_call(::krpc::Connection& _connection, ::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke, ::std::int32_t procedure_call) {
+  ::std::vector<::krpc::encoder::Value> _args;
+  _args.reserve(15);
   _args.push_back(::krpc::encoder::encode_arg(client));
   _args.push_back(::krpc::encoder::encode_arg(connection_));
   _args.push_back(::krpc::encoder::encode_arg(instance));
@@ -6605,6 +6736,7 @@ inline ::krpc::schema::ProcedureCall TestService::Names::parameters_call(::krpc:
   _args.push_back(::krpc::encoder::encode_arg(self));
   _args.push_back(::krpc::encoder::encode_arg(cls));
   _args.push_back(::krpc::encoder::encode_arg(invoke));
+  _args.push_back(::krpc::encoder::encode_arg(procedure_call));
   return _connection.build_call("TestService", "Names_static_Parameters", _args);
 }
 
@@ -6648,6 +6780,10 @@ inline ::krpc::schema::ProcedureCall TestService::Names::bind__call_template() {
   return ::krpc::Connection::build_call("TestService", "Names_static_Bind");
 }
 
+inline ::krpc::schema::ProcedureCall TestService::Names::make_struct_call_template() {
+  return ::krpc::Connection::build_call("TestService", "Names_static_MakeStruct");
+}
+
 inline ::krpc::schema::ProcedureCall TestService::Names::parameters_call_template() {
   return ::krpc::Connection::build_call("TestService", "Names_static_Parameters");
 }
@@ -6679,8 +6815,12 @@ inline ::std::int32_t TestService::Names::Bound::bind_() const {
   return TestService::Names::bind_(_connection);
 }
 
-inline ::std::int32_t TestService::Names::Bound::parameters(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke) const {
-  return TestService::Names::parameters(_connection, client, connection_, instance, return_value, return_value_is_null, null, krpc, java, com, org, nameof, self, cls, invoke);
+inline ::krpc::services::TestService::NamesStruct TestService::Names::Bound::make_struct(::std::int32_t bound) const {
+  return TestService::Names::make_struct(_connection, bound);
+}
+
+inline ::std::int32_t TestService::Names::Bound::parameters(::std::int32_t client, ::std::int32_t connection_, ::std::int32_t instance, ::std::int32_t return_value, ::std::int32_t return_value_is_null, ::std::int32_t null, ::std::int32_t krpc, ::std::int32_t java, ::std::int32_t com, ::std::int32_t org, ::std::int32_t nameof, ::std::int32_t self, ::std::int32_t cls, ::std::int32_t invoke, ::std::int32_t procedure_call) const {
+  return TestService::Names::parameters(_connection, client, connection_, instance, return_value, return_value_is_null, null, krpc, java, com, org, nameof, self, cls, invoke, procedure_call);
 }
 
 inline ::std::int32_t TestService::Names::Bound::uint_64t() const {
@@ -6690,6 +6830,12 @@ inline ::std::int32_t TestService::Names::Bound::uint_64t() const {
 inline TestService::Names::Bound TestService::Names::bind(const ::krpc::Connection& connection) {
   return Bound(connection);
 }
+
+inline TestService::None::None():
+  ::krpc::RemoteObject<None>("TestService::None") {}
+
+inline TestService::None::None(const ::krpc::Connection& connection, ::std::uint64_t id):
+  ::krpc::RemoteObject<None>(connection, "TestService::None", id) {}
 
 inline TestService::Object::Object():
   ::krpc::RemoteObject<Object>("TestService::Object") {}
@@ -6754,6 +6900,18 @@ inline TestService::Serializable::Serializable():
 
 inline TestService::Serializable::Serializable(const ::krpc::Connection& connection, ::std::uint64_t id):
   ::krpc::RemoteObject<Serializable>(connection, "TestService::Serializable", id) {}
+
+inline TestService::Server::Server():
+  ::krpc::RemoteObject<Server>("TestService::Server") {}
+
+inline TestService::Server::Server(const ::krpc::Connection& connection, ::std::uint64_t id):
+  ::krpc::RemoteObject<Server>(connection, "TestService::Server", id) {}
+
+inline TestService::Service::Service():
+  ::krpc::RemoteObject<Service>("TestService::Service") {}
+
+inline TestService::Service::Service(const ::krpc::Connection& connection, ::std::uint64_t id):
+  ::krpc::RemoteObject<Service>(connection, "TestService::Service", id) {}
 
 inline TestService::Stream::Stream():
   ::krpc::RemoteObject<Stream>("TestService::Stream") {}
@@ -7192,6 +7350,12 @@ inline ::std::string TestService::TestClass::Bound::static_optional_arguments(::
 inline TestService::TestClass::Bound TestService::TestClass::bind(const ::krpc::Connection& connection) {
   return Bound(connection);
 }
+
+inline TestService::TestServiceConnection::TestServiceConnection():
+  ::krpc::RemoteObject<TestServiceConnection>("TestService::TestServiceConnection") {}
+
+inline TestService::TestServiceConnection::TestServiceConnection(const ::krpc::Connection& connection, ::std::uint64_t id):
+  ::krpc::RemoteObject<TestServiceConnection>(connection, "TestService::TestServiceConnection", id) {}
 
 inline TestService::Tuple::Tuple():
   ::krpc::RemoteObject<Tuple>("TestService::Tuple") {}
