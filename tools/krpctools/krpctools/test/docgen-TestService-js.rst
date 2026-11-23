@@ -1948,6 +1948,22 @@ Service documentation string.
 
 
 
+.. class:: NamesEnum
+
+   An enumeration whose values are named after names in the generated code.
+
+
+   .. attribute:: mro
+
+      A value named after the method of a Python class that Enum reserves.
+
+
+   .. attribute:: toString_
+
+      A value named after a member of a JavaScript object.
+
+
+
 .. class:: PartlyDeprecatedEnum
 
    Partly deprecated enum documentation string.

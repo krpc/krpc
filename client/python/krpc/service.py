@@ -62,6 +62,14 @@ def _member_name(name: str) -> str:
     return _update_names(snake_case(name))[0]
 
 
+# The enumeration value name Enum rejects. The others it rejects start with _
+_RESERVED_ENUM_VALUE_NAMES = frozenset(["mro"])
+
+
+def _enum_value_name(name: str) -> str:
+    return _update_names(snake_case(name), reserved=_RESERVED_ENUM_VALUE_NAMES)[0]
+
+
 def _update_names(*names: str, reserved: frozenset[str] = frozenset()) -> list[str]:
     """Given a list of names, append underscores to keywords and the reserved names
     without causing names to clash"""
@@ -353,14 +361,15 @@ def service_definitions(
         doc = _documentation(enumeration, name)
         values = dict(
             (
-                _member_name(value.name),
+                _enum_value_name(value.name),
                 {
                     "value": value.value,
                     "doc": _documentation(value, name),
                     "deprecated": deprecation_warning(
                         value,
                         name,
-                        "%s.%s.%s" % (name, enumeration.name, _member_name(value.name)),
+                        "%s.%s.%s"
+                        % (name, enumeration.name, _enum_value_name(value.name)),
                     ),
                 },
             )

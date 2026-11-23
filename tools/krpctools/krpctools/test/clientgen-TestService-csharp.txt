@@ -1518,6 +1518,22 @@ namespace KRPC.Client.Services.TestService
     }
 
     /// <summary>
+    /// An enumeration whose values are named after names in the generated code.
+    /// </summary>
+    [global::System.Serializable]
+    public enum NamesEnum
+    {
+        /// <summary>
+        /// A value named after the method of a Python class that Enum reserves.
+        /// </summary>
+        Mro = 0,
+        /// <summary>
+        /// A value named after a member of a JavaScript object.
+        /// </summary>
+        ToString_ = 1
+    }
+
+    /// <summary>
     /// Partly deprecated enum documentation string.
     /// </summary>
     [global::System.Serializable]

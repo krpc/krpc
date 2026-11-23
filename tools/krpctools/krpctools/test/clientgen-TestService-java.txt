@@ -1450,6 +1450,42 @@ public class TestService extends krpc.client.RemoteService {
     }
 
     /**
+     * An enumeration whose values are named after names in the generated code.
+     */
+    public enum NamesEnum implements krpc.client.RemoteEnum {
+        /**
+         * A value named after the method of a Python class that Enum reserves.
+         */
+        MRO(0),
+
+        /**
+         * A value named after a member of a JavaScript object.
+         */
+        TO_STRING(1);
+
+        private final int value;
+
+        private NamesEnum (int value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public int getValue() {
+            return value;
+        }
+
+        public static NamesEnum fromValue(int value) {
+            switch (value) {
+            case 0:
+                 return MRO;
+            case 1:
+                 return TO_STRING;
+            }
+            return null;
+        }
+    }
+
+    /**
      * Partly deprecated enum documentation string.
      */
     public enum PartlyDeprecatedEnum implements krpc.client.RemoteEnum {

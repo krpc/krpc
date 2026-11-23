@@ -348,4 +348,21 @@ namespace TestServer.Names
         [KRPCProperty]
         public int Class { get; set; }
     }
+
+    /// <summary>
+    /// An enumeration whose values are named after names in the generated code.
+    /// </summary>
+    [KRPCEnum (Service = "TestService")]
+    public enum NamesEnum
+    {
+        /// <summary>
+        /// A value named after the method of a Python class that Enum reserves.
+        /// </summary>
+        Mro,
+
+        /// <summary>
+        /// A value named after a member of a JavaScript object.
+        /// </summary>
+        ToString
+    }
 }

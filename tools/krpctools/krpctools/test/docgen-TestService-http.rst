@@ -2199,6 +2199,24 @@ Passed and returned as the name of one of its values:
 
 
 
+.. _http-TestService.NamesEnum:
+
+.. rubric:: NamesEnum
+
+An enumeration whose values are named after names in the generated code.
+
+Passed and returned as the name of one of its values:
+
+
+``"mro"``
+   A value named after the method of a Python class that Enum reserves.
+
+
+``"to_string"``
+   A value named after a member of a JavaScript object.
+
+
+
 .. _http-TestService.PartlyDeprecatedEnum:
 
 .. rubric:: PartlyDeprecatedEnum

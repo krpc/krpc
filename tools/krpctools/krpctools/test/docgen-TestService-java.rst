@@ -1288,6 +1288,22 @@
 
 
 
+.. type:: public enum NamesEnum
+
+   An enumeration whose values are named after names in the generated code.
+
+
+   .. field:: public NamesEnum MRO
+
+      A value named after the method of a Python class that Enum reserves.
+
+
+   .. field:: public NamesEnum TO_STRING
+
+      A value named after a member of a JavaScript object.
+
+
+
 .. type:: public enum PartlyDeprecatedEnum
 
    Partly deprecated enum documentation string.

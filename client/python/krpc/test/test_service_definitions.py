@@ -151,6 +151,12 @@ class TestServiceDefinitions(unittest.TestCase):
         finally:
             register("Generated", Mode)
 
+    def test_an_enumeration_value_enum_reserves_is_escaped(self) -> None:
+        connection = create_services(
+            [generated_service({"Mro": 0, "Fast": 1}, ["Value"])]
+        )
+        self.assertEqual(0, connection.Generated.Mode.mro_.value)
+
     def test_a_number_the_server_lacks_does_not_coerce(self) -> None:
         connection = create_services([generated_service({"Slow": 0}, ["Value"])])
         mode_type = connection._types.enumeration_type("Generated", "Mode")

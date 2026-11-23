@@ -60,6 +60,9 @@ class PythonDomain(Domain[PythonLanguage]):
             return "%s_" % name
         return name
 
+    def enum_value_name(self, name):
+        return self.language.parse_enum_value_name(name)
+
     def parameter_type(self, typ):
         name = super().parameter_type(typ)
         return "%s or None" % name if typ.nullable else name
@@ -117,7 +120,11 @@ class PythonDomain(Domain[PythonLanguage]):
             name = name.split(".")
             name[-1] = self.method_name(name[-1])
             name = ".".join(name)
-        elif any(isinstance(obj, cls) for cls in (EnumerationValue, StructField)):
+        elif isinstance(obj, EnumerationValue):
+            name = name.split(".")
+            name[-1] = self.enum_value_name(name[-1])
+            name = ".".join(name)
+        elif isinstance(obj, StructField):
             name = name.split(".")
             name[-1] = snake_case(name[-1])
             name = ".".join(name)

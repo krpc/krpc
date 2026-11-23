@@ -52,8 +52,15 @@ class PythonLanguage(Language):
         (Type.UINT64, "max"): "krpc.limits.UINT64_MAX",
     }
 
+    # The enumeration value name Enum rejects. The others it rejects start with _
+    reserved_enum_value_names = frozenset(["mro"])
+
     def parse_name(self, name):
         return super().parse_name(snake_case(name))
+
+    def parse_enum_value_name(self, name):
+        name = self.parse_name(name)
+        return name + "_" if name in self.reserved_enum_value_names else name
 
     def native_exception(self, mapped_type: str) -> str | None:
         native = NATIVE_EXCEPTIONS.get(mapped_type)

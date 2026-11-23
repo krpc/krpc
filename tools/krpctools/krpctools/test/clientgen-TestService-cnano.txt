@@ -900,6 +900,20 @@ typedef enum {
 } krpc_TestService_DeprecatedEnum_t;
 
 /**
+ * An enumeration whose values are named after names in the generated code.
+ */
+typedef enum {
+  /**
+   * A value named after the method of a Python class that Enum reserves.
+   */
+  KRPC_TESTSERVICE_NAMESENUM_MRO = 0,
+  /**
+   * A value named after a member of a JavaScript object.
+   */
+  KRPC_TESTSERVICE_NAMESENUM_TOSTRING = 1
+} krpc_TestService_NamesEnum_t;
+
+/**
  * Partly deprecated enum documentation string.
  */
 typedef enum {
@@ -985,6 +999,7 @@ typedef enum {
 #define KRPC_CLASS_TESTSERVICE_TYPESPECS 857051661u, 3545358241u
 #define KRPC_CLASS_TESTSERVICE_UINT64 857051661u, 827421619u
 #define KRPC_ENUMERATION_TESTSERVICE_DEPRECATEDENUM 857051661u, 698911118u
+#define KRPC_ENUMERATION_TESTSERVICE_NAMESENUM 857051661u, 3464944780u
 #define KRPC_ENUMERATION_TESTSERVICE_PARTLYDEPRECATEDENUM 857051661u, 210444072u
 #define KRPC_ENUMERATION_TESTSERVICE_TESTENUM 857051661u, 1281753798u
 #define KRPC_ENUMERATION_TESTSERVICE_TESTFLAGS 857051661u, 111077217u

@@ -429,6 +429,13 @@ export interface Service extends RemoteService<"TestService"> {
      */
     readonly valueB: DeprecatedEnum;
   };
+  /** An enumeration whose values are named after names in the generated code. */
+  readonly NamesEnum: {
+    /** A value named after the method of a Python class that Enum reserves. */
+    readonly mro: NamesEnum;
+    /** A value named after a member of a JavaScript object. */
+    readonly toString_: NamesEnum;
+  };
   /** Partly deprecated enum documentation string. */
   readonly PartlyDeprecatedEnum: {
     /** Partly deprecated enum ValueA documentation string. */
@@ -695,6 +702,10 @@ export interface UInt64 extends _RemoteObject<"TestService.UInt64"> {}
 export type DeprecatedEnum = RemoteEnum<"TestService.DeprecatedEnum">;
 /** @deprecated Use TestEnum instead. */
 export const DeprecatedEnum = declareEnumeration<Service["DeprecatedEnum"]>("TestService", "DeprecatedEnum", [["valueA", 0, "TestService.DeprecatedEnum.valueA is deprecated: Use TestEnum instead."], ["valueB", 1, "TestService.DeprecatedEnum.valueB is deprecated: Use DeprecatedEnum.valueA instead."]]);
+
+/** An enumeration whose values are named after names in the generated code. */
+export type NamesEnum = RemoteEnum<"TestService.NamesEnum">;
+export const NamesEnum = declareEnumeration<Service["NamesEnum"]>("TestService", "NamesEnum", [["mro", 0], ["toString_", 1]]);
 
 /** Partly deprecated enum documentation string. */
 export type PartlyDeprecatedEnum = RemoteEnum<"TestService.PartlyDeprecatedEnum">;
@@ -1194,6 +1205,8 @@ export declare namespace Server {
      * @deprecated Use TestEnum instead.
      */
     readonly DeprecatedEnum: ClientService["DeprecatedEnum"];
+    /** An enumeration whose values are named after names in the generated code. */
+    readonly NamesEnum: ClientService["NamesEnum"];
     /** Partly deprecated enum documentation string. */
     readonly PartlyDeprecatedEnum: ClientService["PartlyDeprecatedEnum"];
     /** Enum documentation string. */

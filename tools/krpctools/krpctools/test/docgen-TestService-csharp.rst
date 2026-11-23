@@ -1618,6 +1618,22 @@
 
 
 
+.. enum:: NamesEnum
+
+   An enumeration whose values are named after names in the generated code.
+
+
+   .. enumerator:: Mro
+
+      A value named after the method of a Python class that Enum reserves.
+
+
+   .. enumerator:: ToString
+
+      A value named after a member of a JavaScript object.
+
+
+
 .. enum:: PartlyDeprecatedEnum
 
    Partly deprecated enum documentation string.

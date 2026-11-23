@@ -31,6 +31,18 @@ _deprecate_attribute(DeprecatedEnum, "value_a", "TestService.DeprecatedEnum.valu
 _deprecate_attribute(DeprecatedEnum, "value_b", "TestService.DeprecatedEnum.value_b is deprecated: Use DeprecatedEnum.value_a instead.")
 
 
+class NamesEnum(_RemoteEnum):
+    """
+    An enumeration whose values are named after names in the generated code.
+    """
+    mro_ = 0, """
+A value named after the method of a Python class that Enum reserves.
+"""
+    to_string = 1, """
+A value named after a member of a JavaScript object.
+"""
+
+
 class PartlyDeprecatedEnum(_RemoteEnum):
     """
     Partly deprecated enum documentation string.
@@ -705,6 +717,7 @@ if TYPE_CHECKING:
     _type_TypeSpecs = TypeSpecs
     _type_UInt64 = UInt64
     _type_DeprecatedEnum = DeprecatedEnum
+    _type_NamesEnum = NamesEnum
     _type_PartlyDeprecatedEnum = PartlyDeprecatedEnum
     _type_TestEnum = TestEnum
     _type_TestFlags = TestFlags
@@ -755,6 +768,7 @@ class TestService(metaclass=_DeclaredClass):
     TypeSpecs: type[_type_TypeSpecs] = TypeSpecs
     UInt64: type[_type_UInt64] = UInt64
     DeprecatedEnum: type[_type_DeprecatedEnum] = DeprecatedEnum
+    NamesEnum: type[_type_NamesEnum] = NamesEnum
     PartlyDeprecatedEnum: type[_type_PartlyDeprecatedEnum] = PartlyDeprecatedEnum
     TestEnum: type[_type_TestEnum] = TestEnum
     TestFlags: type[_type_TestFlags] = TestFlags
@@ -1275,6 +1289,7 @@ class TestServiceConnection(krpc.connection.Connection):
 _register(
     "TestService",
     DeprecatedEnum,
+    NamesEnum,
     PartlyDeprecatedEnum,
     TestEnum,
     TestFlags,

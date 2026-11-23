@@ -2081,6 +2081,27 @@ Service documentation string.
 
 
 
+.. type:: krpc_TestService_NamesEnum_t
+
+   An enumeration whose values are named after names in the generated code.
+
+   .. macro:: KRPC_ENUMERATION_TESTSERVICE_NAMESENUM
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_TESTSERVICE_NAMESENUM_MRO
+
+      A value named after the method of a Python class that Enum reserves.
+
+
+   .. macro:: KRPC_TESTSERVICE_NAMESENUM_TOSTRING
+
+      A value named after a member of a JavaScript object.
+
+
+
 .. type:: krpc_TestService_PartlyDeprecatedEnum_t
 
    Partly deprecated enum documentation string.

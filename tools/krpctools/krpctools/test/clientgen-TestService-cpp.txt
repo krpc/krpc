@@ -121,6 +121,20 @@ class TestService : public ::krpc::RemoteService {
   };
 
   /**
+   * An enumeration whose values are named after names in the generated code.
+   */
+  enum struct NamesEnum {
+    /**
+     * A value named after the method of a Python class that Enum reserves.
+     */
+    mro = 0,
+    /**
+     * A value named after a member of a JavaScript object.
+     */
+    to_string = 1
+  };
+
+  /**
    * Partly deprecated enum documentation string.
    */
   enum struct PartlyDeprecatedEnum {
@@ -2413,6 +2427,10 @@ namespace encoder {
     return krpc::encoder::encode(static_cast<int32_t>(value));
   }
 
+  inline std::string encode(const services::TestService::NamesEnum& value) {
+    return krpc::encoder::encode(static_cast<int32_t>(value));
+  }
+
   inline std::string encode(const services::TestService::PartlyDeprecatedEnum& value) {
     return krpc::encoder::encode(static_cast<int32_t>(value));
   }
@@ -2529,6 +2547,12 @@ namespace decoder {
     int32_t x;
     decode(x, data, connection);
     value = static_cast<services::TestService::DeprecatedEnum>(x);
+  }
+
+  inline void decode(services::TestService::NamesEnum& value, const std::string& data, ::krpc::Connection* connection) {
+    int32_t x;
+    decode(x, data, connection);
+    value = static_cast<services::TestService::NamesEnum>(x);
   }
 
   inline void decode(services::TestService::PartlyDeprecatedEnum& value, const std::string& data, ::krpc::Connection* connection) {

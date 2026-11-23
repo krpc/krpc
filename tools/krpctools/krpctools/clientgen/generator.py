@@ -263,7 +263,7 @@ class Generator(Generic[LanguageT]):
                 "id": enumeration["id"],
                 "values": [
                     {
-                        "name": self.parse_name(x["name"]),
+                        "name": self.language.parse_enum_value_name(x["name"]),
                         "remote_name": x["name"],
                         "value": x["value"],
                         "documentation": self.parse_documentation(x["documentation"]),
