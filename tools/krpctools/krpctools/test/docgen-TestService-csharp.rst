@@ -871,7 +871,7 @@
 
       :Game Scenes: All
 
-   .. function:: int Service()
+   .. function:: int Service_()
 
       A procedure named Service, as the C# client names the class of a service.
 
@@ -1278,7 +1278,7 @@
 
    A class whose members are named after names in the generated code.
 
-   .. function:: static int Bind(IConnection connection)
+   .. function:: static int Bind_(IConnection connection)
 
       A static method named after the method that binds the static methods of a class
       to a connection.
@@ -1286,7 +1286,7 @@
 
       :Game Scenes: All
 
-   .. function:: int Bound()
+   .. function:: int Bound_()
 
       A method named after the class that holds the bound static methods of a class.
 
@@ -1373,7 +1373,7 @@
 
       :Game Scenes: All
 
-   .. function:: string ToString(int value)
+   .. function:: string ToString_(int value)
 
       A method named after a method of java.lang.Object.
 
@@ -1628,7 +1628,7 @@
       A value named after the method of a Python class that Enum reserves.
 
 
-   .. enumerator:: ToString
+   .. enumerator:: ToString_
 
       A value named after a member of a JavaScript object.
 
@@ -1733,7 +1733,7 @@
 
    A structure whose fields are named after names in the generated code.
 
-   .. function:: NamesStruct(int other, int result, int java, int krpc, int class)
+   .. function:: NamesStruct(int other, int result, int java, int krpc, int class_)
 
       Construct a NamesStruct from the values of its fields.
 

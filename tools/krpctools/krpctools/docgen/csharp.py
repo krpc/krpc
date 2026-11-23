@@ -12,6 +12,7 @@ from krpc.types import (
     TupleType,
     ValueType,
 )
+from krpc.utils import lower_camel_case
 
 from ..lang.csharp import CsharpLanguage
 from .domain import Domain
@@ -199,9 +200,32 @@ class CsharpDomain(Domain[CsharpLanguage]):
                 prefix,
                 self.ref(obj),
                 service,
-                obj.fullname,
+                self.ref(obj),
             )
         return ":%s:`%s`" % (prefix, self.ref(obj))
+
+    def member_name(self, obj):
+        """The name of a member in the generated code, escaped as a keyword or a member of the
+        client's base classes is, or as a member named as the type that holds it"""
+        if isinstance(obj, EnumerationValue):
+            return self.language.parse_enum_value_name(obj.name)
+        name = self.language.parse_name(obj.name)
+        owner = "Service"
+        if not isinstance(obj, (Procedure, Property)):
+            owner = obj.fullname.split(".")[1]
+        return name + "_" if name == owner else name
+
+    def field_parameter_name(self, field):
+        """The name of the constructor parameter of a structure field"""
+        return self.language.parse_name(lower_camel_case(self.member_name(field)))
+
+    def ref(self, obj):
+        name = obj.fullname
+        if not isinstance(obj, (Service, Class, Enumeration, Struct, ExceptionNode)):
+            parts = name.split(".")
+            parts[-1] = self.member_name(obj)
+            name = ".".join(parts)
+        return self.shorten_ref(name, obj)
 
     def shorten_ref(self, name, obj=None):
         # Only drop service name for non-service members
