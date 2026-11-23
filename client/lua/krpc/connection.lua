@@ -14,6 +14,26 @@ local errors = require 'krpc.error'
 
 local Connection = class()
 
+-- The public members of a connection, which a service of the same name would replace. The
+-- Penlight class adds is_a, class_of, cast and catch. A test checks the list against the class
+Connection.MEMBERS = {
+  'cast', 'catch', 'class_of', 'close', 'compile', 'get_call', 'get_call_template', 'is_a', 'run'
+}
+local members = {}
+for _, name in ipairs(Connection.MEMBERS) do
+  members[name] = true
+end
+
+--- The field of a connection that holds a service, with a trailing underscore where it is the
+--- name of a member of the connection
+function Connection._service_field(name)
+  name = to_snake_case(name)
+  if members[name] then
+    name = name .. '_'
+  end
+  return name
+end
+
 function Connection:_init(transport)
   self._types = Types()
   self._transport = transport
@@ -42,7 +62,7 @@ function Connection:_init(transport)
   -- Set up services
   self._deprecated_services = {}
   for _, service in ipairs(services) do
-    local name = to_snake_case(service.name)
+    local name = Connection._service_field(service.name)
     local svc = create_service(self, service)
     if service.deprecated then
       self._deprecated_services[name] = {

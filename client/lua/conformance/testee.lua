@@ -12,6 +12,7 @@ local Map = require 'pl.Map'
 local krpc = require 'krpc.init'
 local Attributes = require 'krpc.attributes'
 local Service = require 'krpc.service'
+local Connection = require 'krpc.connection'
 local Types = require 'krpc.types'
 local encoder = require 'krpc.encoder'
 local decoder = require 'krpc.decoder'
@@ -19,7 +20,8 @@ local protobuf = require 'krpc.protobuf'
 local TCPIPTransport = require 'krpc.tcpiptransport'
 local LocalTransport = require 'krpc.localtransport'
 
-local to_snake_case = Service.to_snake_case
+local member_name = Service.member_name
+local service_name = Connection._service_field
 
 assert(pb.load(require 'conformance.testee_schema'))
 
@@ -50,7 +52,7 @@ local next_handle = 1
 
 -- An enum, struct or class type of a service
 local function service_type(value)
-  return conn[to_snake_case(value.service)][value.name]
+  return conn[service_name(value.service)][value.name]
 end
 
 -- A failure the driver reports as a test the language cannot carry out
@@ -253,7 +255,7 @@ local function members(command)
       names[#names + 1] = k
     end
   else
-    local obj = conn[to_snake_case(command.service)]
+    local obj = conn[service_name(command.service)]
     if (command.name or '') ~= '' then
       obj = obj[command.name]
     end
@@ -276,7 +278,7 @@ local function resolve(command)
   -- An instance member is called through its instance, so only the other members need the
   -- service object
   local function service()
-    local result = conn[to_snake_case(command.service)]
+    local result = conn[service_name(command.service)]
     if result == nil then
       error('The testee cannot call service ' .. command.service, 0)
     end
@@ -289,7 +291,7 @@ local function resolve(command)
     args[i] = from_value(arg)
   end
   if Attributes.is_a_class_member(name) then
-    local member = to_snake_case(Attributes.get_class_member_name(name))
+    local member = member_name(Attributes.get_class_member_name(name))
     if Attributes.is_a_class_static_method(name) then
       if command.through ~= nil then
         return from_value(command.through)[member], args, count
@@ -303,24 +305,24 @@ local function resolve(command)
     return args[1][member], args, count
   elseif Attributes.is_a_property_getter(name) then
     local svc = service()
-    return svc['get_' .. to_snake_case(Attributes.get_property_name(name))], { svc }, 1
+    return svc['get_' .. member_name(Attributes.get_property_name(name))], { svc }, 1
   elseif Attributes.is_a_property_setter(name) then
     local svc = service()
-    return svc['set_' .. to_snake_case(Attributes.get_property_name(name))], { svc, args[1] }, 2
+    return svc['set_' .. member_name(Attributes.get_property_name(name))], { svc, args[1] }, 2
   end
-  return service()[to_snake_case(name)], args, count
+  return service()[member_name(name)], args, count
 end
 
 -- The procedure of a call template, reached through its class or service, given the name the
 -- server gives it
 local function resolve_template(command)
-  local svc = conn[to_snake_case(command.service)]
+  local svc = conn[service_name(command.service)]
   if svc == nil then
     error('The testee cannot call service ' .. command.service, 0)
   end
   local name = command.procedure
   if Attributes.is_a_class_member(name) then
-    local member = to_snake_case(Attributes.get_class_member_name(name))
+    local member = member_name(Attributes.get_class_member_name(name))
     local class = svc[Attributes.get_class_name(name)]
     if Attributes.is_a_class_property_getter(name) then
       return class['get_' .. member]
@@ -329,11 +331,11 @@ local function resolve_template(command)
     end
     return class[member]
   elseif Attributes.is_a_property_getter(name) then
-    return svc['get_' .. to_snake_case(Attributes.get_property_name(name))]
+    return svc['get_' .. member_name(Attributes.get_property_name(name))]
   elseif Attributes.is_a_property_setter(name) then
-    return svc['set_' .. to_snake_case(Attributes.get_property_name(name))]
+    return svc['set_' .. member_name(Attributes.get_property_name(name))]
   end
-  return svc[to_snake_case(name)]
+  return svc[member_name(name)]
 end
 
 -- Call a procedure, given the name the server gives it
@@ -357,11 +359,11 @@ local function use_member(command)
     return
   end
   if command.member == '' then
-    local _ = conn[to_snake_case(command.service)]
+    local _ = conn[service_name(command.service)]
     return
   end
   local type_name, name = command.member:match('^([^.]*)%.?(.*)$')
-  local typ = conn[to_snake_case(command.service)][type_name]
+  local typ = conn[service_name(command.service)][type_name]
   if typ == nil then
     unsupported('The client has no ' .. type_name)
   end
@@ -369,7 +371,7 @@ local function use_member(command)
     if typ._field_names ~= nil then
       unsupported('A field of a structure is a table entry, which cannot warn when read')
     end
-    local _ = typ[to_snake_case(name)]
+    local _ = typ[member_name(name)]
   end
 end
 
@@ -379,7 +381,7 @@ local function deprecation_signals(command)
   -- Reaching a member is not part of its use, and the client warns of each member once
   Types.warn = function() end
   if command.member ~= '' then
-    local service = conn[to_snake_case(command.service)]
+    local service = conn[service_name(command.service)]
     local type_name = command.member:match('^([^.]*)%.')
     if type_name ~= nil then
       local _ = service[type_name]
