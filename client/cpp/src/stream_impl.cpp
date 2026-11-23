@@ -253,16 +253,19 @@ void StreamImpl::call(const std::shared_ptr<CallbackEntry>& callback, uint64_t v
 
 bool StreamImpl::enter_on_update_thread(CallbackEntry* callback, uint64_t version,
                                         const std::string& data, bool is_null) {
-  while (!callback->lock.try_lock_for(std::chrono::milliseconds(10))) {
+  while (true) {
+    // Checked before each wait for the lock, as the first call can return during the wait
+    {
+      std::lock_guard<std::recursive_mutex> guard(*update_lock);
+      if (callback->adding) {
+        callback->missed.push_back({version, data, is_null});
+        return false;
+      }
+    }
+    if (callback->lock.try_lock_for(std::chrono::milliseconds(10))) return true;
     auto held_manager = manager.lock();
     if (!held_manager || held_manager->is_close_requested()) return false;
-    std::lock_guard<std::recursive_mutex> guard(*update_lock);
-    if (callback->adding) {
-      callback->missed.push_back({version, data, is_null});
-      return false;
-    }
   }
-  return true;
 }
 
 void StreamImpl::call_missed(CallbackEntry* callback) {

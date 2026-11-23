@@ -376,6 +376,13 @@ class StreamImpl {
     boolean interrupted = false;
     try {
       while (true) {
+        // Checked before each wait for the lock, as the first call can return during the wait
+        synchronized (updateLock) {
+          if (callback.adding) {
+            callback.missed.add(new Missed(version, value));
+            return false;
+          }
+        }
         try {
           if (callback.lock.tryLock(CALLBACK_LOCK_MILLISECONDS, TimeUnit.MILLISECONDS)) {
             return true;
@@ -385,12 +392,6 @@ class StreamImpl {
         }
         if (manager.isCloseRequested()) {
           return false;
-        }
-        synchronized (updateLock) {
-          if (callback.adding) {
-            callback.missed.add(new Missed(version, value));
-            return false;
-          }
         }
       }
     } finally {

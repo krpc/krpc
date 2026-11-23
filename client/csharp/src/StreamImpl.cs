@@ -417,17 +417,19 @@ namespace KRPC.Client
         /// the value is queued for the adding thread or the connection is closing.
         /// </summary>
         bool EnterOnDispatcherThread (Callback callback, long version, object value) {
-            while (!Monitor.TryEnter (callback, 10)) {
-                if (connection.StreamManager.CloseRequested)
-                    return false;
+            while (true) {
+                // Checked before each wait for the lock, as the first call can return during the wait
                 lock (updateLock) {
                     if (callback.Adding) {
                         callback.Missed.Enqueue (new KeyValuePair<long, object> (version, value));
                         return false;
                     }
                 }
+                if (Monitor.TryEnter (callback, 10))
+                    return true;
+                if (connection.StreamManager.CloseRequested)
+                    return false;
             }
-            return true;
         }
 
         /// <summary>

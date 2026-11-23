@@ -319,14 +319,17 @@ class StreamImpl:
     ) -> bool:
         """Take a callback's lock on the dispatcher thread. Returns false, without the
         lock, once the value is queued for the adding thread or the client is closing."""
-        while not callback.lock.acquire(timeout=0.01):
-            if self._manager.close_requested:
-                return False
+        while True:
+            # Checked before each wait for the lock, as the first call can return during
+            # the wait
             with self._update_lock:
                 if callback.adding:
                     callback.missed.append((version, value))
                     return False
-        return True
+            if callback.lock.acquire(timeout=0.01):
+                return True
+            if self._manager.close_requested:
+                return False
 
     def _call_missed(self, callback: _Callback) -> None:
         """Call a callback, on the adding thread, with the values the dispatcher thread
