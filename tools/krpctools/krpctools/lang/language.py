@@ -90,6 +90,10 @@ class Language:
     keywords: Collection[str]
     value_map: dict[str, str]
 
+    # The names the generated code declares beside a procedure's parameters. A parameter of
+    # one of these names takes a trailing underscore, as a keyword does.
+    parameter_reserved: Collection[str] = ()
+
     def __init__(self):
         self.module = None
 
@@ -97,6 +101,10 @@ class Language:
         if hasattr(self, "keywords") and name in self.keywords:
             return "%s_" % name
         return name
+
+    def parse_parameter_name(self, name):
+        name = self.parse_name(name)
+        return "%s_" % name if name in self.parameter_reserved else name
 
     def parse_enum_value_name(self, name):
         """The name of a value of an enumeration, as the enumeration declares it"""

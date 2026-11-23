@@ -15,7 +15,7 @@ def _cpp_template_fix(typ):
 
 
 class CppGenerator(Generator[CppLanguage]):
-    language = CppLanguage()
+    language = CppLanguage(qualified=True)
     includes_services = True
 
     plain_cref_separator = "::"
@@ -191,14 +191,14 @@ class CppDocParser(DocParser):
         return "\n\n" + self.parse_node(node).strip()
 
     def parse_param(self, node):
-        name = self.language.parse_name(node.attrib["name"])
+        name = self.language.parse_parameter_name(node.attrib["name"])
         return "\n@param %s %s" % (name, self.parse_node(node).strip())
 
     def parse_returns(self, node):
         return "\n@return %s" % self.parse_node(node).strip()
 
     def parse_paramref(self, node):
-        return self.language.parse_name(node.attrib["name"])
+        return self.language.parse_parameter_name(node.attrib["name"])
 
     @staticmethod
     def parse_a(node):
