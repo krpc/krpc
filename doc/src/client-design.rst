@@ -162,10 +162,11 @@ then differ only in case, and the server's :ref:`case-insensitive name rules
 
 lowerCamel keeps acronyms after the first word in capitals, as in ``meanAnomalyAtUT``, so it stays
 close to the C# name. A property accessor is ``get`` or ``set`` and the UpperCamel name, as in
-``getRCSThrust``. A C-nano macro joins its names with ``_``, as in
-``KRPC_SPACECENTER_SASMODE_STABILITYASSIST``, so it upper cases each name with no words. Splitting
-them would make enumeration ``FooBar`` value ``Baz`` and enumeration ``Foo`` value ``BarBaz`` one
-macro.
+``getRCSThrust``. A name that would clash with a keyword of the language, or with a member the
+client's objects already have, takes a trailing ``_``, as in JavaScript's ``toString_``. A C-nano
+macro joins its names with ``_``, as in ``KRPC_SPACECENTER_SASMODE_STABILITYASSIST``, so it upper
+cases each name with no words. Splitting them would make enumeration ``FooBar`` value ``Baz`` and
+enumeration ``Foo`` value ``BarBaz`` one macro.
 
 The case of each name in each client:
 

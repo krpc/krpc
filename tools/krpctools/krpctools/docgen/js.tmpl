@@ -43,7 +43,7 @@
 {% endmacro %}
 
 {% macro procedure(x, directive) %}{{ mark_documented(x) }}
-.. {{ directive }}:: {{ domain.method_name(x.name) }}({{ parameters(x.parameters) }})
+.. {{ directive }}:: {{ domain.member_name(x) }}({{ parameters(x.parameters) }})
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -51,8 +51,8 @@
 {{ gendoc(x.documentation) | indent }}
 
 {% for p in x.parameters %}
-   :param {{ domain.method_name(p.name) }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.has_default_value and p.default_value is not none %} Defaults to ``{{ domain.default_value(p.default_value, p.type) }}``.{% endif +%}
-   :type {{ domain.method_name(p.name) }}: {{ domain.parameter_type(p.type) }}
+   :param {{ domain.parameter_name(p.name) }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.has_default_value and p.default_value is not none %} Defaults to ``{{ domain.default_value(p.default_value, p.type) }}``.{% endif +%}
+   :type {{ domain.parameter_name(p.name) }}: {{ domain.parameter_type(p.type) }}
 {% endfor %}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
@@ -90,7 +90,7 @@
 {% endmacro %}
 
 {% macro class_method(x) %}{{ mark_documented(x) }}
-.. method:: {{ domain.method_name(x.name) }}({{ parameters(x.parameters[1:]) }})
+.. method:: {{ domain.member_name(x) }}({{ parameters(x.parameters[1:]) }})
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -98,8 +98,8 @@
 {{ gendoc(x.documentation) | indent }}
 
 {% for p in x.parameters[1:] %}
-   :param {{ domain.method_name(p.name) }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.has_default_value and p.default_value is not none %} Defaults to ``{{ domain.default_value(p.default_value, p.type) }}``.{% endif +%}
-   :type {{ domain.method_name(p.name) }}: {{ domain.parameter_type(p.type) }}
+   :param {{ domain.parameter_name(p.name) }}:{% if hasdoc(p.documentation, './param[@name=\''+p.name+'\']') %} {{ gendoc(p.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.has_default_value and p.default_value is not none %} Defaults to ``{{ domain.default_value(p.default_value, p.type) }}``.{% endif +%}
+   :type {{ domain.parameter_name(p.name) }}: {{ domain.parameter_type(p.type) }}
 {% endfor %}
 {% if hasdoc(x.documentation, './returns') %}{{ returns(x.documentation) | indent }}
 {% endif %}
@@ -136,7 +136,7 @@
 
 {% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
-   .. attribute:: {{ domain.method_name(value.name) }}
+   .. attribute:: {{ domain.member_name(value) }}
 
 {% if value.deprecated %}{{ deprecated(value) | indent(width=6) }}
 
@@ -157,7 +157,7 @@
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% for field in x.fields.values() %}{{ mark_documented(field) }}
-   .. attribute:: {{ domain.method_name(field.name) }}
+   .. attribute:: {{ domain.member_name(field) }}
 
 {% if field.deprecated %}{{ deprecated(field) | indent(width=6) }}
 
@@ -183,7 +183,7 @@
 {% endmacro %}
 
 {% macro parameters(x) %}
-{% for p in x %}{% if p.has_default_value %}[{% endif %}{% if not loop.first %}, {% endif %}{{ domain.method_name(p.name) }}{% endfor %}{% for p in x %}{% if p.has_default_value %}]{% endif %}{% endfor %}
+{% for p in x %}{% if p.has_default_value %}[{% endif %}{% if not loop.first %}, {% endif %}{{ domain.parameter_name(p.name) }}{% endfor %}{% for p in x %}{% if p.has_default_value %}]{% endif %}{% endfor %}
 {% endmacro %}
 
 {% macro returns(x) %}

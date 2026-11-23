@@ -18,7 +18,7 @@ from krpc.types import (
 )
 from krpc.utils import lower_camel_case
 
-from ..lang.js import JsLanguage, accessor_name
+from ..lang.js import JsLanguage, accessor_name, member_name
 from . import crefs
 from .docparser import DocParser
 from .generator import Generator
@@ -115,11 +115,11 @@ class JsGenerator(Generator[JsLanguage]):
         for name, info in context["classes"].items():
             # The prototype holds the methods, for Connection.getCallTemplate
             static = [["readonly prototype: %s;" % name]]
-            for method_name, method in info["static_methods"].items():
+            for method in info["static_methods"].values():
                 static.append(
                     self._member(
                         method["documentation"],
-                        self._procedure(method_name, method),
+                        self._procedure(self._static_name(method), method),
                         method,
                     )
                 )
@@ -346,10 +346,10 @@ class JsGenerator(Generator[JsLanguage]):
             static = [
                 self._member(
                     self._server_documentation(m["procedure"]["documentation"]),
-                    self._procedure(n, m, True),
+                    self._procedure(self._static_name(m), m, True),
                     m,
                 )
-                for n, m in info["static_methods"].items()
+                for m in info["static_methods"].values()
             ]
             # A class is a value, which names a type and holds the static methods
             server_members.append(
@@ -397,6 +397,12 @@ class JsGenerator(Generator[JsLanguage]):
                 }
             )
         return server_members, server_classes, uses_client_service
+
+    @staticmethod
+    def _static_name(method):
+        """The name of a static method, clear of the members of the class that holds it"""
+        remote = Attributes.get_class_member_name(method["remote_name"])
+        return member_name(remote, static=True)
 
     def _client_type(self, name):
         """The name a type the client exports takes in the module, which imports it"""
@@ -543,7 +549,7 @@ class JsGenerator(Generator[JsLanguage]):
         definitions = definitions[len(definitions) - len(info["parameters"]) :]
         result = []
         for definition in definitions:
-            key = self.language.parse_name(definition["name"])
+            key = self.language.parse_parameter_name(definition["name"])
             result.append(
                 {
                     "key": key,
@@ -573,7 +579,7 @@ class JsGenerator(Generator[JsLanguage]):
             documentation = setter["procedure"]["documentation"]
             parameter = setter["procedure"]["parameters"][-1]
             value = self.ts_type(self.as_type(parameter["type"]), True, True)
-        name = lower_camel_case(self._property_name(remote))
+        name = member_name(self._property_name(remote))
         if getter is None:
             # A property with no getter cannot be read
             lines = ["set %s(value: %s);" % (name, value)]
@@ -712,11 +718,11 @@ class JsGenerator(Generator[JsLanguage]):
             member = target.member
             if target.kind in (crefs.PROPERTY, crefs.CLASS_PROPERTY):
                 if self._server_links:
-                    member = lower_camel_case(member)
+                    member = member_name(member)
                 else:
                     member = accessor_name("get" if target.getter else "set", member)
             else:
-                member = self.language.parse_name(member)
+                member = member_name(member, target.kind == crefs.CLASS_STATIC_METHOD)
             if target.kind in (crefs.CLASS_STATIC_METHOD, crefs.ENUMERATION_VALUE):
                 name = "Service.%s.%s" % (target.type, member)
             else:
@@ -824,7 +830,7 @@ class JsDocParser(DocParser):
         description = self.parse_node(node).strip()
         if not description:
             return ""
-        name = self.language.parse_name(node.attrib["name"])
+        name = self.language.parse_parameter_name(node.attrib["name"])
         return "\n\n@param %s - %s" % (name, description)
 
     def parse_returns(self, node):
@@ -834,7 +840,7 @@ class JsDocParser(DocParser):
         return "\n\n@returns %s" % description
 
     def parse_paramref(self, node):
-        return "`%s`" % self.language.parse_name(node.attrib["name"])
+        return "`%s`" % self.language.parse_parameter_name(node.attrib["name"])
 
     @staticmethod
     def parse_a(node):

@@ -17,7 +17,7 @@ import {
   StreamError,
 } from "./errors.js";
 import { Functions } from "./functions.js";
-import { accessorName, camelCase } from "./naming.js";
+import { accessorName, camelCase, memberName } from "./naming.js";
 import { ObjectCache, RemoteObject, RemoteService } from "./objects.js";
 import { name as nameValue, registered } from "./registry.js";
 import {
@@ -623,7 +623,7 @@ function addClassMembers(
       if (name.includes("_static_")) {
         const cls = classes.get(`${service.name}.${className}`);
         if (cls !== undefined) {
-          const key = camelCase(member);
+          const key = memberName(member, true);
           const message = deprecationMessage(
             procedure,
             service.name,
@@ -648,7 +648,7 @@ function addClassMembers(
       if (cls === undefined) {
         continue;
       }
-      let key = camelCase(member);
+      let key = memberName(member);
       if (name.includes("_get_")) {
         key = accessorName("get", member);
       } else if (name.includes("_set_")) {
@@ -705,7 +705,7 @@ function serviceMembers(
     if (sig === null) {
       continue;
     }
-    let key = camelCase(name);
+    let key = memberName(name);
     if (name.startsWith("get_")) {
       key = accessorName("get", name.slice(4));
     } else if (name.startsWith("set_")) {
@@ -730,7 +730,7 @@ function serviceMembers(
     const values = enumeration?.values ?? {};
     const exposed: Record<string, unknown> = {};
     for (const value of x.values) {
-      const key = camelCase(value.name);
+      const key = memberName(value.name);
       const message = deprecationMessage(value, service.name, `${service.name}.${x.name}.${key}`);
       expose(context, exposed, key, values[key], message);
     }

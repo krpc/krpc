@@ -1,6 +1,6 @@
 import { deprecationMessage } from "../deprecation.js";
 import { nativeError } from "../errors.js";
-import { camelCase } from "../naming.js";
+import { camelCase, memberName } from "../naming.js";
 import type { Procedure, Service } from "../schema/krpc_pb.js";
 import { type Type, type Types, UnknownTypeError } from "../types.js";
 
@@ -57,7 +57,7 @@ export class MemberIndex {
       for (const x of service.structs) {
         this.#fields.set(
           `${service.name}.${x.name}`,
-          new Map(x.fields.map((field) => [camelCase(field.name), field.name])),
+          new Map(x.fields.map((field) => [memberName(field.name), field.name])),
         );
       }
     }
@@ -119,9 +119,9 @@ export class MemberIndex {
       return;
     }
     const className = name.slice(0, name.indexOf("_"));
-    const memberName = name.slice(name.lastIndexOf("_") + 1);
+    const staticName = name.slice(name.lastIndexOf("_") + 1);
     if (name.includes("_static_")) {
-      const key = camelCase(memberName);
+      const key = memberName(staticName, true);
       const members = this.#members(service, className);
       members.statics.set(key, withDeprecation(member, `${service}.${className}.${key}`));
       return;
@@ -151,12 +151,12 @@ export class MemberIndex {
  * removed: `get_Name` is the getter `name`. */
 function accessor(members: Members, name: string): [Map<string, Member>, string] {
   if (name.startsWith("get_")) {
-    return [members.getters, camelCase(name.slice(4))];
+    return [members.getters, memberName(name.slice(4))];
   }
   if (name.startsWith("set_")) {
-    return [members.setters, camelCase(name.slice(4))];
+    return [members.setters, memberName(name.slice(4))];
   }
-  return [members.methods, camelCase(name)];
+  return [members.methods, memberName(name)];
 }
 
 function withDeprecation(member: Member, qualified: string): Member {

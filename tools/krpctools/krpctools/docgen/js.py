@@ -14,7 +14,7 @@ from krpc.types import (
 )
 from krpc.utils import lower_camel_case
 
-from ..lang.js import JsLanguage, accessor_name
+from ..lang.js import JsLanguage, accessor_name, member_name
 from .domain import Domain
 from .nodes import (
     Class,
@@ -56,7 +56,11 @@ class JsDomain(Domain[JsLanguage]):
         return ".. module:: %s\n   :no-index:" % name
 
     @staticmethod
-    def method_name(name):
+    def member_name(obj):
+        return member_name(obj.name, isinstance(obj, ClassStaticMethod))
+
+    @staticmethod
+    def parameter_name(name):
         return lower_camel_case(name)
 
     @staticmethod
@@ -141,7 +145,7 @@ class JsDomain(Domain[JsLanguage]):
             obj,
             (Procedure, ClassMethod, ClassStaticMethod, EnumerationValue, StructField),
         ):
-            name[-1] = lower_camel_case(name[-1])
+            name[-1] = member_name(name[-1], isinstance(obj, ClassStaticMethod))
         return ".".join(name)
 
     def see(self, obj):
