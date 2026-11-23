@@ -168,7 +168,8 @@ namespace KRPC.Test.Server.LocalSocket
         {
             // A run that is killed rather than stopped leaves the socket file behind,
             // which would otherwise make every later bind fail
-            File.WriteAllText (path, string.Empty);
+            using (var stale = new Socket (AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified))
+                UnixSocket.BindAndListen (stale, path, 1);
             Assert.IsTrue (File.Exists (path));
             var server = new LocalSocketServer (path);
             server.Start ();
