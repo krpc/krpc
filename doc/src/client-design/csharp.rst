@@ -15,6 +15,10 @@ passes the local socket tests on .NET 10, so the client has no separate ``net10.
 The tests run on .NET 10, and none run on .NET Framework or Mono.
 
 * A service is an extension method of ``IConnection``. Stubs use only that interface.
+* A service named as a member of ``Connection`` that takes no arguments, such as ``Dispose``,
+  takes a trailing ``_``, as ``conn.Dispose_ ()``. So does a type named as a class the stubs
+  declare beside it, such as ``Service``. ``FunctionCompiler`` maps an escaped name back to the
+  server's.
 * Constructing a service registers its exception types on that connection. ``Connection`` registers
   the ``KRPC`` ones itself. Types with a ``System`` equivalent are a table in ``GetException``,
   which adds no public member to ``IConnection``. The argument exceptions also take their arguments

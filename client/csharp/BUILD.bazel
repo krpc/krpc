@@ -138,13 +138,14 @@ test_deps = [
     "@paket.main//google.protobuf",
 ]
 
-# The tests that need no server: call templates, type specs, structure ordering and the endpoint
-# a unix domain socket is named by.
+# The tests that need no server: call templates, type specs, structure ordering, the members a
+# service accessor is escaped against and the endpoint a unix domain socket is named by.
 csharp_nunit_test(
     name = "unit",
     size = "small",
     srcs = [
         "test/CallTemplateTest.cs",
+        "test/ConnectionNamesTest.cs",
         "test/EncoderTest.cs",
         "test/StructTest.cs",
         "test/UnixEndPointTest.cs",

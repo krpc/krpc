@@ -44,7 +44,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         /// Create an instance of the {{ service_name }} service.
         /// </summary>
 {% if service_deprecated %}        [global::System.Obsolete{% if service_deprecated_reason %} ("{{ service_deprecated_reason | string_literal }}"){% endif %}]
-{% endif %}        public static global::KRPC.Client.Services.{{ service_name }}.Service {{ service_name }} (this global::KRPC.Client.IConnection connection)
+{% endif %}        public static global::KRPC.Client.Services.{{ service_name }}.Service {{ service_accessor }} (this global::KRPC.Client.IConnection connection)
         {
             return new global::KRPC.Client.Services.{{ service_name }}.Service (connection);
         }
@@ -110,7 +110,7 @@ namespace KRPC.Client.Services.{{ service_name }}
         internal static void AddExceptionTypes (global::KRPC.Client.IConnection serverConnection)
         {
             {% for exception_name,exception in exceptions.items() %}
-            serverConnection.AddExceptionType ("{{ service_name }}", "{{ exception_name }}", message => {{ exception.alias or 'new ' + exception_name + ' (message)' }});
+            serverConnection.AddExceptionType ("{{ service_name }}", "{{ exception.remote_name }}", message => {{ exception.alias or 'new ' + exception_name + ' (message)' }});
             {% endfor %}
         }
         {% endif %}

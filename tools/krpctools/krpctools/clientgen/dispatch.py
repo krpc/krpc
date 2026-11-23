@@ -28,7 +28,8 @@ from krpc.types import (
 from krpc.utils import snake_case
 
 from ..lang.cpp import CppLanguage
-from ..lang.csharp import CsharpLanguage
+from ..lang.csharp import CsharpLanguage, service_accessor
+from ..lang.csharp import type_name as csharp_type_name
 from ..lang.java import JavaLanguage
 from .cnano import CnanoGenerator
 from .generator import Generator
@@ -356,7 +357,7 @@ class CsharpDispatchGenerator(DispatchGenerator):
     has_defaults = True
 
     def class_type(self, service, name):
-        return "global::KRPC.Client.Services.%s.%s" % (service, name)
+        return "global::KRPC.Client.Services.%s.%s" % (service, csharp_type_name(name))
 
     def _nullable(self, typ, conversion):
         # A value type takes the nullable form T? where it can hold null
@@ -439,15 +440,16 @@ class CsharpDispatchGenerator(DispatchGenerator):
             "type": "systemAlias::Tuple<%s>" % types,
         }
 
-    def _name(self, name, owner):
+    def _name(self, name, cls):
         """The name of a member as the stubs declare it, where one named as the type that
         holds it takes a trailing underscore"""
         name = self.language.parse_name(name)
+        owner = csharp_type_name(cls) if cls else "Service"
         return name + "_" if name == owner else name
 
     def call(self, kind, cls, name, parameters):
-        service = "connection.%s ()" % self._service
-        name = self._name(name, cls or "Service")
+        service = "connection.%s ()" % service_accessor(self._service)
+        name = self._name(name, cls)
         if kind == PROCEDURE:
             return "%s.%s (%s)" % (service, name, _arguments(parameters))
         if kind == GETTER:
@@ -472,9 +474,9 @@ class CsharpDispatchGenerator(DispatchGenerator):
         return "Connection.GetCall (() => %s)" % self.call(kind, cls, name, parameters)
 
     def call_template(self, kind, cls, name, parameters):
-        service = "connection.%s ()" % self._service
+        service = "connection.%s ()" % service_accessor(self._service)
         service_class = "global::KRPC.Client.Services.%s.Service" % self._service
-        name = self._name(name, cls or "Service")
+        name = self._name(name, cls)
         if kind == PROCEDURE:
             defaults = ", ".join("default" for _ in parameters)
             body = "%s.%s (%s)" % (service, name, defaults)

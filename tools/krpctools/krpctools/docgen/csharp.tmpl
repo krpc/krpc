@@ -20,7 +20,7 @@
 {% endmacro %}
 
 {% macro class(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}
+.. class:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -134,7 +134,7 @@
 {% endmacro %}
 
 {% macro enumeration(x) %}{{ mark_documented(x) }}
-.. enum:: {{ x.name }}
+.. enum:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -158,7 +158,7 @@
 {% endmacro %}
 
 {% macro struct(x) %}{{ mark_documented(x) }}
-.. struct:: {{ x.name }}
+.. struct:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -168,9 +168,9 @@
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
 {% endif %}
-   .. function:: {{ x.name }}({% for field in x.fields.values() %}{{ domain.field_type(field) }} {{ domain.field_parameter_name(field) }}{% if not loop.last %}, {% endif %}{% endfor %})
+   .. function:: {{ domain.type_name(x) }}({% for field in x.fields.values() %}{{ domain.field_type(field) }} {{ domain.field_parameter_name(field) }}{% if not loop.last %}, {% endif %}{% endfor %})
 
-      Construct a {{ x.name }} from the values of its fields.
+      Construct a {{ domain.type_name(x) }} from the values of its fields.
 
 {% for field in x.fields.values() %}{{ mark_documented(field) }}
    .. property:: {{ domain.field_type(field) }} {{ domain.member_name(field) }} {{'{'}} get; {{'}'}}
@@ -183,7 +183,7 @@
 {% endmacro %}
 
 {% macro exception(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}
+.. class:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 

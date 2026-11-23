@@ -2475,11 +2475,11 @@ namespace KRPC.Client
             if (type == typeof(byte[]))
                 return ServerType.Bytes (connection);
             if (typeof(RemoteObject).IsAssignableFrom (type))
-                return ServerType.ClassType (connection, ServiceName (type), type.Name);
+                return ServerType.ClassType (connection, ServiceName (type), RemoteName (type));
             if (type.IsEnum)
-                return ServerType.EnumerationType (connection, ServiceName (type), type.Name);
+                return ServerType.EnumerationType (connection, ServiceName (type), RemoteName (type));
             if (IsAStruct (type))
-                return ServerType.StructType (connection, ServiceName (type), type.Name);
+                return ServerType.StructType (connection, ServiceName (type), RemoteName (type));
             if (IsATuple (type))
                 return ServerType.TupleType (
                     connection, TupleTypes (type, node).Select (t => RemoteType (t, node)).ToList ());
@@ -2520,6 +2520,31 @@ namespace KRPC.Client
         {
             return type.GetProperties (BindingFlags.Public | BindingFlags.Instance)
                 .OrderBy (property => property.MetadataToken);
+        }
+
+        // The classes generated in the namespace of each service, beside its types. A type of
+        // one of these names takes a trailing underscore in the generated code
+        static readonly string[] generatedTypeNames = { "ExtensionMethods", "Service" };
+
+        /// <summary>
+        /// The name the server gives a generated class, enumeration or structure.
+        /// </summary>
+        static string RemoteName (Type type)
+        {
+            var name = type.Name;
+            if (name.EndsWith ("_", StringComparison.Ordinal) &&
+                generatedTypeNames.Contains (name.Substring (0, name.Length - 1)))
+                return name.Substring (0, name.Length - 1);
+            return name;
+        }
+
+        /// <summary>
+        /// The name of the generated type for a class, enumeration or structure the server
+        /// names.
+        /// </summary>
+        static string GeneratedName (string name)
+        {
+            return generatedTypeNames.Contains (name) ? name + "_" : name;
         }
 
         /// <summary>
@@ -2664,7 +2689,7 @@ namespace KRPC.Client
         /// </summary>
         static Type ServiceType (Schema.KRPC.Type described)
         {
-            var name = "KRPC.Client.Services." + described.Service + "." + described.Name;
+            var name = "KRPC.Client.Services." + described.Service + "." + GeneratedName (described.Name);
             return AppDomain.CurrentDomain.GetAssemblies ()
                 .Select (assembly => assembly.GetType (name))
                 .FirstOrDefault (type => type != null);
@@ -2672,7 +2697,7 @@ namespace KRPC.Client
 
         static bool IsNamed (Type type, Schema.KRPC.Type described)
         {
-            return ServiceName (type) == described.Service && type.Name == described.Name;
+            return ServiceName (type) == described.Service && RemoteName (type) == described.Name;
         }
 
         static bool IsGeneric (Type type, params Type[] definitions)

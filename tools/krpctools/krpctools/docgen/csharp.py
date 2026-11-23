@@ -14,7 +14,7 @@ from krpc.types import (
 )
 from krpc.utils import lower_camel_case
 
-from ..lang.csharp import CsharpLanguage
+from ..lang.csharp import CsharpLanguage, type_name
 from .domain import Domain
 from .nodes import (
     Class,
@@ -74,7 +74,7 @@ class CsharpDomain(Domain[CsharpLanguage]):
             return "KRPC.Schema.KRPC.%s" % typ.python_type.__name__
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
             return self.shorten_ref(
-                "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
+                "%s.%s" % (typ.protobuf_type.service, type_name(typ.protobuf_type.name))
             )
         if isinstance(typ, ListType):
             return "System.Collections.Generic.IList<%s>" % self.type_at_position(
@@ -212,20 +212,26 @@ class CsharpDomain(Domain[CsharpLanguage]):
         name = self.language.parse_name(obj.name)
         owner = "Service"
         if not isinstance(obj, (Procedure, Property)):
-            owner = obj.fullname.split(".")[1]
+            owner = type_name(obj.fullname.split(".")[1])
         return name + "_" if name == owner else name
 
     def field_parameter_name(self, field):
         """The name of the constructor parameter of a structure field"""
         return self.language.parse_name(lower_camel_case(self.member_name(field)))
 
+    @staticmethod
+    def type_name(obj):
+        """The name of a class, enumeration, structure or exception in the generated code"""
+        return type_name(obj.name)
+
     def ref(self, obj):
-        name = obj.fullname
+        parts = obj.fullname.split(".")
+        # A type, and a member of one, is named as the generated code names the type
+        if not isinstance(obj, (Service, Procedure, Property)):
+            parts[1] = type_name(parts[1])
         if not isinstance(obj, (Service, Class, Enumeration, Struct, ExceptionNode)):
-            parts = name.split(".")
             parts[-1] = self.member_name(obj)
-            name = ".".join(parts)
-        return self.shorten_ref(name, obj)
+        return self.shorten_ref(".".join(parts), obj)
 
     def shorten_ref(self, name, obj=None):
         # Only drop service name for non-service members

@@ -117,6 +117,42 @@ class TestClientGenCsharp(ClientGenTestCase, unittest.TestCase):
         self.assertIn("public ulong? GetStream ()", content)
         self.assertIn("IList<ulong?> GetStreams ()", content)
 
+    def test_service_named_as_a_connection_member(self):
+        # Connection.Dispose takes no arguments, so conn.Dispose () would call it in place of
+        # the extension method
+        service = {
+            "id": 1,
+            "documentation": "",
+            "procedures": {},
+            "classes": {},
+            "enumerations": {},
+            "exceptions": {},
+            "structs": {},
+        }
+        content = self.generate("Dispose", {"Dispose": service})
+        self.assertIn(
+            "Service Dispose_ (this global::KRPC.Client.IConnection connection)",
+            content,
+        )
+
+    def test_service_named_as_the_class_of_its_accessor(self):
+        # The accessor is a method of the class ExtensionMethods, which C# forbids to have a
+        # member of its own name
+        service = {
+            "id": 1,
+            "documentation": "",
+            "procedures": {},
+            "classes": {},
+            "enumerations": {},
+            "exceptions": {},
+            "structs": {},
+        }
+        content = self.generate("ExtensionMethods", {"ExtensionMethods": service})
+        self.assertIn(
+            "Service ExtensionMethods_ (this global::KRPC.Client.IConnection connection)",
+            content,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

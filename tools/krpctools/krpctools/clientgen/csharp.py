@@ -11,7 +11,7 @@ from krpc.types import (
 )
 from krpc.utils import lower_camel_case
 
-from ..lang.csharp import CsharpLanguage
+from ..lang.csharp import CsharpLanguage, service_accessor, type_name
 from ..utils import as_type
 from . import crefs
 from .docparser import render_markup, warn_markup
@@ -253,10 +253,10 @@ class CsharpGenerator(Generator[CsharpLanguage]):
         context["properties"] = rename(context["properties"], "Service")
         for class_name, cls in context["classes"].items():
             for kind in ("methods", "static_methods", "properties"):
-                cls[kind] = rename(cls[kind], class_name)
+                cls[kind] = rename(cls[kind], type_name(class_name))
         for struct_name, struct_info in context["structs"].items():
             for field in struct_info["fields"]:
-                if field["name"] == struct_name:
+                if field["name"] == type_name(struct_name):
                     field["name"] += "_"
                 field["parameter_name"] = self.language.parse_name(
                     lower_camel_case(field["name"])
@@ -285,4 +285,13 @@ class CsharpGenerator(Generator[CsharpLanguage]):
             {"name": name.split(".")[-1], "spec": expression}
             for expression, name in self._type_specs.items()
         ]
+        context["service_accessor"] = service_accessor(self.service_name)
+        # The types of the service, by their names in the generated code, keeping the name
+        # the server gives each
+        for kind in ("classes", "enumerations", "structs", "exceptions"):
+            types = collections.OrderedDict()
+            for name, info in context[kind].items():
+                info["remote_name"] = name
+                types[type_name(name)] = info
+            context[kind] = types
         return context
