@@ -17,6 +17,11 @@ keeps names out of flash and off the wire.
 Each procedure also has a ``_call`` function and a ``_call_template`` function, for server side
 functions. An unused one adds compile time and no code.
 
+A parameter named as one the function adds, such as ``connection`` or ``returnValue``, takes a
+trailing ``_``. An enumeration value macro names its service first, so a service named as a
+prefix of the library's macros, such as ``Error``, takes the ``_`` there, as in
+``KRPC_ERROR__<ENUM>_<VALUE>``.
+
 ``KRPC_DEPRECATED`` goes before a declaration, the one position GCC, Clang and MSVC share. An
 enumeration value takes ``KRPC_DEPRECATED_VALUE`` after its name, as the attribute has no other
 position there. MSVC has no such attribute in C, so the macro is empty for it.

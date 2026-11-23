@@ -14,7 +14,7 @@ from krpc.types import (
 )
 from krpc.utils import snake_case
 
-from ..lang.cnano import CnanoLanguage
+from ..lang.cnano import CnanoLanguage, enum_value_macro
 from .domain import Domain
 from .nodes import (
     Class,
@@ -172,6 +172,10 @@ class CnanoDomain(Domain[CnanoLanguage]):
     def returns_null_flag(self, typ):
         return self.language.returns_null_flag(typ)
 
+    @staticmethod
+    def enum_value_macro(service, enumeration, value):
+        return enum_value_macro(service, enumeration, value)
+
     def ref(self, obj):
         name = obj.fullname.split(".")
         if isinstance(obj, StructField):
@@ -183,10 +187,10 @@ class CnanoDomain(Domain[CnanoLanguage]):
             name[-1] = "set_" + name[-1]
         if isinstance(obj, ExceptionNode):
             return "KRPC_EXCEPTION_" + "_".join(name).upper()
-        ref = "krpc_" + "_".join(name)
         if isinstance(obj, EnumerationValue):
-            ref = ref.upper()
-        elif isinstance(obj, (Class, Enumeration, Struct)):
+            return enum_value_macro(*name)
+        ref = "krpc_" + "_".join(name)
+        if isinstance(obj, (Class, Enumeration, Struct)):
             ref += "_t"
         return ref
 

@@ -253,6 +253,7 @@ py_binary(
 test_suite(
     name = "test",
     tests = [
+        ":cnano-prefixes-test",
         ":conformance-test",
         ":krpctoolstest",
         ":lint",
@@ -349,6 +350,19 @@ native_py_test(
         "//client/conformance:names.json",
     ],
     main = "naming_test.py",
+    deps = [
+        ":krpctools_lib",
+        "@krpc_pypi//pytest",
+    ],
+)
+
+native_py_test(
+    name = "cnano-prefixes-test",
+    size = "small",
+    srcs = ["cnano_prefixes_test.py"],
+    args = ["$(rootpaths //client/cnano:library-sources)"],
+    data = ["//client/cnano:library-sources"],
+    main = "cnano_prefixes_test.py",
     deps = [
         ":krpctools_lib",
         "@krpc_pypi//pytest",

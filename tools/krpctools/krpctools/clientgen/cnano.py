@@ -16,7 +16,7 @@ from krpc.types import (
 )
 from krpc.utils import snake_case
 
-from ..lang.cnano import CnanoLanguage
+from ..lang.cnano import CnanoLanguage, enum_value_macro
 from ..utils import as_type
 from . import crefs
 from .docparser import DocParser
@@ -295,7 +295,7 @@ class CnanoGenerator(Generator[CnanoLanguage]):
             return name + "_t"
         # Doxygen links a global enumeration value only when it is written with a #
         if target.kind == crefs.ENUMERATION_VALUE:
-            return "#" + (name + "_" + target.member).upper()
+            return "#" + enum_value_macro(target.service, target.type, target.member)
         if target.kind == crefs.STRUCT_FIELD:
             return name + "_t." + self.parse_name(snake_case(target.member))
         setter = "" if target.getter else "set_"
@@ -423,6 +423,7 @@ class CnanoGenerator(Generator[CnanoLanguage]):
             collection_types.setdefault(ctype["name"], ctype)
         context["collection_types"] = list(collection_types.values())
 
+        context["enum_value_macro"] = enum_value_macro
         return context
 
 
