@@ -79,7 +79,7 @@ public class Event implements Comparable<Event>, AutoCloseable {
     long seenOnEntry = seen;
     while (impl.getFired() <= seenOnEntry) {
       impl.throwIfEnded();
-      if (!Stream.waitOn(impl.getCondition(), deadline)) {
+      if (!impl.waitOnCondition(deadline)) {
         return false;
       }
     }

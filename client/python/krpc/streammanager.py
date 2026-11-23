@@ -37,6 +37,11 @@ class _WakingCondition(threading.Condition):
     def __init__(self) -> None:
         super().__init__()
         self._wake_on_release = False
+        # The threads waiting, and those wake_waiters woke that have not taken the
+        # condition back yet. Changed with the condition held.
+        self._waiting = 0
+        self._woken = 0
+        self._wakes = 0
         # The condition binds release to its lock, so it is replaced here
         self._release_lock = self.release
         self.release = self._release
@@ -48,6 +53,35 @@ class _WakingCondition(threading.Condition):
 
     def __exit__(self, *args: object) -> None:
         self._release()
+
+    def wait(self, timeout: float | None = None) -> bool:
+        if not self._is_owned():  # pyright: ignore[reportAttributeAccessIssue]
+            return super().wait(timeout)
+        generation = self._wakes
+        self._waiting += 1
+        try:
+            return super().wait(timeout)
+        finally:
+            self._waiting -= 1
+            # The last woken waiter to take the condition back lets the next value through
+            if generation != self._wakes and self._woken > 0:
+                self._woken -= 1
+                if self._woken == 0:
+                    super().notify_all()
+
+    def await_woken(self, stop: Callable[[], bool]) -> None:
+        """Wait, with the condition held, until the waiters the last wake_waiters woke have
+        taken the condition back. A woken waiter then reads the value that woke it, as the
+        lock lets a thread take it ahead of one that waits for it."""
+        while self._woken > 0 and not stop():
+            super().wait(0.05)
+
+    def wake_waiters(self) -> None:
+        """Wake the waiters, with the condition held."""
+        if self._waiting > 0:
+            self._wakes += 1
+            self._woken = self._waiting
+        self.notify_all()
 
     def wake(self) -> None:
         """Wake the waiters now if the condition is free. Otherwise wake them once the
@@ -714,10 +748,11 @@ class StreamManager:
             if locked:
                 try:
                     if value is not None:
+                        stream.condition.await_woken(lambda: self._close_requested)
                         stream.announce(value[3], value[1])
                     else:
                         stream.announce_ending()
-                    stream.condition.notify_all()
+                    stream.condition.wake_waiters()
                 finally:
                     stream.condition.release()
             # The ending is already stored, so the end callbacks run even once closing

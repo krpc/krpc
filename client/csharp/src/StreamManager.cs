@@ -383,11 +383,13 @@ namespace KRPC.Client
                 var entered = EnterCondition (stream.Condition);
                 if (entered) {
                     try {
-                        if (change.EndCallbacks == null)
+                        if (change.EndCallbacks == null) {
+                            stream.AwaitWoken (() => closeRequested);
                             stream.Announce (change.Value, change.Version);
-                        else
+                        } else {
                             stream.AnnounceEnding ();
-                        Monitor.PulseAll (stream.Condition);
+                        }
+                        stream.WakeWaiters ();
                     } finally {
                         Monitor.Exit (stream.Condition);
                     }

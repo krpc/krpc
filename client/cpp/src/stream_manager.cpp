@@ -303,7 +303,8 @@ void StreamManager::apply(const std::vector<Change>& changes, const Callbacks& u
       if (change.ending)
         stream->announce_ending();
       else
-        stream->announce(change.data, change.is_null, change.version);
+        stream->announce(change.data, change.is_null, change.version,
+                         [this] { return close_requested.load(); });
     }
     // The ending is already stored, so the end callbacks run even once closing
     if (change.ending) {

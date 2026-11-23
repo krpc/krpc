@@ -586,6 +586,10 @@ A program can read a stream's value, or wait for its next value using the stream
 A thread holding a stream's condition reads the announced value, not the stored one. The value it
 reads stays the same until it waits.
 
+A lock can let a thread take it ahead of a waiter woken to take it back. The dispatcher thread
+therefore announces a stream's next value only once the waiters the last one woke have the
+condition again. Each wait sees one value.
+
 An event is a stream of a bool, and each true value is a **firing**. The stream counts its firings,
 and each event object keeps the count its last wait saw. A wait returns straight away if the event
 has fired since then.
