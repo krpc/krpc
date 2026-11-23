@@ -53,16 +53,21 @@ def _as_literal(value: object, typ: TypeBase) -> str:
     return str(value)
 
 
+# The parameters a method takes ahead of those of its procedure. A parameter of one of these
+# names takes a trailing underscore.
+_RESERVED_PARAMETER_NAMES = frozenset(["cls", "self"])
+
+
 def _member_name(name: str) -> str:
     return _update_names(snake_case(name))[0]
 
 
-def _update_names(*names: str) -> list[str]:
-    """Given a list of names, append underscores to reserved keywords
+def _update_names(*names: str, reserved: frozenset[str] = frozenset()) -> list[str]:
+    """Given a list of names, append underscores to keywords and the reserved names
     without causing names to clash"""
     newnames = []
     for name in names:
-        if keyword.iskeyword(name):
+        if keyword.iskeyword(name) or name in reserved:
             name += "_"
             while name in names:
                 name += "_"
@@ -80,11 +85,19 @@ def _construct_func(
     param_required: Iterable[bool],
     param_default: Iterable[object | None],
     return_type: TypeBase | None,
+    instance: bool = False,
 ) -> Callable:
-    """Build function to invoke a remote procedure"""
+    """Build function to invoke a remote procedure. With instance, the first parameter is the
+    instance of a method, which keeps its name."""
 
-    prefix_param_names = _update_names(*prefix_param_names)
-    param_names = _update_names(*param_names)
+    # A parameter is named in snake case, which has no upper case letter, so the names the
+    # code is evaluated with take one
+    prefix_param_names = list(prefix_param_names)
+    param_names = list(param_names)
+    first = param_names[:1] if instance else []
+    param_names = first + _update_names(
+        *param_names[len(first) :], reserved=_RESERVED_PARAMETER_NAMES
+    )
 
     params = []
     for name, required, default, typ in zip(
@@ -98,21 +111,21 @@ def _construct_func(
         "'" + str(service_name) + "'",
         "'" + str(procedure_name) + "'",
         "[" + ",".join(param_names) + "]",
-        "param_types",
-        "return_type",
+        "ParamTypes",
+        "ReturnType",
     ]
     code = (
         "lambda "
         + ", ".join(prefix_param_names + params)
-        + ": invoke("
+        + ": Invoke("
         + ", ".join(invoke_args)
         + ")"
     )
     context = {
-        "invoke": invoke,
+        "Invoke": invoke,
         "DefaultArgument": DefaultArgument,
-        "param_types": param_types,
-        "return_type": return_type,
+        "ParamTypes": param_types,
+        "ReturnType": return_type,
     }
     fn = eval(code, context)
     # Connection.get_call_template reads the procedure the function calls
@@ -813,9 +826,9 @@ class RemoteService(DynamicType):
         param_names, param_types, param_required, param_default, return_type = (
             cls._parse_procedure(procedure)
         )
-        # Rename this to self if it doesn't cause a name clash
-        if "self" not in param_names:
-            param_names[0] = "self"
+        # The instance is self, as a parameter of the procedure named self takes a trailing
+        # underscore
+        param_names[0] = "self"
         func = _construct_func(
             cls._connection._invoke,
             cls._name,
@@ -826,6 +839,7 @@ class RemoteService(DynamicType):
             param_required,
             param_default,
             return_type,
+            instance=True,
         )
         build_call = _construct_func(
             cls._connection._build_call,
@@ -837,6 +851,7 @@ class RemoteService(DynamicType):
             param_required,
             param_default,
             return_type,
+            instance=True,
         )
         name = _member_name(method_name)
         doc = _parse_documentation(procedure.documentation)
@@ -929,9 +944,7 @@ class RemoteService(DynamicType):
         if getter:
             getter_name = getter.name
             param_names, param_types, _, _, return_type = cls._parse_procedure(getter)
-            # Rename this to self if it doesn't cause a name clash
-            if "self" not in param_names:
-                param_names[0] = "self"
+            param_names[0] = "self"
             getter_fn = _construct_func(
                 cls._connection._invoke,
                 cls._name,
@@ -942,6 +955,7 @@ class RemoteService(DynamicType):
                 [True],
                 [None],
                 return_type,
+                instance=True,
             )
             if getter.deprecated:
                 getter_fn = _wrap_deprecated(
@@ -957,6 +971,7 @@ class RemoteService(DynamicType):
                 [True],
                 [None],
                 return_type,
+                instance=True,
             )
             getter_return_type = return_type
             class_cls._add_method("_build_call__" + member_name, build_call)
@@ -965,8 +980,7 @@ class RemoteService(DynamicType):
             )
         if setter:
             param_names, param_types, _, _, return_type = cls._parse_procedure(setter)
-            if "self" not in param_names:
-                param_names[0] = "self"
+            param_names[0] = "self"
             setter_fn = _construct_func(
                 cls._connection._invoke,
                 cls._name,
@@ -977,6 +991,7 @@ class RemoteService(DynamicType):
                 [True, True],
                 [None, None],
                 None,
+                instance=True,
             )
             if setter.deprecated:
                 setter_fn = _wrap_deprecated(
@@ -992,6 +1007,7 @@ class RemoteService(DynamicType):
                 [True, True],
                 [None, None],
                 None,
+                instance=True,
             )
             class_cls._add_method("_build_call_set__" + member_name, build_set_call)
         class_cls._add_property(member_name, getter_fn, setter_fn, doc=doc)

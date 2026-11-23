@@ -51,7 +51,16 @@ class StubLanguage(PythonLanguage):
     its stubs are imported from, and its own service's directly.
 
     The module another service's stubs are imported from is aliased, so that a service whose name
-    is also that of a module the stubs use, such as KRPC, does not hide it."""
+    is also that of a module the stubs use, such as KRPC, does not hide it. A builtin is named
+    through the builtins module and the limits through an alias, as a class body evaluates its
+    annotations and default arguments where a member of the same name would hide them."""
+
+    special_values = {
+        key: value.replace("float(", "_builtins.float(").replace(
+            "krpc.limits.", "_limits."
+        )
+        for key, value in PythonLanguage.special_values.items()
+    }
 
     def __init__(self, service):
         super().__init__()
@@ -63,7 +72,14 @@ class StubLanguage(PythonLanguage):
             if typ.protobuf_type.service != self.module:
                 name = "_service_" + typ.protobuf_type.service.lower() + "." + name
             return name
+        if isinstance(typ, (ValueType, StreamType)):
+            return "_builtins." + super().parse_type(typ)
         return super().parse_type(typ)
+
+    def parse_default_value(self, value, typ):
+        if isinstance(typ, SetType) and not value:
+            return "_builtins.set()"
+        return super().parse_default_value(value, typ)
 
 
 class PythonGenerator(Generator[StubLanguage]):
@@ -81,30 +97,30 @@ class PythonGenerator(Generator[StubLanguage]):
         if isinstance(typ, ValueType):
             spec = self.language.parse_type(typ)
         elif isinstance(typ, StreamType):
-            spec = "int"
+            spec = "_builtins.int"
         elif isinstance(typ, EventType):
-            spec = "Event"
+            spec = "_Event"
         elif isinstance(typ, MessageType):
             spec = "KRPC_pb2.%s" % typ.python_type.__name__
         elif isinstance(typ, (ClassType, EnumerationType, StructType)):
             spec = self.language.parse_type(typ)
         elif isinstance(typ, TupleType):
-            spec = "Tuple[%s]" % ",".join(
+            spec = "_Tuple[%s]" % ",".join(
                 self.parse_type_specification(t) for t in typ.value_types
             )
         elif isinstance(typ, ListType):
-            spec = "List[%s]" % self.parse_type_specification(typ.value_type)
+            spec = "_List[%s]" % self.parse_type_specification(typ.value_type)
         elif isinstance(typ, SetType):
-            spec = "Set[%s]" % self.parse_type_specification(typ.value_type)
+            spec = "_Set[%s]" % self.parse_type_specification(typ.value_type)
         elif isinstance(typ, DictionaryType):
-            spec = "Dict[%s, %s]" % (
+            spec = "_Dict[%s, %s]" % (
                 self.parse_type_specification(typ.key_type),
                 self.parse_type_specification(typ.value_type),
             )
         else:
             raise RuntimeError("Unknown type " + typ)
         if typ.nullable:
-            return "Optional[%s]" % spec
+            return "_Optional[%s]" % spec
         return spec
 
     def parse_parameter_specification(self, typ):
@@ -114,8 +130,8 @@ class PythonGenerator(Generator[StubLanguage]):
             isinstance(typ, MessageType)
             and typ.protobuf_type.code == Type.PROCEDURE_CALL
         ):
-            spec = "Union[KRPC_pb2.ProcedureCall, property, Callable[..., object]]"
-            return "Optional[%s]" % spec if typ.nullable else spec
+            spec = "_Union[KRPC_pb2.ProcedureCall, _builtins.property, _Callable[..., _builtins.object]]"
+            return "_Optional[%s]" % spec if typ.nullable else spec
         return self.parse_type_specification(typ)
 
     def parse_context(self, context):
@@ -405,7 +421,7 @@ class PythonDocParser(DocParser):
         return "\n\n" + self.parse_node(node).strip("\n")
 
     def parse_param(self, node):
-        name = ":param %s: " % self.language.parse_name(node.attrib["name"])
+        name = ":param %s: " % self.language.parse_parameter_name(node.attrib["name"])
         desc = self.parse_node(node, indent=len(name))[len(name) :]
         if len(desc) == 0:
             return ""
@@ -420,7 +436,7 @@ class PythonDocParser(DocParser):
 
     def parse_paramref(self, node):
         # Emphasized, as reStructuredText reads a name ending in _ as a link
-        return "*%s*" % self.language.parse_name(node.attrib["name"])
+        return "*%s*" % self.language.parse_parameter_name(node.attrib["name"])
 
     @staticmethod
     def parse_a(node):

@@ -24,6 +24,9 @@ from .language import Language, float32_literal
 class PythonLanguage(Language):
     keywords = keyword.kwlist
 
+    # The parameters a method takes ahead of those of its procedure
+    parameter_reserved = frozenset(["cls", "self"])
+
     value_map = {"null": "None", "true": "True", "false": "False"}
 
     # Python builds NaN and the infinities from a string, and takes the finite extremes

@@ -1,12 +1,13 @@
 from __future__ import annotations
-from typing import Callable, Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING, Union
+import builtins as _builtins
+from typing import Callable as _Callable, Tuple as _Tuple, Set as _Set, Dict as _Dict, List as _List, NamedTuple as _NamedTuple, Optional as _Optional, TYPE_CHECKING, Union as _Union
 import krpc.connection
 import krpc.error
-import krpc.limits
-from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
-from krpc.event import Event
+import krpc.limits as _limits
+from krpc.declarations import DeclaredClass as _DeclaredClass, DeclaredObject as _DeclaredObject, declaration_error as _declaration, register as _register
+from krpc.event import Event as _Event
 from krpc.schema import KRPC_pb2
-from krpc.types import RemoteEnum, RemoteFlags, deprecate_attribute, deprecated
+from krpc.types import RemoteEnum as _RemoteEnum, RemoteFlags as _RemoteFlags, deprecate_attribute as _deprecate_attribute, deprecated as _deprecated
 {% for dependency in dependencies %}
 import {{ dependency.module }} as {{ dependency.alias }}
 {% endfor %}
@@ -17,10 +18,10 @@ self{% for x in parameters %}, {{x.name}}: {{ x.type.spec }}{%if 'default_value'
 {% for x in parameters %}{{x.name}}: {{ x.type.spec }}{%if 'default_value' in x %} = {{x.default_value}}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
 {% macro properties_of(properties, owner) %}
     {% for prop_name, prop in properties.items() %}
-    @property
+    @_builtins.property
     {% if 'getter' in prop %}
     {% if prop.getter.deprecated %}
-    @deprecated("{{ prop.getter.deprecated_reason | string_literal }}")
+    @_deprecated("{{ prop.getter.deprecated_reason | string_literal }}")
     {% endif %}
     def {{prop_name}}(self) -> {{ prop.getter.return_type.spec }}:
 {% if prop.getter.documentation %}{{ prop.getter.documentation | indent(width=8) }}
@@ -33,7 +34,7 @@ self{% for x in parameters %}, {{x.name}}: {{ x.type.spec }}{%if 'default_value'
     {% if 'setter' in prop %}
     @{{prop_name}}.setter
     {% if prop.setter.deprecated %}
-    @deprecated("{{ prop.setter.deprecated_reason | string_literal }}")
+    @_deprecated("{{ prop.setter.deprecated_reason | string_literal }}")
     {% endif %}
     def {{prop_name}}({{ arg_list(prop.setter.parameters) }}) -> None:
         raise _declaration({{ owner }})
@@ -44,7 +45,7 @@ self{% for x in parameters %}, {{x.name}}: {{ x.type.spec }}{%if 'default_value'
 {% macro methods_of(methods, owner) %}
     {% for proc_name, procedure in methods.items() %}
     {% if procedure.deprecated %}
-    @deprecated("{{ procedure.deprecated_reason | string_literal }}")
+    @_deprecated("{{ procedure.deprecated_reason | string_literal }}")
     {% endif %}
     def {{proc_name}}({{ arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
@@ -55,13 +56,13 @@ self{% for x in parameters %}, {{x.name}}: {{ x.type.spec }}{%if 'default_value'
 {% endmacro %}
 
 {% macro deprecated_decorator(member) %}
-{% if member.deprecated %}@deprecated("{{ member.deprecated_reason | string_literal }}")
+{% if member.deprecated %}@_deprecated("{{ member.deprecated_reason | string_literal }}")
 {% endif %}{% endmacro %}
 {% macro deprecation_message(name, member) %}
 "{{ name }} is deprecated{% if member.deprecated_reason %}: {{ member.deprecated_reason | string_literal }}{% endif %}"{% endmacro %}
 
 {% for enum_name, enumeration in enumerations.items() %}
-{{ deprecated_decorator(enumeration) }}class {{enum_name}}({% if enumeration.flags %}RemoteFlags{% else %}RemoteEnum{% endif %}):
+{{ deprecated_decorator(enumeration) }}class {{enum_name}}({% if enumeration.flags %}_RemoteFlags{% else %}_RemoteEnum{% endif %}):
 {% if enumeration.documentation %}{{ enumeration.documentation | indent(width=4) }}
 {% endif %}
     {% for enum_value in enumeration['values'] %}
@@ -71,7 +72,7 @@ self{% for x in parameters %}, {{x.name}}: {{ x.type.spec }}{%if 'default_value'
 
 
 {% for enum_value in enumeration['values'] if enum_value.deprecated %}
-deprecate_attribute({{ enum_name }}, "{{ enum_value['name'] }}", {{ deprecation_message(service_name + '.' + enum_name + '.' + enum_value['name'], enum_value) }})
+_deprecate_attribute({{ enum_name }}, "{{ enum_value['name'] }}", {{ deprecation_message(service_name + '.' + enum_name + '.' + enum_value['name'], enum_value) }})
 {% if loop.last %}
 
 
@@ -79,7 +80,7 @@ deprecate_attribute({{ enum_name }}, "{{ enum_value['name'] }}", {{ deprecation_
 {% endfor %}
 {% endfor %}
 {% for struct_name, struct in structs.items() %}
-{{ deprecated_decorator(struct) }}class {{struct_name}}(NamedTuple):
+{{ deprecated_decorator(struct) }}class {{struct_name}}(_NamedTuple):
 {% if struct.documentation %}{{ struct.documentation | indent(width=4) }}
 {% endif %}
     {% for field in struct['fields'] %}
@@ -90,7 +91,7 @@ deprecate_attribute({{ enum_name }}, "{{ enum_value['name'] }}", {{ deprecation_
 
 
 {% for field in struct['fields'] if field.deprecated %}
-deprecate_attribute({{ struct_name }}, "{{ field.name }}", {{ deprecation_message(service_name + '.' + struct_name + '.' + field.name, field) }})
+_deprecate_attribute({{ struct_name }}, "{{ field.name }}", {{ deprecation_message(service_name + '.' + struct_name + '.' + field.name, field) }})
 {% if loop.last %}
 
 
@@ -103,7 +104,7 @@ deprecate_attribute({{ struct_name }}, "{{ field.name }}", {{ deprecation_messag
 
 
 {% else %}
-{{ deprecated_decorator(exception) }}class {{exception_name}}({{ exception.native or 'krpc.error.ServerError' }}):
+{{ deprecated_decorator(exception) }}class {{exception_name}}({% if exception.native %}_builtins.{{ exception.native }}{% else %}krpc.error.ServerError{% endif %}):
 {% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
 {% else %}
     pass
@@ -113,7 +114,7 @@ deprecate_attribute({{ struct_name }}, "{{ field.name }}", {{ deprecation_messag
 {% endif %}
 {% endfor %}
 {% for class_name, class in classes.items() %}
-{{ deprecated_decorator(class) }}class {{class_name}}(DeclaredObject, metaclass=DeclaredClass):
+{{ deprecated_decorator(class) }}class {{class_name}}(_DeclaredObject, metaclass=_DeclaredClass):
 {% if class.documentation %}{{ class.documentation | indent(width=4) }}
 {% endif %}
     _service_name = "{{ service_name }}"
@@ -122,9 +123,9 @@ deprecate_attribute({{ struct_name }}, "{{ field.name }}", {{ deprecation_messag
 {{ properties_of(class['properties'], '"' + service_name + '", "' + class_name + '"') -}}
 {{ methods_of(class['methods'], '"' + service_name + '", "' + class_name + '"') -}}
     {% for proc_name, procedure in class['static_methods'].items() %}
-    @staticmethod
+    @_builtins.staticmethod
     {% if procedure.deprecated %}
-    @deprecated("{{ procedure.deprecated_reason | string_literal }}")
+    @_deprecated("{{ procedure.deprecated_reason | string_literal }}")
     {% endif %}
     def {{proc_name}}({{ static_arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
@@ -139,23 +140,23 @@ deprecate_attribute({{ struct_name }}, "{{ field.name }}", {{ deprecation_messag
 # the service would otherwise name the attribute itself
 if TYPE_CHECKING:
 {% for name in classes.keys() | list + enumerations.keys() | list + structs.keys() | list + exceptions.keys() | list %}
-    _{{ name }} = {{ name }}
+    _type_{{ name }} = {{ name }}
 {% else %}
     pass
 {% endfor %}
 
 
 {% if service_deprecated %}
-@deprecated("{{ service_deprecated_reason | string_literal }}")
+@_deprecated("{{ service_deprecated_reason | string_literal }}")
 {% endif %}
-class {{ service_name }}(metaclass=DeclaredClass):
+class {{ service_name }}(metaclass=_DeclaredClass):
 {% if service_documentation %}{{ service_documentation | indent(width=4) }}
 {% endif %}
     _service_name = "{{ service_name }}"
     _class_name = None
 
 {% for name in classes.keys() | list + enumerations.keys() | list + structs.keys() | list + exceptions.keys() | list %}
-    {{ name }}: type[_{{ name }}] = {{ name }}
+    {{ name }}: type[_type_{{ name }}] = {{ name }}
 {% endfor %}
 
 {{ properties_of(properties, '"' + service_name + '", None') -}}
