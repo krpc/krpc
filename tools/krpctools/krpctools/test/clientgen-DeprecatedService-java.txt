@@ -174,21 +174,21 @@ public class DeprecatedService extends RemoteService {
 
         /** Build a ServiceStruct from the values of its fields. */
         @SuppressWarnings("unchecked")
-        public static ServiceStruct fromFieldValues(Object[] values) {
+        public static ServiceStruct fromFieldValues(java.lang.Object[] values) {
             return new ServiceStruct(
                 (int) values[0]
             );
         }
 
         @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 field
             };
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof ServiceStruct)) {
                 return false;
             }
@@ -198,7 +198,7 @@ public class DeprecatedService extends RemoteService {
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {field});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {field});
         }
 
         /**

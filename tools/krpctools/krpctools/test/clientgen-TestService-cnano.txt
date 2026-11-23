@@ -25,6 +25,10 @@ KRPC_DEPRECATED_USES_BEGIN
 KRPC_DEPRECATED("Use TestClass instead.")
 typedef krpc_object_t krpc_TestService_DeprecatedClass_t;
 /**
+ * A class named Object.
+ */
+typedef krpc_object_t krpc_TestService_Object_t;
+/**
  * Class documentation string.
  */
 typedef krpc_object_t krpc_TestService_TestClass_t;
@@ -863,6 +867,7 @@ typedef enum {
 } krpc_TestService_TestFlags_t;
 
 #define KRPC_CLASS_TESTSERVICE_DEPRECATEDCLASS 857051661u, 3568109615u
+#define KRPC_CLASS_TESTSERVICE_OBJECT 857051661u, 2279253602u
 #define KRPC_CLASS_TESTSERVICE_TESTCLASS 857051661u, 3511177853u
 #define KRPC_ENUMERATION_TESTSERVICE_DEPRECATEDENUM 857051661u, 698911118u
 #define KRPC_ENUMERATION_TESTSERVICE_PARTLYDEPRECATEDENUM 857051661u, 210444072u
@@ -1076,6 +1081,27 @@ static inline krpc_error_t krpc_TestService_CreateDeprecatedClass_call(krpc_sche
  */
 KRPC_DEPRECATED("Use CreateTestObject instead.")
 static inline krpc_error_t krpc_TestService_CreateDeprecatedClass_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A new object of the class named Object.
+ * @param connection A connection object.
+ * @param returnValue The object.
+ * @param name The name of the object.
+ */
+static inline krpc_error_t krpc_TestService_CreateObject(krpc_connection_t connection, krpc_TestService_Object_t * returnValue, const char * name);
+
+/**
+ * Fills in the call krpc_TestService_CreateObject() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_CreateObject_call(krpc_schema_ProcedureCall * procedureCall, const char * name);
+
+/**
+ * Fills in the call template of krpc_TestService_CreateObject(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_CreateObject_call_template(krpc_schema_ProcedureCall * procedureCall);
 
 static inline krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, const char * value);
 
@@ -2891,6 +2917,24 @@ static inline krpc_error_t krpc_TestService_DeprecatedClass_set_InheritedPropert
  */
 KRPC_DEPRECATED("Use TestClass instead.")
 static inline krpc_error_t krpc_TestService_DeprecatedClass_set_InheritedProperty_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * The name of the object.
+ */
+static inline krpc_error_t krpc_TestService_Object_Name(krpc_connection_t connection, char * * returnValue, krpc_TestService_Object_t instance);
+
+/**
+ * Fills in the call krpc_TestService_Object_Name() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Object_Name_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Object_t instance);
+
+/**
+ * Fills in the call template of krpc_TestService_Object_Name(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Object_Name_call_template(krpc_schema_ProcedureCall * procedureCall);
 
 static inline krpc_error_t krpc_TestService_TestClass_EchoNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t value);
 
@@ -6718,6 +6762,33 @@ static inline krpc_error_t krpc_TestService_CreateDeprecatedClass_call_template(
   return krpc_procedure_call(procedureCall, 857051661, 623454212, 0);
 }
 
+static inline krpc_error_t krpc_TestService_CreateObject(krpc_connection_t connection, krpc_TestService_Object_t * returnValue, const char * name) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 3644230423, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_string, &name));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_CreateObject_call(krpc_schema_ProcedureCall * procedureCall, const char * name) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 3644230423, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_string, &name));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_CreateObject_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 3644230423, 0);
+}
+
 static inline krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, const char * value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
@@ -9973,6 +10044,33 @@ static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedStaticMetho
 
 static inline krpc_error_t krpc_TestService_DeprecatedClass_InheritedStaticMethod_call_template(krpc_schema_ProcedureCall * procedureCall) {
   return krpc_procedure_call(procedureCall, 857051661, 313918032, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Object_Name(krpc_connection_t connection, char * * returnValue, krpc_TestService_Object_t instance) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 857051661, 2384062255, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_string(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Object_Name_call(krpc_schema_ProcedureCall * procedureCall, krpc_TestService_Object_t instance) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 2384062255, 1));
+  KRPC_CHECK(krpc_procedure_call_argument(procedureCall, 0, &krpc_encode_callback_uint64, &instance));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Object_Name_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 2384062255, 0);
 }
 
 static inline krpc_error_t krpc_TestService_TestClass_EchoNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t value) {

@@ -139,6 +139,18 @@ Service documentation string.
 
 
 
+.. staticmethod:: create_object(name)
+
+   A new object of the class named Object.
+
+   :param str name: The name of the object.
+   :returns: The object.
+   :rtype: :class:`Object`
+   
+
+
+
+
 .. staticmethod:: create_test_object(value)
 
 
@@ -1337,6 +1349,20 @@ Service documentation string.
 
       Static method with no deprecation of its own documentation string.
 
+      :rtype: str
+   
+
+
+
+.. class:: Object
+
+   A class named Object.
+
+   .. attribute:: name
+
+      The name of the object.
+
+      :Attribute: Read-only, cannot be set
       :rtype: str
    
 

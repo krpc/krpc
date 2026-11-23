@@ -40,6 +40,7 @@ class TestService : public ::krpc::RemoteService {
 
   // Class forward declarations
   class DeprecatedClass;
+  class Object;
   class TestClass;
 
   // Structure forward declarations
@@ -207,6 +208,13 @@ class TestService : public ::krpc::RemoteService {
    */
   [[deprecated("Use create_test_object instead.")]]
   TestService::DeprecatedClass create_deprecated_class();
+
+  /**
+   * A new object of the class named Object.
+   * @param name The name of the object.
+   * @return The object.
+   */
+  TestService::Object create_object(std::string name);
 
   TestService::TestClass create_test_object(std::string value);
 
@@ -543,6 +551,8 @@ class TestService : public ::krpc::RemoteService {
 
   [[deprecated("Use create_test_object instead.")]] ::krpc::Stream<TestService::DeprecatedClass> create_deprecated_class_stream();
 
+  ::krpc::Stream<TestService::Object> create_object_stream(std::string name);
+
   ::krpc::Stream<TestService::TestClass> create_test_object_stream(std::string value);
 
   [[deprecated("Use float_to_string instead.")]] ::krpc::Stream<std::string> deprecated_procedure_stream(float value);
@@ -768,6 +778,8 @@ class TestService : public ::krpc::RemoteService {
   ::krpc::schema::ProcedureCall counter_struct_call(std::string id);
 
   [[deprecated("Use create_test_object instead.")]] ::krpc::schema::ProcedureCall create_deprecated_class_call();
+
+  ::krpc::schema::ProcedureCall create_object_call(std::string name);
 
   ::krpc::schema::ProcedureCall create_test_object_call(std::string value);
 
@@ -1004,6 +1016,8 @@ class TestService : public ::krpc::RemoteService {
   static ::krpc::schema::ProcedureCall counter_struct_call_template();
 
   [[deprecated("Use create_test_object instead.")]] static ::krpc::schema::ProcedureCall create_deprecated_class_call_template();
+
+  static ::krpc::schema::ProcedureCall create_object_call_template();
 
   static ::krpc::schema::ProcedureCall create_test_object_call_template();
 
@@ -1322,6 +1336,26 @@ class TestService : public ::krpc::RemoteService {
      * @return The bound methods.
      */
     static Bound bind(const ::krpc::Connection& connection);
+  };
+
+  /**
+   * A class named Object.
+   */
+  class Object : public ::krpc::RemoteObject<Object> {
+   public:
+    Object();
+    Object(const ::krpc::Connection& connection, uint64_t id);
+
+    /**
+     * The name of the object.
+     */
+    std::string name();
+
+    ::krpc::Stream<std::string> name_stream();
+
+    ::krpc::schema::ProcedureCall name_call();
+
+    static ::krpc::schema::ProcedureCall name_call_template();
   };
 
   /**
@@ -2250,6 +2284,16 @@ inline TestService::TestStruct TestService::counter_struct(std::string id = "") 
 inline TestService::DeprecatedClass TestService::create_deprecated_class() {
   auto _data = this->_connection.invoke("TestService", "CreateDeprecatedClass", {}, ::krpc::Connection::Returns::value);
   TestService::DeprecatedClass _result{};
+  decoder::decode_result(_result, _data, &this->_connection);
+  return _result;
+}
+
+inline TestService::Object TestService::create_object(std::string name) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(name));
+  auto _data = this->_connection.invoke("TestService", "CreateObject", _args, ::krpc::Connection::Returns::value);
+  TestService::Object _result{};
   decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
@@ -3352,6 +3396,13 @@ inline ::krpc::Stream<TestService::DeprecatedClass> TestService::create_deprecat
   return ::krpc::Stream<TestService::DeprecatedClass>(this->_connection, this->_connection.build_call("TestService", "CreateDeprecatedClass"));
 }
 
+inline ::krpc::Stream<TestService::Object> TestService::create_object_stream(std::string name) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(name));
+  return ::krpc::Stream<TestService::Object>(this->_connection, this->_connection.build_call("TestService", "CreateObject", _args));
+}
+
 inline ::krpc::Stream<TestService::TestClass> TestService::create_test_object_stream(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -4118,6 +4169,13 @@ inline ::krpc::schema::ProcedureCall TestService::create_deprecated_class_call()
   return this->_connection.build_call("TestService", "CreateDeprecatedClass");
 }
 
+inline ::krpc::schema::ProcedureCall TestService::create_object_call(std::string name) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(name));
+  return this->_connection.build_call("TestService", "CreateObject", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::create_test_object_call(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -4882,6 +4940,10 @@ inline ::krpc::schema::ProcedureCall TestService::create_deprecated_class_call_t
   return ::krpc::Connection::build_call("TestService", "CreateDeprecatedClass");
 }
 
+inline ::krpc::schema::ProcedureCall TestService::create_object_call_template() {
+  return ::krpc::Connection::build_call("TestService", "CreateObject");
+}
+
 inline ::krpc::schema::ProcedureCall TestService::create_test_object_call_template() {
   return ::krpc::Connection::build_call("TestService", "CreateTestObject");
 }
@@ -5448,6 +5510,40 @@ inline std::string TestService::DeprecatedClass::Bound::inherited_static_method(
 
 inline TestService::DeprecatedClass::Bound TestService::DeprecatedClass::bind(const ::krpc::Connection& connection) {
   return Bound(connection);
+}
+
+inline TestService::Object::Object():
+  RemoteObject("TestService::Object") {}
+
+inline TestService::Object::Object(const ::krpc::Connection& connection, uint64_t id):
+  RemoteObject(connection, "TestService::Object", id) {}
+
+inline std::string TestService::Object::name() {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(*this));
+  auto _data = this->_connection.invoke("TestService", "Object_get_Name", _args, ::krpc::Connection::Returns::value);
+  std::string _result{};
+  decoder::decode_result(_result, _data, &this->_connection);
+  return _result;
+}
+
+inline ::krpc::Stream<std::string> TestService::Object::name_stream() {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(*this));
+  return ::krpc::Stream<std::string>(this->_connection, this->_connection.build_call("TestService", "Object_get_Name", _args));
+}
+
+inline ::krpc::schema::ProcedureCall TestService::Object::name_call() {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(*this));
+  return this->_connection.build_call("TestService", "Object_get_Name", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::Object::name_call_template() {
+  return ::krpc::Connection::build_call("TestService", "Object_get_Name");
 }
 
 inline TestService::TestClass::TestClass():

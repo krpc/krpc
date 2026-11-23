@@ -94,6 +94,14 @@
 
    
 
+   .. method:: Object createObject(String name)
+
+      A new object of the class named Object.
+
+      :param String name: The name of the object.
+      :returns: The object.
+   
+
    .. method:: TestClass createTestObject(String value)
 
 
@@ -884,6 +892,19 @@
    .. method:: static String inheritedStaticMethod(Connection connection)
 
       Static method with no deprecation of its own documentation string.
+
+   
+
+
+
+.. type:: public class Object
+
+   A class named Object.
+
+   .. method:: String getName()
+
+
+      The name of the object.
 
    
 

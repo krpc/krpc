@@ -150,6 +150,18 @@ Service documentation string.
 
 
 
+.. http:post:: /test-service/create-object
+
+   A new object of the class named Object.
+
+
+   :reqjson string name: The name of the object.
+   :resjson TestService.Object value: The object.
+
+
+
+
+
 .. http:post:: /test-service/create-test-object
 
 
@@ -1472,6 +1484,29 @@ an object takes it as ``(id)``.
 
    :resjson string value:
 
+
+
+
+
+
+.. _http-TestService.Object:
+
+.. rubric:: Object
+
+A class named Object.
+
+A ``Object`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:get:: /test-service/object/(id)/name
+
+   The name of the object.
+
+
+   :param id: The identifier of the :ref:`Object <http-TestService.Object>` object.
+
+   :resjson string value:
 
 
 

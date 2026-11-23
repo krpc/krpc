@@ -242,6 +242,22 @@ class DeprecatedClass(DeclaredObject, metaclass=DeclaredClass):
 
 
 
+class Object(DeclaredObject, metaclass=DeclaredClass):
+    """
+    A class named Object.
+    """
+    _service_name = "TestService"
+    _class_name = "Object"
+
+    @property
+    def name(self) -> str:
+        """
+        The name of the object.
+        """
+        raise _declaration("TestService", "Object")
+
+
+
 class TestClass(DeclaredObject, metaclass=DeclaredClass):
     """
     Class documentation string.
@@ -330,6 +346,7 @@ class TestClass(DeclaredObject, metaclass=DeclaredClass):
 # the service would otherwise name the attribute itself
 if TYPE_CHECKING:
     _DeprecatedClass = DeprecatedClass
+    _Object = Object
     _TestClass = TestClass
     _DeprecatedEnum = DeprecatedEnum
     _PartlyDeprecatedEnum = PartlyDeprecatedEnum
@@ -354,6 +371,7 @@ class TestService(metaclass=DeclaredClass):
     _class_name = None
 
     DeprecatedClass: type[_DeprecatedClass] = DeprecatedClass
+    Object: type[_Object] = Object
     TestClass: type[_TestClass] = TestClass
     DeprecatedEnum: type[_DeprecatedEnum] = DeprecatedEnum
     PartlyDeprecatedEnum: type[_PartlyDeprecatedEnum] = PartlyDeprecatedEnum
@@ -468,6 +486,16 @@ class TestService(metaclass=DeclaredClass):
         Deprecated. Use create_test_object instead.
 
         Create an instance of a deprecated class documentation string.
+        """
+        raise _declaration("TestService", None)
+
+    def create_object(self, name: str) -> Object:
+        """
+        A new object of the class named Object.
+
+        :param name: The name of the object.
+
+        :returns: The object.
         """
         raise _declaration("TestService", None)
 

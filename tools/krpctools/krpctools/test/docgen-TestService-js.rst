@@ -157,6 +157,19 @@ Service documentation string.
 
 
 
+.. function:: createObject(name)
+
+   A new object of the class named Object.
+
+   :param name: The name of the object.
+   :type name: ``string``
+   :returns: The object.
+   :rtype: :class:`TestService.Object`
+   
+
+
+
+
 .. function:: createTestObject(value)
 
 
@@ -1463,6 +1476,20 @@ Service documentation string.
 
       Static method with no deprecation of its own documentation string.
 
+      :rtype: ``string``
+   
+
+
+
+.. class:: Object
+
+   A class named Object.
+
+   .. method:: getName()
+
+      The name of the object.
+
+      :Property: Read-only, cannot be set
       :rtype: ``string``
    
 

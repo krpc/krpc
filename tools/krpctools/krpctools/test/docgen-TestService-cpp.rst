@@ -130,6 +130,17 @@
 
    
 
+   .. function:: Object create_object(std::string name)
+
+      A new object of the class named Object.
+
+      :Parameters:
+
+       * **name** -- The name of the object.
+
+      :returns: The object.
+   
+
    .. function:: TestClass create_test_object(std::string value)
 
 
@@ -1188,6 +1199,18 @@
 
       Static method with no deprecation of its own documentation string.
 
+
+   
+
+
+
+.. class:: Object
+
+   A class named Object.
+
+   .. function:: std::string name()
+
+      The name of the object.
 
    
 

@@ -105,6 +105,16 @@ Service documentation string.
 
 
 
+.. staticmethod:: create_object(name: string): TestService.Object
+
+   A new object of the class named Object.
+
+   :param name: The name of the object.
+   :returns: The object.
+
+
+
+
 .. staticmethod:: create_test_object(value: string): TestService.TestClass
 
 
@@ -1023,6 +1033,18 @@ Service documentation string.
    .. staticmethod:: inherited_static_method(): string
 
       Static method with no deprecation of its own documentation string.
+
+
+
+.. class:: Object
+
+   A class named Object.
+
+   .. attribute:: name: string
+
+      The name of the object.
+
+      :Attribute: Read-only, cannot be set
 
 
 

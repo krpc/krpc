@@ -157,6 +157,20 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_CreateObject(krpc_connection_t connection, krpc_TestService_Object_t * returnValue, const char * name)
+
+   A new object of the class named Object.
+
+   :Parameters:
+
+    * **name** -- The name of the object.
+
+   :returns: The object.
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, const char * value)
 
 
@@ -1527,6 +1541,22 @@ Service documentation string.
 
       Static method with no deprecation of its own documentation string.
 
+
+   
+
+
+
+.. type:: krpc_TestService_Object_t
+
+   A class named Object.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_OBJECT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_TestService_Object_Name(krpc_connection_t connection, char * * returnValue, krpc_TestService_Object_t instance)
+
+      The name of the object.
 
    
 

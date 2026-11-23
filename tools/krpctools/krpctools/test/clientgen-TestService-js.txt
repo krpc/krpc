@@ -30,6 +30,14 @@ export interface Service extends RemoteService<"TestService"> {
    * @deprecated Use createTestObject instead.
    */
   createDeprecatedClass(): Promise<DeprecatedClass>;
+  /**
+   * A new object of the class named Object.
+   *
+   * @param name - The name of the object.
+   *
+   * @returns The object.
+   */
+  createObject(name: string): Promise<Object>;
   createTestObject(value: string): Promise<TestClass>;
   /**
    * Deprecated procedure documentation string.
@@ -252,6 +260,11 @@ export interface Service extends RemoteService<"TestService"> {
      */
     inheritedStaticMethod(): Promise<string>;
   };
+  /** A class named Object. */
+  readonly Object: {
+    [Symbol.hasInstance](value: unknown): value is Object;
+    readonly prototype: Object;
+  };
   /** Class documentation string. */
   readonly TestClass: {
     [Symbol.hasInstance](value: unknown): value is TestClass;
@@ -408,6 +421,12 @@ export interface DeprecatedClass extends RemoteObject<"TestService.DeprecatedCla
    * @deprecated Use TestClass instead.
    */
   setInheritedProperty(value: string): Promise<void>;
+}
+
+/** A class named Object. */
+export interface Object extends RemoteObject<"TestService.Object"> {
+  /** The name of the object. */
+  getName(): Promise<string>;
 }
 
 /** Class documentation string. */
@@ -574,6 +593,14 @@ export declare namespace Server {
      * @deprecated Use createTestObject instead.
      */
     createDeprecatedClass(): DeprecatedClass;
+    /**
+     * A new object of the class named Object.
+     *
+     * @param name - The name of the object.
+     *
+     * @returns The object.
+     */
+    createObject(name: string): Object;
     createTestObject(value: string): TestClass;
     /**
      * Deprecated procedure documentation string.
@@ -784,6 +811,10 @@ export declare namespace Server {
        */
       inheritedStaticMethod(): string;
     };
+    /** A class named Object. */
+    readonly Object: {
+      [Symbol.hasInstance](value: unknown): value is Object;
+    };
     /** Class documentation string. */
     readonly TestClass: {
       [Symbol.hasInstance](value: unknown): value is TestClass;
@@ -867,6 +898,12 @@ export declare namespace Server {
     inheritedProperty: string;
   }
 
+  /** A class named Object. */
+  interface Object extends ServerObject<"TestService.Object"> {
+    /** The name of the object. */
+    readonly name: string;
+  }
+
   /** Class documentation string. */
   interface TestClass extends ServerObject<"TestService.TestClass"> {
     echoNullableObject(value: TestClass | null): TestClass | null;
@@ -893,11 +930,13 @@ declare module "@krpc-org/krpc" {
   interface ServerTypes {
     "TestService": Server.Service;
     "TestService.DeprecatedClass": Server.DeprecatedClass;
+    "TestService.Object": Server.Object;
     "TestService.TestClass": Server.TestClass;
   }
   interface ClientTypes {
     "TestService": Service;
     "TestService.DeprecatedClass": DeprecatedClass;
+    "TestService.Object": Object;
     "TestService.TestClass": TestClass;
   }
 }

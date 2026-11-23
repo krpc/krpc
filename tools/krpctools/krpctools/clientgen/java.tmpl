@@ -209,7 +209,7 @@ import krpc.client.Types;
 
         /** Build a {{ struct_name }} from the values of its fields. */
         @SuppressWarnings("unchecked")
-        public static {{ struct_name }} fromFieldValues(Object[] values) {
+        public static {{ struct_name }} fromFieldValues(java.lang.Object[] values) {
             return new {{ struct_name }}(
                 {% for field in struct['fields'] %}
                 ({{ field.type }}) values[{{ loop.index0 }}]{% if not loop.last %},{% endif %}
@@ -219,8 +219,8 @@ import krpc.client.Types;
         }
 
         @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 {% for field in struct['fields'] %}
                 {{ field.name }}{% if not loop.last %},{% endif %}
 
@@ -229,7 +229,7 @@ import krpc.client.Types;
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof {{ struct_name }})) {
                 return false;
             }
@@ -240,7 +240,7 @@ import krpc.client.Types;
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {{ '{' }}{% for field in struct['fields'] %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}{{ '}' }});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {{ '{' }}{% for field in struct['fields'] %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}{{ '}' }});
         }
 
         /**

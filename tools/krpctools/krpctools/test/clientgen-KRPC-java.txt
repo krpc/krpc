@@ -591,7 +591,7 @@ public class KRPC extends RemoteService {
 
         /** Build a ClientInfo from the values of its fields. */
         @SuppressWarnings("unchecked")
-        public static ClientInfo fromFieldValues(Object[] values) {
+        public static ClientInfo fromFieldValues(java.lang.Object[] values) {
             return new ClientInfo(
                 (byte[]) values[0],
                 (String) values[1],
@@ -600,8 +600,8 @@ public class KRPC extends RemoteService {
         }
 
         @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 id,
                 name,
                 address
@@ -609,7 +609,7 @@ public class KRPC extends RemoteService {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof ClientInfo)) {
                 return false;
             }
@@ -619,7 +619,7 @@ public class KRPC extends RemoteService {
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {id, name, address});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {id, name, address});
         }
 
         /**
@@ -719,7 +719,7 @@ public class KRPC extends RemoteService {
 
         /** Build a ServerSettings from the values of its fields. */
         @SuppressWarnings("unchecked")
-        public static ServerSettings fromFieldValues(Object[] values) {
+        public static ServerSettings fromFieldValues(java.lang.Object[] values) {
             return new ServerSettings(
                 (boolean) values[0],
                 (int) values[1],
@@ -730,8 +730,8 @@ public class KRPC extends RemoteService {
         }
 
         @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 adaptiveRateControl,
                 targetFrameRate,
                 maxTimePerFrame,
@@ -741,7 +741,7 @@ public class KRPC extends RemoteService {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof ServerSettings)) {
                 return false;
             }
@@ -751,7 +751,7 @@ public class KRPC extends RemoteService {
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {adaptiveRateControl, targetFrameRate, maxTimePerFrame, maxCallWait, tickHoldTimeout});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {adaptiveRateControl, targetFrameRate, maxTimePerFrame, maxCallWait, tickHoldTimeout});
         }
 
         /**
@@ -991,7 +991,7 @@ public class KRPC extends RemoteService {
 
         /** Build a ServerStatistics from the values of its fields. */
         @SuppressWarnings("unchecked")
-        public static ServerStatistics fromFieldValues(Object[] values) {
+        public static ServerStatistics fromFieldValues(java.lang.Object[] values) {
             return new ServerStatistics(
                 (long) values[0],
                 (long) values[1],
@@ -1015,8 +1015,8 @@ public class KRPC extends RemoteService {
         }
 
         @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 bytesRead,
                 bytesWritten,
                 bytesReadRate,
@@ -1039,7 +1039,7 @@ public class KRPC extends RemoteService {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof ServerStatistics)) {
                 return false;
             }
@@ -1049,7 +1049,7 @@ public class KRPC extends RemoteService {
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {bytesRead, bytesWritten, bytesReadRate, bytesWrittenRate, rpcsExecuted, rpcRate, frameRate, timePerFrame, execTimePerFrame, waitTimePerFrame, streamTimePerFrame, budgetPerFrame, medianTurnaround, deferredCalls, streams, streamEvaluations, streamEvaluationRate, streamUpdatesSent});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {bytesRead, bytesWritten, bytesReadRate, bytesWrittenRate, rpcsExecuted, rpcRate, frameRate, timePerFrame, execTimePerFrame, waitTimePerFrame, streamTimePerFrame, budgetPerFrame, medianTurnaround, deferredCalls, streams, streamEvaluations, streamEvaluationRate, streamUpdatesSent});
         }
 
         /**
@@ -1196,7 +1196,7 @@ public class KRPC extends RemoteService {
 
         /** Build a ServerStatus from the values of its fields. */
         @SuppressWarnings("unchecked")
-        public static ServerStatus fromFieldValues(Object[] values) {
+        public static ServerStatus fromFieldValues(java.lang.Object[] values) {
             return new ServerStatus(
                 (String) values[0],
                 (int) values[1],
@@ -1206,8 +1206,8 @@ public class KRPC extends RemoteService {
         }
 
         @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 version,
                 protocolVersion,
                 settings,
@@ -1216,7 +1216,7 @@ public class KRPC extends RemoteService {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof ServerStatus)) {
                 return false;
             }
@@ -1226,7 +1226,7 @@ public class KRPC extends RemoteService {
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {version, protocolVersion, settings, statistics});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {version, protocolVersion, settings, statistics});
         }
 
         /**

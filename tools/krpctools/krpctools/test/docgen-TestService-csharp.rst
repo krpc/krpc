@@ -125,6 +125,17 @@
 
       :Game Scenes: All
 
+   .. function:: Object CreateObject(string name)
+
+      A new object of the class named Object.
+
+      :parameters:
+
+       * **name** -- The name of the object.
+
+      :returns: The object.
+      :Game Scenes: All
+
    .. function:: TestClass CreateTestObject(string value)
 
 
@@ -1179,6 +1190,18 @@
 
       Static method with no deprecation of its own documentation string.
 
+
+      :Game Scenes: All
+
+
+
+.. class:: Object
+
+   A class named Object.
+
+   .. property:: string Name { get; }
+
+      The name of the object.
 
       :Game Scenes: All
 

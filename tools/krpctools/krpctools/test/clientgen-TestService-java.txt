@@ -186,6 +186,21 @@ public class TestService extends RemoteService {
         return (krpc.client.services.TestService.DeprecatedClass) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "DeprecatedClass"), this.connection);
     }
 
+    /**
+     * A new object of the class named Object.
+     * @param name The name of the object.
+     * @return The object.
+     */
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "CreateObject", types = _Types.class)
+    public krpc.client.services.TestService.Object createObject(String name) {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(name, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "CreateObject", _args);
+        return (krpc.client.services.TestService.Object) Decoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "Object"), this.connection);
+    }
+
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "CreateTestObject", types = _Types.class)
     public krpc.client.services.TestService.TestClass createTestObject(String value) {
@@ -1614,7 +1629,7 @@ public class TestService extends RemoteService {
 
         /** Build a DeprecatedStruct from the values of its fields. */
         @SuppressWarnings("unchecked")
-        public static DeprecatedStruct fromFieldValues(Object[] values) {
+        public static DeprecatedStruct fromFieldValues(java.lang.Object[] values) {
             return new DeprecatedStruct(
                 (int) values[0],
                 (int) values[1]
@@ -1622,15 +1637,15 @@ public class TestService extends RemoteService {
         }
 
         @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 value,
                 oldValue
             };
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof DeprecatedStruct)) {
                 return false;
             }
@@ -1640,7 +1655,7 @@ public class TestService extends RemoteService {
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {value, oldValue});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {value, oldValue});
         }
 
         /**
@@ -1704,7 +1719,7 @@ public class TestService extends RemoteService {
 
         /** Build a PartlyDeprecatedStruct from the values of its fields. */
         @SuppressWarnings("unchecked")
-        public static PartlyDeprecatedStruct fromFieldValues(Object[] values) {
+        public static PartlyDeprecatedStruct fromFieldValues(java.lang.Object[] values) {
             return new PartlyDeprecatedStruct(
                 (int) values[0],
                 (int) values[1]
@@ -1712,15 +1727,15 @@ public class TestService extends RemoteService {
         }
 
         @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 value,
                 oldValue
             };
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof PartlyDeprecatedStruct)) {
                 return false;
             }
@@ -1730,7 +1745,7 @@ public class TestService extends RemoteService {
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {value, oldValue});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {value, oldValue});
         }
 
         /**
@@ -1778,21 +1793,21 @@ public class TestService extends RemoteService {
 
         /** Build a TestFlagsStruct from the values of its fields. */
         @SuppressWarnings("unchecked")
-        public static TestFlagsStruct fromFieldValues(Object[] values) {
+        public static TestFlagsStruct fromFieldValues(java.lang.Object[] values) {
             return new TestFlagsStruct(
                 (krpc.client.services.TestService.TestFlags) values[0]
             );
         }
 
         @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 flagsField
             };
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof TestFlagsStruct)) {
                 return false;
             }
@@ -1802,7 +1817,7 @@ public class TestService extends RemoteService {
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {flagsField});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {flagsField});
         }
 
         /**
@@ -1853,7 +1868,7 @@ public class TestService extends RemoteService {
 
         /** Build a TestNestedNullableStruct from the values of its fields. */
         @SuppressWarnings("unchecked")
-        public static TestNestedNullableStruct fromFieldValues(Object[] values) {
+        public static TestNestedNullableStruct fromFieldValues(java.lang.Object[] values) {
             return new TestNestedNullableStruct(
                 (java.util.List<krpc.client.services.TestService.TestClass>) values[0],
                 (String) values[1]
@@ -1861,15 +1876,15 @@ public class TestService extends RemoteService {
         }
 
         @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 listField,
                 stringField
             };
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof TestNestedNullableStruct)) {
                 return false;
             }
@@ -1879,7 +1894,7 @@ public class TestService extends RemoteService {
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {listField, stringField});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {listField, stringField});
         }
 
         /**
@@ -1951,7 +1966,7 @@ public class TestService extends RemoteService {
 
         /** Build a TestStruct from the values of its fields. */
         @SuppressWarnings("unchecked")
-        public static TestStruct fromFieldValues(Object[] values) {
+        public static TestStruct fromFieldValues(java.lang.Object[] values) {
             return new TestStruct(
                 (int) values[0],
                 (String) values[1],
@@ -1961,8 +1976,8 @@ public class TestService extends RemoteService {
         }
 
         @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 intField,
                 stringField,
                 enumField,
@@ -1971,7 +1986,7 @@ public class TestService extends RemoteService {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof TestStruct)) {
                 return false;
             }
@@ -1981,7 +1996,7 @@ public class TestService extends RemoteService {
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {intField, stringField, enumField, listField});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {intField, stringField, enumField, listField});
         }
 
         /**
@@ -2051,7 +2066,7 @@ public class TestService extends RemoteService {
 
         /** Build a TestNestedStruct from the values of its fields. */
         @SuppressWarnings("unchecked")
-        public static TestNestedStruct fromFieldValues(Object[] values) {
+        public static TestNestedStruct fromFieldValues(java.lang.Object[] values) {
             return new TestNestedStruct(
                 (krpc.client.services.TestService.TestStruct) values[0],
                 (krpc.client.services.TestService.TestClass) values[1],
@@ -2060,8 +2075,8 @@ public class TestService extends RemoteService {
         }
 
         @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 structField,
                 objectField,
                 stringField
@@ -2069,7 +2084,7 @@ public class TestService extends RemoteService {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof TestNestedStruct)) {
                 return false;
             }
@@ -2079,7 +2094,7 @@ public class TestService extends RemoteService {
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {structField, objectField, stringField});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {structField, objectField, stringField});
         }
 
         /**
@@ -2159,7 +2174,7 @@ public class TestService extends RemoteService {
 
         /** Build a TestNullableStruct from the values of its fields. */
         @SuppressWarnings("unchecked")
-        public static TestNullableStruct fromFieldValues(Object[] values) {
+        public static TestNullableStruct fromFieldValues(java.lang.Object[] values) {
             return new TestNullableStruct(
                 (int) values[0],
                 (Integer) values[1],
@@ -2170,8 +2185,8 @@ public class TestService extends RemoteService {
         }
 
         @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 intField,
                 nullableIntField,
                 nullableEnumField,
@@ -2181,7 +2196,7 @@ public class TestService extends RemoteService {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof TestNullableStruct)) {
                 return false;
             }
@@ -2191,7 +2206,7 @@ public class TestService extends RemoteService {
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {intField, nullableIntField, nullableEnumField, nullableStringField, nullableObjectField});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {intField, nullableIntField, nullableEnumField, nullableStringField, nullableObjectField});
         }
 
         /**
@@ -2354,6 +2369,32 @@ public class TestService extends RemoteService {
             {
                 return krpc.client.services.TestService.DeprecatedClass.inheritedStaticMethod(connection);
             }
+        }
+    }
+
+    /**
+     * A class named Object.
+     */
+    public static class Object extends RemoteObject {
+
+        private static final long serialVersionUID = 371703491867088664L;
+
+        public Object(Connection connection, long id) {
+            super(connection, id);
+        }
+
+        /**
+         * The name of the object.
+         */
+        @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "TestService", procedure = "Object_get_Name", types = _Types.class)
+        public String getName()
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(this, krpc.client.Types.createClass("TestService", "Object"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Object_get_Name", _args);
+            return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
         }
     }
 
@@ -2651,6 +2692,8 @@ public class TestService extends RemoteService {
             PARAMETER_TYPES.put("CounterStruct", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("CreateDeprecatedClass", krpc.client.Types.createClass("TestService", "DeprecatedClass"));
             PARAMETER_TYPES.put("CreateDeprecatedClass", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("CreateObject", krpc.client.Types.createClass("TestService", "Object"));
+            PARAMETER_TYPES.put("CreateObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("CreateTestObject", krpc.client.Types.createClass("TestService", "TestClass"));
             PARAMETER_TYPES.put("CreateTestObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("DeprecatedProcedure", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
@@ -2727,11 +2770,11 @@ public class TestService extends RemoteService {
             PARAMETER_TYPES.put("FlagsDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestFlags") });
             RETURN_TYPES.put("FlagsEcho", krpc.client.Types.createEnumeration("TestService", "TestFlags"));
             PARAMETER_TYPES.put("FlagsEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestFlags") });
-            RETURN_TYPES.put("FlagsListEcho", krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestFlags")));
-            PARAMETER_TYPES.put("FlagsListEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestFlags")) });
         }
 
         private static void initTypes1() {
+            RETURN_TYPES.put("FlagsListEcho", krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestFlags")));
+            PARAMETER_TYPES.put("FlagsListEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestFlags")) });
             RETURN_TYPES.put("FlagsStructEcho", krpc.client.Types.createStruct("TestService", "TestFlagsStruct"));
             PARAMETER_TYPES.put("FlagsStructEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createStruct("TestService", "TestFlagsStruct") });
             RETURN_TYPES.put("FlagsToInt", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
@@ -2830,11 +2873,11 @@ public class TestService extends RemoteService {
             PARAMETER_TYPES.put("ThrowArgumentOutOfRangeException", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("ThrowCustomException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("ThrowCustomException", new krpc.schema.KRPC.Type[] {  });
-            RETURN_TYPES.put("ThrowCustomExceptionLater", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
-            PARAMETER_TYPES.put("ThrowCustomExceptionLater", new krpc.schema.KRPC.Type[] {  });
         }
 
         private static void initTypes2() {
+            RETURN_TYPES.put("ThrowCustomExceptionLater", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("ThrowCustomExceptionLater", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ThrowInvalidOperationException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("ThrowInvalidOperationException", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ThrowInvalidOperationExceptionLater", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
@@ -2881,6 +2924,8 @@ public class TestService extends RemoteService {
             PARAMETER_TYPES.put("DeprecatedClass_set_InheritedProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "DeprecatedClass"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("DeprecatedClass_static_InheritedStaticMethod", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("DeprecatedClass_static_InheritedStaticMethod", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("Object_get_Name", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("Object_get_Name", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Object") });
             RETURN_TYPES.put("TestClass_EchoNullableObject", krpc.client.Types.createClass("TestService", "TestClass"));
             PARAMETER_TYPES.put("TestClass_EchoNullableObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass"), krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass")) });
             RETURN_TYPES.put("TestClass_FloatToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
