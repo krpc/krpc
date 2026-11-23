@@ -50,6 +50,38 @@ export function memberName(name: string, isStatic = false): string {
   return (isStatic ? CLASS_MEMBERS : OBJECT_MEMBERS).has(key) ? `${key}_` : key;
 }
 
+// The public members of a connection, which a service of the same name would replace. A test
+// checks the list against the members of Connection
+export const CONNECTION_MEMBERS: ReadonlySet<string> = new Set([
+  ...OBJECT_MEMBERS,
+  "addEvent",
+  "addStream",
+  "addUpdateCallback",
+  "close",
+  "compile",
+  "getCall",
+  "getCallTemplate",
+  "removeUpdateCallback",
+  "run",
+]);
+
+/** The property of a connection that holds a service, with a trailing underscore where it is
+ * the name of a member of the connection, so `Close` is `close_`. */
+export function serviceName(name: string): string {
+  const key = camelCase(name);
+  return CONNECTION_MEMBERS.has(key) ? `${key}_` : key;
+}
+
+// The names the module of a service declares beside its types
+const MODULE_NAMES: ReadonlySet<string> = new Set(["ClientService", "Server", "Service"]);
+
+/** The name of a class, enumeration, structure or exception of a service, with a trailing
+ * underscore where it is a name the module of the service declares, so `Service` is
+ * `Service_`. */
+export function typeName(name: string): string {
+  return MODULE_NAMES.has(name) ? `${name}_` : name;
+}
+
 /** The name of a property accessor, such as `getRCSThrust` for the getter of `RCSThrust`. */
 export function accessorName(prefix: "get" | "set", name: string): string {
   return prefix + name;

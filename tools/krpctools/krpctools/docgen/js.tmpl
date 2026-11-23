@@ -20,7 +20,7 @@
 {% endmacro %}
 
 {% macro class(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}
+.. class:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -124,7 +124,7 @@
 {% endmacro %}
 
 {% macro enumeration(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}
+.. class:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -148,7 +148,7 @@
 {% endmacro %}
 
 {% macro struct(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}(fields)
+.. class:: {{ domain.type_name(x) }}(fields)
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -169,7 +169,7 @@
 {% endmacro %}
 
 {% macro exception(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}
+.. class:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 

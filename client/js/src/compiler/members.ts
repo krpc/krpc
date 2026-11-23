@@ -1,6 +1,6 @@
 import { deprecationMessage } from "../deprecation.js";
 import { nativeError } from "../errors.js";
-import { camelCase, memberName } from "../naming.js";
+import { camelCase, memberName, typeName } from "../naming.js";
 import type { Procedure, Service } from "../schema/krpc_pb.js";
 import { type Type, type Types, UnknownTypeError } from "../types.js";
 
@@ -123,7 +123,8 @@ export class MemberIndex {
     if (name.includes("_static_")) {
       const key = memberName(staticName, true);
       const members = this.#members(service, className);
-      members.statics.set(key, withDeprecation(member, `${service}.${className}.${key}`));
+      const qualified = `${service}.${typeName(className)}.${key}`;
+      members.statics.set(key, withDeprecation(member, qualified));
       return;
     }
     // A member of a class can belong to another service, and takes the object first
@@ -133,7 +134,8 @@ export class MemberIndex {
     }
     const members = this.#members(instance.service, instance.name);
     const [map, key] = accessor(members, name.slice(name.indexOf("_") + 1));
-    map.set(key, withDeprecation(member, `${instance.service}.${instance.name}.${key}`));
+    const qualified = `${instance.service}.${typeName(instance.name)}.${key}`;
+    map.set(key, withDeprecation(member, qualified));
   }
 
   #members(service: string, className: string): Members {

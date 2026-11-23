@@ -24,7 +24,7 @@ import {
   type ServerErrorDetails,
   StreamError,
 } from "../dist/errors.js";
-import { camelCase } from "../dist/naming.js";
+import { camelCase, memberName, serviceName, typeName } from "../dist/naming.js";
 import { getObjectId, RemoteObject } from "../dist/objects.js";
 import { type Declared, registered } from "../dist/registry.js";
 import {
@@ -160,11 +160,11 @@ function isDeclared(conn: DynamicConnection, command: DeclaredCommand): boolean 
 
 /** The value of a service member, by the name the server gives it. */
 function serviceType(conn: DynamicConnection, service: string, name: string): any {
-  const members = conn[camelCase(service)];
-  if (members === undefined || !(name in members)) {
+  const members = conn[serviceName(service)];
+  if (members === undefined || !(typeName(name) in members)) {
     throw new Unsupported(`No ${service}.${name}`);
   }
-  return members[name];
+  return members[typeName(name)];
 }
 
 function fromValue(conn: DynamicConnection, value: Value | undefined): unknown {
@@ -532,7 +532,7 @@ function resolve(conn: DynamicConnection, command: Invoke): () => Promise<unknow
     args.push(named);
   }
   const service = () => {
-    const result = conn[camelCase(command.service)];
+    const result = conn[serviceName(command.service)];
     if (result === undefined) {
       throw new Unsupported(`No service ${command.service}`);
     }
@@ -544,25 +544,25 @@ function resolve(conn: DynamicConnection, command: Invoke): () => Promise<unknow
     target = service();
     member = name.slice(0, 3) + name.slice(4);
   } else if (name.includes("_")) {
-    const memberName = name.slice(name.lastIndexOf("_") + 1);
+    const remoteName = name.slice(name.lastIndexOf("_") + 1);
     if (name.includes("_static_")) {
       if (command.through !== undefined) {
         throw new Unsupported("A static method is called through its class");
       }
-      target = service()[name.slice(0, name.indexOf("_"))];
-      member = camelCase(memberName);
+      target = service()[typeName(name.slice(0, name.indexOf("_")))];
+      member = memberName(remoteName, true);
     } else {
       target = args.shift();
-      member = camelCase(memberName);
+      member = memberName(remoteName);
       if (name.includes("_get_")) {
-        member = `get${memberName}`;
+        member = `get${remoteName}`;
       } else if (name.includes("_set_")) {
-        member = `set${memberName}`;
+        member = `set${remoteName}`;
       }
     }
   } else {
     target = service();
-    member = camelCase(name);
+    member = memberName(name);
   }
   if (target === null || target === undefined || typeof target[member] !== "function") {
     throw new Unsupported(`No member ${member} for ${command.service}.${name}`);
@@ -573,23 +573,24 @@ function resolve(conn: DynamicConnection, command: Invoke): () => Promise<unknow
 /** The member function of a call template, reached through its class or service. */
 function resolveTemplate(conn: DynamicConnection, command: Invoke): (...args: never[]) => unknown {
   const name = command.procedure;
-  const service = conn[camelCase(command.service)];
+  const service = conn[serviceName(command.service)];
   if (service === undefined) {
     throw new Unsupported(`No service ${command.service}`);
   }
   let target: any = service;
-  let member = camelCase(name);
+  let member = memberName(name);
   if (name.startsWith("get_") || name.startsWith("set_")) {
     member = name.slice(0, 3) + name.slice(4);
   } else if (name.includes("_")) {
-    const cls = service[name.slice(0, name.indexOf("_"))];
-    const memberName = name.slice(name.lastIndexOf("_") + 1);
-    target = name.includes("_static_") ? cls : cls?.prototype;
-    member = camelCase(memberName);
+    const cls = service[typeName(name.slice(0, name.indexOf("_")))];
+    const remoteName = name.slice(name.lastIndexOf("_") + 1);
+    const isStatic = name.includes("_static_");
+    target = isStatic ? cls : cls?.prototype;
+    member = memberName(remoteName, isStatic);
     if (name.includes("_get_")) {
-      member = `get${memberName}`;
+      member = `get${remoteName}`;
     } else if (name.includes("_set_")) {
-      member = `set${memberName}`;
+      member = `set${remoteName}`;
     }
   }
   if (target === null || target === undefined || typeof target[member] !== "function") {
@@ -633,7 +634,7 @@ function members(conn: DynamicConnection, command: Members): Value {
   if (command.service === "") {
     names = Object.keys(conn);
   } else if (command.name === "") {
-    names = Object.keys(conn[camelCase(command.service)] ?? {});
+    names = Object.keys(conn[serviceName(command.service)] ?? {});
   } else {
     const member = serviceType(conn, command.service, command.name);
     if (typeof member === "function" && member.prototype instanceof RemoteObject) {
@@ -729,22 +730,25 @@ function memberUse(conn: DynamicConnection, command: DeprecationSignals): () => 
         throw new Unsupported(`No ${command.use} of a procedure`);
     }
   }
-  const serviceName = camelCase(command.service);
+  const serviceKey = serviceName(command.service);
   if (command.member === "") {
-    return () => conn[serviceName];
+    return () => conn[serviceKey];
   }
-  const service = conn[serviceName];
-  const [typeName, name] = command.member.split(".");
+  const service = conn[serviceKey];
+  const [remoteType, name] = command.member.split(".");
+  const typeKey = typeName(remoteType);
   if (name === undefined) {
-    return () => service[typeName];
+    return () => service[typeKey];
   }
-  const type = service[typeName];
-  const key = camelCase(name);
+  const type = service[typeKey];
   if (typeof type === "function" && type.prototype instanceof RemoteStruct) {
-    const struct = contextOf(conn).types.struct(`${command.service}.${typeName}`);
+    const struct = contextOf(conn).types.struct(`${command.service}.${remoteType}`);
     const value = new type(Object.fromEntries(struct.fields.map((x) => [x.name, null])));
+    const key = memberName(name);
     return () => value[key];
   }
+  // A static method of a class keeps clear of the members of a function too
+  const key = memberName(name, typeof type === "function");
   return () => type[key];
 }
 

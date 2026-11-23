@@ -41,6 +41,16 @@ OBJECT_MEMBERS = frozenset(
 CLASS_MEMBERS = OBJECT_MEMBERS | frozenset(["length", "name", "prototype"])
 
 
+# The names the module of a service declares beside its types
+MODULE_NAMES = frozenset(["ClientService", "Server", "Service"])
+
+
+def type_name(name):
+    """The name of a class, enumeration, structure or exception of a service, with a trailing
+    underscore where it is a name the module of the service declares"""
+    return name + "_" if name in MODULE_NAMES else name
+
+
 def member_name(name, static=False):
     """The name of a member in lower camel case, with a trailing underscore where it would
     replace a member of the object that holds it"""
@@ -110,7 +120,10 @@ class JsLanguage(Language):
         if isinstance(typ, MessageType):
             return "schema.%s" % typ.python_type.__name__
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
-            return "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
+            return "%s.%s" % (
+                typ.protobuf_type.service,
+                type_name(typ.protobuf_type.name),
+            )
         if isinstance(typ, (ListType, TupleType)):
             return "Array"
         if isinstance(typ, SetType):

@@ -18,7 +18,7 @@ from krpc.types import (
 )
 from krpc.utils import lower_camel_case
 
-from ..lang.js import JsLanguage, accessor_name, member_name
+from ..lang.js import JsLanguage, accessor_name, member_name, type_name
 from . import crefs
 from .docparser import DocParser
 from .generator import Generator
@@ -105,6 +105,17 @@ class JsGenerator(Generator[JsLanguage]):
 
     def parse_context(self, context):
         service = self._service
+        # The types of the service, by their names in the module, keeping the name the server
+        # gives each
+        self._local_types = {}
+        for kind in ("classes", "enumerations", "structs", "exceptions"):
+            types = {}
+            self._local_types[kind] = {}
+            for name, info in context[kind].items():
+                info["remote_name"] = name
+                types[type_name(name)] = info
+                self._local_types[kind][type_name(name)] = name
+            context[kind] = types
         members = []
         for name, info in context["procedures"].items():
             members.append(
@@ -209,7 +220,7 @@ class JsGenerator(Generator[JsLanguage]):
                     "name": name,
                     "base": self._client_type("RemoteObject"),
                     "documentation": doc_comment(self._documentation(info)),
-                    "brand": "%s.%s" % (service, name),
+                    "brand": "%s.%s" % (service, info["remote_name"]),
                     "members": render(class_members),
                 }
             )
@@ -227,12 +238,12 @@ class JsGenerator(Generator[JsLanguage]):
                     "name": name,
                     "base": base,
                     "documentation": doc_comment(self._documentation(info)),
-                    "brand": "%s.%s" % (service, name),
+                    "brand": "%s.%s" % (service, info["remote_name"]),
                     "deprecated": deprecated_comment(info),
                     "arguments": "%s, %s, %s%s"
                     % (
                         json.dumps(service),
-                        json.dumps(name),
+                        json.dumps(info["remote_name"]),
                         js_array(values),
                         ", true" if info["flags"] else "",
                     ),
@@ -261,11 +272,15 @@ class JsGenerator(Generator[JsLanguage]):
                     "name": name,
                     "base": self._client_type("RemoteStruct"),
                     "documentation": doc_comment(self._documentation(info)),
-                    "brand": "%s.%s" % (service, name),
+                    "brand": "%s.%s" % (service, info["remote_name"]),
                     "fields": render(fields),
                     "deprecated": deprecated_comment(info),
                     "arguments": "%s, %s, %s"
-                    % (json.dumps(service), json.dumps(name), js_array(field_names)),
+                    % (
+                        json.dumps(service),
+                        json.dumps(info["remote_name"]),
+                        js_array(field_names),
+                    ),
                 }
             )
 
@@ -388,7 +403,7 @@ class JsGenerator(Generator[JsLanguage]):
                             )
                         )
                     ),
-                    "brand": "%s.%s" % (service, name),
+                    "brand": "%s.%s" % (service, info["remote_name"]),
                     "members": indent(
                         render(
                             self._server_members(info["methods"], info["properties"])
@@ -428,22 +443,14 @@ class JsGenerator(Generator[JsLanguage]):
         return name if local == name else "globalThis." + name
 
     def _defined_names(self):
-        """The names of the classes, enumerations, structures and exceptions of the service,
-        none of which can be a name the declarations of its server forms use"""
+        """The names of the classes, enumerations, structures and exceptions of the service in
+        the module"""
         defs = self._defs
-        defined = (
-            set(defs.get("classes", {}))
-            | set(defs.get("enumerations", {}))
-            | set(defs.get("structs", {}))
-            | set(defs.get("exceptions", {}))
-        )
-        for name in ("Server", "ClientService"):
-            if name in defined:
-                raise RuntimeError(
-                    "%s defines %s, the name of the declarations of its server forms"
-                    % (self._service, name)
-                )
-        return defined
+        return {
+            type_name(name)
+            for kind in ("classes", "enumerations", "structs", "exceptions")
+            for name in defs.get(kind, {})
+        }
 
     def _exceptions(self, context):
         """The exceptions of the service, each declared as a type and a value"""
@@ -452,7 +459,7 @@ class JsGenerator(Generator[JsLanguage]):
         for name, info in context["exceptions"].items():
             self._value_imports.add("declareException")
             native = info["native"]
-            arguments = [json.dumps(service), json.dumps(name)]
+            arguments = [json.dumps(service), json.dumps(info["remote_name"])]
             if native is not None:
                 arguments.append(self._global(native))
             if info["alias"] is not None:
@@ -683,12 +690,12 @@ class JsGenerator(Generator[JsLanguage]):
             # Within the Server namespace, a class's name is its server form
             prefix = "Server." if server and isinstance(typ, ClassType) else ""
             if service == self._service:
-                return typ.protobuf_type.name
+                return type_name(typ.protobuf_type.name)
             self._service_imports.add(service)
             return "%s.%s%s" % (
                 self._local_name(service),
                 prefix,
-                typ.protobuf_type.name,
+                type_name(typ.protobuf_type.name),
             )
         if isinstance(typ, ListType):
             item = _parenthesize(self.ts_type(typ.value_type, argument, server))
@@ -713,7 +720,7 @@ class JsGenerator(Generator[JsLanguage]):
         if target.kind == crefs.SERVICE:
             name = "Service"
         elif target.member is None:
-            name = target.type
+            name = type_name(target.type)
         else:
             member = target.member
             if target.kind in (crefs.PROPERTY, crefs.CLASS_PROPERTY):
@@ -724,9 +731,11 @@ class JsGenerator(Generator[JsLanguage]):
             else:
                 member = member_name(member, target.kind == crefs.CLASS_STATIC_METHOD)
             if target.kind in (crefs.CLASS_STATIC_METHOD, crefs.ENUMERATION_VALUE):
-                name = "Service.%s.%s" % (target.type, member)
+                name = "Service.%s.%s" % (type_name(target.type), member)
+            elif target.type:
+                name = "%s.%s" % (type_name(target.type), member)
             else:
-                name = "%s.%s" % (target.type or "Service", member)
+                name = "Service.%s" % member
         if target.service != self._service:
             return "`%s.%s`" % (target.service, name)
         return "{@link %s}" % name
@@ -747,7 +756,8 @@ class JsGenerator(Generator[JsLanguage]):
     def _server_definition_documentation(self, kind, name):
         """The documentation of a class, enumeration, structure or exception of the service,
         as its server form carries it"""
-        return self._server_documentation(self._defs[kind][name]["documentation"])
+        remote = self._local_types[kind][name]
+        return self._server_documentation(self._defs[kind][remote]["documentation"])
 
 
 def deprecation_message(qualified_name, info):

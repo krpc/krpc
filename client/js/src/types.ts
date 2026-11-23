@@ -1,7 +1,7 @@
 import type { DescMessage } from "@bufbuild/protobuf";
 import { deprecationMessage } from "./deprecation.js";
 import { EncodingError } from "./errors.js";
-import { memberName } from "./naming.js";
+import { memberName, typeName } from "./naming.js";
 import { name as nameValue, registered } from "./registry.js";
 import {
   ProcedureCallSchema,
@@ -427,7 +427,8 @@ export class Types {
     const service = key.slice(0, key.indexOf("."));
     const names = definition.fields.map((field) => {
       const name = memberName(field.name);
-      return { name, deprecation: deprecationMessage(field, service, `${key}.${name}`) };
+      const qualified = `${service}.${typeName(definition.name)}.${name}`;
+      return { name, deprecation: deprecationMessage(field, service, qualified) };
     });
     const declared = registered(service, definition.name);
     const declaration =

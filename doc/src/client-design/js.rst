@@ -368,7 +368,8 @@ Mapping the Spec to JavaScript
      - lowerCamel, as in ``httpServer`` for ``HTTPServer``. A property is ``get`` or ``set``
        and the name, as in ``getRCSThrust``. A member named after a member of ``Object``, such
        as ``toString``, takes a trailing ``_``, as does a static method named ``name``,
-       ``length`` or ``prototype``
+       ``length`` or ``prototype``. A service named as a member of the connection does too,
+       as in ``conn.close_``, and a type named ``Service``, ``Server`` or ``ClientService``
    * - Named arguments
      - A plain object after the positional arguments
    * - 64-bit integers
