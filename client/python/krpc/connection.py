@@ -10,7 +10,15 @@ from typing import TYPE_CHECKING, Any, TypeGuard, TypeVar, cast
 import krpc.schema.KRPC_pb2 as KRPC
 import krpc.stream
 from krpc import limits
-from krpc.declarations import DeclaredClass, connection_lookup, declaration_error
+from krpc.declarations import (
+    DeclaredClass,
+    connection_lookup,
+    declaration_error,
+    service_attribute,
+)
+from krpc.declarations import (
+    type_name as declared_type_name,
+)
 from krpc.decoder import Decoder
 from krpc.definitions import register_all
 from krpc.encoder import Encoder
@@ -44,7 +52,6 @@ from krpc.types import (
     clear_type_ids,
     warn_deprecated,
 )
-from krpc.utils import snake_case
 
 _ConnectionT = TypeVar("_ConnectionT", bound="Connection")
 
@@ -193,7 +200,7 @@ class Connection:
             ) from exn
         self._deprecated_services: dict[str, tuple[str, object]] = {}
         for service_info in services:
-            name = snake_case(service_info.name)
+            name = service_attribute(service_info.name)
             try:
                 service = create_service(self, service_info)
             except (RuntimeError, ValueError) as exn:
@@ -703,8 +710,8 @@ class Connection:
         # TODO: modify the stack trace of the thrown exception so it looks like
         #       it came from the local call
         if error.service and error.exception:
-            service_name = snake_case(error.service)
-            type_name = error.exception
+            service_name = service_attribute(error.service)
+            type_name = declared_type_name(error.service, error.exception)
             # The service is missing if this client does not know it, and the member is an
             # exception class only for an exception the service declares. Report the error
             # itself, named by its type on the server, so that the failure to build an
@@ -716,7 +723,8 @@ class Connection:
                 and issubclass(exception_type, Exception)
             ):
                 return ServerError(
-                    "%s.%s: %s" % (error.service, type_name, self._error_message(error))
+                    "%s.%s: %s"
+                    % (error.service, error.exception, self._error_message(error))
                 )
             return exception_type(self._error_message(error))
         return ServerError(self._error_message(error))

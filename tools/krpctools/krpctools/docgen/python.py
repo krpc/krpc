@@ -1,3 +1,4 @@
+from krpc.declarations import type_name
 from krpc.types import (
     ClassType,
     DictionaryType,
@@ -102,11 +103,21 @@ class PythonDomain(Domain[PythonLanguage]):
             )
         raise RuntimeError("Unknown type '%s'" % str(typ))
 
+    @staticmethod
+    def type_name(obj):
+        """The name of a class, enumeration, structure or exception in the client"""
+        return type_name(obj.service_name, obj.name)
+
     def ref(self, obj):
         name = obj.fullname
-        # A procedure, property or method is documented under the name the client
-        # generates for it, which escapes a python keyword; an enumeration value
-        # or a structure field is documented under its plain snake case name
+        # A type, and a member of one, is named as the client names the type
+        if not isinstance(obj, (Service, Procedure, Property)):
+            parts = name.split(".")
+            parts[1] = type_name(parts[0], parts[1])
+            name = ".".join(parts)
+        # A procedure, property, method or enumeration value is documented under the name
+        # the client gives it, which escapes a keyword, and a structure field under its
+        # plain snake case name
         if any(
             isinstance(obj, cls)
             for cls in (

@@ -1,5 +1,6 @@
 import keyword
 
+from krpc.declarations import type_name
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     NATIVE_EXCEPTIONS,
@@ -89,8 +90,9 @@ class PythonLanguage(Language):
         if isinstance(typ, MessageType):
             return "krpc.schema.KRPC.%s" % typ.python_type.__name__
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
+            service = typ.protobuf_type.service
             return self.shorten_ref(
-                "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
+                "%s.%s" % (service, type_name(service, typ.protobuf_type.name))
             )
         if isinstance(typ, ListType):
             return "list"

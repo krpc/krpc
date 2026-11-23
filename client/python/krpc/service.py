@@ -15,7 +15,7 @@ from xml.etree import ElementTree
 
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.attributes import Attributes
-from krpc.declarations import Lookup, registered
+from krpc.declarations import Lookup, registered, type_name
 from krpc.definitions import (
     CLASS,
     ENUMERATION,
@@ -369,7 +369,11 @@ def service_definitions(
                         value,
                         name,
                         "%s.%s.%s"
-                        % (name, enumeration.name, _enum_value_name(value.name)),
+                        % (
+                            name,
+                            type_name(name, enumeration.name),
+                            _enum_value_name(value.name),
+                        ),
                     ),
                 },
             )
@@ -427,7 +431,9 @@ def service_definitions(
                 generated = None
             deprecated_fields = {
                 field_name: deprecation_warning(
-                    field, name, "%s.%s.%s" % (name, struct.name, field_name)
+                    field,
+                    name,
+                    "%s.%s.%s" % (name, type_name(name, struct.name), field_name),
                 )
                 for field_name, field in zip(field_names, struct.fields)
                 if field.deprecated
@@ -623,11 +629,11 @@ class RemoteService(DynamicType):
     def _add_service_type(cls, member: Any, python_type: object) -> None:
         """Make a type a member of the service"""
         warning = deprecation_warning(
-            member, cls._name, "%s.%s" % (cls._name, member.name)
+            member, cls._name, "%s.%s" % (cls._name, type_name(cls._name, member.name))
         )
         if warning:
             python_type = DeprecatedDefinition(member.name, warning, python_type)
-        setattr(cls, member.name, python_type)
+        setattr(cls, type_name(cls._name, member.name), python_type)
 
     @classmethod
     def _add_service_class(cls, remote_cls: KRPC.Class) -> None:
@@ -867,7 +873,7 @@ class RemoteService(DynamicType):
         if procedure.deprecated:
             func = _wrap_deprecated(
                 func,
-                cls._name + "." + class_name + "." + name,
+                cls._name + "." + type_name(cls._name, class_name) + "." + name,
                 procedure.deprecated_reason,
                 cls._name,
             )
@@ -915,7 +921,7 @@ class RemoteService(DynamicType):
         if procedure.deprecated:
             func = _wrap_deprecated(
                 func,
-                cls._name + "." + class_name + "." + name,
+                cls._name + "." + type_name(cls._name, class_name) + "." + name,
                 procedure.deprecated_reason,
                 cls._name,
             )
@@ -938,7 +944,9 @@ class RemoteService(DynamicType):
             cls._connection._types.class_type(cls._name, class_name).python_type,
         )
         member_name = _member_name(property_name)
-        qualified_name = cls._name + "." + class_name + "." + member_name
+        qualified_name = (
+            cls._name + "." + type_name(cls._name, class_name) + "." + member_name
+        )
         doc = None
         if getter:
             doc = _parse_documentation(getter.documentation)

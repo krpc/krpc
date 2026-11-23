@@ -118,10 +118,10 @@ _deprecate_attribute({{ struct_name }}, "{{ field.name }}", {{ deprecation_messa
 {% if class.documentation %}{{ class.documentation | indent(width=4) }}
 {% endif %}
     _service_name = "{{ service_name }}"
-    _class_name = "{{ class_name }}"
+    _class_name = "{{ class.remote_name }}"
 
-{{ properties_of(class['properties'], '"' + service_name + '", "' + class_name + '"') -}}
-{{ methods_of(class['methods'], '"' + service_name + '", "' + class_name + '"') -}}
+{{ properties_of(class['properties'], '"' + service_name + '", "' + class.remote_name + '"') -}}
+{{ methods_of(class['methods'], '"' + service_name + '", "' + class.remote_name + '"') -}}
     {% for proc_name, procedure in class['static_methods'].items() %}
     @_builtins.staticmethod
     {% if procedure.deprecated %}
@@ -130,7 +130,7 @@ _deprecate_attribute({{ struct_name }}, "{{ field.name }}", {{ deprecation_messa
     def {{proc_name}}({{ static_arg_list(procedure.parameters) }}) -> {{ procedure.return_type.spec }}:
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=8) }}
 {% endif %}
-        raise _declaration("{{ service_name }}", "{{ class_name }}")
+        raise _declaration("{{ service_name }}", "{{ class.remote_name }}")
 
     {% endfor %}
 
@@ -169,7 +169,7 @@ class {{ service_name }}(metaclass=_DeclaredClass):
 
     _declares_service = "{{ service_name }}"
 
-    {{ service_name | snake_case }}: {{ service_name }}
+    {{ service_attribute }}: {{ service_name }}
 
 
 _register(

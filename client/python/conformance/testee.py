@@ -27,6 +27,7 @@ import krpc
 import krpc.error
 from krpc.attributes import Attributes
 from krpc.connection import Connection
+from krpc.declarations import service_attribute, type_name
 from krpc.decoder import Decoder
 from krpc.encoder import Encoder
 from krpc.event import Event
@@ -492,15 +493,19 @@ class Testee:
                 if command.HasField("through"):
                     through = self._from_value(command.through)
                     return getattr(through, member_name(member)), args
-                service = getattr(self._connection(), snake_case(command.service))
-                cls = getattr(service, Attributes.get_class_name(name))
+                service = getattr(
+                    self._connection(), service_attribute(command.service)
+                )
+                cls = getattr(
+                    service, type_name(command.service, Attributes.get_class_name(name))
+                )
                 return getattr(cls, member_name(member)), args
             if Attributes.is_a_class_property_getter(name):
                 return getattr, [args[0], snake_case(member)]
             if Attributes.is_a_class_property_setter(name):
                 return setattr, [args[0], snake_case(member), args[1]]
             return getattr(args[0], member_name(member)), args[1:]
-        service = getattr(self._connection(), snake_case(command.service))
+        service = getattr(self._connection(), service_attribute(command.service))
         if Attributes.is_a_property_getter(name):
             return getattr, [service, snake_case(Attributes.get_property_name(name))]
         if Attributes.is_a_property_setter(name):
@@ -512,9 +517,11 @@ class Testee:
         """The arguments of get_call_template for a procedure, which name the member through
         its class or service"""
         name = command.procedure
-        service = getattr(self._connection(), snake_case(command.service))
+        service = getattr(self._connection(), service_attribute(command.service))
         if Attributes.is_a_class_member(name):
-            owner = getattr(service, Attributes.get_class_name(name))
+            owner = getattr(
+                service, type_name(command.service, Attributes.get_class_name(name))
+            )
             member = Attributes.get_class_member_name(name)
             if Attributes.is_a_class_property_getter(name):
                 return [getattr, owner, snake_case(member)]
@@ -708,9 +715,9 @@ class Testee:
                 for x in dir(conn)
                 if not x.startswith("_") and is_service(getattr(conn, x))
             ]
-        obj = getattr(conn, snake_case(command.service))
+        obj = getattr(conn, service_attribute(command.service))
         if command.name:
-            obj = getattr(obj, command.name)
+            obj = getattr(obj, type_name(command.service, command.name))
             if isinstance(obj, type) and issubclass(obj, enum.Enum):
                 return [x.name for x in obj]
         return [x for x in dir(obj) if not x.startswith("_")]
@@ -746,12 +753,13 @@ class Testee:
             return lambda: func(*args)
         conn = self._connection()
         if not command.member:
-            return lambda: getattr(conn, snake_case(command.service))
-        service = getattr(conn, snake_case(command.service))
-        type_name, _, name = command.member.partition(".")
+            return lambda: getattr(conn, service_attribute(command.service))
+        service = getattr(conn, service_attribute(command.service))
+        member_type, _, name = command.member.partition(".")
+        member_type = type_name(command.service, member_type)
         if not name:
-            return lambda: getattr(service, type_name)
-        typ = getattr(service, type_name)
+            return lambda: getattr(service, member_type)
+        typ = getattr(service, member_type)
         if hasattr(typ, "_fields"):
             value = typ(*[None] * len(typ._fields))
             return lambda: getattr(value, snake_case(name))
@@ -788,7 +796,10 @@ class Testee:
 
     def _type(self, service: str, name: str) -> Any:
         """An enum, struct, class or exception type of a service."""
-        return getattr(getattr(self._connection(), snake_case(service)), name)
+        return getattr(
+            getattr(self._connection(), service_attribute(service)),
+            type_name(service, name),
+        )
 
     def _to_value(self, value: object) -> pb.Value:
         result = pb.Value()
@@ -865,7 +876,10 @@ def member_name(name: str) -> str:
 
 def declared_type(service: str, name: str) -> Any:
     """An enum or struct type of a service, from its generated module."""
-    return getattr(importlib.import_module("krpc.services." + service.lower()), name)
+    return getattr(
+        importlib.import_module("krpc.services." + service.lower()),
+        type_name(service, name),
+    )
 
 
 def is_service(value: object) -> bool:

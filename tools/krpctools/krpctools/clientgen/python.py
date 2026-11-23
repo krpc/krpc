@@ -1,6 +1,7 @@
 import collections
 import itertools
 
+from krpc.declarations import service_attribute, type_name
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     ClassType,
@@ -68,7 +69,7 @@ class StubLanguage(PythonLanguage):
 
     def parse_type(self, typ):
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
-            name = typ.protobuf_type.name
+            name = type_name(typ.protobuf_type.service, typ.protobuf_type.name)
             if typ.protobuf_type.service != self.module:
                 name = "_service_" + typ.protobuf_type.service.lower() + "." + name
             return name
@@ -313,7 +314,21 @@ class PythonGenerator(Generator[StubLanguage]):
                     pos += 1
 
         self.add_deprecated_docstrings(context)
+        self.escape_type_names(context)
+        context["service_attribute"] = service_attribute(context["service_name"])
         return context
+
+    @staticmethod
+    def escape_type_names(context):
+        """Key the types of the service by their names in the module, keeping the name the
+        server gives each"""
+        service = context["service_name"]
+        for kind in ("classes", "enumerations", "structs", "exceptions"):
+            types = collections.OrderedDict()
+            for name, info in context[kind].items():
+                info["remote_name"] = name
+                types[type_name(service, name)] = info
+            context[kind] = types
 
     @staticmethod
     def struct_field_dependencies(context):
