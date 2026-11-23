@@ -844,6 +844,8 @@ def test_wait_timeout(connected, control, request, case):
         return
     testee = connected.testee
     waiting = testee.send(wait=pb.Wait(stream=stream.handle, timeout=REPLY_TIMEOUT))
+    # An update that arrives before the wait starts is one the wait has seen
+    time.sleep(SETTLE)
     control.conformance_service.set_value(name(request), 1)
     reply = testee.reply(waiting, 2 * REPLY_TIMEOUT)
     assert values.native(reply.value) is True
