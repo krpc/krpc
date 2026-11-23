@@ -125,6 +125,9 @@ class CsharpLanguage(Language):
             # The members of object, of the client's base classes and of a generated
             # structure or service, which a generated member of the same name would hide
             "AddExceptionTypes",
+            # The static method and nested class of a class with static methods
+            "Bind",
+            "Bound",
             "CompareTo",
             "Equals",
             "Finalize",

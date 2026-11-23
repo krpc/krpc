@@ -248,6 +248,25 @@ namespace TestServer.Names
         }
 
         /// <summary>
+        /// A static method named after the method that binds the static methods of a class
+        /// to a connection.
+        /// </summary>
+        [KRPCMethod]
+        public static int Bind ()
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// A method named after the class that holds the bound static methods of a class.
+        /// </summary>
+        [KRPCMethod]
+        public int Bound ()
+        {
+            return 0;
+        }
+
+        /// <summary>
         /// A method named after a method of a Penlight class.
         /// </summary>
         [KRPCMethod]

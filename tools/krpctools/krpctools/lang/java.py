@@ -90,6 +90,9 @@ class JavaLanguage(Language):
             "notifyAll",
             "toString",
             "wait",
+            # The static method of a class with static methods, which binds them to a
+            # connection
+            "bind",
             # The packages the generated code names types in, which a variable of the same
             # name would obscure
             "com",

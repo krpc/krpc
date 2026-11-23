@@ -1642,6 +1642,31 @@ A ``Names`` object is passed and returned as its identifier, a number. A path th
 an object takes it as ``(id)``.
 
 
+.. http:post:: /test-service/names/bind
+
+   A static method named after the method that binds the static methods of a class
+   to a connection.
+
+
+   :resjson int32 value:
+
+
+
+
+
+.. http:post:: /test-service/names/(id)/bound
+
+   A method named after the class that holds the bound static methods of a class.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :resjson int32 value:
+
+
+
+
+
 .. http:post:: /test-service/names/(id)/class-of
 
    A method named after a method of a Penlight class.

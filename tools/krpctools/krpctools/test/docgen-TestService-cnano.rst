@@ -1684,6 +1684,21 @@ Service documentation string.
 
       The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
+   .. function:: krpc_error_t krpc_TestService_Names_Bind(krpc_connection_t connection, int32_t * returnValue)
+
+      A static method named after the method that binds the static methods of a class
+      to a connection.
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_Bound(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+
+      A method named after the class that holds the bound static methods of a class.
+
+
+   
+
    .. function:: krpc_error_t krpc_TestService_Names_ClassOf(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
 
       A method named after a method of a Penlight class.

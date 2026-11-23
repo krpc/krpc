@@ -2980,6 +2980,19 @@ namespace KRPC.Client.Services.TestService
         }
 
         /// <summary>
+        /// A method named after the class that holds the bound static methods of a class.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_Bound", typeof(_TypeSpecs))]
+        public int Bound_ ()
+        {
+            var _args = new global::Google.Protobuf.ByteString[] {
+                global::KRPC.Client.Encoder.Encode (this, _TypeSpecs.Spec48)
+            };
+            var _result = connection.Invoke ("TestService", "Names_Bound", _args);
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
         /// A method named after a method of a Penlight class.
         /// </summary>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_ClassOf", typeof(_TypeSpecs))]
@@ -3089,6 +3102,20 @@ namespace KRPC.Client.Services.TestService
         }
 
         /// <summary>
+        /// A static method named after the method that binds the static methods of a class
+        /// to a connection.
+        /// </summary>
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_static_Bind", typeof(_TypeSpecs))]
+        public static int Bind_ (global::KRPC.Client.IConnection connection)
+        {
+            if (connection == null)
+                throw new global::System.ArgumentNullException (nameof (connection));
+            var _result = connection.Invoke ("TestService", "Names_static_Bind");
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
         /// A static method with parameters named after names in the generated code.
         /// </summary>
         /// <param name="connection">A connection object.</param>
@@ -3152,6 +3179,16 @@ namespace KRPC.Client.Services.TestService
             internal Bound (global::KRPC.Client.IConnection connection)
             {
                 this.connection = connection;
+            }
+
+            /// <summary>
+            /// A static method named after the method that binds the static methods of a class
+            /// to a connection.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_static_Bind", typeof(_TypeSpecs))]
+            public int Bind_ ()
+            {
+                return global::KRPC.Client.Services.TestService.Names.Bind_ (connection);
             }
 
             /// <summary>

@@ -326,6 +326,11 @@ export interface Service extends RemoteService<"TestService"> {
   readonly Names: {
     [Symbol.hasInstance](value: unknown): value is Names;
     readonly prototype: Names;
+    /**
+     * A static method named after the method that binds the static methods of a class
+     * to a connection.
+     */
+    bind(): Promise<number>;
     /** A static method with parameters named after names in the generated code. */
     parameters(client: number, connection: number, instance: number, returnValue: number, returnValueIsNull: number, null_: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number): Promise<number>;
     /** A method named after a C++ integer type. */
@@ -591,6 +596,8 @@ export interface NamedTuple extends _RemoteObject<"TestService.NamedTuple"> {}
 
 /** A class whose members are named after names in the generated code. */
 export interface Names extends _RemoteObject<"TestService.Names"> {
+  /** A method named after the class that holds the bound static methods of a class. */
+  bound(): Promise<number>;
   /** A method named after a method of a Penlight class. */
   classOf(): Promise<number>;
   /** A method named after a Python builtin. */
@@ -1109,6 +1116,11 @@ export declare namespace Server {
     /** A class whose members are named after names in the generated code. */
     readonly Names: {
       [Symbol.hasInstance](value: unknown): value is Names;
+      /**
+       * A static method named after the method that binds the static methods of a class
+       * to a connection.
+       */
+      bind(): number;
       /** A static method with parameters named after names in the generated code. */
       parameters(client: number, connection: number, instance: number, returnValue: number, returnValueIsNull: number, null_: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number): number;
       /** A method named after a C++ integer type. */
@@ -1283,6 +1295,8 @@ export declare namespace Server {
 
   /** A class whose members are named after names in the generated code. */
   interface Names extends ServerObject<"TestService.Names"> {
+    /** A method named after the class that holds the bound static methods of a class. */
+    bound(): number;
     /** A method named after a method of a Penlight class. */
     classOf(): number;
     /** A method named after a Python builtin. */

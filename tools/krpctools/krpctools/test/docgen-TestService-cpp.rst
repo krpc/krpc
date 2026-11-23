@@ -1287,6 +1287,21 @@
 
    A class whose members are named after names in the generated code.
 
+   .. function:: static int32_t bind_(krpc::Connection& connection)
+
+      A static method named after the method that binds the static methods of a class
+      to a connection.
+
+
+   
+
+   .. function:: int32_t bound()
+
+      A method named after the class that holds the bound static methods of a class.
+
+
+   
+
    .. function:: int32_t class_of()
 
       A method named after a method of a Penlight class.

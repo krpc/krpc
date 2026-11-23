@@ -412,6 +412,12 @@ class Names(_DeclaredObject, metaclass=_DeclaredClass):
     def value(self, value: _builtins.int) -> None:
         raise _declaration("TestService", "Names")
 
+    def bound(self) -> _builtins.int:
+        """
+        A method named after the class that holds the bound static methods of a class.
+        """
+        raise _declaration("TestService", "Names")
+
     def class_of(self) -> _builtins.int:
         """
         A method named after a method of a Penlight class.
@@ -452,6 +458,14 @@ class Names(_DeclaredObject, metaclass=_DeclaredClass):
         """
         A method declared after methods named after Python builtins, with defaults that
         name them.
+        """
+        raise _declaration("TestService", "Names")
+
+    @_builtins.staticmethod
+    def bind() -> _builtins.int:
+        """
+        A static method named after the method that binds the static methods of a class
+        to a connection.
         """
         raise _declaration("TestService", "Names")
 

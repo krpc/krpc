@@ -123,6 +123,12 @@ class CppLanguage(Language):
             "xor",
             "xor_eq",
         ]
+    ) | set(
+        [
+            # The static method of a class with static methods, which binds them to a
+            # connection
+            "bind",
+        ]
     )
 
     type_map = {

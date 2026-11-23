@@ -1440,6 +1440,21 @@ Service documentation string.
 
    A class whose members are named after names in the generated code.
 
+   .. staticmethod:: bind()
+
+      A static method named after the method that binds the static methods of a class
+      to a connection.
+
+      :rtype: int
+   
+
+   .. method:: bound()
+
+      A method named after the class that holds the bound static methods of a class.
+
+      :rtype: int
+   
+
    .. method:: class_of()
 
       A method named after a method of a Penlight class.
