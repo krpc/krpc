@@ -175,7 +175,7 @@
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
 {% endif %}
-   .. constructor:: public {{ domain.type_name(x) }}({% for field in x.fields.values() %}{{ domain.field_type(field) }} {{ field.name | lower_camelcase }}{% if not loop.last %}, {% endif %}{% endfor %})
+   .. constructor:: public {{ domain.type_name(x) }}({% for field in x.fields.values() %}{{ domain.field_type(field) }} {{ domain.parameter_name(field.name) }}{% if not loop.last %}, {% endif %}{% endfor %})
 
       Construct a {{ domain.type_name(x) }} from the values of its fields.
 

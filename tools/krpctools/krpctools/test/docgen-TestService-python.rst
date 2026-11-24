@@ -1942,7 +1942,7 @@ Service documentation string.
       :rtype: int
 
 
-.. class:: NamesStruct(other, result, java, krpc, class, bound)
+.. class:: NamesStruct(other, result, java, krpc, class_, bound)
 
    A structure whose fields are named after names in the generated code.
 
@@ -1971,7 +1971,7 @@ Service documentation string.
 
       :rtype: int
 
-   .. attribute:: class
+   .. attribute:: class_
 
       A value.
 

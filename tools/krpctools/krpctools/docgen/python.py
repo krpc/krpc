@@ -115,9 +115,7 @@ class PythonDomain(Domain[PythonLanguage]):
             parts = name.split(".")
             parts[1] = type_name(parts[0], parts[1])
             name = ".".join(parts)
-        # A procedure, property, method or enumeration value is documented under the name
-        # the client gives it, which escapes a keyword, and a structure field under its
-        # plain snake case name
+        # A member is documented under the name the client gives it, which escapes a keyword
         if any(
             isinstance(obj, cls)
             for cls in (
@@ -137,7 +135,7 @@ class PythonDomain(Domain[PythonLanguage]):
             name = ".".join(name)
         elif isinstance(obj, StructField):
             name = name.split(".")
-            name[-1] = snake_case(name[-1])
+            name[-1] = self.method_name(name[-1])
             name = ".".join(name)
         return self.shorten_ref(name)
 

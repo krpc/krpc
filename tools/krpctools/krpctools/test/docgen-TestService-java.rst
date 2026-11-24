@@ -1460,7 +1460,7 @@
 
    A structure whose fields are named after names in the generated code.
 
-   .. constructor:: public NamesStruct(int other, int result, int java, int krpc, int class, int bound)
+   .. constructor:: public NamesStruct(int other, int result, int java_, int krpc_, int class_, int bound)
 
       Construct a NamesStruct from the values of its fields.
 

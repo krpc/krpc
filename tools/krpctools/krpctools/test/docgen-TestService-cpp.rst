@@ -1827,7 +1827,7 @@
 
       A value.
 
-   .. member:: int32_t class
+   .. member:: int32_t class_
 
       A value.
 

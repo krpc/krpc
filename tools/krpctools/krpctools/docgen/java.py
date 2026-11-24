@@ -63,6 +63,10 @@ class JavaDomain(Domain[JavaLanguage]):
     def accessor_name(self, prefix, name):
         return self.language.accessor_name(prefix, name)
 
+    def parameter_name(self, name):
+        """The name of a constructor parameter of a structure field, as the code names it"""
+        return self.language.parse_name(name)
+
     def type(self, typ):
         return self._type(typ)
 

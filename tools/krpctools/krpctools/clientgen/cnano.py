@@ -295,7 +295,8 @@ class CnanoGenerator(Generator[CnanoLanguage]):
             return name + "_t"
         # Doxygen links a global enumeration value only when it is written with a #
         if target.kind == crefs.ENUMERATION_VALUE:
-            return "#" + enum_value_macro(target.service, target.type, target.member)
+            value = self.language.parse_enum_value_name(target.member)
+            return "#" + enum_value_macro(target.service, target.type, value)
         if target.kind == crefs.STRUCT_FIELD:
             return name + "_t." + self.parse_name(snake_case(target.member))
         setter = "" if target.getter else "set_"

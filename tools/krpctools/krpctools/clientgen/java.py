@@ -116,11 +116,14 @@ class JavaGenerator(Generator[JavaLanguage]):
         if target.member is None:
             return "{@link %s}" % name
         if target.kind in (crefs.PROPERTY, crefs.CLASS_PROPERTY):
-            member = ("get%s()" if target.getter else "set%s") % target.member
+            if target.getter:
+                member = self.language.accessor_name("get", target.member) + "()"
+            else:
+                member = self.language.accessor_name("set", target.member)
         elif target.kind == crefs.ENUMERATION_VALUE:
             member = self.language.parse_const_name(target.member)
         elif target.kind == crefs.STRUCT_FIELD:
-            member = "get%s()" % target.member
+            member = self.language.accessor_name("get", target.member) + "()"
         else:
             member = self.language.parse_name(target.member)
         return "{@link %s#%s}" % (name, member)

@@ -175,7 +175,7 @@
       The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
 
 {% for field in x.fields.values() %}{{ mark_documented(field) }}
-   .. member:: {{ domain.field_type(field).ctype }} {{ field.name | snakecase }}
+   .. member:: {{ domain.field_type(field).ctype }} {{ domain.field_name(field.name) }}
 
 {% if field.deprecated %}{{ deprecated(field) | indent(width=6) }}
 

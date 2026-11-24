@@ -171,7 +171,7 @@
 {% endmacro %}
 
 {% macro struct(x) %}{{ mark_documented(x) }}
-.. class:: {{ domain.type_name(x) }}({% for field in x.fields.values() %}{{ field.name | snakecase }}{% if not loop.last %}, {% endif %}{% endfor %})
+.. class:: {{ domain.type_name(x) }}({% for field in x.fields.values() %}{{ domain.method_name(field.name) }}{% if not loop.last %}, {% endif %}{% endfor %})
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -180,7 +180,7 @@
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% for field in x.fields.values() %}{{ mark_documented(field) }}
-   .. attribute:: {{ field.name | snakecase }}
+   .. attribute:: {{ domain.method_name(field.name) }}
 
 {% if field.deprecated %}{{ deprecated(field) | indent(width=6) }}
 

@@ -2356,7 +2356,7 @@ Service documentation string.
          The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
 
-   .. member:: int32_t class
+   .. member:: int32_t class_
 
       A value.
 
