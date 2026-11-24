@@ -112,7 +112,7 @@ public class Stream<T> implements Comparable<Stream<T>>, AutoCloseable {
         return true;
       }
       stream.throwIfEnded();
-      if (!waitOn(stream.getCondition(), deadline)) {
+      if (!stream.waitOnCondition(deadline)) {
         return false;
       }
     }

@@ -171,7 +171,8 @@ namespace KRPC.Test
             var updates = new List<int> ();
             var responses = Receive (2, updates);
             Assert.AreEqual (1, responses [0].Response.Id);
-            Assert.AreEqual (1, updates [0]);
+            // Note: a response can reach the client an update after the one that sent it
+            Assert.Less (updates [0], 6);
             Assert.GreaterOrEqual (updates [1], 6);
         }
 

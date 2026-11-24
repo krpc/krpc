@@ -95,8 +95,12 @@ class StreamImpl {
   uint64_t get_announced_version() const { return announced_version; }
   /** The version of the value this thread last read. */
   uint64_t get_seen_version() const;
-  /** Announce a stored value to waiters, and wake them, with the condition held. */
-  void announce(const std::string& data, bool is_null, uint64_t version);
+  /** Announce a stored value to waiters, and wake them, with the condition held. Waits first
+      for the waiters the last announce woke to take the condition back, unless stop returns
+      true. A woken waiter then reads the value that woke it, as a thread can take the mutex
+      ahead of one that waits for it. */
+  void announce(const std::string& data, bool is_null, uint64_t version,
+                const std::function<bool()>& stop);
   /** The number of true values received, which for an event is its firings. */
   uint64_t get_fired() const;
   bool has_ended() const;
@@ -226,6 +230,11 @@ class StreamImpl {
   bool ended_by_client = false;
   RecursiveMutex condition_mutex;
   Condition condition;
+  // The threads waiting in wait, and those an announce woke that have not taken the condition
+  // back yet. Changed with the condition held.
+  std::size_t waiters = 0;
+  std::size_t woken = 0;
+  uint64_t wakes = 0;
   std::map<int, std::shared_ptr<CallbackEntry>> callbacks;
   int next_callback_tag;
   EndCallbacks end_callbacks;

@@ -13,9 +13,10 @@
  * program per transport and the runner runs both.
  */
 
-/* clock_gettime is POSIX rather than C. See the same note in src/communication.c. */
+/* clock_gettime is POSIX rather than C. See the same note in src/communication.c. macOS also
+ * hides snprintf under a POSIX older than 2001. */
 #if !defined(_WIN32) && !defined(_POSIX_C_SOURCE)
-#define _POSIX_C_SOURCE 199309L
+#define _POSIX_C_SOURCE 200112L
 #endif
 
 #include <krpc_cnano.h>

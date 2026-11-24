@@ -4,6 +4,7 @@ filegroup(
     name = "doxygen",
     srcs = select({
         "@platforms//os:linux": ["@doxygen_linux//:bin/doxygen"],
+        "@platforms//os:osx": ["@doxygen_macos//:doxygen"],
         "@platforms//os:windows": [
             "@doxygen_windows//:doxygen.exe",
             "@doxygen_windows//:libclang.dll",
@@ -12,6 +13,7 @@ filegroup(
     }),
     target_compatible_with = select({
         "@platforms//os:linux": [],
+        "@platforms//os:osx": [],
         "@platforms//os:windows": [],
         "//conditions:default": ["@platforms//:incompatible"],
     }),

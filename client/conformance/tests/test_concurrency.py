@@ -739,9 +739,10 @@ def test_add_callback_while_callback_waits(connected, request):
     # The first call can run on the adding thread, so only later calls wait
     waiting = stream.add_callback(pb.Behavior(run=wait, skip=1))
     with connected.holding(held.handle):
-        # A call that starts once the condition is held waits for it
+        # A call that starts once the condition is held waits for it, and holds up the
+        # calls after it. The call counted last can be that one already.
         count = len(waiting.calls)
-        waiting.wait_for_calls(count + 1)
+        wait_until(lambda: len(waiting.calls) > count, SETTLE)
         added = stream.add_callback()
     added.remove()
     waiting.remove()

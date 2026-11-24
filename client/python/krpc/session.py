@@ -382,6 +382,7 @@ class Session:
         current = threading.current_thread()
         if current is not self._reader:
             self._reader.join()
+        self._transport.release()
         if join_dispatcher and current is not self._dispatcher:
             self._dispatcher.join()
 

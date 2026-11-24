@@ -284,6 +284,125 @@ jobs:
           path: ${{ steps.cpp-cache.outputs.path }}
           key: ${{ steps.cpp-cache.outputs.key }}
 
+  # The Windows matrix, for macOS
+  macos:
+    name: macos-${{ matrix.name }}
+    if: inputs.daily || github.event_name == 'workflow_dispatch'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: build-krpc
+            build: //:krpc //:csproj //tools/krpctools
+          - name: build-docs-html
+            build: //doc:html
+          - name: build-docs-examples
+            build: //doc:compile-scripts
+            cpp-cache: restore
+          - name: build-benchmarks
+            build: //tools/benchmarks/...
+            cpp-cache: restore
+          - name: test-docs
+            test: //doc:test
+          - name: test-core
+            test: //core:test
+          - name: test-service
+            test: //service/...
+          - name: test-client-cnano
+            build: //client/cnano:cnano
+            test: //client/cnano:test
+            cpp-cache: restore
+          - name: test-client-csharp
+            build: //client/csharp
+            test: //client/csharp:test
+          - name: test-client-java
+            build: //client/java:java
+            test: //client/java:test
+          - name: test-client-python
+            build: //client/python:python
+            test: //client/python:test
+          - name: test-client-lua
+            build: //client/lua:lua
+            test: //client/lua:test
+          - name: test-client-js
+            build: //client/js:js
+            test: //client/js:test
+          - name: test-client-http
+            test: //client/http:test
+          - name: test-tools
+            test: //client/conformance:test //tools/benchmarks:test //tools/game:test //tools/krpctools:test
+          - name: test-ksa
+            test: //experimental/ksa:test
+          - name: test-build-scripts
+            test: >-
+              //:buildifier
+              //:changelog-test //:changelog-fragments-test
+              //:pyright-release //:ruff-release
+              //tools/build:test
+              //tools/ci:test
+              //tools/deps:test
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+      - name: setup
+        uses: ./.github/actions/bazel-fetch
+        with:
+          bazel: bazelisk
+          config: ci-macos
+      - name: cpp-cache
+        if: matrix.cpp-cache
+        uses: ./.github/actions/bazel-disk-cache
+        with:
+          bazel: bazelisk
+          bazelrc: $HOME/.bazelrc
+      - name: build
+        if: matrix.build
+        run: bazelisk build ${{ matrix.build }}
+      - name: test
+        if: matrix.test
+        run: bazelisk test ${{ matrix.test }}
+      - name: flaky-tests
+        if: ${{ !cancelled() && matrix.test }}
+        uses: ./.github/actions/flaky-tests
+        with:
+          name: macos-${{ matrix.name }}
+
+  macos-test-client-cpp:
+    if: inputs.daily || github.event_name == 'workflow_dispatch'
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+      - name: setup
+        uses: ./.github/actions/bazel-fetch
+        with:
+          bazel: bazelisk
+          config: ci-macos
+      - name: cpp-cache
+        id: cpp-cache
+        uses: ./.github/actions/bazel-disk-cache
+        with:
+          bazel: bazelisk
+          bazelrc: $HOME/.bazelrc
+      - name: build
+        run: bazelisk build //client/cpp:cpp
+      - name: test
+        run: bazelisk test //client/cpp:test
+      - name: flaky-tests
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/flaky-tests
+        with:
+          name: macos-test-client-cpp
+      - name: save-cpp-cache
+        if: steps.cpp-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ steps.cpp-cache.outputs.path }}
+          key: ${{ steps.cpp-cache.outputs.key }}
+
   linux-build-krpc:
     if: github.event_name != 'push'
     runs-on: ubuntu-latest
@@ -361,6 +480,8 @@ jobs:
             runner: ubuntu-latest
           - os: windows
             runner: windows-latest
+          - os: macos
+            runner: macos-latest
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
     steps:
@@ -514,10 +635,19 @@ jobs:
           name: client-cnano
           path: bazel-bin/client/cnano/krpc-cnano-*.zip
 
-  linux-build-client-cnano-cmake:
+  build-client-cnano-cmake:
+    name: ${{ matrix.os }}-build-client-cnano-cmake
     needs: linux-test-client-cnano
     if: inputs.daily || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: linux
+            runner: ubuntu-latest
+          - os: macos
+            runner: macos-latest
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
@@ -532,43 +662,52 @@ jobs:
         with:
           name: client-cnano
       - name: vcpkg
-        uses: ./.github/actions/vcpkg-linux
+        id: vcpkg
+        uses: ./.github/actions/vcpkg-unix
         with:
           packages: nanopb
-      - name: setup-cmake
+      - name: install-ccache-linux
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get -o Acquire::Retries=5 update
           sudo apt-get -o Acquire::Retries=5 install -y --no-install-recommends ccache
+      - name: install-ccache-macos
+        if: runner.os == 'macOS'
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+        run: brew install ccache
+      - name: setup-cmake
+        run: |
           # The system scenarios find the packages the vcpkg step installed
-          echo "CMAKE_PREFIX_PATH=$RUNNER_TEMP/vcpkg-deps/x64-linux" >> "$GITHUB_ENV"
+          echo "CMAKE_PREFIX_PATH=${{ steps.vcpkg.outputs.installed }}" >> "$GITHUB_ENV"
           # Set after the vcpkg step, which builds and detects its compiler without ccache
           echo "CMAKE_C_COMPILER_LAUNCHER=ccache" >> "$GITHUB_ENV"
           echo "CMAKE_CXX_COMPILER_LAUNCHER=ccache" >> "$GITHUB_ENV"
       - name: cache-key
         id: cache-key
         run: |
-          tmpl=$(sha256sum client/cnano/CMakeLists.txt.tmpl | cut -d' ' -f1)
+          tmpl=$(shasum -a 256 client/cnano/CMakeLists.txt.tmpl | cut -d' ' -f1)
           cc=$(cc --version 2>/dev/null | head -n1 || echo unknown-cc)
           # The packages the system scenarios build against, by their vcpkg ABI hashes
-          abis=$(sha256sum "$RUNNER_TEMP"/vcpkg-deps/*/share/*/vcpkg_abi_info.txt | cut -d' ' -f1 | sort -u)
+          abis=$(shasum -a 256 "$RUNNER_TEMP"/vcpkg-deps/*/share/*/vcpkg_abi_info.txt | cut -d' ' -f1 | sort -u)
           info=$(printf '%s\n' "$cc" "$tmpl" "$abis")
           echo 'cache key inputs:'
           printf '%s\n' "$info" | sed 's/^/  /'
-          hash=$(printf '%s' "$info" | sha256sum | cut -d' ' -f1)
-          echo "cache key: ccache-cnano-$hash"
+          hash=$(printf '%s' "$info" | shasum -a 256 | cut -d' ' -f1)
+          echo "cache key: ccache-${{ matrix.os }}-cnano-$hash"
           echo "hash=$hash" >> "$GITHUB_OUTPUT"
       - name: ccache-restore
         id: ccache
         uses: actions/cache@v6
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-cnano-${{ steps.cache-key.outputs.hash }}
+          key: ccache-${{ matrix.os }}-cnano-${{ steps.cache-key.outputs.hash }}
           # ccache checks each entry, so an older cache is safe to start from
-          restore-keys: ccache-cnano-
+          restore-keys: ccache-${{ matrix.os }}-cnano-
       - name: build-system
-        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system
+        run: client/cnano/test-cmake-unix.sh krpc-cnano-*.zip system
       - name: build-fetch
-        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch
+        run: client/cnano/test-cmake-unix.sh krpc-cnano-*.zip fetch
 
   windows-build-client-cnano-cmake:
     needs: linux-test-client-cnano
@@ -593,10 +732,19 @@ jobs:
         shell: bash
         run: client/cnano/test-cmake-windows.sh fetch
 
-  linux-build-client-cnano-vcpkg:
+  build-client-cnano-vcpkg:
+    name: ${{ matrix.os }}-build-client-cnano-vcpkg
     needs: linux-test-client-cnano
     if: inputs.daily || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: linux
+            runner: ubuntu-latest
+          - os: macos
+            runner: macos-latest
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
     steps:
       - name: checkout
@@ -606,13 +754,11 @@ jobs:
         with:
           name: client-cnano
       - name: vcpkg
-        uses: ./.github/actions/vcpkg-linux
+        uses: ./.github/actions/vcpkg-unix
         with:
           packages: nanopb
       - name: test-vcpkg
-        env:
-          VCPKG_ROOT: /usr/local/share/vcpkg
-        run: client/cnano/test-vcpkg-linux.sh krpc-cnano-*.zip
+        run: client/cnano/test-vcpkg-unix.sh krpc-cnano-*.zip
 
   windows-build-client-cnano-vcpkg:
     needs: linux-test-client-cnano
@@ -683,10 +829,19 @@ jobs:
           name: client-cpp
           path: bazel-bin/client/cpp/krpc-cpp-*.zip
 
-  linux-build-client-cpp-cmake:
+  build-client-cpp-cmake:
+    name: ${{ matrix.os }}-build-client-cpp-cmake
     needs: linux-test-client-cpp
     if: inputs.daily || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: linux
+            runner: ubuntu-latest
+          - os: macos
+            runner: macos-latest
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
@@ -700,41 +855,50 @@ jobs:
         with:
           name: client-cpp
       - name: vcpkg
-        uses: ./.github/actions/vcpkg-linux
+        id: vcpkg
+        uses: ./.github/actions/vcpkg-unix
         with:
           packages: protobuf asio
-      - name: setup-cmake
+      - name: install-ccache-linux
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get -o Acquire::Retries=5 update
           sudo apt-get -o Acquire::Retries=5 install -y --no-install-recommends ccache
+      - name: install-ccache-macos
+        if: runner.os == 'macOS'
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+        run: brew install ccache
+      - name: setup-cmake
+        run: |
           # The system scenarios find the packages the vcpkg step installed
-          echo "CMAKE_PREFIX_PATH=$RUNNER_TEMP/vcpkg-deps/x64-linux" >> "$GITHUB_ENV"
+          echo "CMAKE_PREFIX_PATH=${{ steps.vcpkg.outputs.installed }}" >> "$GITHUB_ENV"
           echo "CMAKE_C_COMPILER_LAUNCHER=ccache" >> "$GITHUB_ENV"
           echo "CMAKE_CXX_COMPILER_LAUNCHER=ccache" >> "$GITHUB_ENV"
       - name: cache-key
         id: cache-key
         run: |
-          tmpl=$(sha256sum client/cpp/CMakeLists.txt.tmpl | cut -d' ' -f1)
+          tmpl=$(shasum -a 256 client/cpp/CMakeLists.txt.tmpl | cut -d' ' -f1)
           cc=$(cc --version 2>/dev/null | head -n1 || echo unknown-cc)
-          abis=$(sha256sum "$RUNNER_TEMP"/vcpkg-deps/*/share/*/vcpkg_abi_info.txt | cut -d' ' -f1 | sort -u)
+          abis=$(shasum -a 256 "$RUNNER_TEMP"/vcpkg-deps/*/share/*/vcpkg_abi_info.txt | cut -d' ' -f1 | sort -u)
           info=$(printf '%s\n' "$cc" "$tmpl" "$abis")
           echo 'cache key inputs:'
           printf '%s\n' "$info" | sed 's/^/  /'
-          hash=$(printf '%s' "$info" | sha256sum | cut -d' ' -f1)
-          echo "cache key: ccache-cpp-$hash"
+          hash=$(printf '%s' "$info" | shasum -a 256 | cut -d' ' -f1)
+          echo "cache key: ccache-${{ matrix.os }}-cpp-$hash"
           echo "hash=$hash" >> "$GITHUB_OUTPUT"
       - name: ccache-restore
         id: ccache
         uses: actions/cache@v6
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccache-cpp-${{ steps.cache-key.outputs.hash }}
+          key: ccache-${{ matrix.os }}-cpp-${{ steps.cache-key.outputs.hash }}
           # ccache checks each entry, so an older cache is safe to start from
-          restore-keys: ccache-cpp-
+          restore-keys: ccache-${{ matrix.os }}-cpp-
       - name: build-system
-        run: client/cpp/test-cmake-linux.sh krpc-cpp-*.zip system
+        run: client/cpp/test-cmake-unix.sh krpc-cpp-*.zip system
       - name: build-fetch
-        run: client/cpp/test-cmake-linux.sh krpc-cpp-*.zip fetch
+        run: client/cpp/test-cmake-unix.sh krpc-cpp-*.zip fetch
 
   # The system scenario only, as the fetch scenario takes over 30 minutes here
   windows-build-client-cpp-cmake:
@@ -757,10 +921,19 @@ jobs:
         shell: bash
         run: client/cpp/test-cmake-windows.sh
 
-  linux-build-client-cpp-vcpkg:
+  build-client-cpp-vcpkg:
+    name: ${{ matrix.os }}-build-client-cpp-vcpkg
     needs: linux-test-client-cpp
     if: inputs.daily || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: linux
+            runner: ubuntu-latest
+          - os: macos
+            runner: macos-latest
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
     steps:
       - name: checkout
@@ -770,13 +943,11 @@ jobs:
         with:
           name: client-cpp
       - name: vcpkg
-        uses: ./.github/actions/vcpkg-linux
+        uses: ./.github/actions/vcpkg-unix
         with:
           packages: protobuf asio
       - name: test-vcpkg
-        env:
-          VCPKG_ROOT: /usr/local/share/vcpkg
-        run: client/cpp/test-vcpkg-linux.sh krpc-cpp-*.zip
+        run: client/cpp/test-vcpkg-unix.sh krpc-cpp-*.zip
 
   windows-build-client-cpp-vcpkg:
     needs: linux-test-client-cpp
@@ -895,6 +1066,8 @@ jobs:
       - linux-build-benchmarks
       - windows
       - windows-test-client-cpp
+      - macos
+      - macos-test-client-cpp
       - linux-build-krpc
       - linux-test-client-python
       - test-tool-packages
@@ -902,14 +1075,14 @@ jobs:
       - linux-build-csharp-sln
       - windows-build-csharp-sln
       - linux-test-client-cnano
-      - linux-build-client-cnano-cmake
+      - build-client-cnano-cmake
       - windows-build-client-cnano-cmake
-      - linux-build-client-cnano-vcpkg
+      - build-client-cnano-vcpkg
       - windows-build-client-cnano-vcpkg
       - linux-test-client-cpp
-      - linux-build-client-cpp-cmake
+      - build-client-cpp-cmake
       - windows-build-client-cpp-cmake
-      - linux-build-client-cpp-vcpkg
+      - build-client-cpp-vcpkg
       - windows-build-client-cpp-vcpkg
       - copy-artifacts
     steps:

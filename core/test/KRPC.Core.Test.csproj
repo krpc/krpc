@@ -123,6 +123,7 @@
     <Compile Include="Utils\ModAPITest.cs" />
     <Compile Include="Utils\NamingTest.cs" />
     <Compile Include="Utils\ReflectionTest.cs" />
+    <Compile Include="Utils\TimedWaitsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service\KRPC\" />

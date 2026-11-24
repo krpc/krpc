@@ -1,19 +1,34 @@
 inputs:
   packages:
     required: true
+outputs:
+  installed:
+    description: The directory of the installed packages, for CMAKE_PREFIX_PATH
+    value: ${{ steps.install-deps.outputs.installed }}
 # The cache follows the scheme the Windows action describes. The test scripts
 # install into a directory of their own, so we install the packages once here
-# to find their ABI hashes.
+# to find their ABI hashes. The action sets VCPKG_ROOT for the later steps.
 runs:
   using: composite
   steps:
+    # The macOS image may carry no vcpkg
+    - name: vcpkg-root
+      shell: bash
+      run: |
+        root="${VCPKG_INSTALLATION_ROOT:-}"
+        if [[ -z "$root" ]]; then
+          root="$RUNNER_TEMP/vcpkg"
+          git clone -q --depth 1 https://github.com/microsoft/vcpkg.git "$root"
+          "$root/bootstrap-vcpkg.sh" -disableMetrics
+        fi
+        echo "VCPKG_ROOT=$root" >> "$GITHUB_ENV"
     - name: cache-prefix
       id: cache-prefix
       shell: bash
       env:
         PACKAGES: ${{ inputs.packages }}
       run: |
-        prefix="vcpkg-linux-$(printf '%s' "$PACKAGES" | sed -E 's/[^A-Za-z0-9]+/-/g')-"
+        prefix="vcpkg-$(printf '%s' "$RUNNER_OS" | tr '[:upper:]' '[:lower:]')-$(printf '%s' "$PACKAGES" | sed -E 's/[^A-Za-z0-9]+/-/g')-"
         echo "prefix=$prefix" >> "$GITHUB_OUTPUT"
         echo "image-prefix=$prefix$ImageOS-$ImageVersion-" >> "$GITHUB_OUTPUT"
     - name: restore-vcpkg-image
@@ -32,11 +47,15 @@ runs:
         key: ${{ steps.cache-prefix.outputs.prefix }}${{ github.run_id }}
         restore-keys: ${{ steps.cache-prefix.outputs.prefix }}
     - name: install-deps
+      id: install-deps
       shell: bash
       run: |
         export VCPKG_DEFAULT_BINARY_CACHE="$HOME/.cache/vcpkg/archives"
         mkdir -p "$VCPKG_DEFAULT_BINARY_CACHE"
-        vcpkg install ${{ inputs.packages }} --x-install-root="$RUNNER_TEMP/vcpkg-deps"
+        "$VCPKG_ROOT/vcpkg" install ${{ inputs.packages }} --x-install-root="$RUNNER_TEMP/vcpkg-deps"
+        # The install root holds a directory per triplet, beside vcpkg's own
+        installed=$(dirname "$(ls -d "$RUNNER_TEMP"/vcpkg-deps/*/share | head -n1)")
+        echo "installed=$installed" >> "$GITHUB_OUTPUT"
     # A package's ABI hash is the hash of its vcpkg_abi_info.txt, which lists
     # the inputs. Comparing it between two runs shows why a package rebuilt.
     - name: cache-key
@@ -48,11 +67,11 @@ runs:
         for info in "$RUNNER_TEMP"/vcpkg-deps/*/share/*/vcpkg_abi_info.txt; do
           share=$(dirname "$info")
           triplet=$(basename "$(dirname "$(dirname "$share")")")
-          echo "::group::$(basename "$share"):$triplet $(sha256sum "$info" | cut -d' ' -f1)"
+          echo "::group::$(basename "$share"):$triplet $(shasum -a 256 "$info" | cut -d' ' -f1)"
           cat "$info"
           echo '::endgroup::'
         done
-        abis=$(sha256sum "$RUNNER_TEMP"/vcpkg-deps/*/share/*/vcpkg_abi_info.txt | cut -d' ' -f1 | sort -u)
+        abis=$(shasum -a 256 "$RUNNER_TEMP"/vcpkg-deps/*/share/*/vcpkg_abi_info.txt | cut -d' ' -f1 | sort -u)
         # Drop the archives of packages the install no longer uses
         find ~/.cache/vcpkg/archives -name '*.zip' | while read -r archive; do
           if ! grep -qx "$(basename "$archive" .zip)" <<< "$abis"; then
@@ -60,7 +79,7 @@ runs:
             rm "$archive"
           fi
         done
-        hash=$(printf '%s' "$abis" | sha256sum | cut -d' ' -f1)
+        hash=$(printf '%s' "$abis" | shasum -a 256 | cut -d' ' -f1)
         echo "cache key: $PREFIX$hash"
         echo "key=$PREFIX$hash" >> "$GITHUB_OUTPUT"
     - name: save-vcpkg

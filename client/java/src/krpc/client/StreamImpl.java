@@ -51,6 +51,11 @@ class StreamImpl {
   // The ending as a thread holding the condition reads it. An ending from the server reaches the
   // holder when its waiters are woken, as a value does.
   private volatile Exception announcedEnding = null;
+  // The threads waiting on the condition, and those an announce woke that have not taken it back
+  // yet. Changed with the condition held.
+  private int waiters = 0;
+  private int woken = 0;
+  private long wakes = 0;
   // Whether a remove or a close ended the stream, which discards an unseen firing
   private volatile boolean endedByClient = false;
   private float rate = 0;
@@ -123,7 +128,7 @@ class StreamImpl {
     if (!getUpdated()) {
       synchronized (condition) {
         while (!announced && ending == null) {
-          Stream.waitOn(condition, 0);
+          waitOnCondition(0);
         }
       }
     }
@@ -235,8 +240,47 @@ class StreamImpl {
   /** Announces a stored value to waiters, and wakes them. */
   void announce(Object value, long version) {
     synchronized (condition) {
+      awaitWoken();
       announceLocked(value, version);
+      if (waiters > 0) {
+        wakes++;
+        woken = waiters;
+      }
       condition.notifyAll();
+    }
+  }
+
+  /**
+   * Waits, with the condition held, until the waiters the last announce woke have taken the
+   * condition back. A woken waiter then reads the value that woke it, as a monitor lets a thread
+   * take it ahead of one that waits for it.
+   */
+  private void awaitWoken() {
+    while (woken > 0) {
+      try {
+        condition.wait(50);
+      } catch (InterruptedException exn) {
+        Thread.currentThread().interrupt();
+        return;
+      }
+    }
+  }
+
+  /**
+   * Waits on the condition, which the caller holds, as Stream.waitOn does. A deadline of zero
+   * waits indefinitely.
+   */
+  boolean waitOnCondition(long deadline) {
+    long generation = wakes;
+    waiters++;
+    try {
+      return Stream.waitOn(condition, deadline);
+    } finally {
+      waiters--;
+      // The last woken waiter to take the condition back lets the next value through
+      if (generation != wakes && woken > 0 && --woken == 0) {
+        condition.notifyAll();
+      }
     }
   }
 
@@ -376,6 +420,13 @@ class StreamImpl {
     boolean interrupted = false;
     try {
       while (true) {
+        // Checked before each wait for the lock, as the first call can return during the wait
+        synchronized (updateLock) {
+          if (callback.adding) {
+            callback.missed.add(new Missed(version, value));
+            return false;
+          }
+        }
         try {
           if (callback.lock.tryLock(CALLBACK_LOCK_MILLISECONDS, TimeUnit.MILLISECONDS)) {
             return true;
@@ -385,12 +436,6 @@ class StreamImpl {
         }
         if (manager.isCloseRequested()) {
           return false;
-        }
-        synchronized (updateLock) {
-          if (callback.adding) {
-            callback.missed.add(new Missed(version, value));
-            return false;
-          }
         }
       }
     } finally {

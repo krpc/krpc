@@ -23,7 +23,8 @@ outputs:
 #
 # The key is a hash of the libraries' actions, as aquery prints them. It
 # changes with their versions, the build flags and, on Windows, the MSVC paths
-# in the command lines. The Linux system LLVM is pinned by the buildenv image.
+# in the command lines. The Linux system LLVM is pinned by the buildenv image. The
+# macOS jobs build with the image's Xcode.
 runs:
   using: composite
   steps:
@@ -31,9 +32,11 @@ runs:
       id: cache-key
       shell: bash
       run: |
+        # macOS has shasum but no sha256sum
+        sha256() { if command -v sha256sum > /dev/null; then sha256sum; else shasum -a 256; fi; }
         actions=$(${{ inputs.bazel }} aquery --output=text \
           'deps(@protobuf//src/google/protobuf/util:json_util + @cpp_googletest//:gmock)' |
-          sha256sum | cut -d' ' -f1)
+          sha256 | cut -d' ' -f1)
         echo "key=bazel-disk-cache-${{ runner.os }}-$actions" >> "$GITHUB_OUTPUT"
         # Bazel reads backslashes in an rc file as escapes. RUNNER_TEMP is the
         # path inside the container, where runner.temp is the host's.

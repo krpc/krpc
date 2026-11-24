@@ -28,6 +28,11 @@ namespace KRPC.Client
         volatile bool endedByClient;
         volatile bool updated;
         float rate = 0;
+        // The threads waiting on the condition, and those an announce woke that have not
+        // taken it back yet. Changed under the condition.
+        int waiters;
+        int woken;
+        long wakes;
 
         public StreamImpl (Connection connection, ulong id,
                            TypeSpec returnType, object updateLock)
@@ -241,16 +246,53 @@ namespace KRPC.Client
             while (!done ()) {
                 ThrowIfEnded ();
                 if (timer == null) {
-                    Monitor.Wait (condition);
+                    WaitOnCondition (Timeout.Infinite);
                     continue;
                 }
                 // The timeout is a deadline, so a wake with nothing new waits for the remainder
                 var remaining = timeout * 1000.0 - timer.Elapsed.TotalMilliseconds;
                 if (remaining <= 0)
                     return false;
-                Monitor.Wait (condition, (int)Math.Min (Math.Ceiling (remaining), int.MaxValue));
+                WaitOnCondition ((int)Math.Min (Math.Ceiling (remaining), int.MaxValue));
             }
             return true;
+        }
+
+        void WaitOnCondition (int timeout)
+        {
+            var generation = wakes;
+            waiters++;
+            try {
+                Monitor.Wait (condition, timeout);
+            } finally {
+                waiters--;
+                // The last woken waiter to take the condition back lets the next value through
+                if (generation != wakes && woken > 0 && --woken == 0)
+                    Monitor.PulseAll (condition);
+            }
+        }
+
+        /// <summary>
+        /// Wait, with the condition held, until the waiters the last announce woke have taken
+        /// the condition back. A woken waiter then reads the value that woke it, as the
+        /// monitor lets a thread take it ahead of one that waits for it.
+        /// </summary>
+        public void AwaitWoken (Func<bool> stop)
+        {
+            while (woken > 0 && !stop ())
+                Monitor.Wait (condition, 50);
+        }
+
+        /// <summary>
+        /// Wake the threads waiting on the condition, with it held.
+        /// </summary>
+        public void WakeWaiters ()
+        {
+            if (waiters > 0) {
+                wakes++;
+                woken = waiters;
+            }
+            Monitor.PulseAll (condition);
         }
 
         /// <summary>
@@ -417,17 +459,19 @@ namespace KRPC.Client
         /// the value is queued for the adding thread or the connection is closing.
         /// </summary>
         bool EnterOnDispatcherThread (Callback callback, long version, object value) {
-            while (!Monitor.TryEnter (callback, 10)) {
-                if (connection.StreamManager.CloseRequested)
-                    return false;
+            while (true) {
+                // Checked before each wait for the lock, as the first call can return during the wait
                 lock (updateLock) {
                     if (callback.Adding) {
                         callback.Missed.Enqueue (new KeyValuePair<long, object> (version, value));
                         return false;
                     }
                 }
+                if (Monitor.TryEnter (callback, 10))
+                    return true;
+                if (connection.StreamManager.CloseRequested)
+                    return false;
             }
-            return true;
         }
 
         /// <summary>
