@@ -59,6 +59,17 @@ ws2_32 = select({
     "//conditions:default": [],
 })
 
+# The library's own sources, which //tools/krpctools:cnano-prefixes-test reads the macro prefixes
+# of
+filegroup(
+    name = "library-sources",
+    srcs = glob([
+        "include/**/*.h",
+        "src/**/*.c",
+    ]),
+    visibility = ["//tools/krpctools:__pkg__"],
+)
+
 cc_library(
     name = "krpc_cnano",
     srcs = srcs + [":protobuf"],

@@ -157,6 +157,20 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_CreateObject(krpc_connection_t connection, krpc_TestService_Object_t * returnValue, const char * name)
+
+   A new object of the class named Object.
+
+   :Parameters:
+
+    * **name** -- The name of the object.
+
+   :returns: The object.
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, const char * value)
 
 
@@ -1114,6 +1128,16 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_Service(krpc_connection_t connection, int32_t * returnValue)
+
+   A procedure named Service, as the C# client names the class of a service.
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_SetDefault(krpc_connection_t connection, krpc_set_int32_t * returnValue, const krpc_set_int32_t * x)
 
 
@@ -1490,6 +1514,73 @@ Service documentation string.
 
 
 
+.. type:: krpc_TestService_Bound_t
+
+   A class named after the class a class with static methods nests.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_BOUND
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_TestService_Bound_Make(krpc_connection_t connection, int32_t * returnValue)
+
+      A static method, which gives the class its nested class of static methods.
+
+
+   
+
+
+
+.. type:: krpc_TestService_ByteString_t
+
+   A class named ByteString.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_BYTESTRING
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_ClassBase_t
+
+   A class named ClassBase.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_CLASSBASE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_Client_t
+
+   A class named Client.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_CLIENT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_ClientService_t
+
+   A class named after the alias of the service in the generated JavaScript.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_CLIENTSERVICE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_Connection_t
+
+   A class named Connection.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_CONNECTION
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
 .. type:: krpc_TestService_DeprecatedClass_t
 
    .. warning:: Deprecated. Use :type:`krpc_TestService_TestClass_t` instead.
@@ -1529,6 +1620,366 @@ Service documentation string.
 
 
    
+
+
+
+.. type:: krpc_TestService_DocEnum_t
+
+   A class named DocEnum.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_DOCENUM
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_Encoder_t
+
+   A class named Encoder.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_ENCODER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_Event_t
+
+   A class named Event.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_EVENT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_Exception_t
+
+   A class named Exception.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_EXCEPTION
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_ExtensionMethods_t
+
+   A class named after the class that reaches a service in the generated C# code.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_EXTENSIONMETHODS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_IConnection_t
+
+   A class named IConnection.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_ICONNECTION
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_IEquatable_t
+
+   A class named IEquatable.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_IEQUATABLE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_List_t
+
+   A class named List.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_LIST
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_NamedTuple_t
+
+   A class named NamedTuple.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_NAMEDTUPLE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_Names_t
+
+   A class whose members are named after names in the generated code.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_NAMES
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_TestService_Names_Bind(krpc_connection_t connection, int32_t * returnValue)
+
+      A static method named after the method that binds the static methods of a class
+      to a connection.
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_Bound(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+
+      A method named after the class that holds the bound static methods of a class.
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_ClassOf(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+
+      A method named after a method of a Penlight class.
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_Float(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+
+      A method named after a Python builtin.
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_HashCode(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+
+      A method named after a method of java.lang.Object.
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_InstanceParameters(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance, int32_t client, int32_t connection, int32_t instance, int32_t returnValue, int32_t returnValueIsNull, int32_t NULL, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke, int32_t procedureCall)
+
+      A method with parameters named after names in the generated code.
+
+      :Parameters:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_Krpc(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+
+      A method named after the Python client package.
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_MakeStruct(krpc_connection_t connection, krpc_TestService_NamesStruct_t * returnValue, int32_t bound)
+
+      A structure with the given value in its field named Bound.
+
+      :Parameters:
+
+       * **bound** -- The value.
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_Parameters(krpc_connection_t connection, int32_t * returnValue, int32_t client, int32_t connection, int32_t instance, int32_t returnValue, int32_t returnValueIsNull, int32_t NULL, int32_t krpc, int32_t java, int32_t com, int32_t org, int32_t nameof, int32_t self, int32_t cls, int32_t invoke, int32_t procedureCall)
+
+      A static method with parameters named after names in the generated code.
+
+      :Parameters:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_Property(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+   .. function:: krpc_error_t krpc_TestService_Names_set_Property(krpc_connection_t connection, krpc_TestService_Names_t instance, int32_t value)
+
+      A property named after a Python builtin.
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_ToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_Names_t instance, int32_t value)
+
+      A method named after a method of java.lang.Object.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_Uint64T(krpc_connection_t connection, int32_t * returnValue)
+
+      A method named after a C++ integer type.
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_Value(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+   .. function:: krpc_error_t krpc_TestService_Names_set_Value(krpc_connection_t connection, krpc_TestService_Names_t instance, int32_t value)
+
+      A property declared after the property named Property.
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_WithDefaults(krpc_connection_t connection, double * returnValue, krpc_TestService_Names_t instance, double x, int32_t y)
+
+      A method declared after methods named after Python builtins, with defaults that
+      name them.
+
+      :Parameters:
+
+
+
+
+   
+
+
+
+.. type:: krpc_TestService_None_t
+
+   A class named after a keyword of Python.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_NONE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_Object_t
+
+   A class named Object.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_OBJECT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_TestService_Object_Name(krpc_connection_t connection, char * * returnValue, krpc_TestService_Object_t instance)
+
+      The name of the object.
+
+   
+
+
+
+.. type:: krpc_TestService_Optional_t
+
+   A class named Optional.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_OPTIONAL
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_Override_t
+
+   A class named Override.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_OVERRIDE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_RPCException_t
+
+   A class named RPCException.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_RPCEXCEPTION
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_RemoteObject_t
+
+   A class named RemoteObject.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_REMOTEOBJECT
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_Serializable_t
+
+   A class named Serializable.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_SERIALIZABLE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_Server_t
+
+   A class named after the namespace of server forms in the generated JavaScript.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_SERVER
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_Service_t
+
+   A class named after the class a generated module or namespace declares for its service.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_SERVICE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_Stream_t
+
+   A class named Stream.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_STREAM
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_String_t
+
+   A class named String.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_STRING
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
 
 
 
@@ -1654,6 +2105,46 @@ Service documentation string.
 
 
 
+.. type:: krpc_TestService_TestServiceConnection_t
+
+   A class named after the connection type of the generated Python module.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_TESTSERVICECONNECTION
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_Tuple_t
+
+   A class named Tuple.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_TUPLE
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_TypeSpecs_t
+
+   A class named TypeSpecs.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_TYPESPECS
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
+.. type:: krpc_TestService_UInt64_t
+
+   A class named UInt64.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_UINT64
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+
+
 .. type:: krpc_TestService_DeprecatedEnum_t
 
    .. warning:: Deprecated. Use :type:`krpc_TestService_TestEnum_t` instead.
@@ -1676,6 +2167,27 @@ Service documentation string.
       .. warning:: Deprecated. Use :macro:`KRPC_TESTSERVICE_DEPRECATEDENUM_VALUEA` instead.
 
       Deprecated enum ValueB documentation string.
+
+
+
+.. type:: krpc_TestService_NamesEnum_t
+
+   An enumeration whose values are named after names in the generated code.
+
+   .. macro:: KRPC_ENUMERATION_TESTSERVICE_NAMESENUM
+
+      The service and enumeration ids of the enumeration, for
+      :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
+
+
+   .. macro:: KRPC_TESTSERVICE_NAMESENUM_MRO
+
+      A value named after the method of a Python class that Enum reserves.
+
+
+   .. macro:: KRPC_TESTSERVICE_NAMESENUM_TOSTRING
+
+      A value named after a member of a JavaScript object.
 
 
 
@@ -1794,6 +2306,70 @@ Service documentation string.
       Deprecated struct OldValue documentation string.
 
       .. macro:: KRPC_FIELD_TESTSERVICE_DEPRECATEDSTRUCT_OLDVALUE
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+
+.. type:: krpc_TestService_NamesStruct_t
+
+   A structure whose fields are named after names in the generated code.
+
+   .. macro:: KRPC_STRUCT_TESTSERVICE_NAMESSTRUCT
+
+      The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
+
+
+   .. member:: int32_t other
+
+      A value.
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_NAMESSTRUCT_OTHER
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: int32_t result
+
+      A value.
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_NAMESSTRUCT_RESULT
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: int32_t java
+
+      A value.
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_NAMESSTRUCT_JAVA
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: int32_t krpc
+
+      A value.
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_NAMESSTRUCT_KRPC
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: int32_t class_
+
+      A value.
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_NAMESSTRUCT_CLASS
+
+         The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
+
+
+   .. member:: int32_t bound
+
+      A value named after the class of static methods bound to a connection.
+
+      .. macro:: KRPC_FIELD_TESTSERVICE_NAMESSTRUCT_BOUND
 
          The position of the field, for :func:`krpc_KRPC_Expression_GetFieldByIndex`.
 
@@ -2028,6 +2604,15 @@ Service documentation string.
    .. warning:: Deprecated. Use :macro:`KRPC_EXCEPTION_TESTSERVICE_CUSTOMEXCEPTION` instead.
 
    Deprecated exception documentation string.
+
+   The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
+   that fails with it returns :macro:`KRPC_ERROR_SERVER`.
+
+
+
+.. macro:: KRPC_EXCEPTION_TESTSERVICE_RUNTIMEERROR
+
+   An exception named RuntimeError.
 
    The service and exception ids of the exception, for :macro:`KRPC_IS_EXCEPTION`. A call
    that fails with it returns :macro:`KRPC_ERROR_SERVER`.

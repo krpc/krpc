@@ -43,7 +43,7 @@
 {% endmacro %}
 
 {% macro procedure(x) %}{{ mark_documented(x) }}
-.. staticmethod:: {{ x.name | snakecase }}({{ parameters(x.parameters) }}){% if x.return_type != None %}: {{ domain.return_type(x.return_type) }}{% endif +%}
+.. staticmethod:: {{ domain.method_name(x.name) }}({{ parameters(x.parameters) }}){% if x.return_type != None %}: {{ domain.return_type(x.return_type) }}{% endif +%}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -67,7 +67,7 @@
 {% endmacro %}
 
 {% macro property(x) %}{{ mark_documented(x) }}
-.. attribute:: {{ x.name | snakecase }}: {{ domain.return_type(x.type) }}
+.. attribute:: {{ domain.method_name(x.name) }}: {{ domain.return_type(x.type) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -87,7 +87,7 @@
 {% endmacro %}
 
 {% macro class_method(x) %}{{ mark_documented(x) }}
-.. method:: {{ x.name | snakecase }}({{ parameters(x.parameters[1:]) }}){% if x.return_type != None %}: {{ domain.return_type(x.return_type) }}{% endif +%}
+.. method:: {{ domain.method_name(x.name) }}({{ parameters(x.parameters[1:]) }}){% if x.return_type != None %}: {{ domain.return_type(x.return_type) }}{% endif +%}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -111,7 +111,7 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. staticmethod:: {{ x.name | snakecase }}({{ parameters(x.parameters) }}){% if x.return_type != None %}: {{ domain.return_type(x.return_type) }}{% endif +%}
+.. staticmethod:: {{ domain.method_name(x.name) }}({{ parameters(x.parameters) }}){% if x.return_type != None %}: {{ domain.return_type(x.return_type) }}{% endif +%}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -151,7 +151,7 @@
 
 {% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
-   .. data:: {{ value.name | snakecase }}
+   .. data:: {{ domain.method_name(value.name) }}
 
 {% if value.deprecated %}{{ deprecated(value) | indent(width=6) }}
 

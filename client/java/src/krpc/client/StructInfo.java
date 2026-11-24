@@ -23,8 +23,7 @@ final class StructInfo {
   @SuppressWarnings("unchecked")
   private StructInfo(KRPC.Type type) {
     try {
-      Class<?> structType = Class.forName(
-          "krpc.client.services." + type.getService() + "$" + type.getName());
+      Class<?> structType = Class.forName(Decoder.generatedClassName(type));
       fieldTypes = (List<KRPC.Type>) structType.getMethod("fieldTypes").invoke(null);
       fromFieldValues = structType.getMethod("fromFieldValues", Object[].class);
     } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException

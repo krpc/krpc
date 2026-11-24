@@ -80,6 +80,27 @@ class TestClientGenCNano(ClientGenTestCase, unittest.TestCase):
             self.generate("ServiceA", {"ServiceA": service})
         self.assertIn("ServiceB.Thing", str(cm.exception))
 
+    def test_service_named_as_a_library_prefix(self):
+        # The enumeration value macros of a service Error would start as the library's
+        # KRPC_ERROR_ macros do
+        service = {
+            "id": 1,
+            "documentation": "",
+            "procedures": {},
+            "classes": {},
+            "enumerations": {
+                "Mode": {
+                    "id": 1,
+                    "documentation": "",
+                    "values": [{"name": "Connection", "value": 0, "documentation": ""}],
+                }
+            },
+            "exceptions": {},
+            "structs": {},
+        }
+        content = self.generate("Error", {"Error": service})
+        self.assertIn("KRPC_ERROR__MODE_CONNECTION = 0", content)
+
 
 if __name__ == "__main__":
     unittest.main()

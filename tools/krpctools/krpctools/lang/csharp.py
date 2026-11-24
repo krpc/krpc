@@ -39,6 +39,32 @@ _PARAMETER_NAME_FIRST = {
 }
 
 
+# The members of a connection callable with no arguments, which a call of the extension method of
+# a service of the same name would call instead. A test in the client checks the list
+CONNECTION_MEMBERS = frozenset(
+    ["ConnectLocal", "Dispose", "GetHashCode", "GetType", "ToString"]
+)
+
+# The classes generated in the namespace of each service, beside its types, and the class a class
+# with static methods nests
+GENERATED_TYPE_NAMES = frozenset(["Bound", "ExtensionMethods", "Service"])
+
+
+def service_accessor(name):
+    """The name of the extension method that reaches a service, with a trailing underscore
+    where a member of the connection would be called in its place, or where it is the name of
+    the class that holds it"""
+    if name in CONNECTION_MEMBERS or name == "ExtensionMethods":
+        return name + "_"
+    return name
+
+
+def type_name(name):
+    """The name of a class, enumeration, structure or exception of a service, with a trailing
+    underscore where it is the name of a class generated beside it"""
+    return name + "_" if name in GENERATED_TYPE_NAMES else name
+
+
 class CsharpLanguage(Language):
     keywords = set(
         [
@@ -120,7 +146,29 @@ class CsharpLanguage(Language):
             "volatile",
             "while",
         ]
+    ) | set(
+        [
+            # The members of object, of the client's base classes and of a generated
+            # structure or service, which a generated member of the same name would hide
+            "AddExceptionTypes",
+            # The static method and nested class of a class with static methods
+            "Bind",
+            "Bound",
+            "CompareTo",
+            "Equals",
+            "Finalize",
+            "GetHashCode",
+            "GetObjectId",
+            "GetType",
+            "MemberwiseClone",
+            "ReferenceEquals",
+            "ToString",
+        ]
     )
+
+    # The locals of a generated method, the connection a static method takes, and the
+    # operator its null check uses
+    parameter_reserved = frozenset(["_args", "_result", "connection", "nameof"])
 
     type_map = {
         Type.DOUBLE: "double",
@@ -216,7 +264,7 @@ class CsharpLanguage(Language):
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
             return "global::KRPC.Client.Services.%s.%s" % (
                 typ.protobuf_type.service,
-                typ.protobuf_type.name,
+                type_name(typ.protobuf_type.name),
             )
         raise RuntimeError("Unknown type '%s'" % str(typ))
 

@@ -11,6 +11,7 @@ exports_files([
     "CHANGELOG.md",
     "conformance/expected-failures.txt",
     "conformance/unsupported.txt",
+    "src/krpc/client/Decoder.java",
 ])
 
 services = clientgen_services("java")

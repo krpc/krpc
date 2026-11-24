@@ -125,6 +125,17 @@
 
       :Game Scenes: All
 
+   .. function:: Object CreateObject(string name)
+
+      A new object of the class named Object.
+
+      :parameters:
+
+       * **name** -- The name of the object.
+
+      :returns: The object.
+      :Game Scenes: All
+
    .. function:: TestClass CreateTestObject(string value)
 
 
@@ -860,6 +871,13 @@
 
       :Game Scenes: All
 
+   .. function:: int Service_()
+
+      A procedure named Service, as the C# client names the class of a service.
+
+
+      :Game Scenes: All
+
    .. function:: System.Collections.Generic.ISet<int> SetDefault(System.Collections.Generic.ISet<int> x = null)
 
 
@@ -1147,6 +1165,49 @@
 
 
 
+.. class:: Bound_
+
+   A class named after the class a class with static methods nests.
+
+   .. function:: static int Make(IConnection connection)
+
+      A static method, which gives the class its nested class of static methods.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: ByteString
+
+   A class named ByteString.
+
+
+
+.. class:: ClassBase
+
+   A class named ClassBase.
+
+
+
+.. class:: Client
+
+   A class named Client.
+
+
+
+.. class:: ClientService
+
+   A class named after the alias of the service in the generated JavaScript.
+
+
+
+.. class:: Connection
+
+   A class named Connection.
+
+
+
 .. class:: DeprecatedClass
 
    .. warning:: Deprecated. Use :type:`TestClass` instead.
@@ -1181,6 +1242,280 @@
 
 
       :Game Scenes: All
+
+
+
+.. class:: DocEnum
+
+   A class named DocEnum.
+
+
+
+.. class:: Encoder
+
+   A class named Encoder.
+
+
+
+.. class:: Event
+
+   A class named Event.
+
+
+
+.. class:: Exception
+
+   A class named Exception.
+
+
+
+.. class:: ExtensionMethods_
+
+   A class named after the class that reaches a service in the generated C# code.
+
+
+
+.. class:: IConnection
+
+   A class named IConnection.
+
+
+
+.. class:: IEquatable
+
+   A class named IEquatable.
+
+
+
+.. class:: List
+
+   A class named List.
+
+
+
+.. class:: NamedTuple
+
+   A class named NamedTuple.
+
+
+
+.. class:: Names
+
+   A class whose members are named after names in the generated code.
+
+   .. function:: static int Bind_(IConnection connection)
+
+      A static method named after the method that binds the static methods of a class
+      to a connection.
+
+
+      :Game Scenes: All
+
+   .. function:: int Bound_()
+
+      A method named after the class that holds the bound static methods of a class.
+
+
+      :Game Scenes: All
+
+   .. function:: int ClassOf()
+
+      A method named after a method of a Penlight class.
+
+
+      :Game Scenes: All
+
+   .. function:: int Float()
+
+      A method named after a Python builtin.
+
+
+      :Game Scenes: All
+
+   .. function:: int HashCode()
+
+      A method named after a method of java.lang.Object.
+
+
+      :Game Scenes: All
+
+   .. function:: int InstanceParameters(int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke, int procedureCall)
+
+      A method with parameters named after names in the generated code.
+
+      :parameters:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      :Game Scenes: All
+
+   .. function:: int Krpc()
+
+      A method named after the Python client package.
+
+
+      :Game Scenes: All
+
+   .. function:: static NamesStruct MakeStruct(IConnection connection, int bound)
+
+      A structure with the given value in its field named Bound.
+
+      :parameters:
+
+       * **bound** -- The value.
+
+      :Game Scenes: All
+
+   .. function:: static int Parameters(IConnection connection, int client, int connection, int instance, int returnValue, int returnValueIsNull, int NULL, int krpc, int java, int com, int org, int nameof, int self, int cls, int invoke, int procedureCall)
+
+      A static method with parameters named after names in the generated code.
+
+      :parameters:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      :Game Scenes: All
+
+   .. property:: int Property { get; set; }
+
+      A property named after a Python builtin.
+
+      :Game Scenes: All
+
+   .. function:: string ToString_(int value)
+
+      A method named after a method of java.lang.Object.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: static int Uint64T(IConnection connection)
+
+      A method named after a C++ integer type.
+
+
+      :Game Scenes: All
+
+   .. property:: int Value { get; set; }
+
+      A property declared after the property named Property.
+
+      :Game Scenes: All
+
+   .. function:: double WithDefaults(double x = double.NaN, int y = int.MaxValue)
+
+      A method declared after methods named after Python builtins, with defaults that
+      name them.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+
+
+.. class:: None
+
+   A class named after a keyword of Python.
+
+
+
+.. class:: Object
+
+   A class named Object.
+
+   .. property:: string Name { get; }
+
+      The name of the object.
+
+      :Game Scenes: All
+
+
+
+.. class:: Optional
+
+   A class named Optional.
+
+
+
+.. class:: Override
+
+   A class named Override.
+
+
+
+.. class:: RPCException
+
+   A class named RPCException.
+
+
+
+.. class:: RemoteObject
+
+   A class named RemoteObject.
+
+
+
+.. class:: Serializable
+
+   A class named Serializable.
+
+
+
+.. class:: Server
+
+   A class named after the namespace of server forms in the generated JavaScript.
+
+
+
+.. class:: Service_
+
+   A class named after the class a generated module or namespace declares for its service.
+
+
+
+.. class:: Stream
+
+   A class named Stream.
+
+
+
+.. class:: String
+
+   A class named String.
 
 
 
@@ -1300,6 +1635,30 @@
 
 
 
+.. class:: TestServiceConnection
+
+   A class named after the connection type of the generated Python module.
+
+
+
+.. class:: Tuple
+
+   A class named Tuple.
+
+
+
+.. class:: TypeSpecs
+
+   A class named TypeSpecs.
+
+
+
+.. class:: UInt64
+
+   A class named UInt64.
+
+
+
 .. enum:: DeprecatedEnum
 
    .. warning:: Deprecated. Use :type:`TestEnum` instead.
@@ -1317,6 +1676,22 @@
       .. warning:: Deprecated. Use :value:`DeprecatedEnum.ValueA` instead.
 
       Deprecated enum ValueB documentation string.
+
+
+
+.. enum:: NamesEnum
+
+   An enumeration whose values are named after names in the generated code.
+
+
+   .. enumerator:: Mro
+
+      A value named after the method of a Python class that Enum reserves.
+
+
+   .. enumerator:: ToString_
+
+      A value named after a member of a JavaScript object.
 
 
 
@@ -1413,6 +1788,40 @@
       .. warning:: Deprecated. Use :prop:`DeprecatedStruct.Value` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+.. struct:: NamesStruct
+
+   A structure whose fields are named after names in the generated code.
+
+   .. function:: NamesStruct(int other, int result, int java, int krpc, int class_, int bound_)
+
+      Construct a NamesStruct from the values of its fields.
+
+
+   .. property:: int Other { get; }
+
+      A value.
+
+   .. property:: int Result { get; }
+
+      A value.
+
+   .. property:: int Java { get; }
+
+      A value.
+
+   .. property:: int Krpc { get; }
+
+      A value.
+
+   .. property:: int Class { get; }
+
+      A value.
+
+   .. property:: int Bound_ { get; }
+
+      A value named after the class of static methods bound to a connection.
 
 
 .. struct:: PartlyDeprecatedStruct
@@ -1558,5 +1967,13 @@
    .. warning:: Deprecated. Use :type:`CustomException` instead.
 
    Deprecated exception documentation string.
+
+   A subclass of :type:`KRPC.Client.ServerException`.
+
+
+
+.. class:: RuntimeError
+
+   An exception named RuntimeError.
 
    A subclass of :type:`KRPC.Client.ServerException`.

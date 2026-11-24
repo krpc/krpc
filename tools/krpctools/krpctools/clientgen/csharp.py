@@ -1,3 +1,4 @@
+import collections
 import re
 from xml.sax.saxutils import escape, unescape
 
@@ -8,8 +9,9 @@ from krpc.types import (
     StructType,
     TupleType,
 )
+from krpc.utils import lower_camel_case
 
-from ..lang.csharp import CsharpLanguage
+from ..lang.csharp import CsharpLanguage, service_accessor, type_name
 from ..utils import as_type
 from . import crefs
 from .docparser import render_markup, warn_markup
@@ -17,6 +19,8 @@ from .generator import Generator
 
 # The <math> and <unit> elements, which C# documentation tools do not know
 _MATH = re.compile(r"<(math|unit)>(.*?)</\1>", re.DOTALL)
+# A parameter named in the documentation, which names it as the code does
+_PARAM = re.compile(r'(<param(?:ref)? name=")([^"]*)"')
 _CREF = re.compile(r'cref="([^"]*)"')
 
 
@@ -45,6 +49,10 @@ class CsharpGenerator(Generator[CsharpLanguage]):
             return 'cref="%s"' % reference
 
         documentation = _CREF.sub(resolve, documentation)
+        documentation = _PARAM.sub(
+            lambda m: m.group(1) + self.language.parse_parameter_name(m.group(2)) + '"',
+            documentation,
+        )
         if documentation == "":
             return ""
         lines = ["/// " + line for line in documentation.split("\n")]
@@ -127,7 +135,7 @@ class CsharpGenerator(Generator[CsharpLanguage]):
         else:
             expression = self._plain_specification(typ)
         if expression not in self._type_specs:
-            self._type_specs[expression] = "TypeSpecs.Spec%d" % len(self._type_specs)
+            self._type_specs[expression] = "_TypeSpecs.Spec%d" % len(self._type_specs)
         return self._type_specs[expression]
 
     def _specification_at_position(self, typ):
@@ -230,6 +238,30 @@ class CsharpGenerator(Generator[CsharpLanguage]):
                 else:
                     field["attribute"] = "global::KRPC.Client.Attributes.KRPCNullable"
 
+    def rename_members_named_as_their_type(self, context):
+        """Suffix a member that shares the name of the type that holds it with an underscore,
+        as a keyword is, since C# allows no such member. Give every structure field the name
+        its constructor parameter is written with."""
+
+        def rename(members, type_name):
+            return collections.OrderedDict(
+                (name + "_" if name == type_name else name, info)
+                for name, info in members.items()
+            )
+
+        context["procedures"] = rename(context["procedures"], "Service")
+        context["properties"] = rename(context["properties"], "Service")
+        for class_name, cls in context["classes"].items():
+            for kind in ("methods", "static_methods", "properties"):
+                cls[kind] = rename(cls[kind], type_name(class_name))
+        for struct_name, struct_info in context["structs"].items():
+            for field in struct_info["fields"]:
+                if field["name"] == type_name(struct_name):
+                    field["name"] += "_"
+                field["parameter_name"] = self.language.parse_name(
+                    lower_camel_case(field["name"])
+                )
+
     def parse_context(self, context):
         for info in context["procedures"].values():
             self._apply_return_nullable(info)
@@ -247,9 +279,19 @@ class CsharpGenerator(Generator[CsharpLanguage]):
             for info in cls["properties"].values():
                 self._apply_property_nullable(info)
         self.add_struct_field_nullability(context)
+        self.rename_members_named_as_their_type(context)
         context["procedure_specs"] = self._procedure_specs()
         context["type_specs"] = [
             {"name": name.split(".")[-1], "spec": expression}
             for expression, name in self._type_specs.items()
         ]
+        context["service_accessor"] = service_accessor(self.service_name)
+        # The types of the service, by their names in the generated code, keeping the name
+        # the server gives each
+        for kind in ("classes", "enumerations", "structs", "exceptions"):
+            types = collections.OrderedDict()
+            for name, info in context[kind].items():
+                info["remote_name"] = name
+                types[type_name(name)] = info
+            context[kind] = types
         return context

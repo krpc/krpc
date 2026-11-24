@@ -1,6 +1,8 @@
 import keyword
 
+from krpc.declarations import type_name
 from krpc.schema.KRPC_pb2 import Type
+from krpc.service import RESERVED_ENUM_VALUE_NAMES, RESERVED_PARAMETER_NAMES
 from krpc.types import (
     NATIVE_EXCEPTIONS,
     STREAM_REMOVED,
@@ -23,6 +25,9 @@ from .language import Language, float32_literal
 
 class PythonLanguage(Language):
     keywords = keyword.kwlist
+
+    # The parameters a method takes ahead of those of its procedure
+    parameter_reserved = RESERVED_PARAMETER_NAMES
 
     value_map = {"null": "None", "true": "True", "false": "False"}
 
@@ -49,8 +54,15 @@ class PythonLanguage(Language):
         (Type.UINT64, "max"): "krpc.limits.UINT64_MAX",
     }
 
+    # The enumeration value names Enum rejects
+    reserved_enum_value_names = RESERVED_ENUM_VALUE_NAMES
+
     def parse_name(self, name):
         return super().parse_name(snake_case(name))
+
+    def parse_enum_value_name(self, name):
+        name = self.parse_name(name)
+        return name + "_" if name in self.reserved_enum_value_names else name
 
     def native_exception(self, mapped_type: str) -> str | None:
         native = NATIVE_EXCEPTIONS.get(mapped_type)
@@ -79,8 +91,9 @@ class PythonLanguage(Language):
         if isinstance(typ, MessageType):
             return "krpc.schema.KRPC.%s" % typ.python_type.__name__
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
+            service = typ.protobuf_type.service
             return self.shorten_ref(
-                "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
+                "%s.%s" % (service, type_name(service, typ.protobuf_type.name))
             )
         if isinstance(typ, ListType):
             return "list"

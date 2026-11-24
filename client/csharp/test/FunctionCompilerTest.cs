@@ -8,6 +8,8 @@ using NUnit.Framework;
 
 using Expr = KRPC.Client.Services.KRPC.Expression;
 using KType = KRPC.Client.Services.KRPC.Type;
+// TestService has a class named Tuple
+using Tuple = System.Tuple;
 
 namespace KRPC.Client.Test
 {
@@ -1399,6 +1401,13 @@ namespace KRPC.Client.Test
                 Evaluate (() => testService.CounterStruct ("CSharpCompiler.Field").StringField));
             Assert.IsTrue (
                 Evaluate (() => testService.CounterStruct ("CSharpCompiler.Field2").IntField >= 0));
+        }
+
+        [Test]
+        public void TestEscapedStructField ()
+        {
+            // The generated property of the field Bound is Bound_
+            Assert.AreEqual (3, Evaluate (() => Names.MakeStruct (Connection, 3).Bound_));
         }
 
         [Test]

@@ -150,7 +150,7 @@
       :func:`krpc_KRPC_Type_EnumerationTypeById` and :func:`krpc_KRPC_Expression_ConstantEnumById`.
 
 {% for value in x.values.values() %}{{ mark_documented(value) }}
-   .. macro:: KRPC_{{ x.service_name | upper }}_{{ x.name | upper }}_{{ value.name | upper }}
+   .. macro:: {{ domain.enum_value_macro(x.service_name, x.name, value.name) }}
 
 {% if value.deprecated %}{{ deprecated(value) | indent(width=6) }}
 
@@ -175,7 +175,7 @@
       The service and structure ids of the structure, for :func:`krpc_KRPC_Type_StructTypeById`.
 
 {% for field in x.fields.values() %}{{ mark_documented(field) }}
-   .. member:: {{ domain.field_type(field).ctype }} {{ field.name | snakecase }}
+   .. member:: {{ domain.field_type(field).ctype }} {{ domain.field_name(field.name) }}
 
 {% if field.deprecated %}{{ deprecated(field) | indent(width=6) }}
 

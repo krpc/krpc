@@ -3,7 +3,7 @@ import collections
 from krpc.types import ClassType
 from krpc.utils import snake_case
 
-from ..lang.cpp import CppLanguage
+from ..lang.cpp import CppLanguage, type_name
 from . import crefs
 from .docparser import DocParser
 from .generator import Generator
@@ -15,7 +15,7 @@ def _cpp_template_fix(typ):
 
 
 class CppGenerator(Generator[CppLanguage]):
-    language = CppLanguage()
+    language = CppLanguage(qualified=True)
     includes_services = True
 
     plain_cref_separator = "::"
@@ -41,7 +41,7 @@ class CppGenerator(Generator[CppLanguage]):
         # Fully qualified, so that Doxygen links it from the header of any service
         name = "krpc::services::" + target.service
         if target.type is not None:
-            name += "::" + target.type
+            name += "::" + type_name(target.type)
         if target.member is None:
             return name
         member = self.language.parse_name(target.member)
@@ -154,7 +154,19 @@ class CppGenerator(Generator[CppLanguage]):
                 info["bound_documentation"] = info.get("documentation", "")
                 self.add_connection_param_doxygen(info)
 
+        self.escape_type_names(context)
         return context
+
+    @staticmethod
+    def escape_type_names(context):
+        """Key the types of the service by their names in the generated code, keeping the name
+        the server gives each"""
+        for kind in ("classes", "enumerations", "structs", "exceptions"):
+            types = collections.OrderedDict()
+            for name, info in context[kind].items():
+                info["remote_name"] = name
+                types[type_name(name)] = info
+            context[kind] = types
 
     @staticmethod
     def add_connection_param_doxygen(info):
@@ -191,14 +203,14 @@ class CppDocParser(DocParser):
         return "\n\n" + self.parse_node(node).strip()
 
     def parse_param(self, node):
-        name = self.language.parse_name(node.attrib["name"])
+        name = self.language.parse_parameter_name(node.attrib["name"])
         return "\n@param %s %s" % (name, self.parse_node(node).strip())
 
     def parse_returns(self, node):
         return "\n@return %s" % self.parse_node(node).strip()
 
     def parse_paramref(self, node):
-        return self.language.parse_name(node.attrib["name"])
+        return self.language.parse_parameter_name(node.attrib["name"])
 
     @staticmethod
     def parse_a(node):

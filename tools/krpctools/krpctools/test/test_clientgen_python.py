@@ -1,5 +1,6 @@
 import importlib
 import pkgutil
+import types
 import unittest
 
 import krpc.ksp
@@ -111,6 +112,16 @@ class TestClientGenPython(ClientGenTestCase, unittest.TestCase):
         self.assertIn("import path_krpc.path as _service_path", lines)
         # A shipped service with no include takes the module it ships in
         self.assertIn("import krpc.ksp.spacecenter as _service_spacecenter", lines)
+
+    def test_module_runs(self):
+        # Importing a stub runs its class bodies, which evaluate the base classes,
+        # decorators and default arguments a name the service declares could shadow
+        source = self.generate(
+            "TestService", self.load_with_deps("TestService", ["KRPC"])
+        )
+        module = types.ModuleType("testservice")
+        exec(compile(source, "testservice", "exec"), module.__dict__)
+        self.assertTrue(hasattr(module, "TestService"))
 
 
 if __name__ == "__main__":

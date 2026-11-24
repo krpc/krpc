@@ -7,8 +7,11 @@ load("//tools/build:pkg.bzl", "pkg_zip")
 
 exports_files([
     "CHANGELOG.md",
+    "conformance/conventions.json",
     "conformance/expected-failures.txt",
     "conformance/unsupported.txt",
+    "krpc/connection.lua",
+    "krpc/service.lua",
 ])
 
 # The client's own modules, laid out where require expects to find them. The schema's

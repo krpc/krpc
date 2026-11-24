@@ -74,8 +74,16 @@ class LuaLanguage(Language):
             return "Tuple"
         raise RuntimeError("Unknown type '%s'" % str(typ))
 
+    # The methods of a Penlight class that the client calls, which a member of the same name
+    # would replace on the class
+    reserved_member_names = frozenset(["class_of", "is_a"])
+
+    def parse_name(self, name):
+        name = snake_case(name)
+        return "%s_" % name if name in self.reserved_member_names else name
+
     def parse_enum_value_name(self, name):
-        return snake_case(name)
+        return self.parse_name(name)
 
     def parse_default_value(self, value, typ):
         special = self.parse_special_value(value, typ)

@@ -20,7 +20,7 @@
 {% endmacro %}
 
 {% macro class(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}
+.. class:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -147,7 +147,7 @@
 {% endmacro %}
 
 {% macro enumeration(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}
+.. class:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -159,7 +159,7 @@
 
 {% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
-   .. data:: {{ value.name | snakecase }}
+   .. data:: {{ domain.enum_value_name(value.name) }}
 
 {% if value.deprecated %}{{ deprecated(value) | indent(width=6) }}
 
@@ -171,7 +171,7 @@
 {% endmacro %}
 
 {% macro struct(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}({% for field in x.fields.values() %}{{ field.name | snakecase }}{% if not loop.last %}, {% endif %}{% endfor %})
+.. class:: {{ domain.type_name(x) }}({% for field in x.fields.values() %}{{ domain.method_name(field.name) }}{% if not loop.last %}, {% endif %}{% endfor %})
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -180,7 +180,7 @@
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% for field in x.fields.values() %}{{ mark_documented(field) }}
-   .. attribute:: {{ field.name | snakecase }}
+   .. attribute:: {{ domain.method_name(field.name) }}
 
 {% if field.deprecated %}{{ deprecated(field) | indent(width=6) }}
 
@@ -192,7 +192,7 @@
 {% endmacro %}
 
 {% macro exception(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}
+.. class:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 

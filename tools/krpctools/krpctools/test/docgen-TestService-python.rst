@@ -139,6 +139,18 @@ Service documentation string.
 
 
 
+.. staticmethod:: create_object(name)
+
+   A new object of the class named Object.
+
+   :param str name: The name of the object.
+   :returns: The object.
+   :rtype: :class:`Object`
+   
+
+
+
+
 .. staticmethod:: create_test_object(value)
 
 
@@ -966,6 +978,16 @@ Service documentation string.
 
 
 
+.. staticmethod:: service()
+
+   A procedure named Service, as the C# client names the class of a service.
+
+   :rtype: int
+   
+
+
+
+
 .. staticmethod:: set_default([x = {1, 2, 3}])
 
 
@@ -1303,6 +1325,49 @@ Service documentation string.
 
 
 
+.. class:: Bound
+
+   A class named after the class a class with static methods nests.
+
+   .. staticmethod:: make()
+
+      A static method, which gives the class its nested class of static methods.
+
+      :rtype: int
+   
+
+
+
+.. class:: ByteString
+
+   A class named ByteString.
+
+
+
+.. class:: ClassBase
+
+   A class named ClassBase.
+
+
+
+.. class:: Client
+
+   A class named Client.
+
+
+
+.. class:: ClientService
+
+   A class named after the alias of the service in the generated JavaScript.
+
+
+
+.. class:: Connection
+
+   A class named Connection.
+
+
+
 .. class:: DeprecatedClass
 
    .. warning:: Deprecated. Use :class:`TestClass` instead.
@@ -1339,6 +1404,276 @@ Service documentation string.
 
       :rtype: str
    
+
+
+
+.. class:: DocEnum
+
+   A class named DocEnum.
+
+
+
+.. class:: Encoder
+
+   A class named Encoder.
+
+
+
+.. class:: Event
+
+   A class named Event.
+
+
+
+.. class:: Exception
+
+   A class named Exception.
+
+
+
+.. class:: ExtensionMethods
+
+   A class named after the class that reaches a service in the generated C# code.
+
+
+
+.. class:: IConnection
+
+   A class named IConnection.
+
+
+
+.. class:: IEquatable
+
+   A class named IEquatable.
+
+
+
+.. class:: List
+
+   A class named List.
+
+
+
+.. class:: NamedTuple
+
+   A class named NamedTuple.
+
+
+
+.. class:: Names
+
+   A class whose members are named after names in the generated code.
+
+   .. staticmethod:: bind()
+
+      A static method named after the method that binds the static methods of a class
+      to a connection.
+
+      :rtype: int
+   
+
+   .. method:: bound()
+
+      A method named after the class that holds the bound static methods of a class.
+
+      :rtype: int
+   
+
+   .. method:: class_of()
+
+      A method named after a method of a Penlight class.
+
+      :rtype: int
+   
+
+   .. method:: float()
+
+      A method named after a Python builtin.
+
+      :rtype: int
+   
+
+   .. method:: hash_code()
+
+      A method named after a method of java.lang.Object.
+
+      :rtype: int
+   
+
+   .. method:: instance_parameters(client, connection, instance, return_value, return_value_is_null, null, krpc, java, com, org, nameof, self, cls, invoke, procedure_call)
+
+      A method with parameters named after names in the generated code.
+
+      :param int client:
+      :param int connection:
+      :param int instance:
+      :param int return_value:
+      :param int return_value_is_null:
+      :param int null:
+      :param int krpc:
+      :param int java:
+      :param int com:
+      :param int org:
+      :param int nameof:
+      :param int self:
+      :param int cls:
+      :param int invoke:
+      :param int procedure_call:
+      :rtype: int
+   
+
+   .. method:: krpc()
+
+      A method named after the Python client package.
+
+      :rtype: int
+   
+
+   .. staticmethod:: make_struct(bound)
+
+      A structure with the given value in its field named Bound.
+
+      :param int bound: The value.
+      :rtype: :class:`NamesStruct`
+   
+
+   .. staticmethod:: parameters(client, connection, instance, return_value, return_value_is_null, null, krpc, java, com, org, nameof, self, cls, invoke, procedure_call)
+
+      A static method with parameters named after names in the generated code.
+
+      :param int client:
+      :param int connection:
+      :param int instance:
+      :param int return_value:
+      :param int return_value_is_null:
+      :param int null:
+      :param int krpc:
+      :param int java:
+      :param int com:
+      :param int org:
+      :param int nameof:
+      :param int self:
+      :param int cls:
+      :param int invoke:
+      :param int procedure_call:
+      :rtype: int
+   
+
+   .. attribute:: property
+
+      A property named after a Python builtin.
+
+      :Attribute: Can be read or written
+      :rtype: int
+   
+
+   .. method:: to_string(value)
+
+      A method named after a method of java.lang.Object.
+
+      :param int value:
+      :rtype: str
+   
+
+   .. staticmethod:: uint_64t()
+
+      A method named after a C++ integer type.
+
+      :rtype: int
+   
+
+   .. attribute:: value
+
+      A property declared after the property named Property.
+
+      :Attribute: Can be read or written
+      :rtype: int
+   
+
+   .. method:: with_defaults([x = float("nan")], [y = krpc.limits.SINT32_MAX])
+
+      A method declared after methods named after Python builtins, with defaults that
+      name them.
+
+      :param float x:
+      :param int y:
+      :rtype: float
+   
+
+
+
+.. class:: None_
+
+   A class named after a keyword of Python.
+
+
+
+.. class:: Object
+
+   A class named Object.
+
+   .. attribute:: name
+
+      The name of the object.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+
+
+.. class:: Optional
+
+   A class named Optional.
+
+
+
+.. class:: Override
+
+   A class named Override.
+
+
+
+.. class:: RPCException
+
+   A class named RPCException.
+
+
+
+.. class:: RemoteObject
+
+   A class named RemoteObject.
+
+
+
+.. class:: Serializable
+
+   A class named Serializable.
+
+
+
+.. class:: Server
+
+   A class named after the namespace of server forms in the generated JavaScript.
+
+
+
+.. class:: Service
+
+   A class named after the class a generated module or namespace declares for its service.
+
+
+
+.. class:: Stream
+
+   A class named Stream.
+
+
+
+.. class:: String
+
+   A class named String.
 
 
 
@@ -1452,6 +1787,30 @@ Service documentation string.
 
 
 
+.. class:: TestServiceConnection_
+
+   A class named after the connection type of the generated Python module.
+
+
+
+.. class:: Tuple
+
+   A class named Tuple.
+
+
+
+.. class:: TypeSpecs
+
+   A class named TypeSpecs.
+
+
+
+.. class:: UInt64
+
+   A class named UInt64.
+
+
+
 .. class:: DeprecatedEnum
 
    .. warning:: Deprecated. Use :class:`TestEnum` instead.
@@ -1469,6 +1828,22 @@ Service documentation string.
       .. warning:: Deprecated. Use :attr:`DeprecatedEnum.value_a` instead.
 
       Deprecated enum ValueB documentation string.
+
+
+
+.. class:: NamesEnum
+
+   An enumeration whose values are named after names in the generated code.
+
+
+   .. data:: mro_
+
+      A value named after the method of a Python class that Enum reserves.
+
+
+   .. data:: to_string
+
+      A value named after a member of a JavaScript object.
 
 
 
@@ -1563,6 +1938,48 @@ Service documentation string.
       .. warning:: Deprecated. Use :attr:`DeprecatedStruct.value` instead.
 
       Deprecated struct OldValue documentation string.
+
+      :rtype: int
+
+
+.. class:: NamesStruct(other, result, java, krpc, class_, bound)
+
+   A structure whose fields are named after names in the generated code.
+
+
+   .. attribute:: other
+
+      A value.
+
+      :rtype: int
+
+   .. attribute:: result
+
+      A value.
+
+      :rtype: int
+
+   .. attribute:: java
+
+      A value.
+
+      :rtype: int
+
+   .. attribute:: krpc
+
+      A value.
+
+      :rtype: int
+
+   .. attribute:: class_
+
+      A value.
+
+      :rtype: int
+
+   .. attribute:: bound
+
+      A value named after the class of static methods bound to a connection.
 
       :rtype: int
 
@@ -1720,5 +2137,13 @@ Service documentation string.
    .. warning:: Deprecated. Use :class:`CustomException` instead.
 
    Deprecated exception documentation string.
+
+   A subclass of :class:`krpc.error.ServerError`.
+
+
+
+.. class:: RuntimeError
+
+   An exception named RuntimeError.
 
    A subclass of :class:`krpc.error.ServerError`.

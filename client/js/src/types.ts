@@ -1,7 +1,7 @@
 import type { DescMessage } from "@bufbuild/protobuf";
 import { deprecationMessage } from "./deprecation.js";
 import { EncodingError } from "./errors.js";
-import { camelCase } from "./naming.js";
+import { memberName, typeName } from "./naming.js";
 import { name as nameValue, registered } from "./registry.js";
 import {
   ProcedureCallSchema,
@@ -127,7 +127,7 @@ export class Enumeration {
     const cls = flags ? RemoteFlags : RemoteEnum;
     const byName: Record<string, RemoteEnum> = {};
     for (const x of values) {
-      const value = new cls(this, camelCase(x.name), x.value);
+      const value = new cls(this, memberName(x.name), x.value);
       byName[value.name] = value;
       this.#byNumber.set(x.value, value);
       this.#mask |= x.value;
@@ -426,8 +426,9 @@ export class Types {
     }
     const service = key.slice(0, key.indexOf("."));
     const names = definition.fields.map((field) => {
-      const name = camelCase(field.name);
-      return { name, deprecation: deprecationMessage(field, service, `${key}.${name}`) };
+      const name = memberName(field.name);
+      const qualified = `${service}.${typeName(definition.name)}.${name}`;
+      return { name, deprecation: deprecationMessage(field, service, qualified) };
     });
     const declared = registered(service, definition.name);
     const declaration =
@@ -443,7 +444,7 @@ export class Types {
         if (field.type === undefined) {
           throw new UnknownTypeError(`Field ${field.name} of ${key} has no type`);
         }
-        fields.push({ name: camelCase(field.name), type: this.get(field.type) });
+        fields.push({ name: memberName(field.name), type: this.get(field.type) });
       }
     } catch (error) {
       this.#structs.set(key, null);
@@ -476,6 +477,6 @@ function sameValues(
   return (
     enumeration.flags === flags &&
     declared.length === values.length &&
-    values.every((x) => enumeration.values[camelCase(x.name)]?.value === x.value)
+    values.every((x) => enumeration.values[memberName(x.name)]?.value === x.value)
   );
 }

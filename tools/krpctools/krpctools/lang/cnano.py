@@ -14,6 +14,56 @@ from krpc.types import (
 
 from .language import Language
 
+# The words after KRPC_ that start the library's macros, and the generated macros that name a
+# service second. A service of one of these names takes a trailing underscore in the macros that
+# name it first, the enumeration values. A test checks the library's words against its sources
+LIBRARY_PREFIXES = frozenset(
+    [
+        "ALLOC",
+        "BUFFER",
+        "BYTES",
+        "CALLBACK",
+        "CAUSE",
+        "CUSTOM",
+        "DEPRECATED",
+        "ERROR",
+        "EXCEPTION",
+        "FAIL",
+        "FAILURES",
+        "FREE",
+        "HAS",
+        "IS",
+        "MUTE",
+        "NO",
+        "NULL",
+        "PLATFORM",
+        "PORT",
+        "PRINT",
+        "PRINTS",
+        "PROTOCOL",
+        "RESULT",
+        "RETURN",
+        "SEND",
+        "SET",
+        "SIZE",
+        "TRANSPORT",
+    ]
+)
+GENERATED_PREFIXES = frozenset(
+    ["CLASS", "ENUMERATION", "EXCEPTION", "FIELD", "IMPL", "STRUCT", "TYPE"]
+)
+# The options the CMake and Bazel builds define
+BUILD_PREFIXES = frozenset(["FETCH", "REGENERATE"])
+
+
+def enum_value_macro(service, enumeration, value):
+    """The macro of an enumeration value, KRPC_<SERVICE>_<ENUMERATION>_<VALUE>, with the
+    service escaped where it would start a macro of the library's"""
+    prefix = service.upper()
+    if prefix in LIBRARY_PREFIXES | GENERATED_PREFIXES | BUILD_PREFIXES:
+        prefix += "_"
+    return "KRPC_%s_%s_%s" % (prefix, enumeration.upper(), value.upper())
+
 
 class CnanoLanguage(Language):
     _collection_types: list
@@ -133,6 +183,28 @@ class CnanoLanguage(Language):
     }
 
     value_map = {"null": "nullptr"}
+
+    # The locals of a generated function, the parameters it adds, and the standard names
+    # its signature and body use
+    parameter_reserved = frozenset(
+        [
+            "_call",
+            "_arguments",
+            "_result",
+            "_stream",
+            "connection",
+            "instance",
+            "procedureCall",
+            "returnValue",
+            "returnValueIsNull",
+            "NULL",
+            "size_t",
+            "int32_t",
+            "int64_t",
+            "uint32_t",
+            "uint64_t",
+        ]
+    )
 
     def add_collection_type(self, typ):
         if isinstance(typ, TupleType):

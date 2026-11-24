@@ -5,6 +5,15 @@ The internal design of the C++ client. This page builds on the :doc:`shared clie
 </client-design>` and the :doc:`client specification </client-spec>`. Usage is in
 the :doc:`C++ guide </cpp>`. Paths are relative to ``client/cpp/``.
 
+Generated Stubs
+---------------
+
+``clientgen`` writes one header per service from ``cpp.tmpl`` in ``krpctools``. The header names
+every library and standard type from the global namespace, such as ``::std::string``, and the
+types of every service in full, so a class of the service cannot shadow them. A class with static
+methods has a static ``bind`` and a nested class ``Bound``, so a member named ``bind`` is
+``bind_`` and a type named ``Bound`` is ``Bound_``.
+
 Ownership
 ---------
 

@@ -38,6 +38,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="TestService.cs" />
     <Compile Include="TestService2.cs" />
+    <Compile Include="TestServiceNames.cs" />
     <Compile Include="TestServiceExtensions.cs" />
   </ItemGroup>
 </Project>

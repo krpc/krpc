@@ -16,7 +16,7 @@ from krpc.types import (
 )
 from krpc.utils import snake_case
 
-from ..lang.cnano import CnanoLanguage
+from ..lang.cnano import CnanoLanguage, enum_value_macro
 from ..utils import as_type
 from . import crefs
 from .docparser import DocParser
@@ -295,7 +295,8 @@ class CnanoGenerator(Generator[CnanoLanguage]):
             return name + "_t"
         # Doxygen links a global enumeration value only when it is written with a #
         if target.kind == crefs.ENUMERATION_VALUE:
-            return "#" + (name + "_" + target.member).upper()
+            value = self.language.parse_enum_value_name(target.member)
+            return "#" + enum_value_macro(target.service, target.type, value)
         if target.kind == crefs.STRUCT_FIELD:
             return name + "_t." + self.parse_name(snake_case(target.member))
         setter = "" if target.getter else "set_"
@@ -423,10 +424,13 @@ class CnanoGenerator(Generator[CnanoLanguage]):
             collection_types.setdefault(ctype["name"], ctype)
         context["collection_types"] = list(collection_types.values())
 
+        context["enum_value_macro"] = enum_value_macro
         return context
 
 
 class CNanoDocParser(DocParser):
+    language = CnanoLanguage()
+
     def parse_summary(self, node):
         return self.parse_node(node).strip()
 
@@ -434,15 +438,15 @@ class CNanoDocParser(DocParser):
         return "\n\n" + self.parse_node(node).strip()
 
     def parse_param(self, node):
-        return "\n@param %s %s" % (node.attrib["name"], self.parse_node(node).strip())
+        name = self.language.parse_parameter_name(node.attrib["name"])
+        return "\n@param %s %s" % (name, self.parse_node(node).strip())
 
     def parse_returns(self, node):
         # A function returns an error code, and the value through its returnValue parameter
         return "\n@param returnValue %s" % self.parse_node(node).strip()
 
-    @staticmethod
-    def parse_paramref(node):
-        return node.attrib["name"]
+    def parse_paramref(self, node):
+        return self.language.parse_parameter_name(node.attrib["name"])
 
     @staticmethod
     def parse_a(node):

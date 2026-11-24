@@ -2,7 +2,7 @@ import inspect
 import unittest
 from types import ModuleType
 
-from krpc.declarations import DeclaredClass
+from krpc.declarations import DeclaredClass, type_name
 from krpc.services import krpc as krpc_module
 from krpc.services import testservice
 from krpc.test.servertestcase import ServerTestCase
@@ -74,7 +74,9 @@ class TestDeclarationsDrift(ServerTestCase, unittest.TestCase):
                 and declared._service_name == service_name
                 and declared._class_name is not None
             ):
-                built = _member(type(service), declared._class_name)
+                built = _member(
+                    type(service), type_name(service_name, declared._class_name)
+                )
                 assert isinstance(built, type)
                 self.check_class(declared, built)
 

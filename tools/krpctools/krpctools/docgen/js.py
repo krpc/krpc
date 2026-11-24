@@ -14,7 +14,7 @@ from krpc.types import (
 )
 from krpc.utils import lower_camel_case
 
-from ..lang.js import JsLanguage, accessor_name
+from ..lang.js import JsLanguage, accessor_name, member_name, type_name
 from .domain import Domain
 from .nodes import (
     Class,
@@ -56,7 +56,11 @@ class JsDomain(Domain[JsLanguage]):
         return ".. module:: %s\n   :no-index:" % name
 
     @staticmethod
-    def method_name(name):
+    def member_name(obj):
+        return member_name(obj.name, isinstance(obj, ClassStaticMethod))
+
+    @staticmethod
+    def parameter_name(name):
         return lower_camel_case(name)
 
     @staticmethod
@@ -132,8 +136,16 @@ class JsDomain(Domain[JsLanguage]):
             name = self.language.parse_type(typ)
         return "%s | null" % name if typ.nullable else name
 
+    @staticmethod
+    def type_name(obj):
+        """The name of a class, enumeration, structure or exception in the module"""
+        return type_name(obj.name)
+
     def ref(self, obj):
         name = obj.fullname.split(".")
+        # A type, and a member of one, is named as the module names the type
+        if not isinstance(obj, (Service, Procedure, Property)):
+            name[1] = type_name(name[1])
         if isinstance(obj, (Property, ClassProperty)):
             prefix = "get" if obj.getter is not None else "set"
             name[-1] = accessor_name(prefix, name[-1])
@@ -141,7 +153,7 @@ class JsDomain(Domain[JsLanguage]):
             obj,
             (Procedure, ClassMethod, ClassStaticMethod, EnumerationValue, StructField),
         ):
-            name[-1] = lower_camel_case(name[-1])
+            name[-1] = member_name(name[-1], isinstance(obj, ClassStaticMethod))
         return ".".join(name)
 
     def see(self, obj):

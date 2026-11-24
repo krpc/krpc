@@ -1,18 +1,19 @@
 from __future__ import annotations
-from typing import Callable, Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING, Union
+import builtins as _builtins
+from typing import Callable as _Callable, Tuple as _Tuple, Set as _Set, Dict as _Dict, List as _List, NamedTuple as _NamedTuple, Optional as _Optional, TYPE_CHECKING, Union as _Union
 import krpc.connection
 import krpc.error
-import krpc.limits
-from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
-from krpc.event import Event
+import krpc.limits as _limits
+from krpc.declarations import DeclaredClass as _DeclaredClass, DeclaredObject as _DeclaredObject, declaration_error as _declaration, register as _register
+from krpc.event import Event as _Event
 from krpc.schema import KRPC_pb2
-from krpc.types import RemoteEnum, RemoteFlags, deprecate_attribute, deprecated
+from krpc.types import RemoteEnum as _RemoteEnum, RemoteFlags as _RemoteFlags, deprecate_attribute as _deprecate_attribute, deprecated as _deprecated
 import krpc.services.krpc as _service_krpc
 
 
 
-@deprecated("Use TestEnum instead.")
-class DeprecatedEnum(RemoteEnum):
+@_deprecated("Use TestEnum instead.")
+class DeprecatedEnum(_RemoteEnum):
     """
     Deprecated. Use TestEnum instead.
 
@@ -26,11 +27,23 @@ Deprecated enum ValueB documentation string.
 """
 
 
-deprecate_attribute(DeprecatedEnum, "value_a", "TestService.DeprecatedEnum.value_a is deprecated: Use TestEnum instead.")
-deprecate_attribute(DeprecatedEnum, "value_b", "TestService.DeprecatedEnum.value_b is deprecated: Use DeprecatedEnum.value_a instead.")
+_deprecate_attribute(DeprecatedEnum, "value_a", "TestService.DeprecatedEnum.value_a is deprecated: Use TestEnum instead.")
+_deprecate_attribute(DeprecatedEnum, "value_b", "TestService.DeprecatedEnum.value_b is deprecated: Use DeprecatedEnum.value_a instead.")
 
 
-class PartlyDeprecatedEnum(RemoteEnum):
+class NamesEnum(_RemoteEnum):
+    """
+    An enumeration whose values are named after names in the generated code.
+    """
+    mro_ = 0, """
+A value named after the method of a Python class that Enum reserves.
+"""
+    to_string = 1, """
+A value named after a member of a JavaScript object.
+"""
+
+
+class PartlyDeprecatedEnum(_RemoteEnum):
     """
     Partly deprecated enum documentation string.
     """
@@ -42,10 +55,10 @@ Partly deprecated enum ValueB documentation string.
 """
 
 
-deprecate_attribute(PartlyDeprecatedEnum, "value_b", "TestService.PartlyDeprecatedEnum.value_b is deprecated: Use PartlyDeprecatedEnum.value_a instead.")
+_deprecate_attribute(PartlyDeprecatedEnum, "value_b", "TestService.PartlyDeprecatedEnum.value_b is deprecated: Use PartlyDeprecatedEnum.value_a instead.")
 
 
-class TestEnum(RemoteEnum):
+class TestEnum(_RemoteEnum):
     """
     Enum documentation string.
     """
@@ -61,7 +74,7 @@ Enum ValueC documentation string, in m/s², equal to
 """
 
 
-class TestFlags(RemoteFlags):
+class TestFlags(_RemoteFlags):
     """
     Flags documentation string.
     """
@@ -82,20 +95,20 @@ Flags ValueAB documentation string.
 """
 
 
-@deprecated("Use TestStruct instead.")
-class DeprecatedStruct(NamedTuple):
+@_deprecated("Use TestStruct instead.")
+class DeprecatedStruct(_NamedTuple):
     """
     Deprecated. Use TestStruct instead.
 
     Deprecated struct documentation string.
     """
-    value: int
+    value: _builtins.int
     """
     Deprecated. Use TestStruct instead.
 
     Deprecated struct Value documentation string.
     """
-    old_value: int
+    old_value: _builtins.int
     """
     Deprecated. Use DeprecatedStruct.value instead.
 
@@ -103,19 +116,49 @@ class DeprecatedStruct(NamedTuple):
     """
 
 
-deprecate_attribute(DeprecatedStruct, "value", "TestService.DeprecatedStruct.value is deprecated: Use TestStruct instead.")
-deprecate_attribute(DeprecatedStruct, "old_value", "TestService.DeprecatedStruct.old_value is deprecated: Use DeprecatedStruct.value instead.")
+_deprecate_attribute(DeprecatedStruct, "value", "TestService.DeprecatedStruct.value is deprecated: Use TestStruct instead.")
+_deprecate_attribute(DeprecatedStruct, "old_value", "TestService.DeprecatedStruct.old_value is deprecated: Use DeprecatedStruct.value instead.")
 
 
-class PartlyDeprecatedStruct(NamedTuple):
+class NamesStruct(_NamedTuple):
+    """
+    A structure whose fields are named after names in the generated code.
+    """
+    other: _builtins.int
+    """
+    A value.
+    """
+    result: _builtins.int
+    """
+    A value.
+    """
+    java: _builtins.int
+    """
+    A value.
+    """
+    krpc: _builtins.int
+    """
+    A value.
+    """
+    class_: _builtins.int
+    """
+    A value.
+    """
+    bound: _builtins.int
+    """
+    A value named after the class of static methods bound to a connection.
+    """
+
+
+class PartlyDeprecatedStruct(_NamedTuple):
     """
     Partly deprecated struct documentation string.
     """
-    value: int
+    value: _builtins.int
     """
     Partly deprecated struct Value documentation string.
     """
-    old_value: int
+    old_value: _builtins.int
     """
     Deprecated. Use PartlyDeprecatedStruct.value instead.
 
@@ -123,62 +166,62 @@ class PartlyDeprecatedStruct(NamedTuple):
     """
 
 
-deprecate_attribute(PartlyDeprecatedStruct, "old_value", "TestService.PartlyDeprecatedStruct.old_value is deprecated: Use PartlyDeprecatedStruct.value instead.")
+_deprecate_attribute(PartlyDeprecatedStruct, "old_value", "TestService.PartlyDeprecatedStruct.old_value is deprecated: Use PartlyDeprecatedStruct.value instead.")
 
 
-class TestFlagsStruct(NamedTuple):
+class TestFlagsStruct(_NamedTuple):
     """
     Flags struct documentation string.
     """
     flags_field: TestFlags
 
 
-class TestNestedNullableStruct(NamedTuple):
+class TestNestedNullableStruct(_NamedTuple):
     """
     Nested nullable struct documentation string.
     """
-    list_field: List[Optional[TestClass]]
-    string_field: str
+    list_field: _List[_Optional[TestClass]]
+    string_field: _builtins.str
 
 
-class TestStruct(NamedTuple):
+class TestStruct(_NamedTuple):
     """
     Struct documentation string.
     """
-    int_field: int
+    int_field: _builtins.int
     """
     Struct IntField documentation string.
     """
-    string_field: str
+    string_field: _builtins.str
     enum_field: TestEnum
-    list_field: List[int]
+    list_field: _List[_builtins.int]
 
 
-class TestNestedStruct(NamedTuple):
+class TestNestedStruct(_NamedTuple):
     """
     Nested struct documentation string.
     """
     struct_field: TestStruct
     object_field: TestClass
-    string_field: str
+    string_field: _builtins.str
 
 
-class TestNullableStruct(NamedTuple):
+class TestNullableStruct(_NamedTuple):
     """
     Nullable struct documentation string.
     """
-    int_field: int
-    nullable_int_field: Optional[int]
-    nullable_enum_field: Optional[TestEnum]
-    nullable_string_field: Optional[str]
-    nullable_object_field: Optional[TestClass]
+    int_field: _builtins.int
+    nullable_int_field: _Optional[_builtins.int]
+    nullable_enum_field: _Optional[TestEnum]
+    nullable_string_field: _Optional[_builtins.str]
+    nullable_object_field: _Optional[TestClass]
 
 
 class CustomException(krpc.error.ServerError):
     pass
 
 
-@deprecated("Use CustomException instead.")
+@_deprecated("Use CustomException instead.")
 class DeprecatedException(krpc.error.ServerError):
     """
     Deprecated. Use CustomException instead.
@@ -187,8 +230,75 @@ class DeprecatedException(krpc.error.ServerError):
     """
 
 
-@deprecated("Use TestClass instead.")
-class DeprecatedClass(DeclaredObject, metaclass=DeclaredClass):
+class RuntimeError(krpc.error.ServerError):
+    """
+    An exception named RuntimeError.
+    """
+
+
+class Bound(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named after the class a class with static methods nests.
+    """
+    _service_name = "TestService"
+    _class_name = "Bound"
+
+    @_builtins.staticmethod
+    def make() -> _builtins.int:
+        """
+        A static method, which gives the class its nested class of static methods.
+        """
+        raise _declaration("TestService", "Bound")
+
+
+
+class ByteString(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named ByteString.
+    """
+    _service_name = "TestService"
+    _class_name = "ByteString"
+
+
+
+class ClassBase(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named ClassBase.
+    """
+    _service_name = "TestService"
+    _class_name = "ClassBase"
+
+
+
+class Client(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Client.
+    """
+    _service_name = "TestService"
+    _class_name = "Client"
+
+
+
+class ClientService(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named after the alias of the service in the generated JavaScript.
+    """
+    _service_name = "TestService"
+    _class_name = "ClientService"
+
+
+
+class Connection(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Connection.
+    """
+    _service_name = "TestService"
+    _class_name = "Connection"
+
+
+
+@_deprecated("Use TestClass instead.")
+class DeprecatedClass(_DeclaredObject, metaclass=_DeclaredClass):
     """
     Deprecated. Use TestClass instead.
 
@@ -197,9 +307,9 @@ class DeprecatedClass(DeclaredObject, metaclass=DeclaredClass):
     _service_name = "TestService"
     _class_name = "DeprecatedClass"
 
-    @property
-    @deprecated("Use TestClass instead.")
-    def inherited_property(self) -> str:
+    @_builtins.property
+    @_deprecated("Use TestClass instead.")
+    def inherited_property(self) -> _builtins.str:
         """
         Deprecated. Use TestClass instead.
 
@@ -208,12 +318,12 @@ class DeprecatedClass(DeclaredObject, metaclass=DeclaredClass):
         raise _declaration("TestService", "DeprecatedClass")
 
     @inherited_property.setter
-    @deprecated("Use TestClass instead.")
-    def inherited_property(self, value: str) -> None:
+    @_deprecated("Use TestClass instead.")
+    def inherited_property(self, value: _builtins.str) -> None:
         raise _declaration("TestService", "DeprecatedClass")
 
-    @deprecated("Use TestClass.get_value instead.")
-    def deprecated_method(self) -> str:
+    @_deprecated("Use TestClass.get_value instead.")
+    def deprecated_method(self) -> _builtins.str:
         """
         Deprecated. Use TestClass.get_value instead.
 
@@ -221,8 +331,8 @@ class DeprecatedClass(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("TestService", "DeprecatedClass")
 
-    @deprecated("Use TestClass instead.")
-    def inherited_method(self) -> str:
+    @_deprecated("Use TestClass instead.")
+    def inherited_method(self) -> _builtins.str:
         """
         Deprecated. Use TestClass instead.
 
@@ -230,9 +340,9 @@ class DeprecatedClass(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("TestService", "DeprecatedClass")
 
-    @staticmethod
-    @deprecated("Use TestClass instead.")
-    def inherited_static_method() -> str:
+    @_builtins.staticmethod
+    @_deprecated("Use TestClass instead.")
+    def inherited_static_method() -> _builtins.str:
         """
         Deprecated. Use TestClass instead.
 
@@ -242,26 +352,324 @@ class DeprecatedClass(DeclaredObject, metaclass=DeclaredClass):
 
 
 
-class TestClass(DeclaredObject, metaclass=DeclaredClass):
+class DocEnum(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named DocEnum.
+    """
+    _service_name = "TestService"
+    _class_name = "DocEnum"
+
+
+
+class Encoder(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Encoder.
+    """
+    _service_name = "TestService"
+    _class_name = "Encoder"
+
+
+
+class Event(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Event.
+    """
+    _service_name = "TestService"
+    _class_name = "Event"
+
+
+
+class Exception(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Exception.
+    """
+    _service_name = "TestService"
+    _class_name = "Exception"
+
+
+
+class ExtensionMethods(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named after the class that reaches a service in the generated C# code.
+    """
+    _service_name = "TestService"
+    _class_name = "ExtensionMethods"
+
+
+
+class IConnection(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named IConnection.
+    """
+    _service_name = "TestService"
+    _class_name = "IConnection"
+
+
+
+class IEquatable(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named IEquatable.
+    """
+    _service_name = "TestService"
+    _class_name = "IEquatable"
+
+
+
+class List(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named List.
+    """
+    _service_name = "TestService"
+    _class_name = "List"
+
+
+
+class NamedTuple(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named NamedTuple.
+    """
+    _service_name = "TestService"
+    _class_name = "NamedTuple"
+
+
+
+class Names(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class whose members are named after names in the generated code.
+    """
+    _service_name = "TestService"
+    _class_name = "Names"
+
+    @_builtins.property
+    def property(self) -> _builtins.int:
+        """
+        A property named after a Python builtin.
+        """
+        raise _declaration("TestService", "Names")
+
+    @property.setter
+    def property(self, value: _builtins.int) -> None:
+        raise _declaration("TestService", "Names")
+
+    @_builtins.property
+    def value(self) -> _builtins.int:
+        """
+        A property declared after the property named Property.
+        """
+        raise _declaration("TestService", "Names")
+
+    @value.setter
+    def value(self, value: _builtins.int) -> None:
+        raise _declaration("TestService", "Names")
+
+    def bound(self) -> _builtins.int:
+        """
+        A method named after the class that holds the bound static methods of a class.
+        """
+        raise _declaration("TestService", "Names")
+
+    def class_of(self) -> _builtins.int:
+        """
+        A method named after a method of a Penlight class.
+        """
+        raise _declaration("TestService", "Names")
+
+    def float(self) -> _builtins.int:
+        """
+        A method named after a Python builtin.
+        """
+        raise _declaration("TestService", "Names")
+
+    def hash_code(self) -> _builtins.int:
+        """
+        A method named after a method of java.lang.Object.
+        """
+        raise _declaration("TestService", "Names")
+
+    def instance_parameters(self, client: _builtins.int, connection: _builtins.int, instance: _builtins.int, return_value: _builtins.int, return_value_is_null: _builtins.int, null: _builtins.int, krpc: _builtins.int, java: _builtins.int, com: _builtins.int, org: _builtins.int, nameof: _builtins.int, self_: _builtins.int, cls_: _builtins.int, invoke: _builtins.int, procedure_call: _builtins.int) -> _builtins.int:
+        """
+        A method with parameters named after names in the generated code.
+        """
+        raise _declaration("TestService", "Names")
+
+    def krpc(self) -> _builtins.int:
+        """
+        A method named after the Python client package.
+        """
+        raise _declaration("TestService", "Names")
+
+    def to_string(self, value: _builtins.int) -> _builtins.str:
+        """
+        A method named after a method of java.lang.Object.
+        """
+        raise _declaration("TestService", "Names")
+
+    def with_defaults(self, x: _builtins.float = _builtins.float("nan"), y: _builtins.int = _limits.SINT32_MAX) -> _builtins.float:
+        """
+        A method declared after methods named after Python builtins, with defaults that
+        name them.
+        """
+        raise _declaration("TestService", "Names")
+
+    @_builtins.staticmethod
+    def bind() -> _builtins.int:
+        """
+        A static method named after the method that binds the static methods of a class
+        to a connection.
+        """
+        raise _declaration("TestService", "Names")
+
+    @_builtins.staticmethod
+    def make_struct(bound: _builtins.int) -> NamesStruct:
+        """
+        A structure with the given value in its field named Bound.
+
+        :param bound: The value.
+        """
+        raise _declaration("TestService", "Names")
+
+    @_builtins.staticmethod
+    def parameters(client: _builtins.int, connection: _builtins.int, instance: _builtins.int, return_value: _builtins.int, return_value_is_null: _builtins.int, null: _builtins.int, krpc: _builtins.int, java: _builtins.int, com: _builtins.int, org: _builtins.int, nameof: _builtins.int, self_: _builtins.int, cls_: _builtins.int, invoke: _builtins.int, procedure_call: _builtins.int) -> _builtins.int:
+        """
+        A static method with parameters named after names in the generated code.
+        """
+        raise _declaration("TestService", "Names")
+
+    @_builtins.staticmethod
+    def uint_64t() -> _builtins.int:
+        """
+        A method named after a C++ integer type.
+        """
+        raise _declaration("TestService", "Names")
+
+
+
+class None_(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named after a keyword of Python.
+    """
+    _service_name = "TestService"
+    _class_name = "None"
+
+
+
+class Object(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Object.
+    """
+    _service_name = "TestService"
+    _class_name = "Object"
+
+    @_builtins.property
+    def name(self) -> _builtins.str:
+        """
+        The name of the object.
+        """
+        raise _declaration("TestService", "Object")
+
+
+
+class Optional(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Optional.
+    """
+    _service_name = "TestService"
+    _class_name = "Optional"
+
+
+
+class Override(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Override.
+    """
+    _service_name = "TestService"
+    _class_name = "Override"
+
+
+
+class RPCException(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named RPCException.
+    """
+    _service_name = "TestService"
+    _class_name = "RPCException"
+
+
+
+class RemoteObject(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named RemoteObject.
+    """
+    _service_name = "TestService"
+    _class_name = "RemoteObject"
+
+
+
+class Serializable(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Serializable.
+    """
+    _service_name = "TestService"
+    _class_name = "Serializable"
+
+
+
+class Server(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named after the namespace of server forms in the generated JavaScript.
+    """
+    _service_name = "TestService"
+    _class_name = "Server"
+
+
+
+class Service(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named after the class a generated module or namespace declares for its service.
+    """
+    _service_name = "TestService"
+    _class_name = "Service"
+
+
+
+class Stream(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Stream.
+    """
+    _service_name = "TestService"
+    _class_name = "Stream"
+
+
+
+class String(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named String.
+    """
+    _service_name = "TestService"
+    _class_name = "String"
+
+
+
+class TestClass(_DeclaredObject, metaclass=_DeclaredClass):
     """
     Class documentation string.
     """
     _service_name = "TestService"
     _class_name = "TestClass"
 
-    @property
-    def int_property(self) -> int:
+    @_builtins.property
+    def int_property(self) -> _builtins.int:
         """
         Property documentation string.
         """
         raise _declaration("TestService", "TestClass")
 
     @int_property.setter
-    def int_property(self, value: int) -> None:
+    def int_property(self, value: _builtins.int) -> None:
         raise _declaration("TestService", "TestClass")
 
-    @property
-    def object_property(self) -> Optional[TestClass]:
+    @_builtins.property
+    def object_property(self) -> _Optional[TestClass]:
         """
         A property of the object, holding another object.
 
@@ -270,41 +678,41 @@ class TestClass(DeclaredObject, metaclass=DeclaredClass):
         raise _declaration("TestService", "TestClass")
 
     @object_property.setter
-    def object_property(self, value: Optional[TestClass]) -> None:
+    def object_property(self, value: _Optional[TestClass]) -> None:
         raise _declaration("TestService", "TestClass")
 
-    @property
-    def string_property_private_get(self) -> str:
+    @_builtins.property
+    def string_property_private_get(self) -> _builtins.str:
         raise _declaration("TestService", "TestClass")
 
     @string_property_private_get.setter
-    def string_property_private_get(self, value: str) -> None:
+    def string_property_private_get(self, value: _builtins.str) -> None:
         raise _declaration("TestService", "TestClass")
 
-    @property
-    def string_property_private_set(self) -> str:
+    @_builtins.property
+    def string_property_private_set(self) -> _builtins.str:
         raise _declaration("TestService", "TestClass")
 
-    def echo_nullable_object(self, value: Optional[TestClass]) -> Optional[TestClass]:
+    def echo_nullable_object(self, value: _Optional[TestClass]) -> _Optional[TestClass]:
         raise _declaration("TestService", "TestClass")
 
-    def float_to_string(self, x: float) -> str:
+    def float_to_string(self, x: _builtins.float) -> _builtins.str:
         raise _declaration("TestService", "TestClass")
 
-    def get_value(self) -> str:
+    def get_value(self) -> _builtins.str:
         """
         Method documentation string.
         """
         raise _declaration("TestService", "TestClass")
 
-    def object_to_string(self, other: Optional[TestClass]) -> str:
+    def object_to_string(self, other: _Optional[TestClass]) -> _builtins.str:
         raise _declaration("TestService", "TestClass")
 
-    def optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> str:
+    def optional_arguments(self, x: _builtins.str, y: _builtins.str = 'foo', z: _builtins.str = 'bar', obj: _Optional[TestClass] = None) -> _builtins.str:
         raise _declaration("TestService", "TestClass")
 
-    @staticmethod
-    def static_method(a: str = '', b: str = '') -> str:
+    @_builtins.staticmethod
+    def static_method(a: _builtins.str = '', b: _builtins.str = '') -> _builtins.str:
         """
         Returns static followed by *a* and *b*.
 
@@ -316,62 +724,166 @@ class TestClass(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("TestService", "TestClass")
 
-    @staticmethod
-    def static_nullable_object(value: Optional[TestClass]) -> Optional[TestClass]:
+    @_builtins.staticmethod
+    def static_nullable_object(value: _Optional[TestClass]) -> _Optional[TestClass]:
         raise _declaration("TestService", "TestClass")
 
-    @staticmethod
-    def static_optional_arguments(x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> str:
+    @_builtins.staticmethod
+    def static_optional_arguments(x: _builtins.str, y: _builtins.str = 'foo', z: _builtins.str = 'bar', obj: _Optional[TestClass] = None) -> _builtins.str:
         raise _declaration("TestService", "TestClass")
+
+
+
+class TestServiceConnection_(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named after the connection type of the generated Python module.
+    """
+    _service_name = "TestService"
+    _class_name = "TestServiceConnection"
+
+
+
+class Tuple(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named Tuple.
+    """
+    _service_name = "TestService"
+    _class_name = "Tuple"
+
+
+
+class TypeSpecs(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named TypeSpecs.
+    """
+    _service_name = "TestService"
+    _class_name = "TypeSpecs"
+
+
+
+class UInt64(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named UInt64.
+    """
+    _service_name = "TestService"
+    _class_name = "UInt64"
 
 
 
 # Aliases for the types the service declares as its attributes, as an annotation in the body of
 # the service would otherwise name the attribute itself
 if TYPE_CHECKING:
-    _DeprecatedClass = DeprecatedClass
-    _TestClass = TestClass
-    _DeprecatedEnum = DeprecatedEnum
-    _PartlyDeprecatedEnum = PartlyDeprecatedEnum
-    _TestEnum = TestEnum
-    _TestFlags = TestFlags
-    _DeprecatedStruct = DeprecatedStruct
-    _PartlyDeprecatedStruct = PartlyDeprecatedStruct
-    _TestFlagsStruct = TestFlagsStruct
-    _TestNestedNullableStruct = TestNestedNullableStruct
-    _TestStruct = TestStruct
-    _TestNestedStruct = TestNestedStruct
-    _TestNullableStruct = TestNullableStruct
-    _CustomException = CustomException
-    _DeprecatedException = DeprecatedException
+    _type_Bound = Bound
+    _type_ByteString = ByteString
+    _type_ClassBase = ClassBase
+    _type_Client = Client
+    _type_ClientService = ClientService
+    _type_Connection = Connection
+    _type_DeprecatedClass = DeprecatedClass
+    _type_DocEnum = DocEnum
+    _type_Encoder = Encoder
+    _type_Event = Event
+    _type_Exception = Exception
+    _type_ExtensionMethods = ExtensionMethods
+    _type_IConnection = IConnection
+    _type_IEquatable = IEquatable
+    _type_List = List
+    _type_NamedTuple = NamedTuple
+    _type_Names = Names
+    _type_None_ = None_
+    _type_Object = Object
+    _type_Optional = Optional
+    _type_Override = Override
+    _type_RPCException = RPCException
+    _type_RemoteObject = RemoteObject
+    _type_Serializable = Serializable
+    _type_Server = Server
+    _type_Service = Service
+    _type_Stream = Stream
+    _type_String = String
+    _type_TestClass = TestClass
+    _type_TestServiceConnection_ = TestServiceConnection_
+    _type_Tuple = Tuple
+    _type_TypeSpecs = TypeSpecs
+    _type_UInt64 = UInt64
+    _type_DeprecatedEnum = DeprecatedEnum
+    _type_NamesEnum = NamesEnum
+    _type_PartlyDeprecatedEnum = PartlyDeprecatedEnum
+    _type_TestEnum = TestEnum
+    _type_TestFlags = TestFlags
+    _type_DeprecatedStruct = DeprecatedStruct
+    _type_NamesStruct = NamesStruct
+    _type_PartlyDeprecatedStruct = PartlyDeprecatedStruct
+    _type_TestFlagsStruct = TestFlagsStruct
+    _type_TestNestedNullableStruct = TestNestedNullableStruct
+    _type_TestStruct = TestStruct
+    _type_TestNestedStruct = TestNestedStruct
+    _type_TestNullableStruct = TestNullableStruct
+    _type_CustomException = CustomException
+    _type_DeprecatedException = DeprecatedException
+    _type_RuntimeError = RuntimeError
 
 
-class TestService(metaclass=DeclaredClass):
+class TestService(metaclass=_DeclaredClass):
     """
     Service documentation string.
     """
     _service_name = "TestService"
     _class_name = None
 
-    DeprecatedClass: type[_DeprecatedClass] = DeprecatedClass
-    TestClass: type[_TestClass] = TestClass
-    DeprecatedEnum: type[_DeprecatedEnum] = DeprecatedEnum
-    PartlyDeprecatedEnum: type[_PartlyDeprecatedEnum] = PartlyDeprecatedEnum
-    TestEnum: type[_TestEnum] = TestEnum
-    TestFlags: type[_TestFlags] = TestFlags
-    DeprecatedStruct: type[_DeprecatedStruct] = DeprecatedStruct
-    PartlyDeprecatedStruct: type[_PartlyDeprecatedStruct] = PartlyDeprecatedStruct
-    TestFlagsStruct: type[_TestFlagsStruct] = TestFlagsStruct
-    TestNestedNullableStruct: type[_TestNestedNullableStruct] = TestNestedNullableStruct
-    TestStruct: type[_TestStruct] = TestStruct
-    TestNestedStruct: type[_TestNestedStruct] = TestNestedStruct
-    TestNullableStruct: type[_TestNullableStruct] = TestNullableStruct
-    CustomException: type[_CustomException] = CustomException
-    DeprecatedException: type[_DeprecatedException] = DeprecatedException
+    Bound: type[_type_Bound] = Bound
+    ByteString: type[_type_ByteString] = ByteString
+    ClassBase: type[_type_ClassBase] = ClassBase
+    Client: type[_type_Client] = Client
+    ClientService: type[_type_ClientService] = ClientService
+    Connection: type[_type_Connection] = Connection
+    DeprecatedClass: type[_type_DeprecatedClass] = DeprecatedClass
+    DocEnum: type[_type_DocEnum] = DocEnum
+    Encoder: type[_type_Encoder] = Encoder
+    Event: type[_type_Event] = Event
+    Exception: type[_type_Exception] = Exception
+    ExtensionMethods: type[_type_ExtensionMethods] = ExtensionMethods
+    IConnection: type[_type_IConnection] = IConnection
+    IEquatable: type[_type_IEquatable] = IEquatable
+    List: type[_type_List] = List
+    NamedTuple: type[_type_NamedTuple] = NamedTuple
+    Names: type[_type_Names] = Names
+    None_: type[_type_None_] = None_
+    Object: type[_type_Object] = Object
+    Optional: type[_type_Optional] = Optional
+    Override: type[_type_Override] = Override
+    RPCException: type[_type_RPCException] = RPCException
+    RemoteObject: type[_type_RemoteObject] = RemoteObject
+    Serializable: type[_type_Serializable] = Serializable
+    Server: type[_type_Server] = Server
+    Service: type[_type_Service] = Service
+    Stream: type[_type_Stream] = Stream
+    String: type[_type_String] = String
+    TestClass: type[_type_TestClass] = TestClass
+    TestServiceConnection_: type[_type_TestServiceConnection_] = TestServiceConnection_
+    Tuple: type[_type_Tuple] = Tuple
+    TypeSpecs: type[_type_TypeSpecs] = TypeSpecs
+    UInt64: type[_type_UInt64] = UInt64
+    DeprecatedEnum: type[_type_DeprecatedEnum] = DeprecatedEnum
+    NamesEnum: type[_type_NamesEnum] = NamesEnum
+    PartlyDeprecatedEnum: type[_type_PartlyDeprecatedEnum] = PartlyDeprecatedEnum
+    TestEnum: type[_type_TestEnum] = TestEnum
+    TestFlags: type[_type_TestFlags] = TestFlags
+    DeprecatedStruct: type[_type_DeprecatedStruct] = DeprecatedStruct
+    NamesStruct: type[_type_NamesStruct] = NamesStruct
+    PartlyDeprecatedStruct: type[_type_PartlyDeprecatedStruct] = PartlyDeprecatedStruct
+    TestFlagsStruct: type[_type_TestFlagsStruct] = TestFlagsStruct
+    TestNestedNullableStruct: type[_type_TestNestedNullableStruct] = TestNestedNullableStruct
+    TestStruct: type[_type_TestStruct] = TestStruct
+    TestNestedStruct: type[_type_TestNestedStruct] = TestNestedStruct
+    TestNullableStruct: type[_type_TestNullableStruct] = TestNullableStruct
+    CustomException: type[_type_CustomException] = CustomException
+    DeprecatedException: type[_type_DeprecatedException] = DeprecatedException
+    RuntimeError: type[_type_RuntimeError] = RuntimeError
 
-    @property
-    @deprecated("Use string_property instead.")
-    def deprecated_property(self) -> str:
+    @_builtins.property
+    @_deprecated("Use string_property instead.")
+    def deprecated_property(self) -> _builtins.str:
         """
         Deprecated. Use string_property instead.
 
@@ -380,20 +892,20 @@ class TestService(metaclass=DeclaredClass):
         raise _declaration("TestService", None)
 
     @deprecated_property.setter
-    @deprecated("Use string_property instead.")
-    def deprecated_property(self, value: str) -> None:
+    @_deprecated("Use string_property instead.")
+    def deprecated_property(self, value: _builtins.str) -> None:
         raise _declaration("TestService", None)
 
-    @property
-    def nullable_object(self) -> Optional[TestClass]:
+    @_builtins.property
+    def nullable_object(self) -> _Optional[TestClass]:
         raise _declaration("TestService", None)
 
     @nullable_object.setter
-    def nullable_object(self, value: Optional[TestClass]) -> None:
+    def nullable_object(self, value: _Optional[TestClass]) -> None:
         raise _declaration("TestService", None)
 
-    @property
-    def object_property(self) -> Optional[TestClass]:
+    @_builtins.property
+    def object_property(self) -> _Optional[TestClass]:
         """
         A property holding an object.
 
@@ -402,67 +914,67 @@ class TestService(metaclass=DeclaredClass):
         raise _declaration("TestService", None)
 
     @object_property.setter
-    def object_property(self, value: Optional[TestClass]) -> None:
+    def object_property(self, value: _Optional[TestClass]) -> None:
         raise _declaration("TestService", None)
 
-    @property
-    def string_property(self) -> str:
+    @_builtins.property
+    def string_property(self) -> _builtins.str:
         """
         Property documentation string.
         """
         raise _declaration("TestService", None)
 
     @string_property.setter
-    def string_property(self, value: str) -> None:
+    def string_property(self, value: _builtins.str) -> None:
         raise _declaration("TestService", None)
 
-    @property
-    def string_property_private_get(self) -> str:
+    @_builtins.property
+    def string_property_private_get(self) -> _builtins.str:
         raise _declaration("TestService", None)
 
     @string_property_private_get.setter
-    def string_property_private_get(self, value: str) -> None:
+    def string_property_private_get(self, value: _builtins.str) -> None:
         raise _declaration("TestService", None)
 
-    @property
-    def string_property_private_set(self) -> str:
+    @_builtins.property
+    def string_property_private_set(self) -> _builtins.str:
         raise _declaration("TestService", None)
 
-    def add_multiple_values(self, x: float, y: int, z: int) -> str:
+    def add_multiple_values(self, x: _builtins.float, y: _builtins.int, z: _builtins.int) -> _builtins.str:
         raise _declaration("TestService", None)
 
-    def add_to_object_dictionary(self, d: Dict[str, TestClass], key: str) -> Dict[str, TestClass]:
+    def add_to_object_dictionary(self, d: _Dict[_builtins.str, TestClass], key: _builtins.str) -> _Dict[_builtins.str, TestClass]:
         raise _declaration("TestService", None)
 
-    def add_to_object_list(self, l: List[TestClass], value: str) -> List[TestClass]:
+    def add_to_object_list(self, l: _List[TestClass], value: _builtins.str) -> _List[TestClass]:
         raise _declaration("TestService", None)
 
-    def add_to_object_set(self, h: Set[TestClass], value: str) -> Set[TestClass]:
+    def add_to_object_set(self, h: _Set[TestClass], value: _builtins.str) -> _Set[TestClass]:
         raise _declaration("TestService", None)
 
-    def blocking_procedure(self, n: int, sum: int = 0) -> int:
+    def blocking_procedure(self, n: _builtins.int, sum: _builtins.int = 0) -> _builtins.int:
         raise _declaration("TestService", None)
 
-    def bool_to_string(self, value: bool) -> str:
+    def bool_to_string(self, value: _builtins.bool) -> _builtins.str:
         raise _declaration("TestService", None)
 
-    def bytes_default(self, x: bytes = b'\xca\xfe') -> bytes:
+    def bytes_default(self, x: _builtins.bytes = b'\xca\xfe') -> _builtins.bytes:
         raise _declaration("TestService", None)
 
-    def bytes_to_hex_string(self, value: bytes) -> str:
+    def bytes_to_hex_string(self, value: _builtins.bytes) -> _builtins.str:
         raise _declaration("TestService", None)
 
-    def counter(self, id: str = '', divisor: int = 1) -> int:
+    def counter(self, id: _builtins.str = '', divisor: _builtins.int = 1) -> _builtins.int:
         raise _declaration("TestService", None)
 
-    def counter_struct(self, id: str = '') -> TestStruct:
+    def counter_struct(self, id: _builtins.str = '') -> TestStruct:
         """
         Returns a struct whose IntField counts the number of times it has been called,
         so that a stream on it changes on every update.
         """
         raise _declaration("TestService", None)
 
-    @deprecated("Use create_test_object instead.")
+    @_deprecated("Use create_test_object instead.")
     def create_deprecated_class(self) -> DeprecatedClass:
         """
         Deprecated. Use create_test_object instead.
@@ -471,11 +983,21 @@ class TestService(metaclass=DeclaredClass):
         """
         raise _declaration("TestService", None)
 
-    def create_test_object(self, value: str) -> TestClass:
+    def create_object(self, name: _builtins.str) -> Object:
+        """
+        A new object of the class named Object.
+
+        :param name: The name of the object.
+
+        :returns: The object.
+        """
         raise _declaration("TestService", None)
 
-    @deprecated("Use float_to_string instead.")
-    def deprecated_procedure(self, value: float) -> str:
+    def create_test_object(self, value: _builtins.str) -> TestClass:
+        raise _declaration("TestService", None)
+
+    @_deprecated("Use float_to_string instead.")
+    def deprecated_procedure(self, value: _builtins.float) -> _builtins.str:
         """
         Deprecated. Use float_to_string instead.
 
@@ -483,8 +1005,8 @@ class TestService(metaclass=DeclaredClass):
         """
         raise _declaration("TestService", None)
 
-    @deprecated("")
-    def deprecated_procedure_no_message(self, value: float) -> str:
+    @_deprecated("")
+    def deprecated_procedure_no_message(self, value: _builtins.float) -> _builtins.str:
         """
         Deprecated.
 
@@ -492,7 +1014,7 @@ class TestService(metaclass=DeclaredClass):
         """
         raise _declaration("TestService", None)
 
-    @deprecated("Use TestStruct instead.")
+    @_deprecated("Use TestStruct instead.")
     def deprecated_struct_procedure(self) -> DeprecatedStruct:
         """
         Deprecated. Use TestStruct instead.
@@ -501,61 +1023,61 @@ class TestService(metaclass=DeclaredClass):
         """
         raise _declaration("TestService", None)
 
-    def dictionary_default(self, x: Dict[int, bool] = {1: False, 2: True}) -> Dict[int, bool]:
+    def dictionary_default(self, x: _Dict[_builtins.int, _builtins.bool] = {1: False, 2: True}) -> _Dict[_builtins.int, _builtins.bool]:
         raise _declaration("TestService", None)
 
-    def double_special_defaults(self, nan: float = float("nan"), infinity: float = float("inf"), negative_infinity: float = -float("inf"), maximum: float = krpc.limits.DOUBLE_MAX, lowest: float = krpc.limits.DOUBLE_LOWEST) -> List[float]:
+    def double_special_defaults(self, nan: _builtins.float = _builtins.float("nan"), infinity: _builtins.float = _builtins.float("inf"), negative_infinity: _builtins.float = -_builtins.float("inf"), maximum: _builtins.float = _limits.DOUBLE_MAX, lowest: _builtins.float = _limits.DOUBLE_LOWEST) -> _List[_builtins.float]:
         """
         Procedure whose defaults are the special values of double.
         """
         raise _declaration("TestService", None)
 
-    def double_to_string(self, value: float) -> str:
+    def double_to_string(self, value: _builtins.float) -> _builtins.str:
         raise _declaration("TestService", None)
 
-    def dump_expression_tree(self, expression: _service_krpc.Expression) -> str:
+    def dump_expression_tree(self, expression: _service_krpc.Expression) -> _builtins.str:
         """
         The expression tree of a function, as text.
         """
         raise _declaration("TestService", None)
 
-    def echo_dictionary_of_nullable_objects(self, d: Dict[str, Optional[TestClass]]) -> Dict[str, Optional[TestClass]]:
+    def echo_dictionary_of_nullable_objects(self, d: _Dict[_builtins.str, _Optional[TestClass]]) -> _Dict[_builtins.str, _Optional[TestClass]]:
         raise _declaration("TestService", None)
 
-    def echo_list_of_nullable_ints(self, l: List[Optional[int]]) -> List[Optional[int]]:
+    def echo_list_of_nullable_ints(self, l: _List[_Optional[_builtins.int]]) -> _List[_Optional[_builtins.int]]:
         raise _declaration("TestService", None)
 
-    def echo_list_of_nullable_objects(self, l: List[Optional[TestClass]]) -> List[Optional[TestClass]]:
+    def echo_list_of_nullable_objects(self, l: _List[_Optional[TestClass]]) -> _List[_Optional[TestClass]]:
         raise _declaration("TestService", None)
 
-    def echo_nested_list_of_nullable_objects(self, l: List[List[Optional[TestClass]]]) -> List[List[Optional[TestClass]]]:
+    def echo_nested_list_of_nullable_objects(self, l: _List[_List[_Optional[TestClass]]]) -> _List[_List[_Optional[TestClass]]]:
         raise _declaration("TestService", None)
 
     def echo_nested_nullable_struct(self, value: TestNestedNullableStruct) -> TestNestedNullableStruct:
         raise _declaration("TestService", None)
 
-    def echo_nullable_bool(self, value: Optional[bool]) -> Optional[bool]:
+    def echo_nullable_bool(self, value: _Optional[_builtins.bool]) -> _Optional[_builtins.bool]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_bytes(self, value: Optional[bytes]) -> Optional[bytes]:
+    def echo_nullable_bytes(self, value: _Optional[_builtins.bytes]) -> _Optional[_builtins.bytes]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_dictionary(self, d: Optional[Dict[str, int]]) -> Optional[Dict[str, int]]:
+    def echo_nullable_dictionary(self, d: _Optional[_Dict[_builtins.str, _builtins.int]]) -> _Optional[_Dict[_builtins.str, _builtins.int]]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_double(self, value: Optional[float]) -> Optional[float]:
+    def echo_nullable_double(self, value: _Optional[_builtins.float]) -> _Optional[_builtins.float]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_enum(self, x: Optional[TestEnum]) -> Optional[TestEnum]:
+    def echo_nullable_enum(self, x: _Optional[TestEnum]) -> _Optional[TestEnum]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_flags(self, x: Optional[TestFlags]) -> Optional[TestFlags]:
+    def echo_nullable_flags(self, x: _Optional[TestFlags]) -> _Optional[TestFlags]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_float(self, value: Optional[float]) -> Optional[float]:
+    def echo_nullable_float(self, value: _Optional[_builtins.float]) -> _Optional[_builtins.float]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_int(self, value: Optional[int]) -> Optional[int]:
+    def echo_nullable_int(self, value: _Optional[_builtins.int]) -> _Optional[_builtins.int]:
         """
         Returns the given value.
 
@@ -565,37 +1087,37 @@ class TestService(metaclass=DeclaredClass):
         """
         raise _declaration("TestService", None)
 
-    def echo_nullable_list(self, l: Optional[List[int]]) -> Optional[List[int]]:
+    def echo_nullable_list(self, l: _Optional[_List[_builtins.int]]) -> _Optional[_List[_builtins.int]]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_long(self, value: Optional[int]) -> Optional[int]:
+    def echo_nullable_long(self, value: _Optional[_builtins.int]) -> _Optional[_builtins.int]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_set(self, h: Optional[Set[int]]) -> Optional[Set[int]]:
+    def echo_nullable_set(self, h: _Optional[_Set[_builtins.int]]) -> _Optional[_Set[_builtins.int]]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_string(self, value: Optional[str]) -> Optional[str]:
+    def echo_nullable_string(self, value: _Optional[_builtins.str]) -> _Optional[_builtins.str]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_tuple(self, t: Optional[Tuple[int,int]]) -> Optional[Tuple[int,int]]:
+    def echo_nullable_tuple(self, t: _Optional[_Tuple[_builtins.int,_builtins.int]]) -> _Optional[_Tuple[_builtins.int,_builtins.int]]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_uint(self, value: Optional[int]) -> Optional[int]:
+    def echo_nullable_uint(self, value: _Optional[_builtins.int]) -> _Optional[_builtins.int]:
         raise _declaration("TestService", None)
 
-    def echo_nullable_ulong(self, value: Optional[int]) -> Optional[int]:
+    def echo_nullable_ulong(self, value: _Optional[_builtins.int]) -> _Optional[_builtins.int]:
         raise _declaration("TestService", None)
 
-    def echo_string_set(self, h: Set[str]) -> Set[str]:
+    def echo_string_set(self, h: _Set[_builtins.str]) -> _Set[_builtins.str]:
         raise _declaration("TestService", None)
 
-    def echo_test_object(self, value: Optional[TestClass]) -> Optional[TestClass]:
+    def echo_test_object(self, value: _Optional[TestClass]) -> _Optional[TestClass]:
         raise _declaration("TestService", None)
 
-    def echo_tuple_with_a_nullable_object(self, t: Tuple[int,Optional[TestClass]]) -> Tuple[int,Optional[TestClass]]:
+    def echo_tuple_with_a_nullable_object(self, t: _Tuple[_builtins.int,_Optional[TestClass]]) -> _Tuple[_builtins.int,_Optional[TestClass]]:
         raise _declaration("TestService", None)
 
-    def empty_list_default(self, x: List[str] = []) -> List[str]:
+    def empty_list_default(self, x: _List[_builtins.str] = []) -> _List[_builtins.str]:
         raise _declaration("TestService", None)
 
     def enum_default(self, x: TestEnum = TestEnum.value_c) -> TestEnum:
@@ -604,10 +1126,10 @@ class TestService(metaclass=DeclaredClass):
     def enum_echo(self, x: TestEnum) -> TestEnum:
         raise _declaration("TestService", None)
 
-    def enum_list_default(self, x: List[TestEnum] = [TestEnum.value_b, TestEnum.value_c]) -> List[TestEnum]:
+    def enum_list_default(self, x: _List[TestEnum] = [TestEnum.value_b, TestEnum.value_c]) -> _List[TestEnum]:
         raise _declaration("TestService", None)
 
-    def enum_to_string(self, x: TestEnum) -> str:
+    def enum_to_string(self, x: TestEnum) -> _builtins.str:
         raise _declaration("TestService", None)
 
     def flags_default(self, x: TestFlags = TestFlags.value_a | TestFlags.value_c) -> TestFlags:
@@ -616,71 +1138,71 @@ class TestService(metaclass=DeclaredClass):
     def flags_echo(self, x: TestFlags) -> TestFlags:
         raise _declaration("TestService", None)
 
-    def flags_list_echo(self, x: List[TestFlags]) -> List[TestFlags]:
+    def flags_list_echo(self, x: _List[TestFlags]) -> _List[TestFlags]:
         raise _declaration("TestService", None)
 
     def flags_struct_echo(self, x: TestFlagsStruct) -> TestFlagsStruct:
         raise _declaration("TestService", None)
 
-    def flags_to_int(self, x: TestFlags) -> int:
+    def flags_to_int(self, x: TestFlags) -> _builtins.int:
         raise _declaration("TestService", None)
 
-    def float_special_defaults(self, nan: float = float("nan"), infinity: float = float("inf"), negative_infinity: float = -float("inf"), maximum: float = krpc.limits.FLOAT_MAX, lowest: float = krpc.limits.FLOAT_LOWEST, fraction: float = 0.1) -> List[float]:
+    def float_special_defaults(self, nan: _builtins.float = _builtins.float("nan"), infinity: _builtins.float = _builtins.float("inf"), negative_infinity: _builtins.float = -_builtins.float("inf"), maximum: _builtins.float = _limits.FLOAT_MAX, lowest: _builtins.float = _limits.FLOAT_LOWEST, fraction: _builtins.float = 0.1) -> _List[_builtins.float]:
         """
         Procedure whose defaults are the special values of float, plus a finite fraction
         that no float can hold exactly.
         """
         raise _declaration("TestService", None)
 
-    def float_to_string(self, value: float) -> str:
+    def float_to_string(self, value: _builtins.float) -> _builtins.str:
         """
         Procedure documentation string.
         """
         raise _declaration("TestService", None)
 
-    def hex_string_to_bytes(self, value: str) -> bytes:
+    def hex_string_to_bytes(self, value: _builtins.str) -> _builtins.bytes:
         raise _declaration("TestService", None)
 
-    def increment_dictionary(self, d: Dict[str, int]) -> Dict[str, int]:
+    def increment_dictionary(self, d: _Dict[_builtins.str, _builtins.int]) -> _Dict[_builtins.str, _builtins.int]:
         raise _declaration("TestService", None)
 
-    def increment_list(self, l: List[int]) -> List[int]:
+    def increment_list(self, l: _List[_builtins.int]) -> _List[_builtins.int]:
         raise _declaration("TestService", None)
 
-    def increment_list_of_structs(self, l: List[TestStruct]) -> List[TestStruct]:
+    def increment_list_of_structs(self, l: _List[TestStruct]) -> _List[TestStruct]:
         raise _declaration("TestService", None)
 
-    def increment_nested_collection(self, d: Dict[str, List[int]]) -> Dict[str, List[int]]:
+    def increment_nested_collection(self, d: _Dict[_builtins.str, _List[_builtins.int]]) -> _Dict[_builtins.str, _List[_builtins.int]]:
         raise _declaration("TestService", None)
 
-    def increment_set(self, h: Set[int]) -> Set[int]:
+    def increment_set(self, h: _Set[_builtins.int]) -> _Set[_builtins.int]:
         raise _declaration("TestService", None)
 
-    def increment_tuple(self, t: Tuple[int,int]) -> Tuple[int,int]:
+    def increment_tuple(self, t: _Tuple[_builtins.int,_builtins.int]) -> _Tuple[_builtins.int,_builtins.int]:
         raise _declaration("TestService", None)
 
-    def int32_special_defaults(self, maximum: int = krpc.limits.SINT32_MAX, minimum: int = krpc.limits.SINT32_MIN) -> List[int]:
+    def int32_special_defaults(self, maximum: _builtins.int = _limits.SINT32_MAX, minimum: _builtins.int = _limits.SINT32_MIN) -> _List[_builtins.int]:
         """
         Procedure whose defaults are the extremes of int.
         """
         raise _declaration("TestService", None)
 
-    def int32_to_string(self, value: int) -> str:
+    def int32_to_string(self, value: _builtins.int) -> _builtins.str:
         raise _declaration("TestService", None)
 
-    def int64_special_defaults(self, maximum: int = krpc.limits.SINT64_MAX, minimum: int = krpc.limits.SINT64_MIN) -> List[int]:
+    def int64_special_defaults(self, maximum: _builtins.int = _limits.SINT64_MAX, minimum: _builtins.int = _limits.SINT64_MIN) -> _List[_builtins.int]:
         """
         Procedure whose defaults are the extremes of long.
         """
         raise _declaration("TestService", None)
 
-    def int64_to_string(self, value: int) -> str:
+    def int64_to_string(self, value: _builtins.int) -> _builtins.str:
         raise _declaration("TestService", None)
 
-    def int_to_flags(self, x: int) -> TestFlags:
+    def int_to_flags(self, x: _builtins.int) -> TestFlags:
         raise _declaration("TestService", None)
 
-    def join_with_at_sign(self, first_value: str, from_: str) -> str:
+    def join_with_at_sign(self, first_value: _builtins.str, from_: _builtins.str) -> _builtins.str:
         """
         Returns *first_value* and *from_* joined by an at
         sign, e.g. ``name@host``. The parameter names are:
@@ -696,7 +1218,7 @@ class TestService(metaclass=DeclaredClass):
         """
         raise _declaration("TestService", None)
 
-    def list_default(self, x: List[int] = [1, 2, 3]) -> List[int]:
+    def list_default(self, x: _List[_builtins.int] = [1, 2, 3]) -> _List[_builtins.int]:
         raise _declaration("TestService", None)
 
     def nested_struct_echo(self, x: TestNestedStruct) -> TestNestedStruct:
@@ -705,16 +1227,16 @@ class TestService(metaclass=DeclaredClass):
     def not_nullable_object(self, value: TestClass) -> TestClass:
         raise _declaration("TestService", None)
 
-    def null_default(self, obj: Optional[TestClass] = None) -> str:
+    def null_default(self, obj: _Optional[TestClass] = None) -> _builtins.str:
         raise _declaration("TestService", None)
 
     def nullable_struct_echo(self, x: TestNullableStruct) -> TestNullableStruct:
         raise _declaration("TestService", None)
 
-    def on_timer(self, milliseconds: int, repeats: int = 1) -> Event:
+    def on_timer(self, milliseconds: _builtins.int, repeats: _builtins.int = 1) -> _Event:
         raise _declaration("TestService", None)
 
-    def optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> str:
+    def optional_arguments(self, x: _builtins.str, y: _builtins.str = 'foo', z: _builtins.str = 'bar', obj: _Optional[TestClass] = None) -> _builtins.str:
         raise _declaration("TestService", None)
 
     def partly_deprecated_struct_procedure(self) -> PartlyDeprecatedStruct:
@@ -723,7 +1245,7 @@ class TestService(metaclass=DeclaredClass):
         """
         raise _declaration("TestService", None)
 
-    def remove_event_after(self, milliseconds: int) -> Event:
+    def remove_event_after(self, milliseconds: _builtins.int) -> _Event:
         raise _declaration("TestService", None)
 
     def remove_test_object(self, value: TestClass) -> None:
@@ -738,37 +1260,43 @@ class TestService(metaclass=DeclaredClass):
     def return_null_when_not_allowed(self) -> TestClass:
         raise _declaration("TestService", None)
 
-    def scalar_default(self, x: int = 42) -> int:
+    def scalar_default(self, x: _builtins.int = 42) -> _builtins.int:
         raise _declaration("TestService", None)
 
-    def set_default(self, x: Set[int] = {1, 2, 3}) -> Set[int]:
+    def service(self) -> _builtins.int:
+        """
+        A procedure named Service, as the C# client names the class of a service.
+        """
         raise _declaration("TestService", None)
 
-    def string_default(self, x: str = 'foo') -> str:
+    def set_default(self, x: _Set[_builtins.int] = {1, 2, 3}) -> _Set[_builtins.int]:
         raise _declaration("TestService", None)
 
-    def string_to_bool(self, value: str) -> bool:
+    def string_default(self, x: _builtins.str = 'foo') -> _builtins.str:
         raise _declaration("TestService", None)
 
-    def string_to_double(self, value: str) -> float:
+    def string_to_bool(self, value: _builtins.str) -> _builtins.bool:
         raise _declaration("TestService", None)
 
-    def string_to_enum(self, value: str) -> TestEnum:
+    def string_to_double(self, value: _builtins.str) -> _builtins.float:
         raise _declaration("TestService", None)
 
-    def string_to_float(self, value: str) -> float:
+    def string_to_enum(self, value: _builtins.str) -> TestEnum:
         raise _declaration("TestService", None)
 
-    def string_to_int32(self, value: str) -> int:
+    def string_to_float(self, value: _builtins.str) -> _builtins.float:
         raise _declaration("TestService", None)
 
-    def string_to_int64(self, value: str) -> int:
+    def string_to_int32(self, value: _builtins.str) -> _builtins.int:
         raise _declaration("TestService", None)
 
-    def string_to_uint32(self, value: str) -> int:
+    def string_to_int64(self, value: _builtins.str) -> _builtins.int:
         raise _declaration("TestService", None)
 
-    def string_to_uint64(self, value: str) -> int:
+    def string_to_uint32(self, value: _builtins.str) -> _builtins.int:
+        raise _declaration("TestService", None)
+
+    def string_to_uint64(self, value: _builtins.str) -> _builtins.int:
         raise _declaration("TestService", None)
 
     def struct_default(self, x: TestStruct = TestStruct(42, 'alpha', TestEnum.value_b, [1, 2, 3])) -> TestStruct:
@@ -777,22 +1305,22 @@ class TestService(metaclass=DeclaredClass):
     def struct_echo(self, x: TestStruct) -> TestStruct:
         raise _declaration("TestService", None)
 
-    def struct_echo_nullable(self, x: Optional[TestStruct]) -> Optional[TestStruct]:
+    def struct_echo_nullable(self, x: _Optional[TestStruct]) -> _Optional[TestStruct]:
         raise _declaration("TestService", None)
 
-    def swap_object_tuple(self, t: Tuple[TestClass,TestClass]) -> Tuple[TestClass,TestClass]:
+    def swap_object_tuple(self, t: _Tuple[TestClass,TestClass]) -> _Tuple[TestClass,TestClass]:
         raise _declaration("TestService", None)
 
-    def throw_argument_exception(self) -> int:
+    def throw_argument_exception(self) -> _builtins.int:
         raise _declaration("TestService", None)
 
-    def throw_argument_null_exception(self, foo: str) -> int:
+    def throw_argument_null_exception(self, foo: _builtins.str) -> _builtins.int:
         raise _declaration("TestService", None)
 
-    def throw_argument_out_of_range_exception(self, foo: int) -> int:
+    def throw_argument_out_of_range_exception(self, foo: _builtins.int) -> _builtins.int:
         raise _declaration("TestService", None)
 
-    def throw_custom_exception(self) -> int:
+    def throw_custom_exception(self) -> _builtins.int:
         """
         Throws a :class:`krpc.services.testservice.CustomException`.
 
@@ -806,41 +1334,41 @@ class TestService(metaclass=DeclaredClass):
         """
         raise _declaration("TestService", None)
 
-    def throw_custom_exception_later(self) -> int:
+    def throw_custom_exception_later(self) -> _builtins.int:
         raise _declaration("TestService", None)
 
-    def throw_invalid_operation_exception(self) -> int:
+    def throw_invalid_operation_exception(self) -> _builtins.int:
         raise _declaration("TestService", None)
 
-    def throw_invalid_operation_exception_later(self) -> int:
+    def throw_invalid_operation_exception_later(self) -> _builtins.int:
         raise _declaration("TestService", None)
 
-    def throw_mapped_exception(self, name: str) -> int:
+    def throw_mapped_exception(self, name: _builtins.str) -> _builtins.int:
         """
         Throws the system exception of the given name, which the server maps to the KRPC
         exception of that name.
         """
         raise _declaration("TestService", None)
 
-    def tuple_default(self, x: Tuple[int,bool] = (1, False)) -> Tuple[int,bool]:
+    def tuple_default(self, x: _Tuple[_builtins.int,_builtins.bool] = (1, False)) -> _Tuple[_builtins.int,_builtins.bool]:
         raise _declaration("TestService", None)
 
-    def uint32_special_defaults(self, maximum: int = krpc.limits.UINT32_MAX) -> List[int]:
+    def uint32_special_defaults(self, maximum: _builtins.int = _limits.UINT32_MAX) -> _List[_builtins.int]:
         """
         Procedure whose default is the largest uint.
         """
         raise _declaration("TestService", None)
 
-    def uint32_to_string(self, value: int) -> str:
+    def uint32_to_string(self, value: _builtins.int) -> _builtins.str:
         raise _declaration("TestService", None)
 
-    def uint64_special_defaults(self, maximum: int = krpc.limits.UINT64_MAX) -> List[int]:
+    def uint64_special_defaults(self, maximum: _builtins.int = _limits.UINT64_MAX) -> _List[_builtins.int]:
         """
         Procedure whose default is the largest ulong.
         """
         raise _declaration("TestService", None)
 
-    def uint64_to_string(self, value: int) -> str:
+    def uint64_to_string(self, value: _builtins.int) -> _builtins.str:
         raise _declaration("TestService", None)
 
 
@@ -858,10 +1386,12 @@ class TestServiceConnection(krpc.connection.Connection):
 _register(
     "TestService",
     DeprecatedEnum,
+    NamesEnum,
     PartlyDeprecatedEnum,
     TestEnum,
     TestFlags,
     DeprecatedStruct,
+    NamesStruct,
     PartlyDeprecatedStruct,
     TestFlagsStruct,
     TestNestedNullableStruct,
@@ -870,4 +1400,5 @@ _register(
     TestNullableStruct,
     CustomException,
     DeprecatedException,
+    RuntimeError,
 )

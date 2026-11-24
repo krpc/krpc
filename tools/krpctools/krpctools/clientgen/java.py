@@ -19,7 +19,7 @@ from krpc.types import (
 )
 from krpc.utils import lower_camel_case
 
-from ..lang.java import JavaLanguage
+from ..lang.java import JavaLanguage, type_name
 from ..utils import as_type, is_nullable
 from . import crefs
 from .docparser import DocParser
@@ -36,7 +36,7 @@ def _accessor_name(accessor):
 
 
 class JavaGenerator(Generator[JavaLanguage]):
-    language = JavaLanguage()
+    language = JavaLanguage(qualified=True)
 
     @staticmethod
     def parse_plain_cref_member(name):
@@ -112,15 +112,18 @@ class JavaGenerator(Generator[JavaLanguage]):
                 return "{@link %s}" % alias
         name = target.service
         if target.type is not None:
-            name += "." + target.type
+            name += "." + type_name(target.type)
         if target.member is None:
             return "{@link %s}" % name
         if target.kind in (crefs.PROPERTY, crefs.CLASS_PROPERTY):
-            member = ("get%s()" if target.getter else "set%s") % target.member
+            if target.getter:
+                member = self.language.accessor_name("get", target.member) + "()"
+            else:
+                member = self.language.accessor_name("set", target.member)
         elif target.kind == crefs.ENUMERATION_VALUE:
             member = self.language.parse_const_name(target.member)
         elif target.kind == crefs.STRUCT_FIELD:
-            member = "get%s()" % target.member
+            member = self.language.accessor_name("get", target.member) + "()"
         else:
             member = self.language.parse_name(target.member)
         return "{@link %s#%s}" % (name, member)
@@ -140,14 +143,18 @@ class JavaGenerator(Generator[JavaLanguage]):
         for struct_info in context["structs"].values():
             for field in struct_info["fields"]:
                 field["spec"] = self._at_position(field["krpc_type"])
-                field["accessor_name"] = field["remote_name"]
+                field["accessor_name"] = self.language.accessor_name(
+                    "get", field["remote_name"]
+                )
 
     def parse_context(self, context):
         # Expand service properties into get and set methods
         properties = collections.OrderedDict()
         for info in context["properties"].values():
             if info["getter"]:
-                properties["get" + _accessor_name(info["getter"])] = {
+                properties[
+                    self.language.accessor_name("get", _accessor_name(info["getter"]))
+                ] = {
                     "procedure": info["getter"]["procedure"],
                     "remote_name": info["getter"]["remote_name"],
                     "parameters": [],
@@ -157,7 +164,9 @@ class JavaGenerator(Generator[JavaLanguage]):
                     "deprecated_reason": info["deprecated_reason"],
                 }
             if info["setter"]:
-                properties["set" + _accessor_name(info["setter"])] = {
+                properties[
+                    self.language.accessor_name("set", _accessor_name(info["setter"]))
+                ] = {
                     "procedure": info["setter"]["procedure"],
                     "remote_name": info["setter"]["remote_name"],
                     "parameters": self.generate_context_parameters(
@@ -175,7 +184,11 @@ class JavaGenerator(Generator[JavaLanguage]):
             class_properties = collections.OrderedDict()
             for info in class_info["properties"].values():
                 if info["getter"]:
-                    class_properties["get" + _accessor_name(info["getter"])] = {
+                    class_properties[
+                        self.language.accessor_name(
+                            "get", _accessor_name(info["getter"])
+                        )
+                    ] = {
                         "procedure": info["getter"]["procedure"],
                         "remote_name": info["getter"]["remote_name"],
                         "parameters": [],
@@ -185,7 +198,11 @@ class JavaGenerator(Generator[JavaLanguage]):
                         "deprecated_reason": info["deprecated_reason"],
                     }
                 if info["setter"]:
-                    class_properties["set" + _accessor_name(info["setter"])] = {
+                    class_properties[
+                        self.language.accessor_name(
+                            "set", _accessor_name(info["setter"])
+                        )
+                    ] = {
                         "procedure": info["setter"]["procedure"],
                         "remote_name": info["setter"]["remote_name"],
                         "parameters": [
@@ -285,7 +302,19 @@ class JavaGenerator(Generator[JavaLanguage]):
 
         context["types_table"] = self.build_types_table(context)
 
+        self.escape_type_names(context)
         return context
+
+    @staticmethod
+    def escape_type_names(context):
+        """Key the types of the service by their names in the generated code, keeping the name
+        the server gives each"""
+        for kind in ("classes", "enumerations", "structs", "exceptions"):
+            types = collections.OrderedDict()
+            for name, info in context[kind].items():
+                info["remote_name"] = name
+                types[type_name(name)] = info
+            context[kind] = types
 
     def build_types_table(self, context):
         # Flat table of every procedure's return and parameter type specs, used
@@ -338,6 +367,8 @@ class JavaGenerator(Generator[JavaLanguage]):
 
 
 class JavaDocParser(DocParser):
+    language = JavaLanguage()
+
     def parse_summary(self, node):
         return self.parse_node(node).strip()
 
@@ -345,14 +376,14 @@ class JavaDocParser(DocParser):
         return "\n\n" + self.parse_node(node).strip()
 
     def parse_param(self, node):
-        return "\n@param %s %s" % (node.attrib["name"], self.parse_node(node).strip())
+        name = self.language.parse_parameter_name(node.attrib["name"])
+        return "\n@param %s %s" % (name, self.parse_node(node).strip())
 
     def parse_returns(self, node):
         return "\n@return %s" % self.parse_node(node).strip()
 
-    @staticmethod
-    def parse_paramref(node):
-        return node.attrib["name"]
+    def parse_paramref(self, node):
+        return self.language.parse_parameter_name(node.attrib["name"])
 
     @staticmethod
     def parse_a(node):

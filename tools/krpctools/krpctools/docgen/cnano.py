@@ -14,7 +14,7 @@ from krpc.types import (
 )
 from krpc.utils import snake_case
 
-from ..lang.cnano import CnanoLanguage
+from ..lang.cnano import CnanoLanguage, enum_value_macro
 from .domain import Domain
 from .nodes import (
     Class,
@@ -172,21 +172,30 @@ class CnanoDomain(Domain[CnanoLanguage]):
     def returns_null_flag(self, typ):
         return self.language.returns_null_flag(typ)
 
+    def enum_value_macro(self, service, enumeration, value):
+        return enum_value_macro(
+            service, enumeration, self.language.parse_enum_value_name(value)
+        )
+
+    def field_name(self, name):
+        """The member of a structure that holds a field, escaped as a keyword is"""
+        return self.language.parse_name(snake_case(name))
+
     def ref(self, obj):
         name = obj.fullname.split(".")
         if isinstance(obj, StructField):
             # A field is documented inside the declaration of its structure, and the C
             # domain addresses it through that declaration rather than by a name of its own
-            field = snake_case(name.pop())
+            field = self.field_name(name.pop())
             return "krpc_" + "_".join(name) + "_t." + field
         if isinstance(obj, (Property, ClassProperty)) and obj.getter is None:
             name[-1] = "set_" + name[-1]
         if isinstance(obj, ExceptionNode):
             return "KRPC_EXCEPTION_" + "_".join(name).upper()
-        ref = "krpc_" + "_".join(name)
         if isinstance(obj, EnumerationValue):
-            ref = ref.upper()
-        elif isinstance(obj, (Class, Enumeration, Struct)):
+            return self.enum_value_macro(*name)
+        ref = "krpc_" + "_".join(name)
+        if isinstance(obj, (Class, Enumeration, Struct)):
             ref += "_t"
         return ref
 

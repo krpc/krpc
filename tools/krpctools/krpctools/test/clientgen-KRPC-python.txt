@@ -1,16 +1,17 @@
 from __future__ import annotations
-from typing import Callable, Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING, Union
+import builtins as _builtins
+from typing import Callable as _Callable, Tuple as _Tuple, Set as _Set, Dict as _Dict, List as _List, NamedTuple as _NamedTuple, Optional as _Optional, TYPE_CHECKING, Union as _Union
 import krpc.connection
 import krpc.error
-import krpc.limits
-from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
-from krpc.event import Event
+import krpc.limits as _limits
+from krpc.declarations import DeclaredClass as _DeclaredClass, DeclaredObject as _DeclaredObject, declaration_error as _declaration, register as _register
+from krpc.event import Event as _Event
 from krpc.schema import KRPC_pb2
-from krpc.types import RemoteEnum, RemoteFlags, deprecate_attribute, deprecated
+from krpc.types import RemoteEnum as _RemoteEnum, RemoteFlags as _RemoteFlags, deprecate_attribute as _deprecate_attribute, deprecated as _deprecated
 
 
 
-class GameScene(RemoteEnum):
+class GameScene(_RemoteEnum):
     """
     The game scene. See :attr:`krpc.services.krpc.KRPC.game_scene`.
     """
@@ -50,7 +51,7 @@ administration facility is open within the space center scene.
 """
 
 
-class TypeCode(RemoteEnum):
+class TypeCode(_RemoteEnum):
     """
     The kind of a type, with the values of the communication protocol's type codes.
     """
@@ -104,50 +105,50 @@ A dictionary, with the types of its keys and values in :attr:`krpc.services.krpc
 """
 
 
-class ClientInfo(NamedTuple):
+class ClientInfo(_NamedTuple):
     """
     A client connected to the server.
 
     See :attr:`krpc.services.krpc.KRPC.clients`.
     """
-    id: bytes
+    id: _builtins.bytes
     """
     The identifier of the client.
     """
-    name: str
+    name: _builtins.str
     """
     The name of the client, or an empty string if it has no name.
     """
-    address: str
+    address: _builtins.str
     """
     The address of the client.
     """
 
 
-class ServerSettings(NamedTuple):
+class ServerSettings(_NamedTuple):
     """
     The settings that control how the server executes calls.
 
     See :attr:`krpc.services.krpc.ServerStatus.settings`.
     """
-    adaptive_rate_control: bool
+    adaptive_rate_control: _builtins.bool
     """
     Whether the server adapts its time per frame to hold the frame rate at
     :attr:`krpc.services.krpc.ServerSettings.target_frame_rate`.
     """
-    target_frame_rate: int
+    target_frame_rate: _builtins.int
     """
     The lowest frame rate the server's work pushes the game to, in frames per second.
     """
-    max_time_per_frame: int
+    max_time_per_frame: _builtins.int
     """
     The server's budget per frame, or its ceiling with adaptive rate control, in microseconds.
     """
-    max_call_wait: int
+    max_call_wait: _builtins.int
     """
     The longest the server waits for a client's next call, in microseconds.
     """
-    tick_hold_timeout: int
+    tick_hold_timeout: _builtins.int
     """
     The longest time a client may hold the game on one physics tick, in microseconds.
 
@@ -155,102 +156,102 @@ class ServerSettings(NamedTuple):
     """
 
 
-class ServerStatistics(NamedTuple):
+class ServerStatistics(_NamedTuple):
     """
     The performance statistics of the server.
 
     See :attr:`krpc.services.krpc.ServerStatus.statistics`.
     """
-    bytes_read: int
+    bytes_read: _builtins.int
     """
     The number of bytes received from clients.
     """
-    bytes_written: int
+    bytes_written: _builtins.int
     """
     The number of bytes sent to clients.
     """
-    bytes_read_rate: float
+    bytes_read_rate: _builtins.float
     """
     The rate bytes are received from clients, in bytes per second.
     """
-    bytes_written_rate: float
+    bytes_written_rate: _builtins.float
     """
     The rate bytes are sent to clients, in bytes per second.
     """
-    rpcs_executed: int
+    rpcs_executed: _builtins.int
     """
     The number of calls executed.
     """
-    rpc_rate: float
+    rpc_rate: _builtins.float
     """
     The number of calls executed per second.
     """
-    frame_rate: float
+    frame_rate: _builtins.float
     """
     The game's frame rate, in frames per second.
     """
-    time_per_frame: float
+    time_per_frame: _builtins.float
     """
     The server's time per frame, in seconds: executing calls, waiting for them and
     updating streams.
     """
-    exec_time_per_frame: float
+    exec_time_per_frame: _builtins.float
     """
     The time spent executing calls per frame, in seconds.
     """
-    wait_time_per_frame: float
+    wait_time_per_frame: _builtins.float
     """
     The time spent waiting for calls per frame, in seconds.
     """
-    stream_time_per_frame: float
+    stream_time_per_frame: _builtins.float
     """
     The time spent updating streams per frame, in seconds.
     """
-    budget_per_frame: float
+    budget_per_frame: _builtins.float
     """
     The time the server may spend per frame, in seconds.
 
     Adaptive rate control adjusts it, up to :attr:`krpc.services.krpc.ServerSettings.max_time_per_frame`.
     """
-    median_turnaround: float
+    median_turnaround: _builtins.float
     """
     The median time between a response and the client's next call, over the
     clients' recent calls, in seconds.
     """
-    deferred_calls: int
+    deferred_calls: _builtins.int
     """
     The number of calls left for the next update, because the update ran out of time
     or the call yielded.
     """
-    streams: int
+    streams: _builtins.int
     """
     The number of open streams, events included.
     """
-    stream_evaluations: int
+    stream_evaluations: _builtins.int
     """
     The number of stream evaluations, one per stream per update.
     """
-    stream_evaluation_rate: float
+    stream_evaluation_rate: _builtins.float
     """
     The number of stream evaluations per second.
     """
-    stream_updates_sent: int
+    stream_updates_sent: _builtins.int
     """
     The number of stream updates sent to clients.
     """
 
 
-class ServerStatus(NamedTuple):
+class ServerStatus(_NamedTuple):
     """
     The status of the server.
 
     See :meth:`krpc.services.krpc.KRPC.get_status`.
     """
-    version: str
+    version: _builtins.str
     """
     The version of the server, or ``unknown``.
     """
-    protocol_version: int
+    protocol_version: _builtins.int
     """
     The protocol version of the connection.
     """
@@ -264,26 +265,26 @@ class ServerStatus(NamedTuple):
     """
 
 
-class ArgumentException(ValueError):
+class ArgumentException(_builtins.ValueError):
     """
     A method was invoked where at least one of the passed arguments does not
     meet the parameter specification of the method.
     """
 
 
-class ArgumentNullException(ValueError):
+class ArgumentNullException(_builtins.ValueError):
     """
     A null reference was passed to a method that does not accept it as a valid argument.
     """
 
 
-class ArgumentOutOfRangeException(ValueError):
+class ArgumentOutOfRangeException(_builtins.ValueError):
     """
     The value of an argument is outside the allowable range of values as defined by the invoked method.
     """
 
 
-class DivideByZeroException(ZeroDivisionError):
+class DivideByZeroException(_builtins.ZeroDivisionError):
     """
     An integer was divided by zero.
     """
@@ -295,32 +296,32 @@ class Error(krpc.error.ServerError):
     """
 
 
-class IndexOutOfRangeException(IndexError):
+class IndexOutOfRangeException(_builtins.IndexError):
     """
     An index was outside the bounds of a collection, string or array.
     """
 
 
-class InvalidOperationException(RuntimeError):
+class InvalidOperationException(_builtins.RuntimeError):
     """
     A method call was made to a method that is invalid
     given the current state of the object.
     """
 
 
-class KeyNotFoundException(KeyError):
+class KeyNotFoundException(_builtins.KeyError):
     """
     A key was not found in a dictionary.
     """
 
 
-class NotSupportedException(NotImplementedError):
+class NotSupportedException(_builtins.NotImplementedError):
     """
     A method was invoked that is not supported.
     """
 
 
-class NullReferenceException(TypeError):
+class NullReferenceException(_builtins.TypeError):
     """
     A value was null where its type does not allow one.
     """
@@ -346,7 +347,7 @@ class ObjectNotLoadedException(krpc.error.ServerError):
     """
 
 
-class OverflowException(OverflowError):
+class OverflowException(_builtins.OverflowError):
     """
     An arithmetic or conversion operation overflowed.
     """
@@ -355,7 +356,7 @@ class OverflowException(OverflowError):
 StreamRemovedException = krpc.error.StreamError
 
 
-class TimeoutException(TimeoutError):
+class TimeoutException(_builtins.TimeoutError):
     """
     An operation did not complete in the time allotted to it.
     """
@@ -367,7 +368,7 @@ class UnsupportedSceneException(krpc.error.ServerError):
     """
 
 
-class Expression(DeclaredObject, metaclass=DeclaredClass):
+class Expression(_DeclaredObject, metaclass=_DeclaredClass):
     """
     A server side expression.
 
@@ -376,8 +377,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
     _service_name = "KRPC"
     _class_name = "Expression"
 
-    @property
-    def has_return_type(self) -> bool:
+    @_builtins.property
+    def has_return_type(self) -> _builtins.bool:
         """
         Whether the expression evaluates to a value.
 
@@ -386,8 +387,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @property
-    def parameter_types(self) -> List[Type]:
+    @_builtins.property
+    def parameter_types(self) -> _List[Type]:
         """
         The types of the function's parameters.
 
@@ -395,7 +396,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @property
+    @_builtins.property
     def return_type(self) -> Type:
         """
         The type of the value the expression evaluates to. Throws an exception if the
@@ -407,7 +408,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def add(arg0: Expression, arg1: Expression) -> Expression:
         """
         Numerical addition.
@@ -418,7 +419,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def aggregate(arg: Expression, func: Expression) -> Expression:
         """
         The result of applying an accumulator function over a collection.
@@ -433,7 +434,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def aggregate_with_seed(arg: Expression, seed: Expression, func: Expression) -> Expression:
         """
         The result of applying an accumulator function over a collection, starting from a seed.
@@ -450,7 +451,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def all(arg: Expression, predicate: Expression) -> Expression:
         """
         Whether a predicate function returns true for every value of a collection.
@@ -463,7 +464,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def and_(arg0: Expression, arg1: Expression) -> Expression:
         """
         Logical or bitwise and, which evaluates both operands.
@@ -476,7 +477,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def any(arg: Expression, predicate: Expression) -> Expression:
         """
         Whether a predicate function returns true for any value of a collection.
@@ -489,7 +490,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def append(collection: Expression, value: Expression) -> Expression:
         """
         A statement adding a value to a list or a set.
@@ -502,7 +503,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def assign(variable: Expression, value: Expression) -> Expression:
         """
         An assignment to a local variable, state variable or function parameter.
@@ -516,7 +517,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def average(arg: Expression) -> Expression:
         """
         The average of the values of a collection.
@@ -529,8 +530,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def block(statements: List[Expression]) -> Expression:
+    @_builtins.staticmethod
+    def block(statements: _List[Expression]) -> Expression:
         """
         A block of statements, whose value is that of its last statement.
 
@@ -538,8 +539,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def block_with_variables(variables: List[Expression], statements: List[Expression]) -> Expression:
+    @_builtins.staticmethod
+    def block_with_variables(variables: _List[Expression], statements: _List[Expression]) -> Expression:
         """
         A block of statements with local variables.
 
@@ -552,14 +553,14 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def break_() -> Expression:
         """
         A break statement, which ends the enclosing loop or :meth:`krpc.services.krpc.Expression.switch`.
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def build_dictionary(arg: Expression, key_func: Expression, value_func: Expression) -> Expression:
         """
         A dictionary built from a collection, with a key and a value computed from each
@@ -577,8 +578,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def call(call: Union[KRPC_pb2.ProcedureCall, property, Callable[..., object]]) -> Expression:
+    @_builtins.staticmethod
+    def call(call: _Union[KRPC_pb2.ProcedureCall, _builtins.property, _Callable[..., _builtins.object]]) -> Expression:
         """
         An RPC call.
 
@@ -591,8 +592,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def call_with_arguments(call: Union[KRPC_pb2.ProcedureCall, property, Callable[..., object]], args: Dict[int, Expression]) -> Expression:
+    @_builtins.staticmethod
+    def call_with_arguments(call: _Union[KRPC_pb2.ProcedureCall, _builtins.property, _Callable[..., _builtins.object]], args: _Dict[_builtins.int, Expression]) -> Expression:
         """
         An RPC call, with its arguments computed by expressions.
 
@@ -608,7 +609,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def cast(arg: Expression, type: Type) -> Expression:
         """
         A value cast to the given type.
@@ -621,7 +622,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def clear(collection: Expression) -> Expression:
         """
         A statement removing every value from a list or a set, or every entry from a dictionary.
@@ -630,7 +631,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def concat(arg1: Expression, arg2: Expression) -> Expression:
         """
         The values of one collection followed by those of another.
@@ -645,7 +646,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def conditional(condition: Expression, if_true: Expression, if_false: Expression) -> Expression:
         """
         The second argument if the condition is true, and the third argument otherwise.
@@ -660,7 +661,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def conditional_and(arg0: Expression, arg1: Expression) -> Expression:
         """
         Logical and, which evaluates the second operand only when the first is true.
@@ -671,7 +672,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def conditional_or(arg0: Expression, arg1: Expression) -> Expression:
         """
         Logical or, which evaluates the second operand only when the first is false.
@@ -682,8 +683,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def constant_bool(value: bool) -> Expression:
+    @_builtins.staticmethod
+    def constant_bool(value: _builtins.bool) -> Expression:
         """
         A constant value of boolean type.
 
@@ -691,8 +692,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def constant_bytes(value: bytes) -> Expression:
+    @_builtins.staticmethod
+    def constant_bytes(value: _builtins.bytes) -> Expression:
         """
         A constant value of bytes type.
 
@@ -700,8 +701,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def constant_double(value: float) -> Expression:
+    @_builtins.staticmethod
+    def constant_double(value: _builtins.float) -> Expression:
         """
         A constant value of double precision floating point type.
 
@@ -709,8 +710,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def constant_enum(service: str, name: str, value: int) -> Expression:
+    @_builtins.staticmethod
+    def constant_enum(service: _builtins.str, name: _builtins.str, value: _builtins.int) -> Expression:
         """
         A constant value of an enumeration a service defines.
 
@@ -722,8 +723,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def constant_enum_by_id(service_id: int, enumeration_id: int, value: int) -> Expression:
+    @_builtins.staticmethod
+    def constant_enum_by_id(service_id: _builtins.int, enumeration_id: _builtins.int, value: _builtins.int) -> Expression:
         """
         A constant value of an enumeration a service defines, named by ids.
 
@@ -735,8 +736,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def constant_float(value: float) -> Expression:
+    @_builtins.staticmethod
+    def constant_float(value: _builtins.float) -> Expression:
         """
         A constant value of single precision floating point type.
 
@@ -744,8 +745,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def constant_int(value: int) -> Expression:
+    @_builtins.staticmethod
+    def constant_int(value: _builtins.int) -> Expression:
         """
         A constant value of integer type.
 
@@ -753,8 +754,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def constant_long(value: int) -> Expression:
+    @_builtins.staticmethod
+    def constant_long(value: _builtins.int) -> Expression:
         """
         A constant value of long integer type.
 
@@ -762,7 +763,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def constant_null(type: Type) -> Expression:
         """
         A null constant of the given type.
@@ -773,8 +774,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def constant_object(value: int) -> Expression:
+    @_builtins.staticmethod
+    def constant_object(value: _builtins.int) -> Expression:
         """
         A constant object, an instance of a class a service defines.
 
@@ -784,8 +785,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def constant_string(value: str) -> Expression:
+    @_builtins.staticmethod
+    def constant_string(value: _builtins.str) -> Expression:
         """
         A constant value of string type.
 
@@ -793,8 +794,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def constant_uint(value: int) -> Expression:
+    @_builtins.staticmethod
+    def constant_uint(value: _builtins.int) -> Expression:
         """
         A constant value of unsigned integer type.
 
@@ -802,8 +803,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def constant_ulong(value: int) -> Expression:
+    @_builtins.staticmethod
+    def constant_ulong(value: _builtins.int) -> Expression:
         """
         A constant value of unsigned long integer type.
 
@@ -811,7 +812,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def contains(arg: Expression, value: Expression) -> Expression:
         """
         Whether a collection contains a value.
@@ -824,7 +825,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def contains_key(dictionary: Expression, key: Expression) -> Expression:
         """
         Whether a dictionary contains a key.
@@ -837,14 +838,14 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def continue_() -> Expression:
         """
         A continue statement, which skips to the next iteration of the enclosing loop.
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def convert_to_string(arg: Expression) -> Expression:
         """
         The string representation of a value.
@@ -859,7 +860,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def count(arg: Expression) -> Expression:
         """
         The number of values in a collection.
@@ -870,8 +871,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def create_dictionary(keys: List[Expression], values: List[Expression]) -> Expression:
+    @_builtins.staticmethod
+    def create_dictionary(keys: _List[Expression], values: _List[Expression]) -> Expression:
         """
         A dictionary of the given keys and corresponding values, with numbers widened to
         their common type. Throws an exception if there are no keys, the counts differ, the
@@ -887,7 +888,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def create_empty_dictionary(key_type: Type, value_type: Type) -> Expression:
         """
         An empty dictionary of the given key and value types. Throws an exception if the
@@ -901,7 +902,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def create_empty_list(value_type: Type) -> Expression:
         """
         An empty list of the given value type.
@@ -912,7 +913,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def create_empty_set(value_type: Type) -> Expression:
         """
         An empty set of the given value type. Throws an exception if the value type is
@@ -924,8 +925,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def create_list(values: List[Expression]) -> Expression:
+    @_builtins.staticmethod
+    def create_list(values: _List[Expression]) -> Expression:
         """
         A list of the given values, with numbers widened to their common type. Throws an
         exception if there are no values.
@@ -936,8 +937,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def create_set(values: Set[Expression]) -> Expression:
+    @_builtins.staticmethod
+    def create_set(values: _Set[Expression]) -> Expression:
         """
         A set of the given values, with numbers widened to their common type. Throws an
         exception if there are no values, or a value is null.
@@ -950,8 +951,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def create_struct(type: Type, field_values: List[Expression]) -> Expression:
+    @_builtins.staticmethod
+    def create_struct(type: Type, field_values: _List[Expression]) -> Expression:
         """
         A structure with the given field values. Throws an exception if the field values do
         not match its fields.
@@ -965,8 +966,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def create_tuple(elements: List[Expression]) -> Expression:
+    @_builtins.staticmethod
+    def create_tuple(elements: _List[Expression]) -> Expression:
         """
         A tuple of the given elements. Throws an exception if there are no elements or more
         than seven.
@@ -977,7 +978,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def dictionary_keys(dictionary: Expression) -> Expression:
         """
         The keys of a dictionary, as a list.
@@ -991,7 +992,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def dictionary_values(dictionary: Expression) -> Expression:
         """
         The values of a dictionary, as a list.
@@ -1002,7 +1003,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def distinct(arg: Expression) -> Expression:
         """
         The values of a collection with duplicates removed, keeping the first
@@ -1016,7 +1017,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def divide(arg0: Expression, arg1: Expression) -> Expression:
         """
         Numerical division.
@@ -1027,7 +1028,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def element_at(arg: Expression, index: Expression) -> Expression:
         """
         The value at the given position in a collection.
@@ -1042,7 +1043,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def equal(arg0: Expression, arg1: Expression) -> Expression:
         """
         Equality comparison.
@@ -1056,7 +1057,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def except_(arg1: Expression, arg2: Expression) -> Expression:
         """
         The values of the first collection that are not in the second, with
@@ -1072,7 +1073,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def exclusive_or(arg0: Expression, arg1: Expression) -> Expression:
         """
         Logical or bitwise exclusive or.
@@ -1085,7 +1086,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def first(arg: Expression) -> Expression:
         """
         The first value of a collection.
@@ -1098,7 +1099,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def for_each(variable: Expression, collection: Expression, body: Expression) -> Expression:
         """
         A loop that evaluates the body once for each value of a collection.
@@ -1115,7 +1116,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def get(arg: Expression, index: Expression) -> Expression:
         """
         An element of a tuple, list or dictionary.
@@ -1132,8 +1133,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def get_field(arg: Expression, name: str) -> Expression:
+    @_builtins.staticmethod
+    def get_field(arg: Expression, name: _builtins.str) -> Expression:
         """
         The value of a field of a structure. Throws an exception if the value is not a
         structure, or has no field of the given name.
@@ -1146,8 +1147,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def get_field_by_index(arg: Expression, index: int) -> Expression:
+    @_builtins.staticmethod
+    def get_field_by_index(arg: Expression, index: _builtins.int) -> Expression:
         """
         The value of a field of a structure, named by its position. Throws an exception if
         the value is not a structure, or the index is out of range.
@@ -1162,7 +1163,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def greater_than(arg0: Expression, arg1: Expression) -> Expression:
         """
         Greater than numerical comparison.
@@ -1173,7 +1174,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def greater_than_or_equal(arg0: Expression, arg1: Expression) -> Expression:
         """
         Greater than or equal numerical comparison.
@@ -1184,7 +1185,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def group_by(arg: Expression, key: Expression) -> Expression:
         """
         The values of a collection grouped by the key a function produces for each of them.
@@ -1197,7 +1198,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def if_then(condition: Expression, body: Expression) -> Expression:
         """
         An if statement, with no value.
@@ -1210,7 +1211,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def if_then_else(condition: Expression, body: Expression, else_body: Expression) -> Expression:
         """
         An if-else statement, with no value.
@@ -1225,7 +1226,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def intersect(arg1: Expression, arg2: Expression) -> Expression:
         """
         The values in both of two collections, with duplicates removed.
@@ -1240,8 +1241,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def invoke(function: Expression, args: Dict[str, Expression]) -> Expression:
+    @_builtins.staticmethod
+    def invoke(function: Expression, args: _Dict[_builtins.str, Expression]) -> Expression:
         """
         A function call.
 
@@ -1253,7 +1254,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def is_null(value: Expression) -> Expression:
         """
         Whether a value is null. Throws an exception if the type of the value cannot be null.
@@ -1262,8 +1263,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def lambda_(parameters: List[Expression], body: Expression) -> Expression:
+    @_builtins.staticmethod
+    def lambda_(parameters: _List[Expression], body: Expression) -> Expression:
         """
         A function with the given parameters and body.
 
@@ -1279,7 +1280,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def last(arg: Expression) -> Expression:
         """
         The last value of a collection.
@@ -1292,7 +1293,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def left_shift(arg0: Expression, arg1: Expression) -> Expression:
         """
         Bitwise left shift.
@@ -1306,7 +1307,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def less_than(arg0: Expression, arg1: Expression) -> Expression:
         """
         Less than numerical comparison.
@@ -1317,7 +1318,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def less_than_or_equal(arg0: Expression, arg1: Expression) -> Expression:
         """
         Less than or equal numerical comparison.
@@ -1328,8 +1329,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def match(value: Expression, cases: List[List[Expression]], bodies: List[Expression]) -> Expression:
+    @_builtins.staticmethod
+    def match(value: Expression, cases: _List[_List[Expression]], bodies: _List[Expression]) -> Expression:
         """
         A match statement, which evaluates the first matching case.
 
@@ -1344,7 +1345,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def max(arg: Expression) -> Expression:
         """
         The largest value of a collection.
@@ -1357,7 +1358,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def max_by(arg: Expression, key: Expression) -> Expression:
         """
         The value of a collection with the largest key.
@@ -1372,7 +1373,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def min(arg: Expression) -> Expression:
         """
         The smallest value of a collection.
@@ -1385,7 +1386,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def min_by(arg: Expression, key: Expression) -> Expression:
         """
         The value of a collection with the smallest key.
@@ -1400,7 +1401,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def modulo(arg0: Expression, arg1: Expression) -> Expression:
         """
         Numerical modulo operator.
@@ -1413,7 +1414,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def multiply(arg0: Expression, arg1: Expression) -> Expression:
         """
         Numerical multiplication.
@@ -1424,7 +1425,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def negate(arg: Expression) -> Expression:
         """
         Numerical negation, which negates a uint as a long.
@@ -1433,7 +1434,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def not_(arg: Expression) -> Expression:
         """
         Logical or bitwise negation.
@@ -1444,7 +1445,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def not_equal(arg0: Expression, arg1: Expression) -> Expression:
         """
         Inequality comparison.
@@ -1458,7 +1459,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def or_(arg0: Expression, arg1: Expression) -> Expression:
         """
         Logical or bitwise or, which evaluates both operands.
@@ -1471,7 +1472,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def order_by(arg: Expression, key: Expression) -> Expression:
         """
         The values of a collection ordered by the key a function produces for each of them.
@@ -1486,8 +1487,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def parameter(name: str, type: Type) -> Expression:
+    @_builtins.staticmethod
+    def parameter(name: _builtins.str, type: Type) -> Expression:
         """
         A named parameter of a function.
 
@@ -1502,7 +1503,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def power(arg0: Expression, arg1: Expression) -> Expression:
         """
         Numerical power operator.
@@ -1515,7 +1516,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def remove(collection: Expression, value: Expression) -> Expression:
         """
         A removal of a value from a list or a set, or of an entry from a dictionary.
@@ -1531,7 +1532,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def remove_at(list: Expression, index: Expression) -> Expression:
         """
         A statement removing the element at an index of a list.
@@ -1544,7 +1545,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def return_(value: Expression) -> Expression:
         """
         A return statement, which ends the enclosing function with a value.
@@ -1553,14 +1554,14 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def return_nothing() -> Expression:
         """
         A return statement, which ends the enclosing function with no value.
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def reverse(arg: Expression) -> Expression:
         """
         The values of a collection in the opposite order.
@@ -1573,7 +1574,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def right_shift(arg0: Expression, arg1: Expression) -> Expression:
         """
         Bitwise right shift.
@@ -1587,7 +1588,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def select(arg: Expression, func: Expression) -> Expression:
         """
         The result of a function for each value of a collection.
@@ -1602,7 +1603,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def select_many(arg: Expression, func: Expression) -> Expression:
         """
         The values of the collections a function returns for each value of a collection,
@@ -1619,7 +1620,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def set(collection: Expression, index: Expression, value: Expression) -> Expression:
         """
         A statement setting an element of a list, or an entry of a dictionary.
@@ -1635,7 +1636,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def skip(arg: Expression, count: Expression) -> Expression:
         """
         A collection without its first count values.
@@ -1650,8 +1651,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def state_variable(name: str, initial_value: Expression) -> Expression:
+    @_builtins.staticmethod
+    def state_variable(name: _builtins.str, initial_value: Expression) -> Expression:
         """
         A variable that keeps its value between evaluations of a function.
 
@@ -1667,8 +1668,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def string_concat(args: List[Expression]) -> Expression:
+    @_builtins.staticmethod
+    def string_concat(args: _List[Expression]) -> Expression:
         """
         The concatenation of strings.
 
@@ -1680,7 +1681,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_contains(arg: Expression, value: Expression) -> Expression:
         """
         Whether one string occurs within another.
@@ -1693,7 +1694,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_ends_with(arg: Expression, value: Expression) -> Expression:
         """
         Whether a string ends with another.
@@ -1706,7 +1707,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_get(arg: Expression, index: Expression) -> Expression:
         """
         The character at the given position in a string, as a string of length one.
@@ -1721,7 +1722,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_index_of(arg: Expression, value: Expression) -> Expression:
         """
         The position of the first occurrence of one string within another.
@@ -1734,7 +1735,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_join(separator: Expression, values: Expression) -> Expression:
         """
         Strings joined together, separated by another string.
@@ -1747,7 +1748,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_length(arg: Expression) -> Expression:
         """
         The number of characters in a string.
@@ -1758,7 +1759,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_replace(arg: Expression, old_value: Expression, new_value: Expression) -> Expression:
         """
         A string with every occurrence of one string replaced by another.
@@ -1775,7 +1776,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_split(arg: Expression, separator: Expression) -> Expression:
         """
         The parts of a string separated by another string.
@@ -1788,7 +1789,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_starts_with(arg: Expression, value: Expression) -> Expression:
         """
         Whether a string starts with another.
@@ -1801,7 +1802,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_substring(arg: Expression, start: Expression, length: Expression) -> Expression:
         """
         Part of a string.
@@ -1818,7 +1819,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_to_lower(arg: Expression) -> Expression:
         """
         A string in lower case, independently of the game's language.
@@ -1829,7 +1830,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_to_upper(arg: Expression) -> Expression:
         """
         A string in upper case, independently of the game's language.
@@ -1840,7 +1841,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_trim(arg: Expression) -> Expression:
         """
         A string with white space removed from both ends.
@@ -1851,7 +1852,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_trim_end(arg: Expression) -> Expression:
         """
         A string with white space removed from its end.
@@ -1862,7 +1863,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string_trim_start(arg: Expression) -> Expression:
         """
         A string with white space removed from its start.
@@ -1873,7 +1874,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def subtract(arg0: Expression, arg1: Expression) -> Expression:
         """
         Numerical subtraction.
@@ -1884,7 +1885,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def sum(arg: Expression) -> Expression:
         """
         The sum of the values of a collection.
@@ -1895,8 +1896,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def switch(value: Expression, cases: List[List[Expression]], bodies: List[Expression]) -> Expression:
+    @_builtins.staticmethod
+    def switch(value: Expression, cases: _List[_List[Expression]], bodies: _List[Expression]) -> Expression:
         """
         A switch statement, which evaluates from the first matching case on.
 
@@ -1911,7 +1912,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def take(arg: Expression, count: Expression) -> Expression:
         """
         The first count values of a collection.
@@ -1926,8 +1927,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def throw(service: str, name: str, message: Expression) -> Expression:
+    @_builtins.staticmethod
+    def throw(service: _builtins.str, name: _builtins.str, message: Expression) -> Expression:
         """
         A throw statement, which raises the named exception.
 
@@ -1944,8 +1945,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def throw_by_id(service_id: int, exception_id: int, message: Expression) -> Expression:
+    @_builtins.staticmethod
+    def throw_by_id(service_id: _builtins.int, exception_id: _builtins.int, message: Expression) -> Expression:
         """
         A throw statement, which raises the exception with the given ids.
 
@@ -1960,7 +1961,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def to_list(arg: Expression) -> Expression:
         """
         A collection as a list.
@@ -1971,7 +1972,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def to_set(arg: Expression) -> Expression:
         """
         A collection as a set.
@@ -1984,8 +1985,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def try_catch(body: Expression, service: str, name: str, message: Optional[Expression], handler: Expression) -> Expression:
+    @_builtins.staticmethod
+    def try_catch(body: Expression, service: _builtins.str, name: _builtins.str, message: _Optional[Expression], handler: Expression) -> Expression:
         """
         A try-catch statement that handles the named exception.
 
@@ -2004,8 +2005,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def try_catch_all(body: Expression, message: Optional[Expression], handler: Expression) -> Expression:
+    @_builtins.staticmethod
+    def try_catch_all(body: Expression, message: _Optional[Expression], handler: Expression) -> Expression:
         """
         A try-catch statement that handles any exception.
 
@@ -2017,8 +2018,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def try_catch_by_id(body: Expression, service_id: int, exception_id: int, message: Optional[Expression], handler: Expression) -> Expression:
+    @_builtins.staticmethod
+    def try_catch_by_id(body: Expression, service_id: _builtins.int, exception_id: _builtins.int, message: _Optional[Expression], handler: Expression) -> Expression:
         """
         A try-catch statement that handles the exception with the given ids.
 
@@ -2037,7 +2038,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def try_finally(body: Expression, finalizer: Expression) -> Expression:
         """
         A try-finally statement.
@@ -2051,7 +2052,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def union(arg1: Expression, arg2: Expression) -> Expression:
         """
         The values in either of two collections, with duplicates removed.
@@ -2066,8 +2067,8 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
-    def variable(name: str, type: Type) -> Expression:
+    @_builtins.staticmethod
+    def variable(name: _builtins.str, type: Type) -> Expression:
         """
         A local variable, declared by :meth:`krpc.services.krpc.Expression.block_with_variables`.
 
@@ -2079,7 +2080,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def where(arg: Expression, func: Expression) -> Expression:
         """
         The values of a collection for which a predicate function returns true.
@@ -2094,7 +2095,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def while_(condition: Expression, body: Expression) -> Expression:
         """
         A while loop, which evaluates the body while the condition is true.
@@ -2107,7 +2108,7 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Expression")
 
-    @staticmethod
+    @_builtins.staticmethod
     def zip(arg1: Expression, arg2: Expression, func: Expression) -> Expression:
         """
         The results of a function applied to the values of two collections in pairs.
@@ -2127,29 +2128,29 @@ class Expression(DeclaredObject, metaclass=DeclaredClass):
 
 
 
-class Type(DeclaredObject, metaclass=DeclaredClass):
+class Type(_DeclaredObject, metaclass=_DeclaredClass):
     """
     The type of a value a procedure takes or returns.
     """
     _service_name = "KRPC"
     _class_name = "Type"
 
-    @property
+    @_builtins.property
     def code(self) -> TypeCode:
         """
         The kind of the type.
         """
         raise _declaration("KRPC", "Type")
 
-    @property
-    def name(self) -> str:
+    @_builtins.property
+    def name(self) -> _builtins.str:
         """
         The name of a class, enumeration or structure type, or an empty string.
         """
         raise _declaration("KRPC", "Type")
 
-    @property
-    def nullable(self) -> bool:
+    @_builtins.property
+    def nullable(self) -> _builtins.bool:
         """
         Whether a value of the type may be null.
 
@@ -2158,15 +2159,15 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Type")
 
-    @property
-    def service(self) -> str:
+    @_builtins.property
+    def service(self) -> _builtins.str:
         """
         The service a class, enumeration or structure type is defined in, or an empty string.
         """
         raise _declaration("KRPC", "Type")
 
-    @property
-    def types(self) -> List[Type]:
+    @_builtins.property
+    def types(self) -> _List[Type]:
         """
         The types of the elements of a tuple, list, set or dictionary type.
 
@@ -2175,22 +2176,22 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
+    @_builtins.staticmethod
     def bool() -> Type:
         """
         A boolean type.
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
+    @_builtins.staticmethod
     def bytes() -> Type:
         """
         A byte sequence type.
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
-    def class_type(service: str, name: str) -> Type:
+    @_builtins.staticmethod
+    def class_type(service: _builtins.str, name: _builtins.str) -> Type:
         """
         The type of a class defined by a service.
 
@@ -2200,8 +2201,8 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
-    def class_type_by_id(service_id: int, class_id: int) -> Type:
+    @_builtins.staticmethod
+    def class_type_by_id(service_id: _builtins.int, class_id: _builtins.int) -> Type:
         """
         The type of a class defined by a service, named by ids.
 
@@ -2211,7 +2212,7 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
+    @_builtins.staticmethod
     def dictionary_type(key_type: Type, value_type: Type) -> Type:
         """
         A dictionary type. Throws an exception if the key type is nullable or not a valid
@@ -2223,15 +2224,15 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
+    @_builtins.staticmethod
     def double() -> Type:
         """
         A double precision floating point number type.
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
-    def enumeration_type(service: str, name: str) -> Type:
+    @_builtins.staticmethod
+    def enumeration_type(service: _builtins.str, name: _builtins.str) -> Type:
         """
         The type of an enumeration defined by a service.
 
@@ -2241,8 +2242,8 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
-    def enumeration_type_by_id(service_id: int, enumeration_id: int) -> Type:
+    @_builtins.staticmethod
+    def enumeration_type_by_id(service_id: _builtins.int, enumeration_id: _builtins.int) -> Type:
         """
         The type of an enumeration defined by a service, named by ids.
 
@@ -2252,21 +2253,21 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
+    @_builtins.staticmethod
     def float() -> Type:
         """
         A single precision floating point number type.
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
+    @_builtins.staticmethod
     def int() -> Type:
         """
         A signed 32-bit integer type.
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
+    @_builtins.staticmethod
     def list_type(value_type: Type) -> Type:
         """
         A list type.
@@ -2275,14 +2276,14 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
+    @_builtins.staticmethod
     def long() -> Type:
         """
         A signed 64-bit integer type.
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
+    @_builtins.staticmethod
     def nullable_type(value_type: Type) -> Type:
         """
         A nullable type, holding a value of the given type or null.
@@ -2291,7 +2292,7 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
+    @_builtins.staticmethod
     def set_type(value_type: Type) -> Type:
         """
         A set type. Throws an exception if the element type is nullable.
@@ -2300,15 +2301,15 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
+    @_builtins.staticmethod
     def string() -> Type:
         """
         A string type.
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
-    def struct_type(service: str, name: str) -> Type:
+    @_builtins.staticmethod
+    def struct_type(service: _builtins.str, name: _builtins.str) -> Type:
         """
         The type of a structure defined by a service.
 
@@ -2318,8 +2319,8 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
-    def struct_type_by_id(service_id: int, struct_id: int) -> Type:
+    @_builtins.staticmethod
+    def struct_type_by_id(service_id: _builtins.int, struct_id: _builtins.int) -> Type:
         """
         The type of a structure defined by a service, named by ids.
 
@@ -2329,8 +2330,8 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
-    def tuple_type(value_types: List[Type]) -> Type:
+    @_builtins.staticmethod
+    def tuple_type(value_types: _List[Type]) -> Type:
         """
         A tuple type. Throws an exception if there are no element types or more than seven.
 
@@ -2338,14 +2339,14 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
+    @_builtins.staticmethod
     def uint() -> Type:
         """
         An unsigned 32-bit integer type.
         """
         raise _declaration("KRPC", "Type")
 
-    @staticmethod
+    @_builtins.staticmethod
     def ulong() -> Type:
         """
         An unsigned 64-bit integer type.
@@ -2357,72 +2358,72 @@ class Type(DeclaredObject, metaclass=DeclaredClass):
 # Aliases for the types the service declares as its attributes, as an annotation in the body of
 # the service would otherwise name the attribute itself
 if TYPE_CHECKING:
-    _Expression = Expression
-    _Type = Type
-    _GameScene = GameScene
-    _TypeCode = TypeCode
-    _ClientInfo = ClientInfo
-    _ServerSettings = ServerSettings
-    _ServerStatistics = ServerStatistics
-    _ServerStatus = ServerStatus
-    _ArgumentException = ArgumentException
-    _ArgumentNullException = ArgumentNullException
-    _ArgumentOutOfRangeException = ArgumentOutOfRangeException
-    _DivideByZeroException = DivideByZeroException
-    _Error = Error
-    _IndexOutOfRangeException = IndexOutOfRangeException
-    _InvalidOperationException = InvalidOperationException
-    _KeyNotFoundException = KeyNotFoundException
-    _NotSupportedException = NotSupportedException
-    _NullReferenceException = NullReferenceException
-    _ObjectDestroyedException = ObjectDestroyedException
-    _ObjectNotLoadedException = ObjectNotLoadedException
-    _OverflowException = OverflowException
-    _StreamRemovedException = StreamRemovedException
-    _TimeoutException = TimeoutException
-    _UnsupportedSceneException = UnsupportedSceneException
+    _type_Expression = Expression
+    _type_Type = Type
+    _type_GameScene = GameScene
+    _type_TypeCode = TypeCode
+    _type_ClientInfo = ClientInfo
+    _type_ServerSettings = ServerSettings
+    _type_ServerStatistics = ServerStatistics
+    _type_ServerStatus = ServerStatus
+    _type_ArgumentException = ArgumentException
+    _type_ArgumentNullException = ArgumentNullException
+    _type_ArgumentOutOfRangeException = ArgumentOutOfRangeException
+    _type_DivideByZeroException = DivideByZeroException
+    _type_Error = Error
+    _type_IndexOutOfRangeException = IndexOutOfRangeException
+    _type_InvalidOperationException = InvalidOperationException
+    _type_KeyNotFoundException = KeyNotFoundException
+    _type_NotSupportedException = NotSupportedException
+    _type_NullReferenceException = NullReferenceException
+    _type_ObjectDestroyedException = ObjectDestroyedException
+    _type_ObjectNotLoadedException = ObjectNotLoadedException
+    _type_OverflowException = OverflowException
+    _type_StreamRemovedException = StreamRemovedException
+    _type_TimeoutException = TimeoutException
+    _type_UnsupportedSceneException = UnsupportedSceneException
 
 
-class KRPC(metaclass=DeclaredClass):
+class KRPC(metaclass=_DeclaredClass):
     """
     Main kRPC service, used by clients to interact with basic server functionality.
     """
     _service_name = "KRPC"
     _class_name = None
 
-    Expression: type[_Expression] = Expression
-    Type: type[_Type] = Type
-    GameScene: type[_GameScene] = GameScene
-    TypeCode: type[_TypeCode] = TypeCode
-    ClientInfo: type[_ClientInfo] = ClientInfo
-    ServerSettings: type[_ServerSettings] = ServerSettings
-    ServerStatistics: type[_ServerStatistics] = ServerStatistics
-    ServerStatus: type[_ServerStatus] = ServerStatus
-    ArgumentException: type[_ArgumentException] = ArgumentException
-    ArgumentNullException: type[_ArgumentNullException] = ArgumentNullException
-    ArgumentOutOfRangeException: type[_ArgumentOutOfRangeException] = ArgumentOutOfRangeException
-    DivideByZeroException: type[_DivideByZeroException] = DivideByZeroException
-    Error: type[_Error] = Error
-    IndexOutOfRangeException: type[_IndexOutOfRangeException] = IndexOutOfRangeException
-    InvalidOperationException: type[_InvalidOperationException] = InvalidOperationException
-    KeyNotFoundException: type[_KeyNotFoundException] = KeyNotFoundException
-    NotSupportedException: type[_NotSupportedException] = NotSupportedException
-    NullReferenceException: type[_NullReferenceException] = NullReferenceException
-    ObjectDestroyedException: type[_ObjectDestroyedException] = ObjectDestroyedException
-    ObjectNotLoadedException: type[_ObjectNotLoadedException] = ObjectNotLoadedException
-    OverflowException: type[_OverflowException] = OverflowException
-    StreamRemovedException: type[_StreamRemovedException] = StreamRemovedException
-    TimeoutException: type[_TimeoutException] = TimeoutException
-    UnsupportedSceneException: type[_UnsupportedSceneException] = UnsupportedSceneException
+    Expression: type[_type_Expression] = Expression
+    Type: type[_type_Type] = Type
+    GameScene: type[_type_GameScene] = GameScene
+    TypeCode: type[_type_TypeCode] = TypeCode
+    ClientInfo: type[_type_ClientInfo] = ClientInfo
+    ServerSettings: type[_type_ServerSettings] = ServerSettings
+    ServerStatistics: type[_type_ServerStatistics] = ServerStatistics
+    ServerStatus: type[_type_ServerStatus] = ServerStatus
+    ArgumentException: type[_type_ArgumentException] = ArgumentException
+    ArgumentNullException: type[_type_ArgumentNullException] = ArgumentNullException
+    ArgumentOutOfRangeException: type[_type_ArgumentOutOfRangeException] = ArgumentOutOfRangeException
+    DivideByZeroException: type[_type_DivideByZeroException] = DivideByZeroException
+    Error: type[_type_Error] = Error
+    IndexOutOfRangeException: type[_type_IndexOutOfRangeException] = IndexOutOfRangeException
+    InvalidOperationException: type[_type_InvalidOperationException] = InvalidOperationException
+    KeyNotFoundException: type[_type_KeyNotFoundException] = KeyNotFoundException
+    NotSupportedException: type[_type_NotSupportedException] = NotSupportedException
+    NullReferenceException: type[_type_NullReferenceException] = NullReferenceException
+    ObjectDestroyedException: type[_type_ObjectDestroyedException] = ObjectDestroyedException
+    ObjectNotLoadedException: type[_type_ObjectNotLoadedException] = ObjectNotLoadedException
+    OverflowException: type[_type_OverflowException] = OverflowException
+    StreamRemovedException: type[_type_StreamRemovedException] = StreamRemovedException
+    TimeoutException: type[_type_TimeoutException] = TimeoutException
+    UnsupportedSceneException: type[_type_UnsupportedSceneException] = UnsupportedSceneException
 
-    @property
-    def clients(self) -> List[ClientInfo]:
+    @_builtins.property
+    def clients(self) -> _List[ClientInfo]:
         """
         The clients that are currently connected to the server.
         """
         raise _declaration("KRPC", None)
 
-    @property
+    @_builtins.property
     def game_scene(self) -> GameScene:
         """
         The current game scene. Setting this switches the game to the given
@@ -2442,8 +2443,8 @@ class KRPC(metaclass=DeclaredClass):
     def game_scene(self, value: GameScene) -> None:
         raise _declaration("KRPC", None)
 
-    @property
-    def game_state_loads(self) -> int:
+    @_builtins.property
+    def game_state_loads(self) -> _builtins.int:
         """
         The number of game states that have finished loading.
 
@@ -2451,24 +2452,24 @@ class KRPC(metaclass=DeclaredClass):
         """
         raise _declaration("KRPC", None)
 
-    @property
-    def paused(self) -> bool:
+    @_builtins.property
+    def paused(self) -> _builtins.bool:
         """
         Whether the game is paused.
         """
         raise _declaration("KRPC", None)
 
     @paused.setter
-    def paused(self, value: bool) -> None:
+    def paused(self, value: _builtins.bool) -> None:
         raise _declaration("KRPC", None)
 
-    def get_client_id(self) -> bytes:
+    def get_client_id(self) -> _builtins.bytes:
         """
         Returns the identifier for the current client.
         """
         raise _declaration("KRPC", None)
 
-    def get_client_name(self) -> str:
+    def get_client_name(self) -> _builtins.str:
         """
         Returns the name of the current client.
         This is an empty string if the client has no name.

@@ -20,7 +20,7 @@
 {% endmacro %}
 
 {% macro class(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}
+.. class:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -43,7 +43,7 @@
 {% endmacro %}
 
 {% macro procedure(x) %}{{ mark_documented(x) }}
-.. function:: {{ domain.return_type(x.return_type) }} {{ x.name }}({{ parameters(x.parameters) }})
+.. function:: {{ domain.return_type(x.return_type) }} {{ domain.member_name(x) }}({{ parameters(x.parameters) }})
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -65,7 +65,7 @@
 {% endmacro %}
 
 {% macro property(x) %}{{ mark_documented(x) }}
-.. property:: {{ domain.return_type(x.type) }} {{ x.name }} {{'{'}}{% if x.getter != None %} get;{% endif %}{% if x.setter != None %} set;{% endif %} {{'}'}}
+.. property:: {{ domain.return_type(x.type) }} {{ domain.member_name(x) }} {{'{'}}{% if x.getter != None %} get;{% endif %}{% if x.setter != None %} set;{% endif %} {{'}'}}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -86,7 +86,7 @@
 {% endmacro %}
 
 {% macro class_method(x) %}{{ mark_documented(x) }}
-.. function:: {{ domain.return_type(x.return_type) }} {{ x.name }}({{ parameters(x.parameters[1:]) }})
+.. function:: {{ domain.return_type(x.return_type) }} {{ domain.member_name(x) }}({{ parameters(x.parameters[1:]) }})
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -108,7 +108,7 @@
 {% endmacro %}
 
 {% macro class_static_method(x) %}{{ mark_documented(x) }}
-.. function:: static {{ domain.return_type(x.return_type) }} {{ x.name }}(IConnection connection{% if x.parameters %}, {{ parameters(x.parameters) }}{% endif %})
+.. function:: static {{ domain.return_type(x.return_type) }} {{ domain.member_name(x) }}(IConnection connection{% if x.parameters %}, {{ parameters(x.parameters) }}{% endif %})
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -134,7 +134,7 @@
 {% endmacro %}
 
 {% macro enumeration(x) %}{{ mark_documented(x) }}
-.. enum:: {{ x.name }}
+.. enum:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -146,7 +146,7 @@
 
 {% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
-   .. enumerator:: {{ value.name }}
+   .. enumerator:: {{ domain.member_name(value) }}
 
 {% if value.deprecated %}{{ deprecated(value) | indent(width=6) }}
 
@@ -158,7 +158,7 @@
 {% endmacro %}
 
 {% macro struct(x) %}{{ mark_documented(x) }}
-.. struct:: {{ x.name }}
+.. struct:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -168,12 +168,12 @@
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
 {% endif %}
-   .. function:: {{ x.name }}({% for field in x.fields.values() %}{{ domain.field_type(field) }} {{ field.name | lower_camelcase }}{% if not loop.last %}, {% endif %}{% endfor %})
+   .. function:: {{ domain.type_name(x) }}({% for field in x.fields.values() %}{{ domain.field_type(field) }} {{ domain.field_parameter_name(field) }}{% if not loop.last %}, {% endif %}{% endfor %})
 
-      Construct a {{ x.name }} from the values of its fields.
+      Construct a {{ domain.type_name(x) }} from the values of its fields.
 
 {% for field in x.fields.values() %}{{ mark_documented(field) }}
-   .. property:: {{ domain.field_type(field) }} {{ field.name }} {{'{'}} get; {{'}'}}
+   .. property:: {{ domain.field_type(field) }} {{ domain.member_name(field) }} {{'{'}} get; {{'}'}}
 
 {% if field.deprecated %}{{ deprecated(field) | indent(width=6) }}
 
@@ -183,7 +183,7 @@
 {% endmacro %}
 
 {% macro exception(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}
+.. class:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 

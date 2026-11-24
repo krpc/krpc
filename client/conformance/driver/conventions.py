@@ -7,7 +7,10 @@ own mapping fails the suite.
     "remote_error": "krpc.error.RemoteError",
     "server_error": "krpc.error.ServerError",
     "native_types": {"System.ArgumentException": "ValueError", ...},
-    "naming": {"case": "snake", "accessors": false, "exceptions": true}
+    "naming": {
+      "case": "snake", "accessors": false, "exceptions": true,
+      "service_escapes": ["close", ...], "type_escapes": ["{service}Connection"]
+    }
   }
 
 remote_error names the type every error of the client's own derives, as the testee reports it.
@@ -15,6 +18,9 @@ It is null for a client whose errors are codes, with no type to derive. server_e
 the client's exception types derive, and is null for such a client too.
 A key of native_types is the mapped type of a KRPC exception, the .NET exception it stands for.
 A null value is an exception the client raises only as a type of its own.
+service_escapes lists the names, in the client's case, that a service takes a trailing underscore
+for, as members of the client's connection. type_escapes lists the type names that take one, where
+{service} stands for the name of the service the type belongs to.
 A client with the error-types profile needs remote_error, server_error and native_types, and
 one with the definitions profile needs naming.
 """
@@ -48,15 +54,30 @@ CASES: dict[str, Callable[[str], str]] = {
 @dataclass(frozen=True)
 class Naming:
     """The case of member names, whether a property is a pair of getter and setter
-    functions, and whether the client exposes exception types."""
+    functions, whether the client exposes exception types, and the service and type names
+    the client escapes."""
 
     case: str
     accessors: bool
     exceptions: bool
+    service_escapes: frozenset[str] = frozenset()
+    type_escapes: frozenset[str] = frozenset()
 
     def convert(self, name: str) -> str:
         """A name in the client's case."""
         return CASES[self.case](name)
+
+    def service(self, name: str) -> str:
+        """The name the client exposes a service as: in the client's case, with a trailing
+        underscore where it is an escaped name."""
+        name = self.convert(name)
+        return name + "_" if name in self.service_escapes else name
+
+    def type(self, service: str, name: str) -> str:
+        """The name the client exposes a type of a service as, with a trailing underscore
+        where it is an escaped name."""
+        escapes = {x.replace("{service}", service) for x in self.type_escapes}
+        return name + "_" if name in escapes else name
 
     def accessor(self, prefix: str, name: str) -> str:
         """The name of a property accessor, for the prefix get or set: the prefix and the name
@@ -97,7 +118,7 @@ def read(path: str) -> Conventions:
 
 def _naming(path: str, naming: dict) -> Naming:
     """The naming section of a file, checked against the cases and flags it can hold."""
-    fields = {"case", "accessors", "exceptions"}
+    fields = {"case", "accessors", "exceptions", "service_escapes", "type_escapes"}
     if set(naming) != fields:
         raise ValueError(
             "%s: naming needs exactly the keys %s" % (path, ", ".join(sorted(fields)))
@@ -112,7 +133,18 @@ def _naming(path: str, naming: dict) -> Naming:
             raise ValueError(
                 "%s: naming %s is %r, not true or false" % (path, flag, naming[flag])
             )
-    return Naming(**naming)
+    for escapes in ("service_escapes", "type_escapes"):
+        if not isinstance(naming[escapes], list):
+            raise ValueError(
+                "%s: naming %s is %r, not a list" % (path, escapes, naming[escapes])
+            )
+    return Naming(
+        case=naming["case"],
+        accessors=naming["accessors"],
+        exceptions=naming["exceptions"],
+        service_escapes=frozenset(naming["service_escapes"]),
+        type_escapes=frozenset(naming["type_escapes"]),
+    )
 
 
 def missing(conventions: Conventions, profiles: list[str]) -> list[str]:

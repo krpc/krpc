@@ -105,6 +105,16 @@ Service documentation string.
 
 
 
+.. staticmethod:: create_object(name: string): TestService.Object
+
+   A new object of the class named Object.
+
+   :param name: The name of the object.
+   :returns: The object.
+
+
+
+
 .. staticmethod:: create_test_object(value: string): TestService.TestClass
 
 
@@ -737,6 +747,14 @@ Service documentation string.
 
 
 
+.. staticmethod:: service(): number
+
+   A procedure named Service, as the C# client names the class of a service.
+
+
+
+
+
 .. staticmethod:: set_default(x?: Set): Set
 
 
@@ -998,6 +1016,46 @@ Service documentation string.
 
 
 
+.. class:: Bound
+
+   A class named after the class a class with static methods nests.
+
+   .. staticmethod:: make(): number
+
+      A static method, which gives the class its nested class of static methods.
+
+
+
+.. class:: ByteString
+
+   A class named ByteString.
+
+
+
+.. class:: ClassBase
+
+   A class named ClassBase.
+
+
+
+.. class:: Client
+
+   A class named Client.
+
+
+
+.. class:: ClientService
+
+   A class named after the alias of the service in the generated JavaScript.
+
+
+
+.. class:: Connection
+
+   A class named Connection.
+
+
+
 .. class:: DeprecatedClass
 
    .. warning:: Deprecated. Use :class:`TestService.TestClass` instead.
@@ -1023,6 +1081,205 @@ Service documentation string.
    .. staticmethod:: inherited_static_method(): string
 
       Static method with no deprecation of its own documentation string.
+
+
+
+.. class:: DocEnum
+
+   A class named DocEnum.
+
+
+
+.. class:: Encoder
+
+   A class named Encoder.
+
+
+
+.. class:: Event
+
+   A class named Event.
+
+
+
+.. class:: Exception
+
+   A class named Exception.
+
+
+
+.. class:: ExtensionMethods
+
+   A class named after the class that reaches a service in the generated C# code.
+
+
+
+.. class:: IConnection
+
+   A class named IConnection.
+
+
+
+.. class:: IEquatable
+
+   A class named IEquatable.
+
+
+
+.. class:: List
+
+   A class named List.
+
+
+
+.. class:: NamedTuple
+
+   A class named NamedTuple.
+
+
+
+.. class:: Names
+
+   A class whose members are named after names in the generated code.
+
+   .. staticmethod:: bind(): number
+
+      A static method named after the method that binds the static methods of a class
+      to a connection.
+
+   .. method:: bound(): number
+
+      A method named after the class that holds the bound static methods of a class.
+
+   .. method:: class_of_(): number
+
+      A method named after a method of a Penlight class.
+
+   .. method:: float(): number
+
+      A method named after a Python builtin.
+
+   .. method:: hash_code(): number
+
+      A method named after a method of java.lang.Object.
+
+   .. method:: instance_parameters(client: number, connection: number, instance: number, return_value: number, return_value_is_null: number, null: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number, procedure_call: number): number
+
+      A method with parameters named after names in the generated code.
+
+   .. method:: krpc(): number
+
+      A method named after the Python client package.
+
+   .. staticmethod:: make_struct(bound: number): TestService.NamesStruct
+
+      A structure with the given value in its field named Bound.
+
+      :param bound: The value.
+
+   .. staticmethod:: parameters(client: number, connection: number, instance: number, return_value: number, return_value_is_null: number, null: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number, procedure_call: number): number
+
+      A static method with parameters named after names in the generated code.
+
+   .. attribute:: property: number
+
+      A property named after a Python builtin.
+
+      :Attribute: Can be read or written
+
+   .. method:: to_string(value: number): string
+
+      A method named after a method of java.lang.Object.
+
+   .. staticmethod:: uint_64t(): number
+
+      A method named after a C++ integer type.
+
+   .. attribute:: value: number
+
+      A property declared after the property named Property.
+
+      :Attribute: Can be read or written
+
+   .. method:: with_defaults(x?: number, y?: number): number
+
+      A method declared after methods named after Python builtins, with defaults that
+      name them.
+
+      :param x: Defaults to ``0/0``.
+      :param y: Defaults to ``krpc.limits.SINT32_MAX``.
+
+
+
+.. class:: None
+
+   A class named after a keyword of Python.
+
+
+
+.. class:: Object
+
+   A class named Object.
+
+   .. attribute:: name: string
+
+      The name of the object.
+
+      :Attribute: Read-only, cannot be set
+
+
+
+.. class:: Optional
+
+   A class named Optional.
+
+
+
+.. class:: Override
+
+   A class named Override.
+
+
+
+.. class:: RPCException
+
+   A class named RPCException.
+
+
+
+.. class:: RemoteObject
+
+   A class named RemoteObject.
+
+
+
+.. class:: Serializable
+
+   A class named Serializable.
+
+
+
+.. class:: Server
+
+   A class named after the namespace of server forms in the generated JavaScript.
+
+
+
+.. class:: Service
+
+   A class named after the class a generated module or namespace declares for its service.
+
+
+
+.. class:: Stream
+
+   A class named Stream.
+
+
+
+.. class:: String
+
+   A class named String.
 
 
 
@@ -1092,6 +1349,30 @@ Service documentation string.
 
 
 
+.. class:: TestServiceConnection
+
+   A class named after the connection type of the generated Python module.
+
+
+
+.. class:: Tuple
+
+   A class named Tuple.
+
+
+
+.. class:: TypeSpecs
+
+   A class named TypeSpecs.
+
+
+
+.. class:: UInt64
+
+   A class named UInt64.
+
+
+
 .. class:: DeprecatedEnum
 
    .. warning:: Deprecated. Use :class:`TestService.TestEnum` instead.
@@ -1109,6 +1390,22 @@ Service documentation string.
       .. warning:: Deprecated. Use :data:`TestService.DeprecatedEnum.value_a` instead.
 
       Deprecated enum ValueB documentation string.
+
+
+
+.. class:: NamesEnum
+
+   An enumeration whose values are named after names in the generated code.
+
+
+   .. data:: mro
+
+      A value named after the method of a Python class that Enum reserves.
+
+
+   .. data:: to_string
+
+      A value named after a member of a JavaScript object.
 
 
 
@@ -1202,6 +1499,42 @@ Service documentation string.
       .. warning:: Deprecated. Use :attr:`TestService.DeprecatedStruct.value` instead.
 
       Deprecated struct OldValue documentation string.
+
+
+
+.. class:: NamesStruct
+
+   A structure whose fields are named after names in the generated code.
+
+
+   .. attribute:: other: number
+
+      A value.
+
+
+   .. attribute:: result: number
+
+      A value.
+
+
+   .. attribute:: java: number
+
+      A value.
+
+
+   .. attribute:: krpc: number
+
+      A value.
+
+
+   .. attribute:: class: number
+
+      A value.
+
+
+   .. attribute:: bound: number
+
+      A value named after the class of static methods bound to a connection.
 
 
 
@@ -1343,3 +1676,11 @@ Service documentation string.
    Deprecated exception documentation string.
 
    Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'TestService'`` and ``'DeprecatedException'``.
+
+
+
+.. class:: RuntimeError
+
+   An exception named RuntimeError.
+
+   Raised as a :class:`krpc.ServerError` whose ``service`` and ``name`` are ``'TestService'`` and ``'RuntimeError'``.

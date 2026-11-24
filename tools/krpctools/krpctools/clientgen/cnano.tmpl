@@ -199,7 +199,7 @@ typedef enum {
   {% for value in enm['values'] %}
 {% if value.documentation %}{{ value.documentation | indent(width=2) }}
 {% endif %}
-  KRPC_{{ service_name | upper }}_{{ enum_name | upper }}_{{ value.name | upper }}{% if value.deprecated %} KRPC_DEPRECATED_VALUE("{{ value.deprecated_reason | string_literal }}"){% endif %} = {{ value.value }}{% if not loop.last %},{% endif %}
+  {{ enum_value_macro(service_name, enum_name, value.name) }}{% if value.deprecated %} KRPC_DEPRECATED_VALUE("{{ value.deprecated_reason | string_literal }}"){% endif %} = {{ value.value }}{% if not loop.last %},{% endif %}
 
   {% endfor %}
 } krpc_{{service_name}}_{{ enum_name }}_t;

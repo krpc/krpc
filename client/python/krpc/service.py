@@ -15,7 +15,7 @@ from xml.etree import ElementTree
 
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.attributes import Attributes
-from krpc.declarations import Lookup, registered
+from krpc.declarations import Lookup, registered, type_name
 from krpc.definitions import (
     CLASS,
     ENUMERATION,
@@ -53,16 +53,33 @@ def _as_literal(value: object, typ: TypeBase) -> str:
     return str(value)
 
 
+# The parameters a method takes ahead of those of its procedure. A parameter of one of these
+# names takes a trailing underscore.
+RESERVED_PARAMETER_NAMES = frozenset(["cls", "self"])
+
+
 def _member_name(name: str) -> str:
     return _update_names(snake_case(name))[0]
 
 
-def _update_names(*names: str) -> list[str]:
-    """Given a list of names, append underscores to reserved keywords
+def _parameter_name(name: str) -> str:
+    return _update_names(snake_case(name), reserved=RESERVED_PARAMETER_NAMES)[0]
+
+
+# The enumeration value name Enum rejects. The others it rejects start with _
+RESERVED_ENUM_VALUE_NAMES = frozenset(["mro"])
+
+
+def _enum_value_name(name: str) -> str:
+    return _update_names(snake_case(name), reserved=RESERVED_ENUM_VALUE_NAMES)[0]
+
+
+def _update_names(*names: str, reserved: frozenset[str] = frozenset()) -> list[str]:
+    """Given a list of names, append underscores to keywords and the reserved names
     without causing names to clash"""
     newnames = []
     for name in names:
-        if keyword.iskeyword(name):
+        if keyword.iskeyword(name) or name in reserved:
             name += "_"
             while name in names:
                 name += "_"
@@ -80,11 +97,19 @@ def _construct_func(
     param_required: Iterable[bool],
     param_default: Iterable[object | None],
     return_type: TypeBase | None,
+    instance: bool = False,
 ) -> Callable:
-    """Build function to invoke a remote procedure"""
+    """Build function to invoke a remote procedure. With instance, the first parameter is the
+    instance of a method, which keeps its name."""
 
-    prefix_param_names = _update_names(*prefix_param_names)
-    param_names = _update_names(*param_names)
+    # A parameter is named in snake case, which has no upper case letter, so the names the
+    # code is evaluated with take one
+    prefix_param_names = list(prefix_param_names)
+    param_names = list(param_names)
+    first = param_names[:1] if instance else []
+    param_names = first + _update_names(
+        *param_names[len(first) :], reserved=RESERVED_PARAMETER_NAMES
+    )
 
     params = []
     for name, required, default, typ in zip(
@@ -98,21 +123,21 @@ def _construct_func(
         "'" + str(service_name) + "'",
         "'" + str(procedure_name) + "'",
         "[" + ",".join(param_names) + "]",
-        "param_types",
-        "return_type",
+        "ParamTypes",
+        "ReturnType",
     ]
     code = (
         "lambda "
         + ", ".join(prefix_param_names + params)
-        + ": invoke("
+        + ": Invoke("
         + ", ".join(invoke_args)
         + ")"
     )
     context = {
-        "invoke": invoke,
+        "Invoke": invoke,
         "DefaultArgument": DefaultArgument,
-        "param_types": param_types,
-        "return_type": return_type,
+        "ParamTypes": param_types,
+        "ReturnType": return_type,
     }
     fn = eval(code, context)
     # Connection.get_call_template reads the procedure the function calls
@@ -227,7 +252,7 @@ def _parse_documentation_node(
     if node.tag == "see":
         return parse_cref(node.attrib["cref"])
     if node.tag == "paramref":
-        return snake_case(node.attrib["name"])
+        return _parameter_name(node.attrib["name"])
     if node.tag == "c":
         replace = {"true": "True", "false": "False", "null": "None"}
         if node.text in replace:
@@ -272,7 +297,7 @@ def _parse_documentation(xml: str) -> str:
             summary = _parse_documentation_content(node)
         elif node.tag == "param":
             doc = _parse_documentation_content(node).replace("\n", "")
-            params.append("%s: %s" % (snake_case(node.attrib["name"]), doc))
+            params.append("%s: %s" % (_parameter_name(node.attrib["name"]), doc))
         elif node.tag == "returns":
             returns = "Returns:\n    %s" % _parse_documentation_content(node).replace(
                 "\n", ""
@@ -340,14 +365,19 @@ def service_definitions(
         doc = _documentation(enumeration, name)
         values = dict(
             (
-                _member_name(value.name),
+                _enum_value_name(value.name),
                 {
                     "value": value.value,
                     "doc": _documentation(value, name),
                     "deprecated": deprecation_warning(
                         value,
                         name,
-                        "%s.%s.%s" % (name, enumeration.name, _member_name(value.name)),
+                        "%s.%s.%s"
+                        % (
+                            name,
+                            type_name(name, enumeration.name),
+                            _enum_value_name(value.name),
+                        ),
                     ),
                 },
             )
@@ -405,7 +435,9 @@ def service_definitions(
                 generated = None
             deprecated_fields = {
                 field_name: deprecation_warning(
-                    field, name, "%s.%s.%s" % (name, struct.name, field_name)
+                    field,
+                    name,
+                    "%s.%s.%s" % (name, type_name(name, struct.name), field_name),
                 )
                 for field_name, field in zip(field_names, struct.fields)
                 if field.deprecated
@@ -601,11 +633,11 @@ class RemoteService(DynamicType):
     def _add_service_type(cls, member: Any, python_type: object) -> None:
         """Make a type a member of the service"""
         warning = deprecation_warning(
-            member, cls._name, "%s.%s" % (cls._name, member.name)
+            member, cls._name, "%s.%s" % (cls._name, type_name(cls._name, member.name))
         )
         if warning:
             python_type = DeprecatedDefinition(member.name, warning, python_type)
-        setattr(cls, member.name, python_type)
+        setattr(cls, type_name(cls._name, member.name), python_type)
 
     @classmethod
     def _add_service_class(cls, remote_cls: KRPC.Class) -> None:
@@ -813,9 +845,9 @@ class RemoteService(DynamicType):
         param_names, param_types, param_required, param_default, return_type = (
             cls._parse_procedure(procedure)
         )
-        # Rename this to self if it doesn't cause a name clash
-        if "self" not in param_names:
-            param_names[0] = "self"
+        # The instance is self, as a parameter of the procedure named self takes a trailing
+        # underscore
+        param_names[0] = "self"
         func = _construct_func(
             cls._connection._invoke,
             cls._name,
@@ -826,6 +858,7 @@ class RemoteService(DynamicType):
             param_required,
             param_default,
             return_type,
+            instance=True,
         )
         build_call = _construct_func(
             cls._connection._build_call,
@@ -837,13 +870,14 @@ class RemoteService(DynamicType):
             param_required,
             param_default,
             return_type,
+            instance=True,
         )
         name = _member_name(method_name)
         doc = _parse_documentation(procedure.documentation)
         if procedure.deprecated:
             func = _wrap_deprecated(
                 func,
-                cls._name + "." + class_name + "." + name,
+                cls._name + "." + type_name(cls._name, class_name) + "." + name,
                 procedure.deprecated_reason,
                 cls._name,
             )
@@ -891,7 +925,7 @@ class RemoteService(DynamicType):
         if procedure.deprecated:
             func = _wrap_deprecated(
                 func,
-                cls._name + "." + class_name + "." + name,
+                cls._name + "." + type_name(cls._name, class_name) + "." + name,
                 procedure.deprecated_reason,
                 cls._name,
             )
@@ -914,7 +948,9 @@ class RemoteService(DynamicType):
             cls._connection._types.class_type(cls._name, class_name).python_type,
         )
         member_name = _member_name(property_name)
-        qualified_name = cls._name + "." + class_name + "." + member_name
+        qualified_name = (
+            cls._name + "." + type_name(cls._name, class_name) + "." + member_name
+        )
         doc = None
         if getter:
             doc = _parse_documentation(getter.documentation)
@@ -929,9 +965,7 @@ class RemoteService(DynamicType):
         if getter:
             getter_name = getter.name
             param_names, param_types, _, _, return_type = cls._parse_procedure(getter)
-            # Rename this to self if it doesn't cause a name clash
-            if "self" not in param_names:
-                param_names[0] = "self"
+            param_names[0] = "self"
             getter_fn = _construct_func(
                 cls._connection._invoke,
                 cls._name,
@@ -942,6 +976,7 @@ class RemoteService(DynamicType):
                 [True],
                 [None],
                 return_type,
+                instance=True,
             )
             if getter.deprecated:
                 getter_fn = _wrap_deprecated(
@@ -957,6 +992,7 @@ class RemoteService(DynamicType):
                 [True],
                 [None],
                 return_type,
+                instance=True,
             )
             getter_return_type = return_type
             class_cls._add_method("_build_call__" + member_name, build_call)
@@ -965,8 +1001,7 @@ class RemoteService(DynamicType):
             )
         if setter:
             param_names, param_types, _, _, return_type = cls._parse_procedure(setter)
-            if "self" not in param_names:
-                param_names[0] = "self"
+            param_names[0] = "self"
             setter_fn = _construct_func(
                 cls._connection._invoke,
                 cls._name,
@@ -977,6 +1012,7 @@ class RemoteService(DynamicType):
                 [True, True],
                 [None, None],
                 None,
+                instance=True,
             )
             if setter.deprecated:
                 setter_fn = _wrap_deprecated(
@@ -992,6 +1028,7 @@ class RemoteService(DynamicType):
                 [True, True],
                 [None, None],
                 None,
+                instance=True,
             )
             class_cls._add_method("_build_call_set__" + member_name, build_set_call)
         class_cls._add_property(member_name, getter_fn, setter_fn, doc=doc)

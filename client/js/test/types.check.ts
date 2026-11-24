@@ -1,5 +1,6 @@
 // The types of compiled functions, checked when the tests compile. Nothing runs these
 import type { Connection } from "../dist/connection.js";
+import type { OnClient } from "../dist/server.js";
 import type * as TestService from "../dist/services/TestService.js";
 import { types as t } from "../dist/typevalues.js";
 
@@ -74,5 +75,7 @@ export async function check(
     },
     { obj },
   );
-  void [doubled, echoed, text, value, above, values, counts, empty, objects];
+  // A class named as an export of the package, such as Connection, is the service's own
+  const named: TestService.Connection = {} as OnClient<TestService.Server.Connection>;
+  void [doubled, echoed, text, value, above, values, counts, empty, objects, named];
 }

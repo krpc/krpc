@@ -1,3 +1,5 @@
+import re
+
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     ClassType,
@@ -15,6 +17,30 @@ from krpc.types import (
 from krpc.utils import snake_case
 
 from .language import Language, float32_literal
+
+# A string literal, which is left as it is, or a library name to qualify
+_LIBRARY_NAMES = re.compile(
+    r'"(?:\\.|[^"\\])*"|(?<![\w:])(std::|krpc::|u?int(?:8|16|32|64)_t\b)'
+)
+
+# The class a class with static methods nests, which a class of the same name cannot hold. A type
+# of this name takes a trailing underscore
+GENERATED_TYPE_NAMES = frozenset(["Bound"])
+
+
+def type_name(name):
+    """The name of a class, enumeration, structure or exception of a service, with a trailing
+    underscore where it is the name of a class the generated code nests"""
+    return name + "_" if name in GENERATED_TYPE_NAMES else name
+
+
+def _qualify_library_name(match):
+    name = match.group(1)
+    if name is None:
+        return match.group(0)
+    if name.endswith("_t"):
+        return "::std::" + name
+    return "::" + name
 
 
 class CppLanguage(Language):
@@ -107,6 +133,12 @@ class CppLanguage(Language):
             "xor",
             "xor_eq",
         ]
+    ) | set(
+        [
+            # The static method of a class with static methods, which binds them to a
+            # connection
+            "bind",
+        ]
     )
 
     type_map = {
@@ -158,8 +190,25 @@ class CppLanguage(Language):
         "System.OverflowException": "std::overflow_error",
     }
 
+    # The locals of a generated function, and the connection a static method takes
+    parameter_reserved = frozenset(
+        ["_args", "_data", "_result", "_connection", "connection"]
+    )
+
+    def __init__(self, qualified=False):
+        """With qualified, every type and value is spelled from the global namespace, so that
+        no name a service declares can shadow it in the generated code"""
+        super().__init__()
+        self.qualified = qualified
+
+    def qualify(self, source: str) -> str:
+        if not self.qualified:
+            return source
+        return _LIBRARY_NAMES.sub(_qualify_library_name, source)
+
     def native_exception(self, mapped_type: str) -> str | None:
-        return self.native_exceptions.get(mapped_type)
+        native = self.native_exceptions.get(mapped_type)
+        return None if native is None else self.qualify(native)
 
     def exception_alias(self, service: str, name: str, mapped_type: str) -> str | None:
         # The server removes a stream with this exception, thrown as the client's StreamError
@@ -171,6 +220,9 @@ class CppLanguage(Language):
         return super().parse_name(snake_case(name))
 
     def parse_type(self, typ):
+        return self.qualify(self._parse_nullable_type(typ))
+
+    def _parse_nullable_type(self, typ):
         """The C++ type of a value. A value that can hold null is a std::optional, at a
         slot and at a position inside another value alike, as the type is all the codec
         has to read nullability from."""
@@ -191,24 +243,30 @@ class CppLanguage(Language):
         if isinstance(typ, MessageType):
             return "krpc::schema::%s" % typ.python_type.__name__
         if isinstance(typ, ListType):
-            return "std::vector<%s>" % self.parse_type(typ.value_type)
+            return "std::vector<%s>" % self._parse_nullable_type(typ.value_type)
         if isinstance(typ, SetType):
-            return "std::set<%s>" % self.parse_type(typ.value_type)
+            return "std::set<%s>" % self._parse_nullable_type(typ.value_type)
         if isinstance(typ, DictionaryType):
             return "std::map<%s, %s>" % (
-                self.parse_type(typ.key_type),
-                self.parse_type(typ.value_type),
+                self._parse_nullable_type(typ.key_type),
+                self._parse_nullable_type(typ.value_type),
             )
         if isinstance(typ, TupleType):
             return "std::tuple<%s>" % ", ".join(
-                self.parse_type(t) for t in typ.value_types
+                self._parse_nullable_type(t) for t in typ.value_types
             )
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
-            name = "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
+            name = type_name(typ.protobuf_type.name)
+            if self.qualified:
+                return "krpc::services::%s::%s" % (typ.protobuf_type.service, name)
+            name = "%s.%s" % (typ.protobuf_type.service, name)
             return self.shorten_ref(name).replace(".", "::")
         raise RuntimeError("Unknown type '%s'" % str(typ))
 
-    def parse_default_value(self, value, typ):
+    def parse_default_value(self, value, typ) -> str:
+        return self.qualify(self._parse_default_value(value, typ))
+
+    def _parse_default_value(self, value, typ):
         special = self.parse_special_value(value, typ)
         if special is not None:
             return special

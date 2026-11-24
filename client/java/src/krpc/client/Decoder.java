@@ -27,6 +27,20 @@ import org.javatuples.Unit;
 
 /** Decodes values from kRPC procedure results. */
 public class Decoder {
+
+  // The class a class with static methods nests, which a class of the same name cannot hold. A
+  // type of this name takes a trailing underscore in the generated code
+  private static final Set<String> GENERATED_TYPE_NAMES = Set.of("Bound");
+
+  /** The name of the generated class of a class, enumeration or structure the server names. */
+  static String generatedClassName(KRPC.Type type) {
+    String name = type.getName();
+    if (GENERATED_TYPE_NAMES.contains(name)) {
+      name += "_";
+    }
+    return "krpc.client.services." + type.getService() + "$" + name;
+  }
+
   /**
    * Decode one of the values a collection or a structure holds, which encodeItem wrote.
    */
@@ -179,8 +193,7 @@ public class Decoder {
       throws IOException {
     try {
       long id = decodeUint64(data);
-      Class<?> classType = Class.forName(
-          "krpc.client.services." + type.getService() + "$" + type.getName());
+      Class<?> classType = Class.forName(generatedClassName(type));
       Constructor<?> ctor = classType.getConstructor(Connection.class, long.class);
       return (T) ctor.newInstance(connection, id);
     } catch (ClassNotFoundException exn) {
@@ -201,8 +214,7 @@ public class Decoder {
   static <T> T decodeEnum(ByteString data, KRPC.Type type) {
     try {
       int value = decodeSint32(data);
-      Class<?> enumType = Class.forName(
-          "krpc.client.services." + type.getService() + "$" + type.getName());
+      Class<?> enumType = Class.forName(generatedClassName(type));
       // fromValue gives null for a number the enumeration does not declare
       Object result = enumType.getMethod("fromValue", int.class).invoke(null, value);
       if (result == null) {

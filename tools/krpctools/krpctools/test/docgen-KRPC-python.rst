@@ -2056,7 +2056,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
       A sequence of bytes.
 
 
-   .. data:: class
+   .. data:: class_
 
       A class defined by a service.
 

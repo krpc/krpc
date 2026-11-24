@@ -11,12 +11,14 @@ class TestClientGenCpp(ClientGenTestCase, unittest.TestCase):
     def test_flags_default(self):
         content = self.generate("FlagsService", self.load("FlagsDefault"))
         self.assertIn(
-            "mode = FlagsService::Mode::slow | FlagsService::Mode::fast", content
+            "mode = ::krpc::services::FlagsService::Mode::slow"
+            " | ::krpc::services::FlagsService::Mode::fast",
+            content,
         )
 
     def test_bytes_default(self):
         content = self.generate("ServiceA", bytes_default())
-        self.assertIn('std::string value = std::string("\\xca\\xfe", 2)', content)
+        self.assertIn('::std::string value = ::std::string("\\xca\\xfe", 2)', content)
 
     def test_invoke_returns(self):
         # A nullable stream or event is invoked with the same Returns kind as a non-nullable one
@@ -58,8 +60,8 @@ class TestClientGenCpp(ClientGenTestCase, unittest.TestCase):
                 % (name, returns),
                 actual,
             )
-        self.assertIn("std::optional<::krpc::Event>", actual)
-        self.assertIn("std::optional<uint64_t>", actual)
+        self.assertIn("::std::optional<::krpc::Event>", actual)
+        self.assertIn("::std::optional<::std::uint64_t>", actual)
 
     def test_includes_the_services_it_uses(self):
         # ServiceA uses an enumeration of ServiceB only

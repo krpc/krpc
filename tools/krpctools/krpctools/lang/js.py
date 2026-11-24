@@ -23,6 +23,41 @@ def accessor_name(prefix, name):
     return prefix + name
 
 
+# The members of Object.prototype, which a member of a service, an object, an enumeration or a
+# structure value of the same name would replace
+OBJECT_MEMBERS = frozenset(
+    [
+        "constructor",
+        "hasOwnProperty",
+        "isPrototypeOf",
+        "propertyIsEnumerable",
+        "toLocaleString",
+        "toString",
+        "valueOf",
+    ]
+)
+
+# The members of a class, which a static method of the same name would replace
+CLASS_MEMBERS = OBJECT_MEMBERS | frozenset(["length", "name", "prototype"])
+
+
+# The names the module of a service declares beside its types
+MODULE_NAMES = frozenset(["ClientService", "Server", "Service"])
+
+
+def type_name(name):
+    """The name of a class, enumeration, structure or exception of a service, with a trailing
+    underscore where it is a name the module of the service declares"""
+    return name + "_" if name in MODULE_NAMES else name
+
+
+def member_name(name, static=False):
+    """The name of a member in lower camel case, with a trailing underscore where it would
+    replace a member of the object that holds it"""
+    name = lower_camel_case(name)
+    return name + "_" if name in (CLASS_MEMBERS if static else OBJECT_MEMBERS) else name
+
+
 # The JavaScript error each .NET exception the server maps one to extends, as the client
 # declares in errors.ts
 NATIVE_ERRORS = {
@@ -51,6 +86,9 @@ class JsLanguage(Language):
     }
 
     def parse_name(self, name):
+        return member_name(name)
+
+    def parse_parameter_name(self, name):
         return lower_camel_case(name)
 
     def native_exception(self, mapped_type):
@@ -82,7 +120,10 @@ class JsLanguage(Language):
         if isinstance(typ, MessageType):
             return "schema.%s" % typ.python_type.__name__
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
-            return "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
+            return "%s.%s" % (
+                typ.protobuf_type.service,
+                type_name(typ.protobuf_type.name),
+            )
         if isinstance(typ, (ListType, TupleType)):
             return "Array"
         if isinstance(typ, SetType):
@@ -112,7 +153,7 @@ class JsLanguage(Language):
             return str(value)
         if isinstance(typ, EnumerationType):
             names = [
-                "%s.%s" % (self.parse_type(typ), lower_camel_case(name))
+                "%s.%s" % (self.parse_type(typ), member_name(name))
                 for name in self.enum_value_names(value)
             ]
             return names[0] + "".join(".union(%s)" % x for x in names[1:])
@@ -120,7 +161,7 @@ class JsLanguage(Language):
             fields = (
                 "%s: %s"
                 % (
-                    lower_camel_case(name),
+                    member_name(name),
                     self.parse_default_value(x, typ.field_types[i]),
                 )
                 for i, (name, x) in enumerate(zip(typ.field_names, value))

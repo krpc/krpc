@@ -20,6 +20,7 @@ srcs = [
     "src/ConformanceService.cs",
     "src/DeprecatedService.cs",
     "src/TestService.cs",
+    "src/TestServiceNames.cs",
     ":AssemblyInfo",
 ]
 

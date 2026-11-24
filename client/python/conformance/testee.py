@@ -27,10 +27,15 @@ import krpc
 import krpc.error
 from krpc.attributes import Attributes
 from krpc.connection import Connection
+from krpc.declarations import service_attribute, type_name
 from krpc.decoder import Decoder
 from krpc.encoder import Encoder
 from krpc.event import Event
-from krpc.service import RemoteService
+from krpc.service import (
+    RESERVED_ENUM_VALUE_NAMES,
+    RESERVED_PARAMETER_NAMES,
+    RemoteService,
+)
 from krpc.transport import Transport
 from krpc.types import RemoteObject, TypeBase
 from krpc.utils import snake_case
@@ -236,7 +241,7 @@ class Testee:
         elif case == "invoke":
             func, args = self._resolve(command.invoke)
             kwargs = {
-                snake_case(x.name): self._from_value(x.value)
+                parameter_name(x.name): self._from_value(x.value)
                 for x in command.invoke.named_arguments
             }
             reply.value.CopyFrom(self._to_value(func(*args, **kwargs)))
@@ -492,19 +497,23 @@ class Testee:
                 if command.HasField("through"):
                     through = self._from_value(command.through)
                     return getattr(through, member_name(member)), args
-                service = getattr(self._connection(), snake_case(command.service))
-                cls = getattr(service, Attributes.get_class_name(name))
+                service = getattr(
+                    self._connection(), service_attribute(command.service)
+                )
+                cls = getattr(
+                    service, type_name(command.service, Attributes.get_class_name(name))
+                )
                 return getattr(cls, member_name(member)), args
             if Attributes.is_a_class_property_getter(name):
-                return getattr, [args[0], snake_case(member)]
+                return getattr, [args[0], member_name(member)]
             if Attributes.is_a_class_property_setter(name):
-                return setattr, [args[0], snake_case(member), args[1]]
+                return setattr, [args[0], member_name(member), args[1]]
             return getattr(args[0], member_name(member)), args[1:]
-        service = getattr(self._connection(), snake_case(command.service))
+        service = getattr(self._connection(), service_attribute(command.service))
         if Attributes.is_a_property_getter(name):
-            return getattr, [service, snake_case(Attributes.get_property_name(name))]
+            return getattr, [service, member_name(Attributes.get_property_name(name))]
         if Attributes.is_a_property_setter(name):
-            prop = snake_case(Attributes.get_property_name(name))
+            prop = member_name(Attributes.get_property_name(name))
             return setattr, [service, prop, args[0]]
         return getattr(service, member_name(name)), args
 
@@ -512,19 +521,21 @@ class Testee:
         """The arguments of get_call_template for a procedure, which name the member through
         its class or service"""
         name = command.procedure
-        service = getattr(self._connection(), snake_case(command.service))
+        service = getattr(self._connection(), service_attribute(command.service))
         if Attributes.is_a_class_member(name):
-            owner = getattr(service, Attributes.get_class_name(name))
+            owner = getattr(
+                service, type_name(command.service, Attributes.get_class_name(name))
+            )
             member = Attributes.get_class_member_name(name)
             if Attributes.is_a_class_property_getter(name):
-                return [getattr, owner, snake_case(member)]
+                return [getattr, owner, member_name(member)]
             if Attributes.is_a_class_property_setter(name):
-                return [setattr, owner, snake_case(member)]
+                return [setattr, owner, member_name(member)]
             return [getattr(owner, member_name(member))]
         if Attributes.is_a_property_getter(name):
-            return [getattr, service, snake_case(Attributes.get_property_name(name))]
+            return [getattr, service, member_name(Attributes.get_property_name(name))]
         if Attributes.is_a_property_setter(name):
-            return [setattr, service, snake_case(Attributes.get_property_name(name))]
+            return [setattr, service, member_name(Attributes.get_property_name(name))]
         return [getattr(service, member_name(name))]
 
     def _call_back(
@@ -708,9 +719,9 @@ class Testee:
                 for x in dir(conn)
                 if not x.startswith("_") and is_service(getattr(conn, x))
             ]
-        obj = getattr(conn, snake_case(command.service))
+        obj = getattr(conn, service_attribute(command.service))
         if command.name:
-            obj = getattr(obj, command.name)
+            obj = getattr(obj, type_name(command.service, command.name))
             if isinstance(obj, type) and issubclass(obj, enum.Enum):
                 return [x.name for x in obj]
         return [x for x in dir(obj) if not x.startswith("_")]
@@ -746,16 +757,19 @@ class Testee:
             return lambda: func(*args)
         conn = self._connection()
         if not command.member:
-            return lambda: getattr(conn, snake_case(command.service))
-        service = getattr(conn, snake_case(command.service))
-        type_name, _, name = command.member.partition(".")
+            return lambda: getattr(conn, service_attribute(command.service))
+        service = getattr(conn, service_attribute(command.service))
+        member_type, _, name = command.member.partition(".")
+        member_type = type_name(command.service, member_type)
         if not name:
-            return lambda: getattr(service, type_name)
-        typ = getattr(service, type_name)
+            return lambda: getattr(service, member_type)
+        typ = getattr(service, member_type)
         if hasattr(typ, "_fields"):
             value = typ(*[None] * len(typ._fields))
-            return lambda: getattr(value, snake_case(name))
-        return lambda: getattr(typ, snake_case(name))
+            return lambda: getattr(value, member_name(name))
+        if isinstance(typ, enum.EnumMeta):
+            return lambda: getattr(typ, enum_value_name(name))
+        return lambda: getattr(typ, member_name(name))
 
     def _codec_type(self, name: str) -> TypeBase:
         """The client's type for a codec type name, such as "list(nullable uint32)"."""
@@ -788,7 +802,10 @@ class Testee:
 
     def _type(self, service: str, name: str) -> Any:
         """An enum, struct, class or exception type of a service."""
-        return getattr(getattr(self._connection(), snake_case(service)), name)
+        return getattr(
+            getattr(self._connection(), service_attribute(service)),
+            type_name(service, name),
+        )
 
     def _to_value(self, value: object) -> pb.Value:
         result = pb.Value()
@@ -858,14 +875,32 @@ def split_codec_types(names: str) -> list[str]:
 
 
 def member_name(name: str) -> str:
-    """The name the client gives a procedure or method, with an underscore after a keyword."""
+    """The name the client gives a procedure, method, property or structure field, with an
+    underscore after a keyword."""
     name = snake_case(name)
     return name + "_" if keyword.iskeyword(name) else name
 
 
+def enum_value_name(name: str) -> str:
+    """The name the client gives an enumeration value, with an underscore after a keyword and
+    a name Enum rejects."""
+    name = member_name(name)
+    return name + "_" if name in RESERVED_ENUM_VALUE_NAMES else name
+
+
+def parameter_name(name: str) -> str:
+    """The name the client gives a parameter, with an underscore after a keyword and the names
+    of the parameters a method takes ahead of it."""
+    name = member_name(name)
+    return name + "_" if name in RESERVED_PARAMETER_NAMES else name
+
+
 def declared_type(service: str, name: str) -> Any:
     """An enum or struct type of a service, from its generated module."""
-    return getattr(importlib.import_module("krpc.services." + service.lower()), name)
+    return getattr(
+        importlib.import_module("krpc.services." + service.lower()),
+        type_name(service, name),
+    )
 
 
 def is_service(value: object) -> bool:

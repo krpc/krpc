@@ -28,8 +28,11 @@ from krpc.types import (
 from krpc.utils import snake_case
 
 from ..lang.cpp import CppLanguage
-from ..lang.csharp import CsharpLanguage
+from ..lang.cpp import type_name as cpp_type_name
+from ..lang.csharp import CsharpLanguage, service_accessor
+from ..lang.csharp import type_name as csharp_type_name
 from ..lang.java import JavaLanguage
+from ..lang.java import type_name as java_type_name
 from .cnano import CnanoGenerator
 from .generator import Generator
 
@@ -356,7 +359,7 @@ class CsharpDispatchGenerator(DispatchGenerator):
     has_defaults = True
 
     def class_type(self, service, name):
-        return "global::KRPC.Client.Services.%s.%s" % (service, name)
+        return "global::KRPC.Client.Services.%s.%s" % (service, csharp_type_name(name))
 
     def _nullable(self, typ, conversion):
         # A value type takes the nullable form T? where it can hold null
@@ -398,6 +401,8 @@ class CsharpDispatchGenerator(DispatchGenerator):
 
     def struct(self, typ, struct):
         name = "%s_%s" % (self._service, struct["name"])
+        for field in struct["fields"]:
+            field["name"] = self._name(field["remote_name"], struct["name"])
         conversion = {
             "arg": "Arg_%s" % name,
             "result": "Result_%s" % name,
@@ -437,8 +442,16 @@ class CsharpDispatchGenerator(DispatchGenerator):
             "type": "systemAlias::Tuple<%s>" % types,
         }
 
+    def _name(self, name, cls):
+        """The name of a member as the stubs declare it, where one named as the type that
+        holds it takes a trailing underscore"""
+        name = self.language.parse_name(name)
+        owner = csharp_type_name(cls) if cls else "Service"
+        return name + "_" if name == owner else name
+
     def call(self, kind, cls, name, parameters):
-        service = "connection.%s ()" % self._service
+        service = "connection.%s ()" % service_accessor(self._service)
+        name = self._name(name, cls)
         if kind == PROCEDURE:
             return "%s.%s (%s)" % (service, name, _arguments(parameters))
         if kind == GETTER:
@@ -463,8 +476,9 @@ class CsharpDispatchGenerator(DispatchGenerator):
         return "Connection.GetCall (() => %s)" % self.call(kind, cls, name, parameters)
 
     def call_template(self, kind, cls, name, parameters):
-        service = "connection.%s ()" % self._service
+        service = "connection.%s ()" % service_accessor(self._service)
         service_class = "global::KRPC.Client.Services.%s.Service" % self._service
+        name = self._name(name, cls)
         if kind == PROCEDURE:
             defaults = ", ".join("default" for _ in parameters)
             body = "%s.%s (%s)" % (service, name, defaults)
@@ -499,7 +513,7 @@ class CsharpDispatchGenerator(DispatchGenerator):
     def bound_call(self, cls, name, parameters):
         return "%s.Bind (connection).%s (%s)" % (
             self.class_type(self._service, cls),
-            name,
+            self._name(name, cls),
             _arguments(parameters),
         )
 
@@ -519,7 +533,7 @@ class JavaDispatchGenerator(DispatchGenerator):
     language = JavaLanguage()
 
     def class_type(self, service, name):
-        return "krpc.client.services.%s.%s" % (service, name)
+        return "krpc.client.services.%s.%s" % (service, java_type_name(name))
 
     def _nullable(self, typ, conversion):
         # A primitive takes its boxed form where it can hold null, and the conversion
@@ -566,6 +580,8 @@ class JavaDispatchGenerator(DispatchGenerator):
 
     def struct(self, typ, struct):
         name = "%s%s" % (self._service, struct["name"])
+        for field in struct["fields"]:
+            field["getter"] = self._accessor("get", field["remote_name"])
         return {
             "arg": "Values.argNullable(%sDispatch::arg%s)" % (self._service, name),
             "result": "Values.resultNullable(%sDispatch::result%s)"
@@ -609,14 +625,17 @@ class JavaDispatchGenerator(DispatchGenerator):
     def _name(self, name):
         return self.language.parse_name(name)
 
+    def _accessor(self, prefix, name):
+        return self.language.accessor_name(prefix, name)
+
     def call(self, kind, cls, name, parameters):
         service = "%s.newInstance(connection)" % self._service
         if kind == PROCEDURE:
             return "%s.%s(%s)" % (service, self._name(name), _arguments(parameters))
         if kind == GETTER:
-            return "%s.get%s()" % (service, name)
+            return "%s.%s()" % (service, self._accessor("get", name))
         if kind == SETTER:
-            return "%s.set%s(a0)" % (service, name)
+            return "%s.%s(a0)" % (service, self._accessor("set", name))
         if kind == STATIC_METHOD:
             args = ", ".join(["connection"] + [x["name"] for x in parameters])
             return "%s.%s(%s)" % (
@@ -627,8 +646,8 @@ class JavaDispatchGenerator(DispatchGenerator):
         if kind == METHOD:
             return "a0.%s(%s)" % (self._name(name), _arguments(parameters, 1))
         if kind == CLASS_GETTER:
-            return "a0.get%s()" % name
-        return "a0.set%s(a1)" % name
+            return "a0.%s()" % self._accessor("get", name)
+        return "a0.%s(a1)" % self._accessor("set", name)
 
     def stream(self, kind, cls, name, parameters):
         if kind == PROCEDURE:
@@ -638,7 +657,10 @@ class JavaDispatchGenerator(DispatchGenerator):
                 "".join(", " + x["name"] for x in parameters),
             )
         if kind == GETTER:
-            return 'connection.addStream(%s.class, "get%s")' % (self._service, name)
+            return 'connection.addStream(%s.class, "%s")' % (
+                self._service,
+                self._accessor("get", name),
+            )
         if kind == STATIC_METHOD:
             return 'connection.addStream(%s.class, "%s"%s)' % (
                 self.class_type(self._service, cls),
@@ -650,7 +672,7 @@ class JavaDispatchGenerator(DispatchGenerator):
                 self._name(name),
                 "".join(", " + x["name"] for x in parameters[1:]),
             )
-        return 'connection.addStream(a0, "get%s")' % name
+        return 'connection.addStream(a0, "%s")' % self._accessor("get", name)
 
     def procedure_call(self, kind, cls, name, parameters):
         return self.stream(kind, cls, name, parameters).replace(
@@ -663,9 +685,9 @@ class JavaDispatchGenerator(DispatchGenerator):
         else:
             owner = self.class_type(self._service, cls)
         if kind in (GETTER, CLASS_GETTER):
-            method = "get" + name
+            method = self._accessor("get", name)
         elif kind in (SETTER, CLASS_SETTER):
-            method = "set" + name
+            method = self._accessor("set", name)
         else:
             method = self._name(name)
         return 'connection.getCallTemplate(%s.class, "%s")' % (owner, method)
@@ -698,7 +720,7 @@ class CppDispatchGenerator(DispatchGenerator):
     has_defaults = True
 
     def class_type(self, service, name):
-        return "::krpc::services::%s::%s" % (service, name)
+        return "::krpc::services::%s::%s" % (service, cpp_type_name(name))
 
     def _nullable(self, typ, tag):
         if typ.nullable:
@@ -849,7 +871,9 @@ class CnanoDispatchGenerator(DispatchGenerator, CnanoGenerator):
         return _kind(typ).capitalize()
 
     def _struct_tag(self, struct):
-        struct["field_names"] = [snake_case(x["remote_name"]) for x in struct["fields"]]
+        struct["field_names"] = [
+            self.parse_name(snake_case(x["remote_name"])) for x in struct["fields"]
+        ]
         struct["ctype"] = self.class_type(self._service, struct["name"])
         return "%s_%s" % (self._service, struct["name"])
 

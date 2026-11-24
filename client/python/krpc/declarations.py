@@ -4,6 +4,7 @@ of one service for type checkers. Its enumerations, structures and exceptions ar
 
 from __future__ import annotations
 
+import keyword
 import sys
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
@@ -18,13 +19,57 @@ else:
     DeclaredObject = object
 
 
+# The public members of a connection, which a service of the same name would replace. A test
+# checks the list against the members of krpc.connection.Connection
+CONNECTION_MEMBERS = frozenset(
+    [
+        "add_event",
+        "add_stream",
+        "add_stream_update_callback",
+        "close",
+        "compile",
+        "get_call",
+        "get_call_template",
+        "remove_stream_update_callback",
+        "run",
+        "stream",
+        "stream_update_condition",
+        "wait_for_stream_update",
+    ]
+)
+
+
+def service_attribute(service_name: str) -> str:
+    """The attribute of a connection that holds a service, with a trailing underscore where it
+    is a keyword or the name of a member of the connection"""
+    name = snake_case(service_name)
+    if keyword.iskeyword(name) or name in CONNECTION_MEMBERS:
+        return name + "_"
+    return name
+
+
+def type_name(service_name: str, name: str) -> str:
+    """The name of a type of a service, with a trailing underscore where it is a keyword, such
+    as None, or the name of the connection type of the service's generated module"""
+    if keyword.iskeyword(name) or name == service_name + "Connection":
+        return name + "_"
+    return name
+
+
+def _remote_type_name(service_name: str, name: str) -> str:
+    """The name the server gives a type, from its name in the client"""
+    if name.endswith("_") and type_name(service_name, name[:-1]) == name:
+        return name[:-1]
+    return name
+
+
 def declaration_error(service_name: str, class_name: str | None) -> TypeError:
     """The error raised by calling a declaration, which names the class reached through a
     connection in its place."""
     name = service_name if class_name is None else service_name + "." + class_name
-    reached = "conn." + snake_case(service_name)
+    reached = "conn." + service_attribute(service_name)
     if class_name is not None:
-        reached += "." + class_name
+        reached += "." + type_name(service_name, class_name)
     return TypeError(
         "%s is a declaration for type checkers. Reach it through a connection, as %s"
         % (name, reached)
@@ -84,9 +129,10 @@ def register(service_name: str, *classes: type) -> None:
     uses a registered class in place of building its own when the server's definition of it
     matches. A later registration replaces an earlier one."""
     for cls in classes:
+        name = _remote_type_name(service_name, cls.__name__)
         cls._service_name = service_name
-        cls._class_name = cls.__name__
-        _registered[(service_name, cls.__name__)] = cls
+        cls._class_name = name
+        _registered[(service_name, name)] = cls
 
 
 def registered(service_name: str, name: str) -> type | None:
@@ -114,7 +160,7 @@ def connection_lookup(connection_type: type) -> Lookup:
         namespace = modules.get(service_name)
         if namespace is None:
             return registered(service_name, name)
-        cls = namespace.get(name)
+        cls = namespace.get(type_name(service_name, name))
         if isinstance(cls, type) and _names(cls) == (service_name, name):
             return cls
         return None

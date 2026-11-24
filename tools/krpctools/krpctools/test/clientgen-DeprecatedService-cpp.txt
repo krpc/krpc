@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <limits>
 #include <map>
@@ -50,7 +51,7 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
    */
   class [[deprecated("Use TestService instead.")]] ServiceException : public ::krpc::ServerError {
    public:
-    inline explicit ServiceException(const std::string& msg) : ::krpc::ServerError(msg) {}
+    inline explicit ServiceException(const ::std::string& msg) : ::krpc::ServerError(msg) {}
   };
 
   /**
@@ -73,7 +74,7 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
    * \deprecated Use TestService instead.
    */
   [[deprecated("Use TestService instead.")]]
-  std::string procedure();
+  ::std::string procedure();
 
   /**
    * A procedure returning a structure.
@@ -81,7 +82,7 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
    * \deprecated Use TestService instead.
    */
   [[deprecated("Use TestService instead.")]]
-  DeprecatedService::ServiceStruct struct_procedure();
+  ::krpc::services::DeprecatedService::ServiceStruct struct_procedure();
 
   /**
    * A property.
@@ -89,7 +90,7 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
    * \deprecated Use TestService instead.
    */
   [[deprecated("Use TestService instead.")]]
-  std::string property();
+  ::std::string property();
 
   /**
    * A property.
@@ -97,13 +98,13 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
    * \deprecated Use TestService instead.
    */
   [[deprecated("Use TestService instead.")]]
-  void set_property(std::string value);
+  void set_property(::std::string value);
 
-  [[deprecated("Use TestService instead.")]] ::krpc::Stream<std::string> procedure_stream();
+  [[deprecated("Use TestService instead.")]] ::krpc::Stream<::std::string> procedure_stream();
 
-  [[deprecated("Use TestService instead.")]] ::krpc::Stream<DeprecatedService::ServiceStruct> struct_procedure_stream();
+  [[deprecated("Use TestService instead.")]] ::krpc::Stream<::krpc::services::DeprecatedService::ServiceStruct> struct_procedure_stream();
 
-  [[deprecated("Use TestService instead.")]] ::krpc::Stream<std::string> property_stream();
+  [[deprecated("Use TestService instead.")]] ::krpc::Stream<::std::string> property_stream();
 
   [[deprecated("Use TestService instead.")]] ::krpc::schema::ProcedureCall procedure_call();
 
@@ -111,7 +112,7 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
 
   [[deprecated("Use TestService instead.")]] ::krpc::schema::ProcedureCall property_call();
 
-  [[deprecated("Use TestService instead.")]] ::krpc::schema::ProcedureCall set_property_call(std::string value);
+  [[deprecated("Use TestService instead.")]] ::krpc::schema::ProcedureCall set_property_call(::std::string value);
 
   [[deprecated("Use TestService instead.")]] static ::krpc::schema::ProcedureCall procedure_call_template();
 
@@ -129,7 +130,7 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
   class [[deprecated("Use \"TestService.TestClass\" instead.")]] ReasonedClass : public ::krpc::RemoteObject<ReasonedClass> {
    public:
     ReasonedClass();
-    ReasonedClass(const ::krpc::Connection& connection, uint64_t id);
+    ReasonedClass(const ::krpc::Connection& connection, ::std::uint64_t id);
 
     /**
      * A static method.
@@ -137,9 +138,9 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
      * \deprecated Use "TestService.TestClass" instead.
      */
     [[deprecated("Use \"TestService.TestClass\" instead.")]]
-    static std::string static_method(::krpc::Connection& connection);
+    static ::std::string static_method(::krpc::Connection& connection);
 
-    [[deprecated("Use \"TestService.TestClass\" instead.")]] static ::krpc::Stream<std::string> static_method_stream(::krpc::Connection& connection);
+    [[deprecated("Use \"TestService.TestClass\" instead.")]] static ::krpc::Stream<::std::string> static_method_stream(::krpc::Connection& connection);
 
     [[deprecated("Use \"TestService.TestClass\" instead.")]] static ::krpc::schema::ProcedureCall static_method_call(::krpc::Connection& connection);
 
@@ -158,7 +159,7 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
        * \deprecated Use "TestService.TestClass" instead.
        */
       [[deprecated("Use \"TestService.TestClass\" instead.")]]
-      std::string static_method() const;
+      ::std::string static_method() const;
 
      private:
       mutable ::krpc::Connection _connection;
@@ -180,7 +181,7 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
   class [[deprecated("Use TestService instead.")]] ServiceClass : public ::krpc::RemoteObject<ServiceClass> {
    public:
     ServiceClass();
-    ServiceClass(const ::krpc::Connection& connection, uint64_t id);
+    ServiceClass(const ::krpc::Connection& connection, ::std::uint64_t id);
 
     /**
      * A method.
@@ -188,7 +189,7 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
      * \deprecated Use TestService instead.
      */
     [[deprecated("Use TestService instead.")]]
-    std::string method();
+    ::std::string method();
 
     /**
      * A static method.
@@ -196,11 +197,11 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
      * \deprecated Use TestService instead.
      */
     [[deprecated("Use TestService instead.")]]
-    static std::string static_method(::krpc::Connection& connection);
+    static ::std::string static_method(::krpc::Connection& connection);
 
-    [[deprecated("Use TestService instead.")]] ::krpc::Stream<std::string> method_stream();
+    [[deprecated("Use TestService instead.")]] ::krpc::Stream<::std::string> method_stream();
 
-    [[deprecated("Use TestService instead.")]] static ::krpc::Stream<std::string> static_method_stream(::krpc::Connection& connection);
+    [[deprecated("Use TestService instead.")]] static ::krpc::Stream<::std::string> static_method_stream(::krpc::Connection& connection);
 
     [[deprecated("Use TestService instead.")]] ::krpc::schema::ProcedureCall method_call();
 
@@ -223,7 +224,7 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
        * \deprecated Use TestService instead.
        */
       [[deprecated("Use TestService instead.")]]
-      std::string static_method() const;
+      ::std::string static_method() const;
 
      private:
       mutable ::krpc::Connection _connection;
@@ -248,11 +249,11 @@ class [[deprecated("Use TestService instead.")]] DeprecatedService : public ::kr
      *
      * \deprecated Use TestService instead.
      */
-    int32_t field [[deprecated("Use TestService instead.")]];
+    ::std::int32_t field [[deprecated("Use TestService instead.")]];
 
     ServiceStruct() : field() {}
 
-    ServiceStruct(int32_t field) :
+    ServiceStruct(::std::int32_t field) :
 field(field) {}
 
     bool operator==(const ServiceStruct& other) const {
@@ -265,7 +266,7 @@ field(field) {}
 
     // Ordered by the fields in turn, which is how a tuple of the same values orders
     bool operator<(const ServiceStruct& other) const {
-      if (field < other.field)
+      if (this->field < other.field)
         return true;
       return false;
     }
@@ -289,7 +290,7 @@ field(field) {}
 namespace encoder {
 
   inline std::string encode(const services::DeprecatedService::ServiceEnum& value) {
-    return krpc::encoder::encode(static_cast<int32_t>(value));
+    return krpc::encoder::encode(static_cast<::std::int32_t>(value));
   }
 
   // A structure is sent as the values of its fields in order, which is the same encoding as
@@ -307,7 +308,7 @@ namespace encoder {
 namespace decoder {
 
   inline void decode(services::DeprecatedService::ServiceEnum& value, const std::string& data, ::krpc::Connection* connection) {
-    int32_t x;
+    ::std::int32_t x;
     decode(x, data, connection);
     value = static_cast<services::DeprecatedService::ServiceEnum>(x);
   }
@@ -336,58 +337,58 @@ inline std::size_t hash_value(const services::DeprecatedService::ServiceStruct& 
 // encloses the type, which is this one. These name the same functions here, as a
 // second function with the same signature is ambiguous to a compiler that finds both.
 namespace services {
-  using krpc::encoder::encode;
-  using krpc::decoder::decode;
-  using krpc::hash_value;
+  using ::krpc::encoder::encode;
+  using ::krpc::decoder::decode;
+  using ::krpc::hash_value;
 }  // namespace services
 
 namespace services {
 
 inline DeprecatedService::DeprecatedService(const ::krpc::Connection& connection):
-  RemoteService(connection) {
+  ::krpc::RemoteService(connection) {
   _connection.add_exception_thrower(
     "DeprecatedService", "ServiceException",
-    [] (const std::string& msg) { throw ServiceException(msg); });
+    [] (const ::std::string& msg) { throw ServiceException(msg); });
 }
 
-inline std::string DeprecatedService::procedure() {
+inline ::std::string DeprecatedService::procedure() {
   auto _data = this->_connection.invoke("DeprecatedService", "Procedure", {}, ::krpc::Connection::Returns::value);
-  std::string _result{};
-  decoder::decode_result(_result, _data, &this->_connection);
+  ::std::string _result{};
+  ::krpc::decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
-inline DeprecatedService::ServiceStruct DeprecatedService::struct_procedure() {
+inline ::krpc::services::DeprecatedService::ServiceStruct DeprecatedService::struct_procedure() {
   auto _data = this->_connection.invoke("DeprecatedService", "StructProcedure", {}, ::krpc::Connection::Returns::value);
-  DeprecatedService::ServiceStruct _result{};
-  decoder::decode_result(_result, _data, &this->_connection);
+  ::krpc::services::DeprecatedService::ServiceStruct _result{};
+  ::krpc::decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
-inline std::string DeprecatedService::property() {
+inline ::std::string DeprecatedService::property() {
   auto _data = this->_connection.invoke("DeprecatedService", "get_Property", {}, ::krpc::Connection::Returns::value);
-  std::string _result{};
-  decoder::decode_result(_result, _data, &this->_connection);
+  ::std::string _result{};
+  ::krpc::decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
-inline void DeprecatedService::set_property(std::string value) {
-  std::vector<krpc::encoder::Value> _args;
+inline void DeprecatedService::set_property(::std::string value) {
+  ::std::vector<::krpc::encoder::Value> _args;
   _args.reserve(1);
-  _args.push_back(encoder::encode_arg(value));
+  _args.push_back(::krpc::encoder::encode_arg(value));
   this->_connection.invoke("DeprecatedService", "set_Property", _args, ::krpc::Connection::Returns::value);
 }
 
-inline ::krpc::Stream<std::string> DeprecatedService::procedure_stream() {
-  return ::krpc::Stream<std::string>(this->_connection, this->_connection.build_call("DeprecatedService", "Procedure"));
+inline ::krpc::Stream<::std::string> DeprecatedService::procedure_stream() {
+  return ::krpc::Stream<::std::string>(this->_connection, this->_connection.build_call("DeprecatedService", "Procedure"));
 }
 
-inline ::krpc::Stream<DeprecatedService::ServiceStruct> DeprecatedService::struct_procedure_stream() {
-  return ::krpc::Stream<DeprecatedService::ServiceStruct>(this->_connection, this->_connection.build_call("DeprecatedService", "StructProcedure"));
+inline ::krpc::Stream<::krpc::services::DeprecatedService::ServiceStruct> DeprecatedService::struct_procedure_stream() {
+  return ::krpc::Stream<::krpc::services::DeprecatedService::ServiceStruct>(this->_connection, this->_connection.build_call("DeprecatedService", "StructProcedure"));
 }
 
-inline ::krpc::Stream<std::string> DeprecatedService::property_stream() {
-  return ::krpc::Stream<std::string>(this->_connection, this->_connection.build_call("DeprecatedService", "get_Property"));
+inline ::krpc::Stream<::std::string> DeprecatedService::property_stream() {
+  return ::krpc::Stream<::std::string>(this->_connection, this->_connection.build_call("DeprecatedService", "get_Property"));
 }
 
 inline ::krpc::schema::ProcedureCall DeprecatedService::procedure_call() {
@@ -402,10 +403,10 @@ inline ::krpc::schema::ProcedureCall DeprecatedService::property_call() {
   return this->_connection.build_call("DeprecatedService", "get_Property");
 }
 
-inline ::krpc::schema::ProcedureCall DeprecatedService::set_property_call(std::string value) {
-  std::vector<krpc::encoder::Value> _args;
+inline ::krpc::schema::ProcedureCall DeprecatedService::set_property_call(::std::string value) {
+  ::std::vector<::krpc::encoder::Value> _args;
   _args.reserve(1);
-  _args.push_back(encoder::encode_arg(value));
+  _args.push_back(::krpc::encoder::encode_arg(value));
   return this->_connection.build_call("DeprecatedService", "set_Property", _args);
 }
 
@@ -426,20 +427,20 @@ inline ::krpc::schema::ProcedureCall DeprecatedService::set_property_call_templa
 }
 
 inline DeprecatedService::ReasonedClass::ReasonedClass():
-  RemoteObject("DeprecatedService::ReasonedClass") {}
+  ::krpc::RemoteObject<ReasonedClass>("DeprecatedService::ReasonedClass") {}
 
-inline DeprecatedService::ReasonedClass::ReasonedClass(const ::krpc::Connection& connection, uint64_t id):
-  RemoteObject(connection, "DeprecatedService::ReasonedClass", id) {}
+inline DeprecatedService::ReasonedClass::ReasonedClass(const ::krpc::Connection& connection, ::std::uint64_t id):
+  ::krpc::RemoteObject<ReasonedClass>(connection, "DeprecatedService::ReasonedClass", id) {}
 
-inline std::string DeprecatedService::ReasonedClass::static_method(::krpc::Connection& _connection) {
+inline ::std::string DeprecatedService::ReasonedClass::static_method(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("DeprecatedService", "ReasonedClass_static_StaticMethod", {}, ::krpc::Connection::Returns::value);
-    std::string _result{};
-  decoder::decode_result(_result, _data, &_connection);
+    ::std::string _result{};
+  ::krpc::decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
-inline ::krpc::Stream<std::string> DeprecatedService::ReasonedClass::static_method_stream(::krpc::Connection& _connection) {
-  return ::krpc::Stream<std::string>(_connection, _connection.build_call("DeprecatedService", "ReasonedClass_static_StaticMethod"));
+inline ::krpc::Stream<::std::string> DeprecatedService::ReasonedClass::static_method_stream(::krpc::Connection& _connection) {
+  return ::krpc::Stream<::std::string>(_connection, _connection.build_call("DeprecatedService", "ReasonedClass_static_StaticMethod"));
 }
 
 inline ::krpc::schema::ProcedureCall DeprecatedService::ReasonedClass::static_method_call(::krpc::Connection& _connection) {
@@ -453,7 +454,7 @@ inline ::krpc::schema::ProcedureCall DeprecatedService::ReasonedClass::static_me
 inline DeprecatedService::ReasonedClass::Bound::Bound(const ::krpc::Connection& connection):
   _connection(connection) {}
 
-inline std::string DeprecatedService::ReasonedClass::Bound::static_method() const {
+inline ::std::string DeprecatedService::ReasonedClass::Bound::static_method() const {
   return DeprecatedService::ReasonedClass::static_method(_connection);
 }
 
@@ -462,43 +463,43 @@ inline DeprecatedService::ReasonedClass::Bound DeprecatedService::ReasonedClass:
 }
 
 inline DeprecatedService::ServiceClass::ServiceClass():
-  RemoteObject("DeprecatedService::ServiceClass") {}
+  ::krpc::RemoteObject<ServiceClass>("DeprecatedService::ServiceClass") {}
 
-inline DeprecatedService::ServiceClass::ServiceClass(const ::krpc::Connection& connection, uint64_t id):
-  RemoteObject(connection, "DeprecatedService::ServiceClass", id) {}
+inline DeprecatedService::ServiceClass::ServiceClass(const ::krpc::Connection& connection, ::std::uint64_t id):
+  ::krpc::RemoteObject<ServiceClass>(connection, "DeprecatedService::ServiceClass", id) {}
 
-inline std::string DeprecatedService::ServiceClass::method() {
-  std::vector<krpc::encoder::Value> _args;
+inline ::std::string DeprecatedService::ServiceClass::method() {
+  ::std::vector<::krpc::encoder::Value> _args;
   _args.reserve(1);
-  _args.push_back(encoder::encode_arg(*this));
+  _args.push_back(::krpc::encoder::encode_arg(*this));
   auto _data = this->_connection.invoke("DeprecatedService", "ServiceClass_Method", _args, ::krpc::Connection::Returns::value);
-  std::string _result{};
-  decoder::decode_result(_result, _data, &this->_connection);
+  ::std::string _result{};
+  ::krpc::decoder::decode_result(_result, _data, &this->_connection);
   return _result;
 }
 
-inline std::string DeprecatedService::ServiceClass::static_method(::krpc::Connection& _connection) {
+inline ::std::string DeprecatedService::ServiceClass::static_method(::krpc::Connection& _connection) {
   auto _data = _connection.invoke("DeprecatedService", "ServiceClass_static_StaticMethod", {}, ::krpc::Connection::Returns::value);
-    std::string _result{};
-  decoder::decode_result(_result, _data, &_connection);
+    ::std::string _result{};
+  ::krpc::decoder::decode_result(_result, _data, &_connection);
   return _result;
 }
 
-inline ::krpc::Stream<std::string> DeprecatedService::ServiceClass::method_stream() {
-  std::vector<krpc::encoder::Value> _args;
+inline ::krpc::Stream<::std::string> DeprecatedService::ServiceClass::method_stream() {
+  ::std::vector<::krpc::encoder::Value> _args;
   _args.reserve(1);
-  _args.push_back(encoder::encode_arg(*this));
-  return ::krpc::Stream<std::string>(this->_connection, this->_connection.build_call("DeprecatedService", "ServiceClass_Method", _args));
+  _args.push_back(::krpc::encoder::encode_arg(*this));
+  return ::krpc::Stream<::std::string>(this->_connection, this->_connection.build_call("DeprecatedService", "ServiceClass_Method", _args));
 }
 
-inline ::krpc::Stream<std::string> DeprecatedService::ServiceClass::static_method_stream(::krpc::Connection& _connection) {
-  return ::krpc::Stream<std::string>(_connection, _connection.build_call("DeprecatedService", "ServiceClass_static_StaticMethod"));
+inline ::krpc::Stream<::std::string> DeprecatedService::ServiceClass::static_method_stream(::krpc::Connection& _connection) {
+  return ::krpc::Stream<::std::string>(_connection, _connection.build_call("DeprecatedService", "ServiceClass_static_StaticMethod"));
 }
 
 inline ::krpc::schema::ProcedureCall DeprecatedService::ServiceClass::method_call() {
-  std::vector<krpc::encoder::Value> _args;
+  ::std::vector<::krpc::encoder::Value> _args;
   _args.reserve(1);
-  _args.push_back(encoder::encode_arg(*this));
+  _args.push_back(::krpc::encoder::encode_arg(*this));
   return this->_connection.build_call("DeprecatedService", "ServiceClass_Method", _args);
 }
 
@@ -517,7 +518,7 @@ inline ::krpc::schema::ProcedureCall DeprecatedService::ServiceClass::static_met
 inline DeprecatedService::ServiceClass::Bound::Bound(const ::krpc::Connection& connection):
   _connection(connection) {}
 
-inline std::string DeprecatedService::ServiceClass::Bound::static_method() const {
+inline ::std::string DeprecatedService::ServiceClass::Bound::static_method() const {
   return DeprecatedService::ServiceClass::static_method(_connection);
 }
 

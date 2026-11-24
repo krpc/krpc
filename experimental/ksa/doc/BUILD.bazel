@@ -322,13 +322,15 @@ test_suite(
     ],
 )
 
-# The example linters of the kRPC documentation, with its configurations
+# The example linters of the kRPC documentation, with its configurations, where a warning fails
+# the test
 biome.biome_test(
     name = "biome",
     size = "small",
     args = [
         "ci",
         "--colors=off",
+        "--error-on-warnings",
         "--config-path=doc/src/scripts/biome-scripts.jsonc",
         "$(rootpaths :biome-srcs)",
     ],

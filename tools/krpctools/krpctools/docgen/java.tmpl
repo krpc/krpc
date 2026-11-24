@@ -20,7 +20,7 @@
 {% endmacro %}
 
 {% macro class(x) %}{{ mark_documented(x) }}
-.. type:: public class {{ x.name }}
+.. type:: public class {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -67,11 +67,11 @@
 
 {% macro property(x) %}{{ mark_documented(x) }}
 {% if x.getter != None %}
-.. method:: {{ domain.return_type(x.type) }} get{{ domain.method_name(x.name) }}()
+.. method:: {{ domain.return_type(x.type) }} {{ domain.accessor_name("get", x.name) }}()
 {% endif %}
 
 {% if x.setter != None %}
-.. method:: void set{{ domain.method_name(x.name) }}({{ domain.parameter_type(x.type) }} value)
+.. method:: void {{ domain.accessor_name("set", x.name) }}({{ domain.parameter_type(x.type) }} value)
 {% endif %}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
@@ -141,7 +141,7 @@
 {% endmacro %}
 
 {% macro enumeration(x) %}{{ mark_documented(x) }}
-.. type:: {% if x.flags %}public static final class{% else %}public enum{% endif %} {{ x.name }}
+.. type:: {% if x.flags %}public static final class{% else %}public enum{% endif %} {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -153,7 +153,7 @@
 
 {% endif %}
 {% for value in x.values.values() %}{{ mark_documented(value) }}
-   .. field:: public {% if x.flags %}static final {% endif %}{{ x.name }} {{ value.name | snakecase | upper }}
+   .. field:: public {% if x.flags %}static final {% endif %}{{ domain.type_name(x) }} {{ value.name | snakecase | upper }}
 
 {% if value.deprecated %}{{ deprecated(value) | indent(width=6) }}
 
@@ -165,7 +165,7 @@
 {% endmacro %}
 
 {% macro struct(x) %}{{ mark_documented(x) }}
-.. type:: public class {{ x.name }}
+.. type:: public class {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -175,12 +175,12 @@
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
 
 {% endif %}
-   .. constructor:: public {{ x.name }}({% for field in x.fields.values() %}{{ domain.field_type(field) }} {{ field.name | lower_camelcase }}{% if not loop.last %}, {% endif %}{% endfor %})
+   .. constructor:: public {{ domain.type_name(x) }}({% for field in x.fields.values() %}{{ domain.field_type(field) }} {{ domain.parameter_name(field.name) }}{% if not loop.last %}, {% endif %}{% endfor %})
 
-      Construct a {{ x.name }} from the values of its fields.
+      Construct a {{ domain.type_name(x) }} from the values of its fields.
 
 {% for field in x.fields.values() %}{{ mark_documented(field) }}
-   .. method:: {{ domain.field_type(field) }} get{{ domain.method_name(field.name) }}()
+   .. method:: {{ domain.field_type(field) }} {{ domain.accessor_name("get", field.name) }}()
 
 {% if field.deprecated %}{{ deprecated(field) | indent(width=6) }}
 
@@ -190,7 +190,7 @@
 {% endmacro %}
 
 {% macro exception(x) %}{{ mark_documented(x) }}
-.. type:: public class {{ x.name }}
+.. type:: public class {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 

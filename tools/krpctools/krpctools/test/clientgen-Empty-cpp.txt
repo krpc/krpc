@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <limits>
 #include <map>
@@ -42,7 +43,7 @@ class EmptyService : public ::krpc::RemoteService {
 namespace services {
 
 inline EmptyService::EmptyService(const ::krpc::Connection& connection):
-  RemoteService(connection) {
+  ::krpc::RemoteService(connection) {
 }
 }  // namespace services
 

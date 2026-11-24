@@ -14,11 +14,13 @@ load("//tools/krpctools:clientgen.bzl", "clientgen_js_index", "clientgen_service
 
 exports_files([
     "CHANGELOG.md",
+    "conformance/conventions.json",
     "conformance/expected-failures.txt",
     "conformance/unsupported.txt",
     "package.json",
     "pnpm-lock.yaml",
     "pnpm-workspace.yaml",
+    "src/naming.ts",
 ])
 
 npm_link_all_packages(name = "node_modules")
@@ -289,14 +291,15 @@ js_library(
     ],
 )
 
-# Formatting and lint, from biome.jsonc. The files are named one by one, as Biome skips the
-# symbolic links of the runfiles tree when it searches a directory.
+# Formatting and lint, from biome.jsonc, where a warning fails the test. The files are named one
+# by one, as Biome skips the symbolic links of the runfiles tree when it searches a directory.
 biome.biome_test(
     name = "lint",
     size = "small",
     args = [
         "ci",
         "--colors=off",
+        "--error-on-warnings",
         "--config-path=client/js/biome.jsonc",
         "$(rootpaths :lint-srcs)",
     ],

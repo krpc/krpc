@@ -566,7 +566,7 @@ namespace KRPC.Client
                         connection, instance, RemoteType (node.Type, node)));
             }
             if (IsAStruct (node.Expression.Type))
-                return Result.FromExpression (ServerExpression.GetField (connection, instance, name));
+                return Result.FromExpression (ServerExpression.GetField (connection, instance, RemoteFieldName (name)));
             if (name == "Length" && node.Expression.Type == typeof(string))
                 return Result.FromExpression (ServerExpression.StringLength (connection, instance));
             if (IsATuple (node.Expression.Type) && name.StartsWith ("Item", StringComparison.Ordinal)) {
@@ -2475,11 +2475,11 @@ namespace KRPC.Client
             if (type == typeof(byte[]))
                 return ServerType.Bytes (connection);
             if (typeof(RemoteObject).IsAssignableFrom (type))
-                return ServerType.ClassType (connection, ServiceName (type), type.Name);
+                return ServerType.ClassType (connection, ServiceName (type), RemoteName (type));
             if (type.IsEnum)
-                return ServerType.EnumerationType (connection, ServiceName (type), type.Name);
+                return ServerType.EnumerationType (connection, ServiceName (type), RemoteName (type));
             if (IsAStruct (type))
-                return ServerType.StructType (connection, ServiceName (type), type.Name);
+                return ServerType.StructType (connection, ServiceName (type), RemoteName (type));
             if (IsATuple (type))
                 return ServerType.TupleType (
                     connection, TupleTypes (type, node).Select (t => RemoteType (t, node)).ToList ());
@@ -2522,6 +2522,32 @@ namespace KRPC.Client
                 .OrderBy (property => property.MetadataToken);
         }
 
+        // The classes generated in the namespace of each service, beside its types, and the
+        // class a class with static methods nests. A type of one of these names takes a
+        // trailing underscore in the generated code
+        static readonly string[] generatedTypeNames = { "Bound", "ExtensionMethods", "Service" };
+
+        /// <summary>
+        /// The name the server gives a generated class, enumeration or structure.
+        /// </summary>
+        static string RemoteName (Type type)
+        {
+            var name = type.Name;
+            if (name.EndsWith ("_", StringComparison.Ordinal) &&
+                generatedTypeNames.Contains (name.Substring (0, name.Length - 1)))
+                return name.Substring (0, name.Length - 1);
+            return name;
+        }
+
+        /// <summary>
+        /// The name of the generated type for a class, enumeration or structure the server
+        /// names.
+        /// </summary>
+        static string GeneratedName (string name)
+        {
+            return generatedTypeNames.Contains (name) ? name + "_" : name;
+        }
+
         /// <summary>
         /// The name of the service a generated class, enumeration or structure
         /// belongs to, from its namespace.
@@ -2530,6 +2556,16 @@ namespace KRPC.Client
         {
             var name = type.Namespace ?? string.Empty;
             return name.Substring (name.LastIndexOf ('.') + 1);
+        }
+
+        /// <summary>
+        /// The name the server gives a structure field, from the name of its generated
+        /// property. An escaped property, such as ToString_, ends in an underscore, which no
+        /// name on the server does.
+        /// </summary>
+        static string RemoteFieldName (string name)
+        {
+            return name.EndsWith ("_", StringComparison.Ordinal) ? name.Substring (0, name.Length - 1) : name;
         }
 
         /// <summary>
@@ -2654,7 +2690,7 @@ namespace KRPC.Client
         /// </summary>
         static Type ServiceType (Schema.KRPC.Type described)
         {
-            var name = "KRPC.Client.Services." + described.Service + "." + described.Name;
+            var name = "KRPC.Client.Services." + described.Service + "." + GeneratedName (described.Name);
             return AppDomain.CurrentDomain.GetAssemblies ()
                 .Select (assembly => assembly.GetType (name))
                 .FirstOrDefault (type => type != null);
@@ -2662,7 +2698,7 @@ namespace KRPC.Client
 
         static bool IsNamed (Type type, Schema.KRPC.Type described)
         {
-            return ServiceName (type) == described.Service && type.Name == described.Name;
+            return ServiceName (type) == described.Service && RemoteName (type) == described.Name;
         }
 
         static bool IsGeneric (Type type, params Type[] definitions)

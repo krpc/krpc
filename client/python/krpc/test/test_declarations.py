@@ -1,6 +1,13 @@
 import unittest
 
-from krpc.declarations import DeclaredClass, is_class_type
+from krpc.connection import Connection
+from krpc.declarations import (
+    CONNECTION_MEMBERS,
+    DeclaredClass,
+    is_class_type,
+    service_attribute,
+    type_name,
+)
 from krpc.types import _create_class_type
 
 
@@ -62,6 +69,26 @@ class TestDeclarations(unittest.TestCase):
         self.assertFalse(is_class_type(Shop))
         self.assertFalse(is_class_type(int))
         self.assertFalse(is_class_type(Widget.make))
+
+    def test_connection_members_are_the_public_members_of_a_connection(self) -> None:
+        public = {x for x in dir(Connection) if not x.startswith("_")}
+        self.assertEqual(public, CONNECTION_MEMBERS)
+
+    def test_a_service_named_as_a_connection_member_is_escaped(self) -> None:
+        self.assertEqual("close_", service_attribute("Close"))
+        self.assertEqual("space_center", service_attribute("SpaceCenter"))
+
+    def test_a_service_named_as_a_keyword_is_escaped(self) -> None:
+        self.assertEqual("global_", service_attribute("Global"))
+
+    def test_a_type_named_as_the_connection_type_is_escaped(self) -> None:
+        self.assertEqual(
+            "SpaceCenterConnection_", type_name("SpaceCenter", "SpaceCenterConnection")
+        )
+        self.assertEqual("Vessel", type_name("SpaceCenter", "Vessel"))
+
+    def test_a_type_named_as_a_keyword_is_escaped(self) -> None:
+        self.assertEqual("None_", type_name("SpaceCenter", "None"))
 
 
 if __name__ == "__main__":

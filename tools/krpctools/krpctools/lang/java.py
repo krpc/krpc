@@ -16,6 +16,16 @@ from krpc.utils import lower_camel_case, upper_snake_case
 
 from .language import Language
 
+# The class a class with static methods nests, which a class of the same name cannot hold. A type
+# of this name takes a trailing underscore
+GENERATED_TYPE_NAMES = frozenset(["Bound"])
+
+
+def type_name(name):
+    """The name of a class, enumeration, structure or exception of a service, with a trailing
+    underscore where it is the name of a class the generated code nests"""
+    return name + "_" if name in GENERATED_TYPE_NAMES else name
+
 
 class JavaLanguage(Language):
     keywords = set(
@@ -70,9 +80,40 @@ class JavaLanguage(Language):
             "native",
             "super",
             "while",
+            # The literals, which are reserved as the keywords are
+            "false",
+            "null",
+            "true",
+        ]
+    ) | set(
+        [
+            # The methods of java.lang.Object and of the client's base classes, which a
+            # generated method of the same name would override or hide
+            "clone",
+            "compareTo",
+            "equals",
+            "finalize",
+            "getClass",
+            "getObjectId",
+            "hashCode",
+            "notify",
+            "notifyAll",
+            "toString",
             "wait",
+            # The static method of a class with static methods, which binds them to a
+            # connection
+            "bind",
+            # The packages the generated code names types in, which a variable of the same
+            # name would obscure
+            "com",
+            "java",
+            "krpc",
+            "org",
         ]
     )
+
+    # The locals of a generated method, and the connection a static method takes
+    parameter_reserved = frozenset(["_args", "_data", "connection"])
 
     tuple_types = [
         "Unit",
@@ -130,6 +171,18 @@ class JavaLanguage(Language):
         "System.OverflowException": "java.lang.ArithmeticException",
     }
 
+    def __init__(self, qualified=False):
+        """With qualified, a class from java.lang is named in full, so that no name a service
+        declares can shadow it in the generated code"""
+        super().__init__()
+        self.qualified = qualified
+
+    def accessor_name(self, prefix, name):
+        """The name of a getter or setter, such as getName, with a trailing underscore where it
+        is the name of a method of java.lang.Object"""
+        name = prefix + name
+        return name + "_" if name in self.keywords else name
+
     def native_exception(self, mapped_type: str) -> str | None:
         return self.native_exceptions.get(mapped_type)
 
@@ -141,6 +194,11 @@ class JavaLanguage(Language):
 
     def parse_name(self, name):
         return super().parse_name(lower_camel_case(name))
+
+    def _class_name(self, name):
+        if self.qualified and name[0].isupper():
+            return "java.lang." + name
+        return name
 
     @staticmethod
     def parse_const_name(name):
@@ -164,11 +222,11 @@ class JavaLanguage(Language):
         if isinstance(typ, ValueType):
             # A primitive takes its boxed form at a position that can hold null
             if in_collection or typ.nullable:
-                return self.type_map_classes[typ.protobuf_type.code]
-            return self.type_map[typ.protobuf_type.code]
+                return self._class_name(self.type_map_classes[typ.protobuf_type.code])
+            return self._class_name(self.type_map[typ.protobuf_type.code])
         if isinstance(typ, StreamType):
             if in_collection or typ.nullable:
-                return self.type_map_classes[Type.UINT64]
+                return self._class_name(self.type_map_classes[Type.UINT64])
             return self.type_map[Type.UINT64]
         if isinstance(typ, EventType):
             return "krpc.client.Event"
@@ -177,7 +235,7 @@ class JavaLanguage(Language):
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
             return "krpc.client.services.%s.%s" % (
                 typ.protobuf_type.service,
-                typ.protobuf_type.name,
+                type_name(typ.protobuf_type.name),
             )
         if isinstance(typ, TupleType):
             name = self.get_tuple_class_name(typ.value_types)

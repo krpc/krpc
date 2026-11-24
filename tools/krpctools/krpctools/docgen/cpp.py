@@ -14,7 +14,7 @@ from krpc.types import (
 )
 from krpc.utils import snake_case
 
-from ..lang.cpp import CppLanguage
+from ..lang.cpp import CppLanguage, type_name
 from .domain import Domain
 from .nodes import (
     Class,
@@ -102,8 +102,16 @@ class CppDomain(Domain[CppLanguage]):
             )
         raise RuntimeError("Unknown type '%s'" % str(typ))
 
+    @staticmethod
+    def type_name(obj):
+        """The name of a class, enumeration, structure or exception in the generated code"""
+        return type_name(obj.name)
+
     def ref(self, obj):
         name = obj.fullname.split(".")
+        # A type, and a member of one, is named as the generated code names the type
+        if not isinstance(obj, (Service, Procedure, Property)):
+            name[1] = type_name(name[1])
         if any(
             isinstance(obj, cls)
             for cls in (

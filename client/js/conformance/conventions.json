@@ -17,6 +17,29 @@
   "naming": {
     "case": "lower_camel",
     "accessors": true,
-    "exceptions": true
+    "exceptions": true,
+    "service_escapes": [
+      "addEvent",
+      "addStream",
+      "addUpdateCallback",
+      "close",
+      "compile",
+      "constructor",
+      "getCall",
+      "getCallTemplate",
+      "hasOwnProperty",
+      "isPrototypeOf",
+      "propertyIsEnumerable",
+      "removeUpdateCallback",
+      "run",
+      "toLocaleString",
+      "toString",
+      "valueOf"
+    ],
+    "type_escapes": [
+      "ClientService",
+      "Server",
+      "Service"
+    ]
   }
 }

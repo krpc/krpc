@@ -1,12 +1,13 @@
 from __future__ import annotations
-from typing import Callable, Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING, Union
+import builtins as _builtins
+from typing import Callable as _Callable, Tuple as _Tuple, Set as _Set, Dict as _Dict, List as _List, NamedTuple as _NamedTuple, Optional as _Optional, TYPE_CHECKING, Union as _Union
 import krpc.connection
 import krpc.error
-import krpc.limits
-from krpc.declarations import DeclaredClass, DeclaredObject, declaration_error as _declaration, register as _register
-from krpc.event import Event
+import krpc.limits as _limits
+from krpc.declarations import DeclaredClass as _DeclaredClass, DeclaredObject as _DeclaredObject, declaration_error as _declaration, register as _register
+from krpc.event import Event as _Event
 from krpc.schema import KRPC_pb2
-from krpc.types import RemoteEnum, RemoteFlags, deprecate_attribute, deprecated
+from krpc.types import RemoteEnum as _RemoteEnum, RemoteFlags as _RemoteFlags, deprecate_attribute as _deprecate_attribute, deprecated as _deprecated
 import krpc.services.serviceb as _service_serviceb
 
 
@@ -17,7 +18,7 @@ if TYPE_CHECKING:
     pass
 
 
-class ServiceA(metaclass=DeclaredClass):
+class ServiceA(metaclass=_DeclaredClass):
     """
     A service whose procedures use another service's enumeration.
     """
@@ -31,7 +32,7 @@ class ServiceA(metaclass=DeclaredClass):
         """
         raise _declaration("ServiceA", None)
 
-    def frob_all(self, modes: List[_service_serviceb.Mode] = [_service_serviceb.Mode.fast]) -> None:
+    def frob_all(self, modes: _List[_service_serviceb.Mode] = [_service_serviceb.Mode.fast]) -> None:
         """
         Defaults to a collection containing a member of another service's enumeration.
         """

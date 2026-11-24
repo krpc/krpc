@@ -1,29 +1,16 @@
 package krpc.client.services;
 
-import com.google.protobuf.ByteString;
-
-import krpc.client.Connection;
-import krpc.client.Decoder;
-import krpc.client.Encoder;
-import krpc.client.RemoteEnum;
-import krpc.client.RemoteFlags;
-import krpc.client.RemoteObject;
-import krpc.client.RemoteService;
-import krpc.client.RemoteStruct;
-import krpc.client.RPCInfo;
-import krpc.client.Types;
-
 // Generated code references its own deprecated members (e.g. when registering
 // exception types), so suppress the deprecation warnings within this class.
-@SuppressWarnings("deprecation")
-@Deprecated
-public class DeprecatedService extends RemoteService {
+@java.lang.SuppressWarnings("deprecation")
+@java.lang.Deprecated
+public class DeprecatedService extends krpc.client.RemoteService {
 
-    public static DeprecatedService newInstance(Connection connection) {
+    public static DeprecatedService newInstance(krpc.client.Connection connection) {
         return new DeprecatedService(connection);
     }
 
-    private DeprecatedService(Connection connection) {
+    private DeprecatedService(krpc.client.Connection connection) {
         super(connection);
         addExceptionTypes(connection);
     }
@@ -33,20 +20,20 @@ public class DeprecatedService extends RemoteService {
      *
      * @deprecated Use TestService instead.
      */
-    @Deprecated
+    @java.lang.Deprecated
     public static class ServiceException extends krpc.client.ServerException {
         private static final long serialVersionUID = 82501308113503040L;
 
-        public ServiceException(String message) {
+        public ServiceException(java.lang.String message) {
             super(message);
         }
 
-        public ServiceException(String message, Exception innerException) {
+        public ServiceException(java.lang.String message, java.lang.Exception innerException) {
             super(message, innerException);
         }
     }
 
-    private void addExceptionTypes(Connection connection) {
+    private void addExceptionTypes(krpc.client.Connection connection) {
         connection.addExceptionType("DeprecatedService", "ServiceException", ServiceException.class);
     }
 
@@ -55,12 +42,12 @@ public class DeprecatedService extends RemoteService {
      *
      * @deprecated Use TestService instead.
      */
-    @Deprecated
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "DeprecatedService", procedure = "Procedure", types = _Types.class)
-    public String procedure() {
+    @java.lang.Deprecated
+    @java.lang.SuppressWarnings({ "unchecked" })
+    @krpc.client.RPCInfo(service = "DeprecatedService", procedure = "Procedure", types = _Types.class)
+    public java.lang.String procedure() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("DeprecatedService", "Procedure");
-        return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        return (java.lang.String) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     /**
@@ -68,12 +55,12 @@ public class DeprecatedService extends RemoteService {
      *
      * @deprecated Use TestService instead.
      */
-    @Deprecated
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "DeprecatedService", procedure = "StructProcedure", types = _Types.class)
+    @java.lang.Deprecated
+    @java.lang.SuppressWarnings({ "unchecked" })
+    @krpc.client.RPCInfo(service = "DeprecatedService", procedure = "StructProcedure", types = _Types.class)
     public krpc.client.services.DeprecatedService.ServiceStruct structProcedure() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("DeprecatedService", "StructProcedure");
-        return (krpc.client.services.DeprecatedService.ServiceStruct) Decoder.decode(_data.getValue(), krpc.client.Types.createStruct("DeprecatedService", "ServiceStruct"), this.connection);
+        return (krpc.client.services.DeprecatedService.ServiceStruct) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createStruct("DeprecatedService", "ServiceStruct"), this.connection);
     }
 
     /**
@@ -81,12 +68,12 @@ public class DeprecatedService extends RemoteService {
      *
      * @deprecated Use TestService instead.
      */
-    @Deprecated
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "DeprecatedService", procedure = "get_Property", types = _Types.class)
-    public String getProperty() {
+    @java.lang.Deprecated
+    @java.lang.SuppressWarnings({ "unchecked" })
+    @krpc.client.RPCInfo(service = "DeprecatedService", procedure = "get_Property", types = _Types.class)
+    public java.lang.String getProperty() {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("DeprecatedService", "get_Property");
-        return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        return (java.lang.String) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     /**
@@ -94,12 +81,12 @@ public class DeprecatedService extends RemoteService {
      *
      * @deprecated Use TestService instead.
      */
-    @Deprecated
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "DeprecatedService", procedure = "set_Property", types = _Types.class)
-    public void setProperty(String value) {
-        ByteString[] _args = new ByteString[] {
-            Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
+    @java.lang.Deprecated
+    @java.lang.SuppressWarnings({ "unchecked" })
+    @krpc.client.RPCInfo(service = "DeprecatedService", procedure = "set_Property", types = _Types.class)
+    public void setProperty(java.lang.String value) {
+        com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+            krpc.client.Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
         this.connection.invoke("DeprecatedService", "set_Property", _args);
     }
@@ -109,14 +96,14 @@ public class DeprecatedService extends RemoteService {
      *
      * @deprecated Use TestService instead.
      */
-    @Deprecated
-    public enum ServiceEnum implements RemoteEnum {
+    @java.lang.Deprecated
+    public enum ServiceEnum implements krpc.client.RemoteEnum {
         /**
          * A value.
          *
          * @deprecated Use TestService instead.
          */
-        @Deprecated
+        @java.lang.Deprecated
         VALUE(0);
 
         private final int value;
@@ -125,7 +112,7 @@ public class DeprecatedService extends RemoteService {
             this.value = value;
         }
 
-        @Override
+        @java.lang.Override
         public int getValue() {
             return value;
         }
@@ -144,8 +131,8 @@ public class DeprecatedService extends RemoteService {
      *
      * @deprecated Use TestService instead.
      */
-    @Deprecated
-    public static class ServiceStruct implements RemoteStruct, Comparable<ServiceStruct> {
+    @java.lang.Deprecated
+    public static class ServiceStruct implements krpc.client.RemoteStruct, java.lang.Comparable<ServiceStruct> {
         private final int field;
 
         public ServiceStruct(int field) {
@@ -157,7 +144,7 @@ public class DeprecatedService extends RemoteService {
          *
          * @deprecated Use TestService instead.
          */
-        @Deprecated
+        @java.lang.Deprecated
         public int getField() {
             return field;
         }
@@ -173,22 +160,22 @@ public class DeprecatedService extends RemoteService {
         }
 
         /** Build a ServiceStruct from the values of its fields. */
-        @SuppressWarnings("unchecked")
-        public static ServiceStruct fromFieldValues(Object[] values) {
+        @java.lang.SuppressWarnings("unchecked")
+        public static ServiceStruct fromFieldValues(java.lang.Object[] values) {
             return new ServiceStruct(
                 (int) values[0]
             );
         }
 
-        @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        @java.lang.Override
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 field
             };
         }
 
-        @Override
-        public boolean equals(Object obj) {
+        @java.lang.Override
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof ServiceStruct)) {
                 return false;
             }
@@ -196,19 +183,19 @@ public class DeprecatedService extends RemoteService {
             return java.util.Objects.deepEquals(this.field, other.field);
         }
 
-        @Override
+        @java.lang.Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {field});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {field});
         }
 
         /**
          * Compares this ServiceStruct with the given one, by its fields in turn, which is
          * how a tuple of the same values compares.
          */
-        @Override
+        @java.lang.Override
         public int compareTo(ServiceStruct other) {
             int result;
-            result = RemoteStruct.compareFields(field, other.field);
+            result = krpc.client.RemoteStruct.compareFields(this.field, other.field);
             if (result != 0) {
                 return result;
             }
@@ -221,12 +208,12 @@ public class DeprecatedService extends RemoteService {
      *
      * @deprecated Use "TestService.TestClass" instead.
      */
-    @Deprecated
-    public static class ReasonedClass extends RemoteObject {
+    @java.lang.Deprecated
+    public static class ReasonedClass extends krpc.client.RemoteObject {
 
         private static final long serialVersionUID = 744836600483672425L;
 
-        public ReasonedClass(Connection connection, long id) {
+        public ReasonedClass(krpc.client.Connection connection, long id) {
             super(connection, id);
         }
 
@@ -235,13 +222,13 @@ public class DeprecatedService extends RemoteService {
          *
          * @deprecated Use "TestService.TestClass" instead.
          */
-        @Deprecated
-        @SuppressWarnings({ "unchecked" })
-        @RPCInfo(service = "DeprecatedService", procedure = "ReasonedClass_static_StaticMethod", types = _Types.class)
-        public static String staticMethod(Connection connection)
+        @java.lang.Deprecated
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "DeprecatedService", procedure = "ReasonedClass_static_StaticMethod", types = _Types.class)
+        public static java.lang.String staticMethod(krpc.client.Connection connection)
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("DeprecatedService", "ReasonedClass_static_StaticMethod");
-            return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), connection);
+            return (java.lang.String) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), connection);
         }
 
         /**
@@ -249,9 +236,9 @@ public class DeprecatedService extends RemoteService {
          * @param connection The connection the methods are called on.
          * @return The bound methods.
          */
-        public static Bound bind(Connection connection) {
+        public static Bound bind(krpc.client.Connection connection) {
             if (connection == null) {
-                throw new NullPointerException("connection");
+                throw new java.lang.NullPointerException("connection");
             }
             return new Bound(connection);
         }
@@ -260,9 +247,9 @@ public class DeprecatedService extends RemoteService {
          * The static methods of {@link ReasonedClass}, bound to a connection.
          */
         public static final class Bound {
-            private final Connection connection;
+            private final krpc.client.Connection connection;
 
-            private Bound(Connection connection) {
+            private Bound(krpc.client.Connection connection) {
                 this.connection = connection;
             }
 
@@ -271,9 +258,9 @@ public class DeprecatedService extends RemoteService {
              *
              * @deprecated Use "TestService.TestClass" instead.
              */
-            @Deprecated
-            @RPCInfo(service = "DeprecatedService", procedure = "ReasonedClass_static_StaticMethod", types = _Types.class)
-            public String staticMethod()
+            @java.lang.Deprecated
+            @krpc.client.RPCInfo(service = "DeprecatedService", procedure = "ReasonedClass_static_StaticMethod", types = _Types.class)
+            public java.lang.String staticMethod()
             {
                 return krpc.client.services.DeprecatedService.ReasonedClass.staticMethod(connection);
             }
@@ -285,12 +272,12 @@ public class DeprecatedService extends RemoteService {
      *
      * @deprecated Use TestService instead.
      */
-    @Deprecated
-    public static class ServiceClass extends RemoteObject {
+    @java.lang.Deprecated
+    public static class ServiceClass extends krpc.client.RemoteObject {
 
         private static final long serialVersionUID = 403053876889399376L;
 
-        public ServiceClass(Connection connection, long id) {
+        public ServiceClass(krpc.client.Connection connection, long id) {
             super(connection, id);
         }
 
@@ -299,16 +286,16 @@ public class DeprecatedService extends RemoteService {
          *
          * @deprecated Use TestService instead.
          */
-        @Deprecated
-        @SuppressWarnings({ "unchecked" })
-        @RPCInfo(service = "DeprecatedService", procedure = "ServiceClass_Method", types = _Types.class)
-        public String method()
+        @java.lang.Deprecated
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "DeprecatedService", procedure = "ServiceClass_Method", types = _Types.class)
+        public java.lang.String method()
         {
-            ByteString[] _args = new ByteString[] {
-                Encoder.encode(this, krpc.client.Types.createClass("DeprecatedService", "ServiceClass"))
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("DeprecatedService", "ServiceClass"))
             };
             krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("DeprecatedService", "ServiceClass_Method", _args);
-            return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+            return (java.lang.String) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
         }
 
         /**
@@ -316,13 +303,13 @@ public class DeprecatedService extends RemoteService {
          *
          * @deprecated Use TestService instead.
          */
-        @Deprecated
-        @SuppressWarnings({ "unchecked" })
-        @RPCInfo(service = "DeprecatedService", procedure = "ServiceClass_static_StaticMethod", types = _Types.class)
-        public static String staticMethod(Connection connection)
+        @java.lang.Deprecated
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "DeprecatedService", procedure = "ServiceClass_static_StaticMethod", types = _Types.class)
+        public static java.lang.String staticMethod(krpc.client.Connection connection)
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("DeprecatedService", "ServiceClass_static_StaticMethod");
-            return (String) Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), connection);
+            return (java.lang.String) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), connection);
         }
 
         /**
@@ -330,9 +317,9 @@ public class DeprecatedService extends RemoteService {
          * @param connection The connection the methods are called on.
          * @return The bound methods.
          */
-        public static Bound bind(Connection connection) {
+        public static Bound bind(krpc.client.Connection connection) {
             if (connection == null) {
-                throw new NullPointerException("connection");
+                throw new java.lang.NullPointerException("connection");
             }
             return new Bound(connection);
         }
@@ -341,9 +328,9 @@ public class DeprecatedService extends RemoteService {
          * The static methods of {@link ServiceClass}, bound to a connection.
          */
         public static final class Bound {
-            private final Connection connection;
+            private final krpc.client.Connection connection;
 
-            private Bound(Connection connection) {
+            private Bound(krpc.client.Connection connection) {
                 this.connection = connection;
             }
 
@@ -352,9 +339,9 @@ public class DeprecatedService extends RemoteService {
              *
              * @deprecated Use TestService instead.
              */
-            @Deprecated
-            @RPCInfo(service = "DeprecatedService", procedure = "ServiceClass_static_StaticMethod", types = _Types.class)
-            public String staticMethod()
+            @java.lang.Deprecated
+            @krpc.client.RPCInfo(service = "DeprecatedService", procedure = "ServiceClass_static_StaticMethod", types = _Types.class)
+            public java.lang.String staticMethod()
             {
                 return krpc.client.services.DeprecatedService.ServiceClass.staticMethod(connection);
             }
@@ -366,10 +353,10 @@ public class DeprecatedService extends RemoteService {
         // populated by chunked initializer methods. Emitting them this way keeps
         // every generated method under the JVM's 64KB bytecode limit as a service
         // accumulates procedures.
-        private static final java.util.Map<String, krpc.schema.KRPC.Type> RETURN_TYPES =
-            new java.util.HashMap<String, krpc.schema.KRPC.Type>();
-        private static final java.util.Map<String, krpc.schema.KRPC.Type[]> PARAMETER_TYPES =
-            new java.util.HashMap<String, krpc.schema.KRPC.Type[]>();
+        private static final java.util.Map<java.lang.String, krpc.schema.KRPC.Type> RETURN_TYPES =
+            new java.util.HashMap<java.lang.String, krpc.schema.KRPC.Type>();
+        private static final java.util.Map<java.lang.String, krpc.schema.KRPC.Type[]> PARAMETER_TYPES =
+            new java.util.HashMap<java.lang.String, krpc.schema.KRPC.Type[]>();
 
         static {
             initTypes0();
@@ -392,16 +379,16 @@ public class DeprecatedService extends RemoteService {
             PARAMETER_TYPES.put("ServiceClass_static_StaticMethod", new krpc.schema.KRPC.Type[] {  });
         }
 
-        public static krpc.schema.KRPC.Type getReturnType(String procedure) {
+        public static krpc.schema.KRPC.Type getReturnType(java.lang.String procedure) {
             if (!RETURN_TYPES.containsKey(procedure))
-                throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+                throw new java.lang.IllegalArgumentException("Procedure '" + procedure +"' not found");
             return RETURN_TYPES.get(procedure);
         }
 
-        public static krpc.schema.KRPC.Type[] getParameterTypes(String procedure) {
+        public static krpc.schema.KRPC.Type[] getParameterTypes(java.lang.String procedure) {
             krpc.schema.KRPC.Type[] parameterTypes = PARAMETER_TYPES.get(procedure);
             if (parameterTypes == null)
-                throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+                throw new java.lang.IllegalArgumentException("Procedure '" + procedure +"' not found");
             return parameterTypes;
         }
     }

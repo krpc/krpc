@@ -132,7 +132,7 @@ namespace KRPC.Client.Conformance
         {
             var value = new KRPC.Conformance.Struct { Name = "{{ struct.name }}" };
             {% for field in struct.fields %}
-            value.Fields.Add ({{ field.result }} (x.{{ field.remote_name }}));
+            value.Fields.Add ({{ field.result }} (x.{{ field.name }}));
             {% endfor %}
             return new Value { Struct = value };
         }

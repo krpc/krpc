@@ -1,7 +1,7 @@
 import { create } from "@bufbuild/protobuf";
 import type { Node as SyntaxNode } from "acorn";
 import { CompilationError } from "../errors.js";
-import { camelCase } from "../naming.js";
+import { memberName } from "../naming.js";
 import { RemoteObject } from "../objects.js";
 import { namedOf } from "../registry.js";
 import { ProcedureCallSchema } from "../schema/krpc_pb.js";
@@ -731,7 +731,7 @@ export class Builder {
 
   /** A call of a StdLib procedure, with arguments that are already of its parameter types. */
   stdlib(name: string, args: readonly Node[]): Node {
-    const member = this.env.members.ofService("StdLib")?.methods.get(camelCase(name));
+    const member = this.env.members.ofService("StdLib")?.methods.get(memberName(name));
     if (member === undefined) {
       throw new CompilationError(`The server has no procedure StdLib.${name}`);
     }

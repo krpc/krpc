@@ -5,6 +5,7 @@ local luaunit = require 'luaunit'
 
 TestEncodeDecode = require 'krpc.test.test_encodedecode'
 TestLimits = require 'krpc.test.test_limits'
+TestNaming = require 'krpc.test.test_naming'
 TestTypes = require 'krpc.test.test_types'
 
 os.exit(luaunit.LuaUnit:run())

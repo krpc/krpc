@@ -25,7 +25,7 @@
 {% endmacro %}
 
 {% macro class(x) %}{{ mark_documented(x) }}
-.. class:: {{ x.name }}
+.. class:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -72,7 +72,7 @@
 .. function:: {{ domain.return_type(x.type) }} {{ domain.method_name(x.name) }}()
 {% endif %}
 {% if x.setter != None %}
-.. function:: void set_{{ x.name | snakecase }}({{ domain.parameter_type(x.type) }} value)
+.. function:: void set_{{ domain.method_name(x.name) }}({{ domain.parameter_type(x.type) }} value)
 {% endif %}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
@@ -137,7 +137,7 @@
 
 {% macro enumeration(x) %}{{ mark_documented(x) }}
 .. namespace:: krpc::services::{{ x.service_name }}
-.. enum-struct:: {{ x.name }}
+.. enum-struct:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -162,7 +162,7 @@
 
 {% macro struct(x) %}{{ mark_documented(x) }}
 .. namespace:: krpc::services::{{ x.service_name }}
-.. struct:: {{ x.name }}
+.. struct:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 
@@ -171,7 +171,7 @@
 
 {% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
 {% for field in x.fields.values() %}{{ mark_documented(field) }}
-   .. member:: {{ domain.field_type(field) }} {{ field.name | snakecase }}
+   .. member:: {{ domain.field_type(field) }} {{ domain.method_name(field.name) }}
 
 {% if field.deprecated %}{{ deprecated(field) | indent(width=6) }}
 
@@ -182,7 +182,7 @@
 
 {% macro exception(x) %}{{ mark_documented(x) }}
 .. namespace:: krpc::services::{{ x.service_name }}
-.. class:: {{ x.name }}
+.. class:: {{ domain.type_name(x) }}
 
 {% if x.deprecated %}{{ deprecated(x) | indent }}
 

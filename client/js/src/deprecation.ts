@@ -1,4 +1,4 @@
-import { camelCase } from "./naming.js";
+import { memberName } from "./naming.js";
 import type { Service } from "./schema/krpc_pb.js";
 
 /** A member of a service that can be deprecated. */
@@ -66,7 +66,7 @@ export function deprecationMessage(
       }
       if (kind === "M") {
         const dot = name.lastIndexOf(".");
-        name = name.slice(0, dot + 1) + camelCase(name.slice(dot + 1));
+        name = name.slice(0, dot + 1) + memberName(name.slice(dot + 1));
       }
       return name;
     })

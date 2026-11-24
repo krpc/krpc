@@ -174,7 +174,7 @@ class Generator(Generic[LanguageT]):
         for parameter in procedure["parameters"]:
             typ = as_type(self.types, parameter["type"])
             info = {
-                "name": self.parse_name(parameter["name"]),
+                "name": self.parse_parameter_name(parameter["name"]),
                 "type": self.parse_parameter_type(typ),
             }
             if "default_value" in parameter:
@@ -263,7 +263,7 @@ class Generator(Generic[LanguageT]):
                 "id": enumeration["id"],
                 "values": [
                     {
-                        "name": self.parse_name(x["name"]),
+                        "name": self.language.parse_enum_value_name(x["name"]),
                         "remote_name": x["name"],
                         "value": x["value"],
                         "documentation": self.parse_documentation(x["documentation"]),
@@ -506,6 +506,9 @@ class Generator(Generic[LanguageT]):
 
     def parse_name(self, name):
         return self.language.parse_name(name)
+
+    def parse_parameter_name(self, name):
+        return self.language.parse_parameter_name(name)
 
     def parse_type(self, typ):
         return self.language.parse_type(typ)

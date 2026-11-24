@@ -1427,5 +1427,56 @@ namespace TestServer
         {
             return new List<ulong> { maximum };
         }
+
+        /// <summary>
+        /// A procedure named Service, as the C# client names the class of a service.
+        /// </summary>
+        [KRPCProcedure]
+        public static int Service ()
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// A new object of the class named Object.
+        /// </summary>
+        /// <param name="name">The name of the object.</param>
+        /// <returns>The object.</returns>
+        [KRPCProcedure]
+        public static Object CreateObject (string name)
+        {
+            return new Object (name);
+        }
+
+        /// <summary>
+        /// A class named Object.
+        /// </summary>
+        [KRPCClass]
+        public sealed class Object : Equatable<Object>
+        {
+            /// <summary>
+            /// Create an object.
+            /// </summary>
+            public Object (string name)
+            {
+                Name = name;
+            }
+
+            /// <summary>
+            /// The name of the object.
+            /// </summary>
+            [KRPCProperty]
+            public string Name { get; private set; }
+
+            public override bool Equals (Object other)
+            {
+                return !ReferenceEquals (other, null) && Name == other.Name;
+            }
+
+            public override int GetHashCode ()
+            {
+                return Name.GetHashCode ();
+            }
+        }
     }
 }

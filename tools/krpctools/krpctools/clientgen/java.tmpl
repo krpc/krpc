@@ -1,8 +1,8 @@
 package krpc.client.services;
 {% macro args(parameters) %}
-ByteString[] _args = new ByteString[] {
+com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
 {% for x in parameters %}
-    Encoder.encode({{x.name}}, {{x.type.spec}}){% if not loop.last %},{% endif %}
+    krpc.client.Encoder.encode({{x.name}}, {{x.type.spec}}){% if not loop.last %},{% endif %}
 
 {% endfor %}
 };
@@ -16,36 +16,23 @@ if (_data.getIsNull()) {
   return null;
 }
 {% endif %}
-return ({{type.name}}) Decoder.decode(_data.getValue(), {{type.spec}}, {% if is_static %}connection{% else %}this.connection{% endif %});
+return ({{type.name}}) krpc.client.Decoder.decode(_data.getValue(), {{type.spec}}, {% if is_static %}connection{% else %}this.connection{% endif %});
 {% endmacro %}
 {% macro sig_parameters(parameters) %}
 {% for x in parameters %}{{x.type.name}} {{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endmacro %}
 
-import com.google.protobuf.ByteString;
-
-import krpc.client.Connection;
-import krpc.client.Decoder;
-import krpc.client.Encoder;
-import krpc.client.RemoteEnum;
-import krpc.client.RemoteFlags;
-import krpc.client.RemoteObject;
-import krpc.client.RemoteService;
-import krpc.client.RemoteStruct;
-import krpc.client.RPCInfo;
-import krpc.client.Types;
-
 // Generated code references its own deprecated members (e.g. when registering
 // exception types), so suppress the deprecation warnings within this class.
-@SuppressWarnings("deprecation")
-{% if service_deprecated %}@Deprecated
-{% endif %}public class {{ service_name }} extends RemoteService {
+@java.lang.SuppressWarnings("deprecation")
+{% if service_deprecated %}@java.lang.Deprecated
+{% endif %}public class {{ service_name }} extends krpc.client.RemoteService {
 
-    public static {{ service_name }} newInstance(Connection connection) {
+    public static {{ service_name }} newInstance(krpc.client.Connection connection) {
         return new {{ service_name }}(connection);
     }
 
-    private {{ service_name }}(Connection connection) {
+    private {{ service_name }}(krpc.client.Connection connection) {
         super(connection);
         {% if exceptions.items() | length > 0 %}
         addExceptionTypes(connection);
@@ -55,34 +42,34 @@ import krpc.client.Types;
 
 {% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
 {% endif %}
-{% if exception.deprecated %}    @Deprecated
+{% if exception.deprecated %}    @java.lang.Deprecated
 {% endif %}
     public static class {{ exception_name }} extends krpc.client.ServerException {
         private static final long serialVersionUID = {{ exception.serial_version_uid }}L;
 
-        public {{ exception_name }}(String message) {
+        public {{ exception_name }}(java.lang.String message) {
             super(message);
         }
 
-        public {{ exception_name }}(String message, Exception innerException) {
+        public {{ exception_name }}(java.lang.String message, java.lang.Exception innerException) {
             super(message, innerException);
         }
     }
     {% endfor %}
 
-    private void addExceptionTypes(Connection connection) {
+    private void addExceptionTypes(krpc.client.Connection connection) {
         {% for exception_name,exception in exceptions.items() %}
-        connection.addExceptionType("{{ service_name }}", "{{ exception_name }}", {{ exception.alias or exception_name }}.class);
+        connection.addExceptionType("{{ service_name }}", "{{ exception.remote_name }}", {{ exception.alias or exception_name }}.class);
         {% endfor %}
     }
     {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
 
 {% if procedure.documentation %}{{ procedure.documentation | indent(width=4) }}
 {% endif %}
-{% if procedure.deprecated %}    @Deprecated
+{% if procedure.deprecated %}    @java.lang.Deprecated
 {% endif %}
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "{{ service_name }}", procedure = "{{ procedure.remote_name }}", types = _Types.class)
+    @java.lang.SuppressWarnings({ "unchecked" })
+    @krpc.client.RPCInfo(service = "{{ service_name }}", procedure = "{{ procedure.remote_name }}", types = _Types.class)
     public {{ procedure.return_type.name }} {{ procedure_name }}({{ sig_parameters(procedure.parameters) }}) {
 {% if procedure.parameters | length > 0 %}{{ args(procedure.parameters) | indent(width=8) }}
 {% endif %}
@@ -95,14 +82,14 @@ import krpc.client.Types;
 
 {% if enm.documentation %}{{ enm.documentation | indent(width=4) }}
 {% endif %}
-{% if enm.deprecated %}    @Deprecated
+{% if enm.deprecated %}    @java.lang.Deprecated
 {% endif %}
     {% if enm.flags %}
-    public static final class {{ enum_name }} extends RemoteFlags<{{ enum_name }}> {
+    public static final class {{ enum_name }} extends krpc.client.RemoteFlags<{{ enum_name }}> {
         {% for value in enm['values'] %}
 {% if value.documentation %}{{ value.documentation | indent(width=8) }}
 {% endif %}
-{% if value.deprecated %}        @Deprecated
+{% if value.deprecated %}        @java.lang.Deprecated
 {% endif %}
         public static final {{ enum_name }} {{ value.name }} = new {{ enum_name }}({{ value.value }});
 
@@ -111,7 +98,7 @@ import krpc.client.Types;
             super(value);
         }
 
-        @Override
+        @java.lang.Override
         protected {{ enum_name }} withValue(int value) {
             return fromValue(value);
         }
@@ -134,11 +121,11 @@ import krpc.client.Types;
         }
     }
     {% else %}
-    public enum {{ enum_name }} implements RemoteEnum {
+    public enum {{ enum_name }} implements krpc.client.RemoteEnum {
         {% for value in enm['values'] %}
 {% if value.documentation %}{{ value.documentation | indent(width=8) }}
 {% endif %}
-{% if value.deprecated %}        @Deprecated
+{% if value.deprecated %}        @java.lang.Deprecated
 {% endif %}
         {{ value.name }}({{ value.value }}){% if not loop.last %},{% else %};{% endif %}
 
@@ -150,7 +137,7 @@ import krpc.client.Types;
             this.value = value;
         }
 
-        @Override
+        @java.lang.Override
         public int getValue() {
             return value;
         }
@@ -171,9 +158,9 @@ import krpc.client.Types;
 
 {% if struct.documentation %}{{ struct.documentation | indent(width=4) }}
 {% endif %}
-{% if struct.deprecated %}    @Deprecated
+{% if struct.deprecated %}    @java.lang.Deprecated
 {% endif %}
-    public static class {{ struct_name }} implements RemoteStruct, Comparable<{{ struct_name }}> {
+    public static class {{ struct_name }} implements krpc.client.RemoteStruct, java.lang.Comparable<{{ struct_name }}> {
         {% for field in struct['fields'] %}
         private final {{ field.type }} {{ field.name }};
         {% endfor %}
@@ -187,9 +174,9 @@ import krpc.client.Types;
 
 {% if field.documentation %}{{ field.documentation | indent(width=8) }}
 {% endif %}
-{% if field.deprecated %}        @Deprecated
+{% if field.deprecated %}        @java.lang.Deprecated
 {% endif %}
-        public {{ field.type }} get{{ field.accessor_name }}() {
+        public {{ field.type }} {{ field.accessor_name }}() {
             return {{ field.name }};
         }
         {% endfor %}
@@ -208,8 +195,8 @@ import krpc.client.Types;
         }
 
         /** Build a {{ struct_name }} from the values of its fields. */
-        @SuppressWarnings("unchecked")
-        public static {{ struct_name }} fromFieldValues(Object[] values) {
+        @java.lang.SuppressWarnings("unchecked")
+        public static {{ struct_name }} fromFieldValues(java.lang.Object[] values) {
             return new {{ struct_name }}(
                 {% for field in struct['fields'] %}
                 ({{ field.type }}) values[{{ loop.index0 }}]{% if not loop.last %},{% endif %}
@@ -218,9 +205,9 @@ import krpc.client.Types;
             );
         }
 
-        @Override
-        public Object[] fieldValues() {
-            return new Object[] {
+        @java.lang.Override
+        public java.lang.Object[] fieldValues() {
+            return new java.lang.Object[] {
                 {% for field in struct['fields'] %}
                 {{ field.name }}{% if not loop.last %},{% endif %}
 
@@ -228,8 +215,8 @@ import krpc.client.Types;
             };
         }
 
-        @Override
-        public boolean equals(Object obj) {
+        @java.lang.Override
+        public boolean equals(java.lang.Object obj) {
             if (!(obj instanceof {{ struct_name }})) {
                 return false;
             }
@@ -238,20 +225,20 @@ import krpc.client.Types;
                 && {% endif %}{% endfor %};
         }
 
-        @Override
+        @java.lang.Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {{ '{' }}{% for field in struct['fields'] %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}{{ '}' }});
+            return java.util.Arrays.deepHashCode(new java.lang.Object[] {{ '{' }}{% for field in struct['fields'] %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}{{ '}' }});
         }
 
         /**
          * Compares this {{ struct_name }} with the given one, by its fields in turn, which is
          * how a tuple of the same values compares.
          */
-        @Override
+        @java.lang.Override
         public int compareTo({{ struct_name }} other) {
             int result;
             {% for field in struct['fields'] %}
-            result = RemoteStruct.compareFields({{ field.name }}, other.{{ field.name }});
+            result = krpc.client.RemoteStruct.compareFields(this.{{ field.name }}, other.{{ field.name }});
             if (result != 0) {
                 return result;
             }
@@ -264,26 +251,26 @@ import krpc.client.Types;
 
 {% if cls.documentation %}{{ cls.documentation | indent(width=4) }}
 {% endif %}
-{% if cls.deprecated %}    @Deprecated
+{% if cls.deprecated %}    @java.lang.Deprecated
 {% endif %}
-    public static class {{ class_name }} extends RemoteObject {
+    public static class {{ class_name }} extends krpc.client.RemoteObject {
 
         private static final long serialVersionUID = {{ cls.serial_version_uid }}L;
 
-        public {{ class_name }}(Connection connection, long id) {
+        public {{ class_name }}(krpc.client.Connection connection, long id) {
             super(connection, id);
         }
         {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
 
 {% if method.documentation %}{{ method.documentation | indent(width=8) }}
 {% endif %}
-{% if method.deprecated %}        @Deprecated
+{% if method.deprecated %}        @java.lang.Deprecated
 {% endif %}
-        @SuppressWarnings({ "unchecked" })
-        @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
         public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }})
         {
-{{ args([{'name': 'this', 'type': {'name': service_name+'.'+class_name, 'spec': 'krpc.client.Types.createClass("'+service_name+'", "'+class_name+'")'}}] + method.parameters) | indent(width=12) }}
+{{ args([{'name': 'this', 'type': {'name': service_name+'.'+class_name, 'spec': 'krpc.client.Types.createClass("'+service_name+'", "'+cls.remote_name+'")'}}] + method.parameters) | indent(width=12) }}
 {{ call(service_name, method.remote_name, method.return_type.name != 'void', true) | indent(width=12) }}
 {% if method.return_type.name != 'void' %}{{ return(method.return_type) | indent(width=12) }}
 {% endif %}
@@ -293,11 +280,11 @@ import krpc.client.Types;
 
 {% if method.documentation %}{{ method.documentation | indent(width=8) }}
 {% endif %}
-{% if method.deprecated %}        @Deprecated
+{% if method.deprecated %}        @java.lang.Deprecated
 {% endif %}
-        @SuppressWarnings({ "unchecked" })
-        @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
-        public static {{ method.return_type.name }} {{ method_name }}({{ sig_parameters([{'type': {'name': 'Connection'}, 'name': 'connection'}] + method.parameters) }})
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
+        public static {{ method.return_type.name }} {{ method_name }}({{ sig_parameters([{'type': {'name': 'krpc.client.Connection'}, 'name': 'connection'}] + method.parameters) }})
         {
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=12) }}
 {% endif %}
@@ -313,9 +300,9 @@ import krpc.client.Types;
          * @param connection The connection the methods are called on.
          * @return The bound methods.
          */
-        public static Bound bind(Connection connection) {
+        public static Bound bind(krpc.client.Connection connection) {
             if (connection == null) {
-                throw new NullPointerException("connection");
+                throw new java.lang.NullPointerException("connection");
             }
             return new Bound(connection);
         }
@@ -324,18 +311,18 @@ import krpc.client.Types;
          * The static methods of {@link {{ class_name }}}, bound to a connection.
          */
         public static final class Bound {
-            private final Connection connection;
+            private final krpc.client.Connection connection;
 
-            private Bound(Connection connection) {
+            private Bound(krpc.client.Connection connection) {
                 this.connection = connection;
             }
             {% for method_name,method in cls.static_methods.items() %}
 
 {% if method.documentation %}{{ method.documentation | indent(width=12) }}
 {% endif %}
-{% if method.deprecated %}            @Deprecated
+{% if method.deprecated %}            @java.lang.Deprecated
 {% endif %}
-            @RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
+            @krpc.client.RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
             public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }})
             {
                 {{ 'return ' if method.return_type.name != 'void' else '' }}krpc.client.services.{{ service_name }}.{{ class_name }}.{{ method_name }}({{ (['connection'] + method.parameters | map(attribute='name') | list) | join(', ') }});
@@ -351,10 +338,10 @@ import krpc.client.Types;
         // populated by chunked initializer methods. Emitting them this way keeps
         // every generated method under the JVM's 64KB bytecode limit as a service
         // accumulates procedures.
-        private static final java.util.Map<String, krpc.schema.KRPC.Type> RETURN_TYPES =
-            new java.util.HashMap<String, krpc.schema.KRPC.Type>();
-        private static final java.util.Map<String, krpc.schema.KRPC.Type[]> PARAMETER_TYPES =
-            new java.util.HashMap<String, krpc.schema.KRPC.Type[]>();
+        private static final java.util.Map<java.lang.String, krpc.schema.KRPC.Type> RETURN_TYPES =
+            new java.util.HashMap<java.lang.String, krpc.schema.KRPC.Type>();
+        private static final java.util.Map<java.lang.String, krpc.schema.KRPC.Type[]> PARAMETER_TYPES =
+            new java.util.HashMap<java.lang.String, krpc.schema.KRPC.Type[]>();
 
         static {
             {% for batch in types_table | batch(50) %}
@@ -371,16 +358,16 @@ import krpc.client.Types;
         }
         {% endfor %}
 
-        public static krpc.schema.KRPC.Type getReturnType(String procedure) {
+        public static krpc.schema.KRPC.Type getReturnType(java.lang.String procedure) {
             if (!RETURN_TYPES.containsKey(procedure))
-                throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+                throw new java.lang.IllegalArgumentException("Procedure '" + procedure +"' not found");
             return RETURN_TYPES.get(procedure);
         }
 
-        public static krpc.schema.KRPC.Type[] getParameterTypes(String procedure) {
+        public static krpc.schema.KRPC.Type[] getParameterTypes(java.lang.String procedure) {
             krpc.schema.KRPC.Type[] parameterTypes = PARAMETER_TYPES.get(procedure);
             if (parameterTypes == null)
-                throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+                throw new java.lang.IllegalArgumentException("Procedure '" + procedure +"' not found");
             return parameterTypes;
         }
     }

@@ -17,7 +17,7 @@ import {
   StreamError,
 } from "./errors.js";
 import { Functions } from "./functions.js";
-import { accessorName, camelCase } from "./naming.js";
+import { accessorName, camelCase, memberName, serviceName, typeName } from "./naming.js";
 import { ObjectCache, RemoteObject, RemoteService } from "./objects.js";
 import { name as nameValue, registered } from "./registry.js";
 import {
@@ -305,7 +305,7 @@ export async function connect(options: ConnectOptions = {}): Promise<Connection>
       const members = serviceMembers(context, service, classes, exceptions);
       if (members !== null) {
         const message = deprecationMessage(service, service.name, service.name);
-        expose(context, connection, camelCase(service.name), members, message);
+        expose(context, connection, serviceName(service.name), members, message);
       }
     }
     return connection;
@@ -623,11 +623,11 @@ function addClassMembers(
       if (name.includes("_static_")) {
         const cls = classes.get(`${service.name}.${className}`);
         if (cls !== undefined) {
-          const key = camelCase(member);
+          const key = memberName(member, true);
           const message = deprecationMessage(
             procedure,
             service.name,
-            `${service.name}.${className}.${key}`,
+            `${service.name}.${typeName(className)}.${key}`,
           );
           define(
             cls,
@@ -648,7 +648,7 @@ function addClassMembers(
       if (cls === undefined) {
         continue;
       }
-      let key = camelCase(member);
+      let key = memberName(member);
       if (name.includes("_get_")) {
         key = accessorName("get", member);
       } else if (name.includes("_set_")) {
@@ -657,7 +657,7 @@ function addClassMembers(
       const message = deprecationMessage(
         procedure,
         service.name,
-        `${instance.service}.${instance.name}.${key}`,
+        `${instance.service}.${typeName(instance.name)}.${key}`,
       );
       define(
         cls.prototype,
@@ -682,7 +682,9 @@ function serviceMembers(
 ): object | null {
   const members: Record<string, unknown> = Object.create(RemoteService.prototype);
   nameValue(members, { kind: "service", service: service.name });
-  const add = (key: string, value: unknown, member: Deprecatable) => {
+  // A type takes its name in the service's module
+  const add = (name: string, value: unknown, member: Deprecatable) => {
+    const key = typeName(name);
     const message = deprecationMessage(member, service.name, `${service.name}.${key}`);
     expose(context, members, key, value, message);
   };
@@ -705,7 +707,7 @@ function serviceMembers(
     if (sig === null) {
       continue;
     }
-    let key = camelCase(name);
+    let key = memberName(name);
     if (name.startsWith("get_")) {
       key = accessorName("get", name.slice(4));
     } else if (name.startsWith("set_")) {
@@ -730,8 +732,12 @@ function serviceMembers(
     const values = enumeration?.values ?? {};
     const exposed: Record<string, unknown> = {};
     for (const value of x.values) {
-      const key = camelCase(value.name);
-      const message = deprecationMessage(value, service.name, `${service.name}.${x.name}.${key}`);
+      const key = memberName(value.name);
+      const message = deprecationMessage(
+        value,
+        service.name,
+        `${service.name}.${typeName(x.name)}.${key}`,
+      );
       expose(context, exposed, key, values[key], message);
     }
     if (enumeration !== undefined) {

@@ -1,3 +1,4 @@
+from krpc.declarations import type_name
 from krpc.types import (
     ClassType,
     DictionaryType,
@@ -60,6 +61,9 @@ class PythonDomain(Domain[PythonLanguage]):
             return "%s_" % name
         return name
 
+    def enum_value_name(self, name):
+        return self.language.parse_enum_value_name(name)
+
     def parameter_type(self, typ):
         name = super().parameter_type(typ)
         return "%s or None" % name if typ.nullable else name
@@ -99,11 +103,19 @@ class PythonDomain(Domain[PythonLanguage]):
             )
         raise RuntimeError("Unknown type '%s'" % str(typ))
 
+    @staticmethod
+    def type_name(obj):
+        """The name of a class, enumeration, structure or exception in the client"""
+        return type_name(obj.service_name, obj.name)
+
     def ref(self, obj):
         name = obj.fullname
-        # A procedure, property or method is documented under the name the client
-        # generates for it, which escapes a python keyword; an enumeration value
-        # or a structure field is documented under its plain snake case name
+        # A type, and a member of one, is named as the client names the type
+        if not isinstance(obj, (Service, Procedure, Property)):
+            parts = name.split(".")
+            parts[1] = type_name(parts[0], parts[1])
+            name = ".".join(parts)
+        # A member is documented under the name the client gives it, which escapes a keyword
         if any(
             isinstance(obj, cls)
             for cls in (
@@ -117,9 +129,13 @@ class PythonDomain(Domain[PythonLanguage]):
             name = name.split(".")
             name[-1] = self.method_name(name[-1])
             name = ".".join(name)
-        elif any(isinstance(obj, cls) for cls in (EnumerationValue, StructField)):
+        elif isinstance(obj, EnumerationValue):
             name = name.split(".")
-            name[-1] = snake_case(name[-1])
+            name[-1] = self.enum_value_name(name[-1])
+            name = ".".join(name)
+        elif isinstance(obj, StructField):
+            name = name.split(".")
+            name[-1] = self.method_name(name[-1])
             name = ".".join(name)
         return self.shorten_ref(name)
 
