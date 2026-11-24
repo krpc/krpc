@@ -950,7 +950,10 @@ class, <code class="docutils literal notranslate"><span class="pre">Service.Name
 </tr>
 <tr class="row-odd"><td><p>Member names</p></td>
 <td><p>lowerCamel, as in <code class="docutils literal notranslate"><span class="pre">httpServer</span></code> for <code class="docutils literal notranslate"><span class="pre">HTTPServer</span></code>. A property is <code class="docutils literal notranslate"><span class="pre">get</span></code> or <code class="docutils literal notranslate"><span class="pre">set</span></code>
-and the name, as in <code class="docutils literal notranslate"><span class="pre">getRCSThrust</span></code></p></td>
+and the name, as in <code class="docutils literal notranslate"><span class="pre">getRCSThrust</span></code>. A member named after a member of <code class="docutils literal notranslate"><span class="pre">Object</span></code>, such
+as <code class="docutils literal notranslate"><span class="pre">toString</span></code>, takes a trailing <code class="docutils literal notranslate"><span class="pre">_</span></code>, as does a static method named <code class="docutils literal notranslate"><span class="pre">name</span></code>,
+<code class="docutils literal notranslate"><span class="pre">length</span></code> or <code class="docutils literal notranslate"><span class="pre">prototype</span></code>. A service named as a member of the connection does too,
+as in <code class="docutils literal notranslate"><span class="pre">conn.close_</span></code>, and a type named <code class="docutils literal notranslate"><span class="pre">Service</span></code>, <code class="docutils literal notranslate"><span class="pre">Server</span></code> or <code class="docutils literal notranslate"><span class="pre">ClientService</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>Named arguments</p></td>
 <td><p>A plain object after the positional arguments</p></td>

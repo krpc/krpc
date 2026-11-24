@@ -606,6 +606,10 @@ passes the local socket tests on .NET 10, so the client has no separate <code cl
 The tests run on .NET 10, and none run on .NET Framework or Mono.</p>
 <ul class="simple">
 <li><p>A service is an extension method of <code class="docutils literal notranslate"><span class="pre">IConnection</span></code>. Stubs use only that interface.</p></li>
+<li><p>A service named as a member of <code class="docutils literal notranslate"><span class="pre">Connection</span></code> that takes no arguments, such as <code class="docutils literal notranslate"><span class="pre">Dispose</span></code>,
+takes a trailing <code class="docutils literal notranslate"><span class="pre">_</span></code>, as <code class="docutils literal notranslate"><span class="pre">conn.Dispose_</span> <span class="pre">()</span></code>. So does a type named as a class the stubs
+declare beside it, such as <code class="docutils literal notranslate"><span class="pre">Service</span></code>. <code class="docutils literal notranslate"><span class="pre">FunctionCompiler</span></code> maps an escaped name back to the
+server’s.</p></li>
 <li><p>Constructing a service registers its exception types on that connection. <code class="docutils literal notranslate"><span class="pre">Connection</span></code> registers
 the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> ones itself. Types with a <code class="docutils literal notranslate"><span class="pre">System</span></code> equivalent are a table in <code class="docutils literal notranslate"><span class="pre">GetException</span></code>,
 which adds no public member to <code class="docutils literal notranslate"><span class="pre">IConnection</span></code>. The argument exceptions also take their arguments
@@ -625,7 +629,7 @@ one, which F# units of measure add, still count as a single call.</p></li>
 <p>A C# type cannot say that a reference-typed parameter, or a reference-typed position inside a
 collection, is nullable. The stubs name each in a <code class="docutils literal notranslate"><span class="pre">TypeSpec</span></code>, and the encoder throws
 <code class="docutils literal notranslate"><span class="pre">ArgumentNullException</span></code> for a null where the spec says the position cannot hold one. <code class="docutils literal notranslate"><span class="pre">GetCall</span></code>
-reads the spec from <code class="docutils literal notranslate"><span class="pre">RPCAttribute.Types</span></code>, the service’s generated <code class="docutils literal notranslate"><span class="pre">TypeSpecs</span></code> class. A compiled
+reads the spec from <code class="docutils literal notranslate"><span class="pre">RPCAttribute.Types</span></code>, the service’s generated <code class="docutils literal notranslate"><span class="pre">_TypeSpecs</span></code> class. A compiled
 lambda holding a reference inside a collection or tuple asks the server for its return type.</p>
 <p>Connections carried by the lambda’s objects, its services, a static method’s argument and a
 <code class="docutils literal notranslate"><span class="pre">Bound</span></code> object are not used or checked.</p>

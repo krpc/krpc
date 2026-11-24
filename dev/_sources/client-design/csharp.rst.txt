@@ -15,6 +15,10 @@ passes the local socket tests on .NET 10, so the client has no separate ``net10.
 The tests run on .NET 10, and none run on .NET Framework or Mono.
 
 * A service is an extension method of ``IConnection``. Stubs use only that interface.
+* A service named as a member of ``Connection`` that takes no arguments, such as ``Dispose``,
+  takes a trailing ``_``, as ``conn.Dispose_ ()``. So does a type named as a class the stubs
+  declare beside it, such as ``Service``. ``FunctionCompiler`` maps an escaped name back to the
+  server's.
 * Constructing a service registers its exception types on that connection. ``Connection`` registers
   the ``KRPC`` ones itself. Types with a ``System`` equivalent are a table in ``GetException``,
   which adds no public member to ``IConnection``. The argument exceptions also take their arguments
@@ -34,7 +38,7 @@ Streams from Expressions
 A C# type cannot say that a reference-typed parameter, or a reference-typed position inside a
 collection, is nullable. The stubs name each in a ``TypeSpec``, and the encoder throws
 ``ArgumentNullException`` for a null where the spec says the position cannot hold one. ``GetCall``
-reads the spec from ``RPCAttribute.Types``, the service's generated ``TypeSpecs`` class. A compiled
+reads the spec from ``RPCAttribute.Types``, the service's generated ``_TypeSpecs`` class. A compiled
 lambda holding a reference inside a collection or tuple asks the server for its return type.
 
 Connections carried by the lambda's objects, its services, a static method's argument and a

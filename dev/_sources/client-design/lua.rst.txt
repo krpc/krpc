@@ -25,6 +25,9 @@ types of every service, then builds each service, as a procedure can name a type
   Arguments are read by position, so a ``nil`` leaves a hole and the later ones are still sent.
 * Service and class tables derive from Penlight's ``class.properties``. A property is a ``get_x``
   and a ``set_x`` on the class table, reached through ``__index`` and ``__newindex``.
+* A member named ``IsA`` or ``ClassOf`` is ``is_a_`` or ``class_of_``, as the client calls those
+  Penlight methods. A service named as a method of the connection, such as ``Close``, is the
+  field ``close_``.
 * A member naming a type this client does not know is skipped, with a warning on standard error, so
   a newer server still connects.
 * A deprecated type or enumeration value is left out of its class table, and ``__index`` warns and

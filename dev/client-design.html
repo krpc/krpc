@@ -783,10 +783,14 @@ takes, <code class="docutils literal notranslate"><span class="pre">(?:[0-9]+(?!
 then differ only in case, and the server’s <a class="reference internal" href="extending/types.html#service-api-identifiers"><span class="std std-ref">case-insensitive name rules</span></a> keep them apart.</p>
 <p>lowerCamel keeps acronyms after the first word in capitals, as in <code class="docutils literal notranslate"><span class="pre">meanAnomalyAtUT</span></code>, so it stays
 close to the C# name. A property accessor is <code class="docutils literal notranslate"><span class="pre">get</span></code> or <code class="docutils literal notranslate"><span class="pre">set</span></code> and the UpperCamel name, as in
-<code class="docutils literal notranslate"><span class="pre">getRCSThrust</span></code>. A C-nano macro joins its names with <code class="docutils literal notranslate"><span class="pre">_</span></code>, as in
-<code class="docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_SASMODE_STABILITYASSIST</span></code>, so it upper cases each name with no words. Splitting
-them would make enumeration <code class="docutils literal notranslate"><span class="pre">FooBar</span></code> value <code class="docutils literal notranslate"><span class="pre">Baz</span></code> and enumeration <code class="docutils literal notranslate"><span class="pre">Foo</span></code> value <code class="docutils literal notranslate"><span class="pre">BarBaz</span></code> one
-macro.</p>
+<code class="docutils literal notranslate"><span class="pre">getRCSThrust</span></code>.</p>
+<p>A name that would clash with a keyword of the language, a member the client’s objects already have,
+or a name the generated code declares beside it, takes a trailing <code class="docutils literal notranslate"><span class="pre">_</span></code>. JavaScript names a member
+<code class="docutils literal notranslate"><span class="pre">toString</span></code> as <code class="docutils literal notranslate"><span class="pre">toString_</span></code>, and Python a service <code class="docutils literal notranslate"><span class="pre">Close</span></code> as <code class="docutils literal notranslate"><span class="pre">conn.close_</span></code>.</p>
+<p>A C-nano macro joins its names with <code class="docutils literal notranslate"><span class="pre">_</span></code>, as in <code class="docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_SASMODE_STABILITYASSIST</span></code>, so it
+upper cases each name with no words. Splitting them would make enumeration <code class="docutils literal notranslate"><span class="pre">FooBar</span></code> value <code class="docutils literal notranslate"><span class="pre">Baz</span></code>
+and enumeration <code class="docutils literal notranslate"><span class="pre">Foo</span></code> value <code class="docutils literal notranslate"><span class="pre">BarBaz</span></code> one macro. A service named as a prefix of the library’s
+macros, such as <code class="docutils literal notranslate"><span class="pre">Error</span></code>, takes the trailing <code class="docutils literal notranslate"><span class="pre">_</span></code>, as in <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR__&lt;ENUM&gt;_&lt;VALUE&gt;</span></code>.</p>
 <p>The case of each name in each client:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>

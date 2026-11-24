@@ -18,6 +18,11 @@ jar includes the stubs of the shipped services.
 * ``Encoder`` and ``Decoder`` find a class by the name ``krpc.client.services.<Service>$<Name>``,
   and call its constructor, ``fromValue``, ``fieldTypes`` or ``fromFieldValues`` by reflection. A
   wire type names a structure and omits its fields, so the generated class supplies them.
+* The stubs name every library and ``java.lang`` type in full. A keyword, a literal such as
+  ``null``, a method of ``java.lang.Object`` such as ``hashCode`` and a package name such as
+  ``java`` take a trailing ``_``, and so does a getter named as such a method, as in
+  ``getClass_``. A type named ``Bound``, the class a class with static methods nests, is
+  ``Bound_``, which ``Decoder`` maps back to the server's name.
 * ``addStream`` and ``getCall`` find a method by name and the run-time classes of its arguments.
   ``@RPCInfo`` names the ``_Types`` class holding its descriptors. ``T`` is unchecked, so a wrong
   ``T`` throws ``ClassCastException`` at the assignment.

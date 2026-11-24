@@ -616,6 +616,9 @@ types of every service, then builds each service, as a procedure can name a type
 Arguments are read by position, so a <code class="docutils literal notranslate"><span class="pre">nil</span></code> leaves a hole and the later ones are still sent.</p></li>
 <li><p>Service and class tables derive from Penlight’s <code class="docutils literal notranslate"><span class="pre">class.properties</span></code>. A property is a <code class="docutils literal notranslate"><span class="pre">get_x</span></code>
 and a <code class="docutils literal notranslate"><span class="pre">set_x</span></code> on the class table, reached through <code class="docutils literal notranslate"><span class="pre">__index</span></code> and <code class="docutils literal notranslate"><span class="pre">__newindex</span></code>.</p></li>
+<li><p>A member named <code class="docutils literal notranslate"><span class="pre">IsA</span></code> or <code class="docutils literal notranslate"><span class="pre">ClassOf</span></code> is <code class="docutils literal notranslate"><span class="pre">is_a_</span></code> or <code class="docutils literal notranslate"><span class="pre">class_of_</span></code>, as the client calls those
+Penlight methods. A service named as a method of the connection, such as <code class="docutils literal notranslate"><span class="pre">Close</span></code>, is the
+field <code class="docutils literal notranslate"><span class="pre">close_</span></code>.</p></li>
 <li><p>A member naming a type this client does not know is skipped, with a warning on standard error, so
 a newer server still connects.</p></li>
 <li><p>A deprecated type or enumeration value is left out of its class table, and <code class="docutils literal notranslate"><span class="pre">__index</span></code> warns and

@@ -179,7 +179,10 @@ Mapping the Spec to Python
    * - Null object, nullable value
      - ``None``
    * - Member names
-     - ``snake_case``, with ``_`` appended to a Python keyword
+     - ``snake_case``, with ``_`` appended to a Python keyword, a parameter named ``self`` or
+       ``cls``, an enumeration value named ``mro`` and a service named as a member of the
+       connection, as in ``conn.close_``. A type named as a keyword or as the module's
+       ``<Service>Connection`` takes one too, as in ``None_``
    * - Waiting
      - ``threading.Condition``, held by the caller of ``wait``
    * - Interrupting a blocked thread

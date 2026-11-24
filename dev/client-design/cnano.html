@@ -605,6 +605,10 @@ is <code class="docutils literal notranslate"><span class="pre">static</span> <s
 keeps names out of flash and off the wire.</p>
 <p>Each procedure also has a <code class="docutils literal notranslate"><span class="pre">_call</span></code> function and a <code class="docutils literal notranslate"><span class="pre">_call_template</span></code> function, for server side
 functions. An unused one adds compile time and no code.</p>
+<p>A parameter named as one the function adds, such as <code class="docutils literal notranslate"><span class="pre">connection</span></code> or <code class="docutils literal notranslate"><span class="pre">returnValue</span></code>, takes a
+trailing <code class="docutils literal notranslate"><span class="pre">_</span></code>. An enumeration value macro names its service first, so a service named as a
+prefix of the library’s macros, such as <code class="docutils literal notranslate"><span class="pre">Error</span></code>, takes the <code class="docutils literal notranslate"><span class="pre">_</span></code> there, as in
+<code class="docutils literal notranslate"><span class="pre">KRPC_ERROR__&lt;ENUM&gt;_&lt;VALUE&gt;</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code> goes before a declaration, the one position GCC, Clang and MSVC share. An
 enumeration value takes <code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED_VALUE</span></code> after its name, as the attribute has no other
 position there. MSVC has no such attribute in C, so the macro is empty for it.</p>

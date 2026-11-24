@@ -766,7 +766,10 @@ The function compiler finds the server exception from the class, so each keeps i
 <td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>Member names</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">snake_case</span></code>, with <code class="docutils literal notranslate"><span class="pre">_</span></code> appended to a Python keyword</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">snake_case</span></code>, with <code class="docutils literal notranslate"><span class="pre">_</span></code> appended to a Python keyword, a parameter named <code class="docutils literal notranslate"><span class="pre">self</span></code> or
+<code class="docutils literal notranslate"><span class="pre">cls</span></code>, an enumeration value named <code class="docutils literal notranslate"><span class="pre">mro</span></code> and a service named as a member of the
+connection, as in <code class="docutils literal notranslate"><span class="pre">conn.close_</span></code>. A type named as a keyword or as the module’s
+<code class="docutils literal notranslate"><span class="pre">&lt;Service&gt;Connection</span></code> takes one too, as in <code class="docutils literal notranslate"><span class="pre">None_</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>Waiting</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">threading.Condition</span></code>, held by the caller of <code class="docutils literal notranslate"><span class="pre">wait</span></code></p></td>

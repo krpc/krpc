@@ -1873,7 +1873,7 @@ assembled and run.
       A sequence of bytes.
 
 
-   .. data:: class
+   .. data:: class_
 
       A class defined by a service.
 

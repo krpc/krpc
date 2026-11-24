@@ -748,6 +748,12 @@ and each enumeration its values.</p>
 <a class="reference internal" href="../client-design.html#client-design-name-case"><span class="std std-ref">Case Conversion</span></a> specifies.</p>
 </dd>
 </dl>
+<dl class="simple" id="spec-calls-service-named-as-a-connection-member">
+<dt><code class="docutils literal notranslate"><span class="pre">calls-service-named-as-a-connection-member</span> <span class="pre">[definitions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A service named as a member of the client’s connection, such as <code class="docutils literal notranslate"><span class="pre">Close</span></code>, takes a
+trailing <code class="docutils literal notranslate"><span class="pre">_</span></code>, as <code class="docutils literal notranslate"><span class="pre">close_</span></code>. A type named as a declaration the client makes beside the
+service’s types does too, as the exposed members of <code class="docutils literal notranslate"><span class="pre">TestService</span></code> show.</p>
+</dd>
+</dl>
 <dl class="simple" id="spec-calls-internal-procedure">
 <dt><code class="docutils literal notranslate"><span class="pre">calls-internal-procedure</span> <span class="pre">[definitions]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client leaves out a procedure the server marks internal. The client library calls
 an internal procedure itself, to implement streams, events and server side functions.</p>

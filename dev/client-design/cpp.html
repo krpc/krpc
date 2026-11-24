@@ -597,6 +597,14 @@
 <h1>C++ Client Design<a class="headerlink" href="#c-client-design" title="Link to this heading">#</a></h1>
 <p>The internal design of the C++ client. This page builds on the <a class="reference internal" href="../client-design.html"><span class="doc">shared client design</span></a> and the <a class="reference internal" href="../client-spec.html"><span class="doc">client specification</span></a>. Usage is in
 the <a class="reference internal" href="../cpp.html"><span class="doc">C++ guide</span></a>. Paths are relative to <code class="docutils literal notranslate"><span class="pre">client/cpp/</span></code>.</p>
+<section id="generated-stubs">
+<h2>Generated Stubs<a class="headerlink" href="#generated-stubs" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">clientgen</span></code> writes one header per service from <code class="docutils literal notranslate"><span class="pre">cpp.tmpl</span></code> in <code class="docutils literal notranslate"><span class="pre">krpctools</span></code>. The header names
+every library and standard type from the global namespace, such as <code class="docutils literal notranslate"><span class="pre">::std::string</span></code>, and the
+types of every service in full, so a class of the service cannot shadow them. A class with static
+methods has a static <code class="docutils literal notranslate"><span class="pre">bind</span></code> and a nested class <code class="docutils literal notranslate"><span class="pre">Bound</span></code>, so a member named <code class="docutils literal notranslate"><span class="pre">bind</span></code> is
+<code class="docutils literal notranslate"><span class="pre">bind_</span></code> and a type named <code class="docutils literal notranslate"><span class="pre">Bound</span></code> is <code class="docutils literal notranslate"><span class="pre">Bound_</span></code>.</p>
+</section>
 <section id="ownership">
 <h2>Ownership<a class="headerlink" href="#ownership" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">krpc::Connection</span></code> is a handle to one shared state. Copies, services, objects, streams and events
@@ -794,6 +802,7 @@ declares it. <code class="docutils literal notranslate"><span class="pre">~</spa
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generated-stubs">Generated Stubs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ownership">Ownership</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lifetime">Lifetime</a></li>
