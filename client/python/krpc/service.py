@@ -62,6 +62,10 @@ def _member_name(name: str) -> str:
     return _update_names(snake_case(name))[0]
 
 
+def _parameter_name(name: str) -> str:
+    return _update_names(snake_case(name), reserved=RESERVED_PARAMETER_NAMES)[0]
+
+
 # The enumeration value name Enum rejects. The others it rejects start with _
 RESERVED_ENUM_VALUE_NAMES = frozenset(["mro"])
 
@@ -248,7 +252,7 @@ def _parse_documentation_node(
     if node.tag == "see":
         return parse_cref(node.attrib["cref"])
     if node.tag == "paramref":
-        return snake_case(node.attrib["name"])
+        return _parameter_name(node.attrib["name"])
     if node.tag == "c":
         replace = {"true": "True", "false": "False", "null": "None"}
         if node.text in replace:
@@ -293,7 +297,7 @@ def _parse_documentation(xml: str) -> str:
             summary = _parse_documentation_content(node)
         elif node.tag == "param":
             doc = _parse_documentation_content(node).replace("\n", "")
-            params.append("%s: %s" % (snake_case(node.attrib["name"]), doc))
+            params.append("%s: %s" % (_parameter_name(node.attrib["name"]), doc))
         elif node.tag == "returns":
             returns = "Returns:\n    %s" % _parse_documentation_content(node).replace(
                 "\n", ""
