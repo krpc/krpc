@@ -103,6 +103,46 @@ Service documentation string.
 
 
 
+.. staticmethod:: count()
+
+   A procedure whose C++ helpers are named as the procedures declared after it.
+
+   :rtype: int
+   
+
+
+
+
+.. staticmethod:: count_call()
+
+   A procedure named after the C++ call helper of Count.
+
+   :rtype: int
+   
+
+
+
+
+.. staticmethod:: count_call_template()
+
+   A procedure named after the C++ call template helper of Count.
+
+   :rtype: int
+   
+
+
+
+
+.. staticmethod:: count_stream()
+
+   A procedure named after the C++ stream helper of Count.
+
+   :rtype: int
+   
+
+
+
+
 .. staticmethod:: counter([id = ''], [divisor = 1])
 
 
@@ -804,6 +844,27 @@ Service documentation string.
 
 
 
+.. attribute:: level
+
+   A property whose C++ helpers are named as the procedures declared after it.
+
+   :Attribute: Can be read or written
+   :rtype: int
+   
+
+
+
+
+.. staticmethod:: level_stream()
+
+   A procedure named after the C++ stream helper of the getter of Level.
+
+   :rtype: int
+   
+
+
+
+
 .. staticmethod:: list_default([x = [1, 2, 3]])
 
 
@@ -994,6 +1055,16 @@ Service documentation string.
 
    :param set x:
    :rtype: set(int)
+   
+
+
+
+
+.. staticmethod:: set_level_call()
+
+   A procedure named after the C++ call helper of the setter of Level.
+
+   :rtype: int
    
 
 
@@ -1487,6 +1558,20 @@ Service documentation string.
       :rtype: int
    
 
+   .. staticmethod:: create()
+
+      A static method whose C++ stream helper is named as the static method declared after it.
+
+      :rtype: int
+   
+
+   .. staticmethod:: create_stream()
+
+      A static method named after the C++ stream helper of Create.
+
+      :rtype: int
+   
+
    .. method:: float()
 
       A method named after a Python builtin.
@@ -1568,12 +1653,62 @@ Service documentation string.
       :rtype: int
    
 
+   .. method:: set_size_call()
+
+      A method named after the C++ call helper of the setter of Size.
+
+      :rtype: int
+   
+
+   .. attribute:: size
+
+      A property whose C++ helpers are named as the methods declared after it.
+
+      :Attribute: Can be read or written
+      :rtype: int
+   
+
+   .. method:: size_stream()
+
+      A method named after the C++ stream helper of the getter of Size.
+
+      :rtype: int
+   
+
    .. method:: to_string(value)
 
       A method named after a method of java.lang.Object.
 
       :param int value:
       :rtype: str
+   
+
+   .. method:: total()
+
+      A method whose C++ helpers are named as the methods declared after it.
+
+      :rtype: int
+   
+
+   .. method:: total_call()
+
+      A method named after the C++ call helper of Total.
+
+      :rtype: int
+   
+
+   .. method:: total_call_template()
+
+      A method named after the C++ call template helper of Total.
+
+      :rtype: int
+   
+
+   .. method:: total_stream()
+
+      A method named after the C++ stream helper of Total.
+
+      :rtype: int
    
 
    .. staticmethod:: uint_64t()

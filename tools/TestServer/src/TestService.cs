@@ -1438,6 +1438,66 @@ namespace TestServer
         }
 
         /// <summary>
+        /// A procedure whose C++ helpers are named as the procedures declared after it.
+        /// </summary>
+        [KRPCProcedure]
+        public static int Count ()
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// A procedure named after the C++ stream helper of Count.
+        /// </summary>
+        [KRPCProcedure]
+        public static int CountStream ()
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// A procedure named after the C++ call helper of Count.
+        /// </summary>
+        [KRPCProcedure]
+        public static int CountCall ()
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// A procedure named after the C++ call template helper of Count.
+        /// </summary>
+        [KRPCProcedure]
+        public static int CountCallTemplate ()
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// A property whose C++ helpers are named as the procedures declared after it.
+        /// </summary>
+        [KRPCProperty]
+        public static int Level { get; set; }
+
+        /// <summary>
+        /// A procedure named after the C++ stream helper of the getter of Level.
+        /// </summary>
+        [KRPCProcedure]
+        public static int LevelStream ()
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// A procedure named after the C++ call helper of the setter of Level.
+        /// </summary>
+        [KRPCProcedure]
+        public static int SetLevelCall ()
+        {
+            return 0;
+        }
+
+        /// <summary>
         /// A new object of the class named Object.
         /// </summary>
         /// <param name="name">The name of the object.</param>

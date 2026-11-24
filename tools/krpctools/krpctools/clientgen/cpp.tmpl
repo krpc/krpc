@@ -161,25 +161,25 @@ class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}(
   {% endfor %}
   {% for procedure_name,procedure in procedures.items() %}
 
-  {{ deprecated_attribute(procedure) }}::krpc::Stream<{{ procedure.return_type }}> {{ procedure_name }}_stream({{ sig_parameters(procedure.parameters) }});
+  {{ deprecated_attribute(procedure) }}::krpc::Stream<{{ procedure.return_type }}> {{ procedure.helpers.stream }}({{ sig_parameters(procedure.parameters) }});
   {% endfor %}
   {% for property_name,property in properties.items() %}
   {% if property.return_type != 'void' %}
 
-  {{ deprecated_attribute(property) }}::krpc::Stream<{{ property.return_type }}> {{ property_name }}_stream({{ sig_parameters(property.parameters) }});
+  {{ deprecated_attribute(property) }}::krpc::Stream<{{ property.return_type }}> {{ property.helpers.stream }}({{ sig_parameters(property.parameters) }});
   {% endif %}
   {% endfor %}
   {% for procedure_name,procedure in procedures.items() %}
 
-  {{ deprecated_attribute(procedure) }}::krpc::schema::ProcedureCall {{ procedure_name }}_call({{ sig_parameters(procedure.parameters) }});
+  {{ deprecated_attribute(procedure) }}::krpc::schema::ProcedureCall {{ procedure.helpers.call }}({{ sig_parameters(procedure.parameters) }});
   {% endfor %}
   {% for property_name,property in properties.items() %}
 
-  {{ deprecated_attribute(property) }}::krpc::schema::ProcedureCall {{ property_name }}_call({{ sig_parameters(property.parameters) }});
+  {{ deprecated_attribute(property) }}::krpc::schema::ProcedureCall {{ property.helpers.call }}({{ sig_parameters(property.parameters) }});
   {% endfor %}
   {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
 
-  {{ deprecated_attribute(procedure) }}static ::krpc::schema::ProcedureCall {{ procedure_name }}_call_template();
+  {{ deprecated_attribute(procedure) }}static ::krpc::schema::ProcedureCall {{ procedure.helpers.call_template }}();
   {% endfor %}
   {% for class_name,cls in classes.items() %}
 
@@ -215,33 +215,33 @@ class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}(
     {% endfor %}
     {% for method_name,method in cls.methods.items() %}
 
-    {{ deprecated_attribute(method) }}::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream({{ sig_parameters(method.parameters) }});
+    {{ deprecated_attribute(method) }}::krpc::Stream<{{ method.return_type }}> {{ method.helpers.stream }}({{ sig_parameters(method.parameters) }});
     {% endfor %}
     {% for method_name,method in cls.static_methods.items() %}
 
-    {{ deprecated_attribute(method) }}static ::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream({{ sig_parameters([{'type': '::krpc::Connection&', 'name': 'connection'}] + method.parameters) }});
+    {{ deprecated_attribute(method) }}static ::krpc::Stream<{{ method.return_type }}> {{ method.helpers.stream }}({{ sig_parameters([{'type': '::krpc::Connection&', 'name': 'connection'}] + method.parameters) }});
     {% endfor %}
     {% for property_name,property in cls.properties.items() %}
     {% if property.return_type != 'void' %}
 
-    {{ deprecated_attribute(property) }}::krpc::Stream<{{ property.return_type }}> {{ property_name }}_stream({{ sig_parameters(property.parameters) }});
+    {{ deprecated_attribute(property) }}::krpc::Stream<{{ property.return_type }}> {{ property.helpers.stream }}({{ sig_parameters(property.parameters) }});
     {% endif %}
     {% endfor %}
     {% for method_name,method in cls.methods.items() %}
 
-    {{ deprecated_attribute(method) }}::krpc::schema::ProcedureCall {{ method_name }}_call({{ sig_parameters(method.parameters) }});
+    {{ deprecated_attribute(method) }}::krpc::schema::ProcedureCall {{ method.helpers.call }}({{ sig_parameters(method.parameters) }});
     {% endfor %}
     {% for method_name,method in cls.static_methods.items() %}
 
-    {{ deprecated_attribute(method) }}static ::krpc::schema::ProcedureCall {{ method_name }}_call({{ sig_parameters([{'type': '::krpc::Connection&', 'name': 'connection'}] + method.parameters) }});
+    {{ deprecated_attribute(method) }}static ::krpc::schema::ProcedureCall {{ method.helpers.call }}({{ sig_parameters([{'type': '::krpc::Connection&', 'name': 'connection'}] + method.parameters) }});
     {% endfor %}
     {% for property_name,property in cls.properties.items() %}
 
-    {{ deprecated_attribute(property) }}::krpc::schema::ProcedureCall {{ property_name }}_call({{ sig_parameters(property.parameters) }});
+    {{ deprecated_attribute(property) }}::krpc::schema::ProcedureCall {{ property.helpers.call }}({{ sig_parameters(property.parameters) }});
     {% endfor %}
     {% for method_name,method in cls.methods.items()|list + cls.static_methods.items()|list + cls.properties.items()|list %}
 
-    {{ deprecated_attribute(method) }}static ::krpc::schema::ProcedureCall {{ method_name }}_call_template();
+    {{ deprecated_attribute(method) }}static ::krpc::schema::ProcedureCall {{ method.helpers.call_template }}();
     {% endfor %}
     {% if cls.static_methods %}
 
@@ -427,7 +427,7 @@ inline {{ procedure.return_type }} {{ service_name }}::{{ procedure_name }}({{ i
 {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
 {% if procedure_name in procedures or procedure.return_type != 'void' %}
 
-inline ::krpc::Stream<{{ procedure.return_type }}> {{ service_name }}::{{ procedure_name }}_stream({{ impl_parameters(procedure.parameters) }}) {
+inline ::krpc::Stream<{{ procedure.return_type }}> {{ service_name }}::{{ procedure.helpers.stream }}({{ impl_parameters(procedure.parameters) }}) {
 {% if procedure.parameters | length > 0 %}{{ args(procedure.parameters) | indent(width=2) }}
 {% endif %}
 {{ stream(service_name, procedure.remote_name, procedure.return_type, procedure.parameters | length > 0) | indent(width=2) }}
@@ -436,7 +436,7 @@ inline ::krpc::Stream<{{ procedure.return_type }}> {{ service_name }}::{{ proced
 {% endfor %}
 {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
 
-inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ procedure_name }}_call({{ impl_parameters(procedure.parameters) }}) {
+inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ procedure.helpers.call }}({{ impl_parameters(procedure.parameters) }}) {
 {% if procedure.parameters | length > 0 %}{{ args(procedure.parameters) | indent(width=2) }}
 {% endif %}
 {{ procedure_call(service_name, procedure.remote_name, procedure.return_type, procedure.parameters | length > 0) | indent(width=2) }}
@@ -444,7 +444,7 @@ inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ procedure_name }}_ca
 {% endfor %}
 {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
 
-inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ procedure_name }}_call_template() {
+inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ procedure.helpers.call_template }}() {
   return ::krpc::Connection::build_call("{{ service_name }}", "{{ procedure.remote_name }}");
 }
 {% endfor %}
@@ -477,7 +477,7 @@ inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_
 {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
 {% if method_name in cls.methods or method.return_type != 'void' %}
 
-inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_name }}::{{ method_name }}_stream({{ impl_parameters(method.parameters) }}) {
+inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_name }}::{{ method.helpers.stream }}({{ impl_parameters(method.parameters) }}) {
 {{ args([{'name': '*this'}] + method.parameters) | indent(width=2) }}
 {{ stream(service_name, method.remote_name, method.return_type, True) | indent(width=2) }}
 }
@@ -485,7 +485,7 @@ inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_nam
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
-inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_name }}::{{ method_name }}_stream({{ impl_parameters([{'type': '::krpc::Connection&', 'name': '_connection'}] + method.parameters) }}) {
+inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_name }}::{{ method.helpers.stream }}({{ impl_parameters([{'type': '::krpc::Connection&', 'name': '_connection'}] + method.parameters) }}) {
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=2) }}
 {% endif %}
 {{ stream(service_name, method.remote_name, method.return_type, method.parameters | length > 0, True) | indent(width=2) }}
@@ -493,14 +493,14 @@ inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_nam
 {% endfor %}
 {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
 
-inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ method_name }}_call({{ impl_parameters(method.parameters) }}) {
+inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ method.helpers.call }}({{ impl_parameters(method.parameters) }}) {
 {{ args([{'name': '*this'}] + method.parameters) | indent(width=2) }}
 {{ procedure_call(service_name, method.remote_name, method.return_type, True) | indent(width=2) }}
 }
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
 
-inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ method_name }}_call({{ impl_parameters([{'type': '::krpc::Connection&', 'name': '_connection'}] + method.parameters) }}) {
+inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ method.helpers.call }}({{ impl_parameters([{'type': '::krpc::Connection&', 'name': '_connection'}] + method.parameters) }}) {
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=2) }}
 {% endif %}
 {{ procedure_call(service_name, method.remote_name, method.return_type, method.parameters | length > 0, True) | indent(width=2) }}
@@ -508,7 +508,7 @@ inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ me
 {% endfor %}
 {% for method_name,method in cls.methods.items()|list + cls.static_methods.items()|list + cls.properties.items()|list %}
 
-inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ method_name }}_call_template() {
+inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ method.helpers.call_template }}() {
   return ::krpc::Connection::build_call("{{ service_name }}", "{{ method.remote_name }}");
 }
 {% endfor %}

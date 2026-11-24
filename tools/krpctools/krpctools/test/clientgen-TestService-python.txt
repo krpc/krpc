@@ -452,6 +452,17 @@ class Names(_DeclaredObject, metaclass=_DeclaredClass):
         raise _declaration("TestService", "Names")
 
     @_builtins.property
+    def size(self) -> _builtins.int:
+        """
+        A property whose C++ helpers are named as the methods declared after it.
+        """
+        raise _declaration("TestService", "Names")
+
+    @size.setter
+    def size(self, value: _builtins.int) -> None:
+        raise _declaration("TestService", "Names")
+
+    @_builtins.property
     def value(self) -> _builtins.int:
         """
         A property declared after the property named Property.
@@ -498,9 +509,45 @@ class Names(_DeclaredObject, metaclass=_DeclaredClass):
         """
         raise _declaration("TestService", "Names")
 
+    def set_size_call(self) -> _builtins.int:
+        """
+        A method named after the C++ call helper of the setter of Size.
+        """
+        raise _declaration("TestService", "Names")
+
+    def size_stream(self) -> _builtins.int:
+        """
+        A method named after the C++ stream helper of the getter of Size.
+        """
+        raise _declaration("TestService", "Names")
+
     def to_string(self, value: _builtins.int) -> _builtins.str:
         """
         A method named after a method of java.lang.Object.
+        """
+        raise _declaration("TestService", "Names")
+
+    def total(self) -> _builtins.int:
+        """
+        A method whose C++ helpers are named as the methods declared after it.
+        """
+        raise _declaration("TestService", "Names")
+
+    def total_call(self) -> _builtins.int:
+        """
+        A method named after the C++ call helper of Total.
+        """
+        raise _declaration("TestService", "Names")
+
+    def total_call_template(self) -> _builtins.int:
+        """
+        A method named after the C++ call template helper of Total.
+        """
+        raise _declaration("TestService", "Names")
+
+    def total_stream(self) -> _builtins.int:
+        """
+        A method named after the C++ stream helper of Total.
         """
         raise _declaration("TestService", "Names")
 
@@ -516,6 +563,20 @@ class Names(_DeclaredObject, metaclass=_DeclaredClass):
         """
         A static method named after the method that binds the static methods of a class
         to a connection.
+        """
+        raise _declaration("TestService", "Names")
+
+    @_builtins.staticmethod
+    def create() -> _builtins.int:
+        """
+        A static method whose C++ stream helper is named as the static method declared after it.
+        """
+        raise _declaration("TestService", "Names")
+
+    @_builtins.staticmethod
+    def create_stream() -> _builtins.int:
+        """
+        A static method named after the C++ stream helper of Create.
         """
         raise _declaration("TestService", "Names")
 
@@ -897,6 +958,17 @@ class TestService(metaclass=_DeclaredClass):
         raise _declaration("TestService", None)
 
     @_builtins.property
+    def level(self) -> _builtins.int:
+        """
+        A property whose C++ helpers are named as the procedures declared after it.
+        """
+        raise _declaration("TestService", None)
+
+    @level.setter
+    def level(self, value: _builtins.int) -> None:
+        raise _declaration("TestService", None)
+
+    @_builtins.property
     def nullable_object(self) -> _Optional[TestClass]:
         raise _declaration("TestService", None)
 
@@ -962,6 +1034,30 @@ class TestService(metaclass=_DeclaredClass):
         raise _declaration("TestService", None)
 
     def bytes_to_hex_string(self, value: _builtins.bytes) -> _builtins.str:
+        raise _declaration("TestService", None)
+
+    def count(self) -> _builtins.int:
+        """
+        A procedure whose C++ helpers are named as the procedures declared after it.
+        """
+        raise _declaration("TestService", None)
+
+    def count_call(self) -> _builtins.int:
+        """
+        A procedure named after the C++ call helper of Count.
+        """
+        raise _declaration("TestService", None)
+
+    def count_call_template(self) -> _builtins.int:
+        """
+        A procedure named after the C++ call template helper of Count.
+        """
+        raise _declaration("TestService", None)
+
+    def count_stream(self) -> _builtins.int:
+        """
+        A procedure named after the C++ stream helper of Count.
+        """
         raise _declaration("TestService", None)
 
     def counter(self, id: _builtins.str = '', divisor: _builtins.int = 1) -> _builtins.int:
@@ -1218,6 +1314,12 @@ class TestService(metaclass=_DeclaredClass):
         """
         raise _declaration("TestService", None)
 
+    def level_stream(self) -> _builtins.int:
+        """
+        A procedure named after the C++ stream helper of the getter of Level.
+        """
+        raise _declaration("TestService", None)
+
     def list_default(self, x: _List[_builtins.int] = [1, 2, 3]) -> _List[_builtins.int]:
         raise _declaration("TestService", None)
 
@@ -1270,6 +1372,12 @@ class TestService(metaclass=_DeclaredClass):
         raise _declaration("TestService", None)
 
     def set_default(self, x: _Set[_builtins.int] = {1, 2, 3}) -> _Set[_builtins.int]:
+        raise _declaration("TestService", None)
+
+    def set_level_call(self) -> _builtins.int:
+        """
+        A procedure named after the C++ call helper of the setter of Level.
+        """
         raise _declaration("TestService", None)
 
     def string_default(self, x: _builtins.str = 'foo') -> _builtins.str:

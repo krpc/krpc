@@ -151,6 +151,46 @@ public class TestService extends krpc.client.RemoteService {
         return (java.lang.String) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
+    /**
+     * A procedure whose C++ helpers are named as the procedures declared after it.
+     */
+    @java.lang.SuppressWarnings({ "unchecked" })
+    @krpc.client.RPCInfo(service = "TestService", procedure = "Count", types = _Types.class)
+    public int count() {
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Count");
+        return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+    }
+
+    /**
+     * A procedure named after the C++ call helper of Count.
+     */
+    @java.lang.SuppressWarnings({ "unchecked" })
+    @krpc.client.RPCInfo(service = "TestService", procedure = "CountCall", types = _Types.class)
+    public int countCall() {
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "CountCall");
+        return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+    }
+
+    /**
+     * A procedure named after the C++ call template helper of Count.
+     */
+    @java.lang.SuppressWarnings({ "unchecked" })
+    @krpc.client.RPCInfo(service = "TestService", procedure = "CountCallTemplate", types = _Types.class)
+    public int countCallTemplate() {
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "CountCallTemplate");
+        return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+    }
+
+    /**
+     * A procedure named after the C++ stream helper of Count.
+     */
+    @java.lang.SuppressWarnings({ "unchecked" })
+    @krpc.client.RPCInfo(service = "TestService", procedure = "CountStream", types = _Types.class)
+    public int countStream() {
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "CountStream");
+        return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+    }
+
     @java.lang.SuppressWarnings({ "unchecked" })
     @krpc.client.RPCInfo(service = "TestService", procedure = "Counter", types = _Types.class)
     public int counter(java.lang.String id, int divisor) {
@@ -872,6 +912,16 @@ public class TestService extends krpc.client.RemoteService {
         return (java.lang.String) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
+    /**
+     * A procedure named after the C++ stream helper of the getter of Level.
+     */
+    @java.lang.SuppressWarnings({ "unchecked" })
+    @krpc.client.RPCInfo(service = "TestService", procedure = "LevelStream", types = _Types.class)
+    public int levelStream() {
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "LevelStream");
+        return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+    }
+
     @java.lang.SuppressWarnings({ "unchecked" })
     @krpc.client.RPCInfo(service = "TestService", procedure = "ListDefault", types = _Types.class)
     public java.util.List<java.lang.Integer> listDefault(java.util.List<java.lang.Integer> x) {
@@ -1022,6 +1072,16 @@ public class TestService extends krpc.client.RemoteService {
         };
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "SetDefault", _args);
         return (java.util.Set<java.lang.Integer>) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
+    }
+
+    /**
+     * A procedure named after the C++ call helper of the setter of Level.
+     */
+    @java.lang.SuppressWarnings({ "unchecked" })
+    @krpc.client.RPCInfo(service = "TestService", procedure = "SetLevelCall", types = _Types.class)
+    public int setLevelCall() {
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "SetLevelCall");
+        return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @java.lang.SuppressWarnings({ "unchecked" })
@@ -1319,6 +1379,28 @@ public class TestService extends krpc.client.RemoteService {
             krpc.client.Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
         this.connection.invoke("TestService", "set_DeprecatedProperty", _args);
+    }
+
+    /**
+     * A property whose C++ helpers are named as the procedures declared after it.
+     */
+    @java.lang.SuppressWarnings({ "unchecked" })
+    @krpc.client.RPCInfo(service = "TestService", procedure = "get_Level", types = _Types.class)
+    public int getLevel() {
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "get_Level");
+        return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+    }
+
+    /**
+     * A property whose C++ helpers are named as the procedures declared after it.
+     */
+    @java.lang.SuppressWarnings({ "unchecked" })
+    @krpc.client.RPCInfo(service = "TestService", procedure = "set_Level", types = _Types.class)
+    public void setLevel(int value) {
+        com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+            krpc.client.Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
+        };
+        this.connection.invoke("TestService", "set_Level", _args);
     }
 
     @java.lang.SuppressWarnings({ "unchecked" })
@@ -2906,6 +2988,34 @@ public class TestService extends krpc.client.RemoteService {
         }
 
         /**
+         * A method named after the C++ call helper of the setter of Size.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_SetSizeCall", types = _Types.class)
+        public int setSizeCall()
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_SetSizeCall", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        }
+
+        /**
+         * A method named after the C++ stream helper of the getter of Size.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_SizeStream", types = _Types.class)
+        public int sizeStream()
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_SizeStream", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        }
+
+        /**
          * A method named after a method of java.lang.Object.
          */
         @java.lang.SuppressWarnings({ "unchecked" })
@@ -2918,6 +3028,62 @@ public class TestService extends krpc.client.RemoteService {
             };
             krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_ToString", _args);
             return (java.lang.String) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        }
+
+        /**
+         * A method whose C++ helpers are named as the methods declared after it.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_Total", types = _Types.class)
+        public int total()
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_Total", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        }
+
+        /**
+         * A method named after the C++ call helper of Total.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_TotalCall", types = _Types.class)
+        public int totalCall()
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_TotalCall", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        }
+
+        /**
+         * A method named after the C++ call template helper of Total.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_TotalCallTemplate", types = _Types.class)
+        public int totalCallTemplate()
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_TotalCallTemplate", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        }
+
+        /**
+         * A method named after the C++ stream helper of Total.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_TotalStream", types = _Types.class)
+        public int totalStream()
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_TotalStream", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
         }
 
         /**
@@ -2966,6 +3132,34 @@ public class TestService extends krpc.client.RemoteService {
         }
 
         /**
+         * A property whose C++ helpers are named as the methods declared after it.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_get_Size", types = _Types.class)
+        public int getSize()
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names"))
+            };
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Names_get_Size", _args);
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        }
+
+        /**
+         * A property whose C++ helpers are named as the methods declared after it.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_set_Size", types = _Types.class)
+        public void setSize(int value)
+        {
+            com.google.protobuf.ByteString[] _args = new com.google.protobuf.ByteString[] {
+                krpc.client.Encoder.encode(this, krpc.client.Types.createClass("TestService", "Names")),
+                krpc.client.Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
+            };
+            this.connection.invoke("TestService", "Names_set_Size", _args);
+        }
+
+        /**
          * A property declared after the property named Property.
          */
         @java.lang.SuppressWarnings({ "unchecked" })
@@ -3002,6 +3196,28 @@ public class TestService extends krpc.client.RemoteService {
         public static int bind_(krpc.client.Connection connection)
         {
             krpc.schema.KRPC.ProcedureResult _data = connection.invoke("TestService", "Names_static_Bind");
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), connection);
+        }
+
+        /**
+         * A static method whose C++ stream helper is named as the static method declared after it.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_static_Create", types = _Types.class)
+        public static int create(krpc.client.Connection connection)
+        {
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("TestService", "Names_static_Create");
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), connection);
+        }
+
+        /**
+         * A static method named after the C++ stream helper of Create.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Names_static_CreateStream", types = _Types.class)
+        public static int createStream(krpc.client.Connection connection)
+        {
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("TestService", "Names_static_CreateStream");
             return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), connection);
         }
 
@@ -3089,6 +3305,24 @@ public class TestService extends krpc.client.RemoteService {
             public int bind_()
             {
                 return krpc.client.services.TestService.Names.bind_(connection);
+            }
+
+            /**
+             * A static method whose C++ stream helper is named as the static method declared after it.
+             */
+            @krpc.client.RPCInfo(service = "TestService", procedure = "Names_static_Create", types = _Types.class)
+            public int create()
+            {
+                return krpc.client.services.TestService.Names.create(connection);
+            }
+
+            /**
+             * A static method named after the C++ stream helper of Create.
+             */
+            @krpc.client.RPCInfo(service = "TestService", procedure = "Names_static_CreateStream", types = _Types.class)
+            public int createStream()
+            {
+                return krpc.client.services.TestService.Names.createStream(connection);
             }
 
             /**
@@ -3604,6 +3838,14 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("BytesDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES) });
             RETURN_TYPES.put("BytesToHexString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("BytesToHexString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES) });
+            RETURN_TYPES.put("Count", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Count", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("CountCall", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("CountCall", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("CountCallTemplate", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("CountCallTemplate", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("CountStream", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("CountStream", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("Counter", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("Counter", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("CounterStruct", krpc.client.Types.createStruct("TestService", "TestStruct"));
@@ -3680,6 +3922,9 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("EnumDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestEnum") });
             RETURN_TYPES.put("EnumEcho", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
             PARAMETER_TYPES.put("EnumEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestEnum") });
+        }
+
+        private static void initTypes1() {
             RETURN_TYPES.put("EnumListDefault", krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestEnum")));
             PARAMETER_TYPES.put("EnumListDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestEnum")) });
             RETURN_TYPES.put("EnumToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
@@ -3688,9 +3933,6 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("FlagsDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestFlags") });
             RETURN_TYPES.put("FlagsEcho", krpc.client.Types.createEnumeration("TestService", "TestFlags"));
             PARAMETER_TYPES.put("FlagsEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestFlags") });
-        }
-
-        private static void initTypes1() {
             RETURN_TYPES.put("FlagsListEcho", krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestFlags")));
             PARAMETER_TYPES.put("FlagsListEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestFlags")) });
             RETURN_TYPES.put("FlagsStructEcho", krpc.client.Types.createStruct("TestService", "TestFlagsStruct"));
@@ -3727,6 +3969,8 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("IntToFlags", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("JoinWithAtSign", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("JoinWithAtSign", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("LevelStream", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("LevelStream", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ListDefault", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
             PARAMETER_TYPES.put("ListDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
             RETURN_TYPES.put("NestedStructEcho", krpc.client.Types.createStruct("TestService", "TestNestedStruct"));
@@ -3759,6 +4003,8 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("Service", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("SetDefault", krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
             PARAMETER_TYPES.put("SetDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
+            RETURN_TYPES.put("SetLevelCall", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("SetLevelCall", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("StringDefault", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("StringDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("StringToBool", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL));
@@ -3779,6 +4025,9 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("StringToUInt64", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("StructDefault", krpc.client.Types.createStruct("TestService", "TestStruct"));
             PARAMETER_TYPES.put("StructDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createStruct("TestService", "TestStruct") });
+        }
+
+        private static void initTypes2() {
             RETURN_TYPES.put("StructEcho", krpc.client.Types.createStruct("TestService", "TestStruct"));
             PARAMETER_TYPES.put("StructEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createStruct("TestService", "TestStruct") });
             RETURN_TYPES.put("StructEchoNullable", krpc.client.Types.createStruct("TestService", "TestStruct"));
@@ -3791,9 +4040,6 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("ThrowArgumentNullException", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("ThrowArgumentOutOfRangeException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("ThrowArgumentOutOfRangeException", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
-        }
-
-        private static void initTypes2() {
             RETURN_TYPES.put("ThrowCustomException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("ThrowCustomException", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ThrowCustomExceptionLater", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
@@ -3818,6 +4064,10 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("get_DeprecatedProperty", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("set_DeprecatedProperty", null);
             PARAMETER_TYPES.put("set_DeprecatedProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("get_Level", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("get_Level", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("set_Level", null);
+            PARAMETER_TYPES.put("set_Level", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("get_NullableObject", krpc.client.Types.createClass("TestService", "TestClass"));
             PARAMETER_TYPES.put("get_NullableObject", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("set_NullableObject", null);
@@ -3858,20 +4108,43 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("Names_InstanceParameters", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("Names_Krpc", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("Names_Krpc", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
+            RETURN_TYPES.put("Names_SetSizeCall", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_SetSizeCall", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
+            RETURN_TYPES.put("Names_SizeStream", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_SizeStream", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
             RETURN_TYPES.put("Names_ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("Names_ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("Names_Total", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_Total", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
+            RETURN_TYPES.put("Names_TotalCall", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_TotalCall", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
+            RETURN_TYPES.put("Names_TotalCallTemplate", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_TotalCallTemplate", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
+            RETURN_TYPES.put("Names_TotalStream", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_TotalStream", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
             RETURN_TYPES.put("Names_WithDefaults", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE));
             PARAMETER_TYPES.put("Names_WithDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("Names_get_Property", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("Names_get_Property", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
             RETURN_TYPES.put("Names_set_Property", null);
             PARAMETER_TYPES.put("Names_set_Property", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+        }
+
+        private static void initTypes3() {
+            RETURN_TYPES.put("Names_get_Size", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_get_Size", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
+            RETURN_TYPES.put("Names_set_Size", null);
+            PARAMETER_TYPES.put("Names_set_Size", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("Names_get_Value", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("Names_get_Value", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names") });
             RETURN_TYPES.put("Names_set_Value", null);
             PARAMETER_TYPES.put("Names_set_Value", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "Names"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("Names_static_Bind", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("Names_static_Bind", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("Names_static_Create", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_static_Create", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("Names_static_CreateStream", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Names_static_CreateStream", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("Names_static_MakeStruct", krpc.client.Types.createStruct("TestService", "NamesStruct"));
             PARAMETER_TYPES.put("Names_static_MakeStruct", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("Names_static_Parameters", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
@@ -3894,9 +4167,6 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("TestClass_get_IntProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
             RETURN_TYPES.put("TestClass_set_IntProperty", null);
             PARAMETER_TYPES.put("TestClass_set_IntProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
-        }
-
-        private static void initTypes3() {
             RETURN_TYPES.put("TestClass_get_ObjectProperty", krpc.client.Types.createClass("TestService", "TestClass"));
             PARAMETER_TYPES.put("TestClass_get_ObjectProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
             RETURN_TYPES.put("TestClass_set_ObjectProperty", null);

@@ -94,6 +94,34 @@
 
       :Game Scenes: All
 
+   .. function:: int Count()
+
+      A procedure whose C++ helpers are named as the procedures declared after it.
+
+
+      :Game Scenes: All
+
+   .. function:: int CountCall()
+
+      A procedure named after the C++ call helper of Count.
+
+
+      :Game Scenes: All
+
+   .. function:: int CountCallTemplate()
+
+      A procedure named after the C++ call template helper of Count.
+
+
+      :Game Scenes: All
+
+   .. function:: int CountStream()
+
+      A procedure named after the C++ stream helper of Count.
+
+
+      :Game Scenes: All
+
    .. function:: int Counter(string id = "", int divisor = 1)
 
 
@@ -726,6 +754,19 @@
       :returns: The strings joined.
       :Game Scenes: All
 
+   .. property:: int Level { get; set; }
+
+      A property whose C++ helpers are named as the procedures declared after it.
+
+      :Game Scenes: All
+
+   .. function:: int LevelStream()
+
+      A procedure named after the C++ stream helper of the getter of Level.
+
+
+      :Game Scenes: All
+
    .. function:: System.Collections.Generic.IList<int> ListDefault(System.Collections.Generic.IList<int> x = null)
 
 
@@ -885,6 +926,13 @@
       :parameters:
 
        * **x** -- If null, defaults to ``new System.Collections.Generic.HashSet<int> { 1, 2, 3 }``.
+
+      :Game Scenes: All
+
+   .. function:: int SetLevelCall()
+
+      A procedure named after the C++ call helper of the setter of Level.
+
 
       :Game Scenes: All
 
@@ -1325,6 +1373,20 @@
 
       :Game Scenes: All
 
+   .. function:: static int Create(IConnection connection)
+
+      A static method whose C++ stream helper is named as the static method declared after it.
+
+
+      :Game Scenes: All
+
+   .. function:: static int CreateStream(IConnection connection)
+
+      A static method named after the C++ stream helper of Create.
+
+
+      :Game Scenes: All
+
    .. function:: int Float()
 
       A method named after a Python builtin.
@@ -1410,12 +1472,60 @@
 
       :Game Scenes: All
 
+   .. function:: int SetSizeCall()
+
+      A method named after the C++ call helper of the setter of Size.
+
+
+      :Game Scenes: All
+
+   .. property:: int Size { get; set; }
+
+      A property whose C++ helpers are named as the methods declared after it.
+
+      :Game Scenes: All
+
+   .. function:: int SizeStream()
+
+      A method named after the C++ stream helper of the getter of Size.
+
+
+      :Game Scenes: All
+
    .. function:: string ToString_(int value)
 
       A method named after a method of java.lang.Object.
 
       :parameters:
 
+
+
+      :Game Scenes: All
+
+   .. function:: int Total()
+
+      A method whose C++ helpers are named as the methods declared after it.
+
+
+      :Game Scenes: All
+
+   .. function:: int TotalCall()
+
+      A method named after the C++ call helper of Total.
+
+
+      :Game Scenes: All
+
+   .. function:: int TotalCallTemplate()
+
+      A method named after the C++ call template helper of Total.
+
+
+      :Game Scenes: All
+
+   .. function:: int TotalStream()
+
+      A method named after the C++ stream helper of Total.
 
 
       :Game Scenes: All

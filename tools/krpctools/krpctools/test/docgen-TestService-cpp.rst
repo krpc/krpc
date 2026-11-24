@@ -99,6 +99,34 @@
 
    
 
+   .. function:: int32_t count()
+
+      A procedure whose C++ helpers are named as the procedures declared after it.
+
+
+   
+
+   .. function:: int32_t count_call()
+
+      A procedure named after the C++ call helper of Count.
+
+
+   
+
+   .. function:: int32_t count_call_template()
+
+      A procedure named after the C++ call template helper of Count.
+
+
+   
+
+   .. function:: int32_t count_stream()
+
+      A procedure named after the C++ stream helper of Count.
+
+
+   
+
    .. function:: int32_t counter(std::string id = "", int32_t divisor = 1)
 
 
@@ -732,6 +760,20 @@
       :returns: The strings joined.
    
 
+   .. function:: int32_t level()
+   .. function:: void set_level(int32_t value)
+
+      A property whose C++ helpers are named as the procedures declared after it.
+
+   
+
+   .. function:: int32_t level_stream()
+
+      A procedure named after the C++ stream helper of the getter of Level.
+
+
+   
+
    .. function:: std::vector<int32_t> list_default(std::vector<int32_t> x = std::vector<int32_t>{1, 2, 3})
 
 
@@ -892,6 +934,13 @@
 
       :Parameters:
 
+
+
+   
+
+   .. function:: int32_t set_level_call()
+
+      A procedure named after the C++ call helper of the setter of Level.
 
 
    
@@ -1334,6 +1383,20 @@
 
    
 
+   .. function:: static int32_t create(krpc::Connection& connection)
+
+      A static method whose C++ stream helper is named as the static method declared after it.
+
+
+   
+
+   .. function:: static int32_t create_stream(krpc::Connection& connection)
+
+      A static method named after the C++ stream helper of Create.
+
+
+   
+
    .. function:: int32_t float_()
 
       A method named after a Python builtin.
@@ -1420,12 +1483,61 @@
 
    
 
+   .. function:: int32_t set_size_call()
+
+      A method named after the C++ call helper of the setter of Size.
+
+
+   
+
+   .. function:: int32_t size()
+   .. function:: void set_size(int32_t value)
+
+      A property whose C++ helpers are named as the methods declared after it.
+
+   
+
+   .. function:: int32_t size_stream()
+
+      A method named after the C++ stream helper of the getter of Size.
+
+
+   
+
    .. function:: std::string to_string(int32_t value)
 
       A method named after a method of java.lang.Object.
 
       :Parameters:
 
+
+
+   
+
+   .. function:: int32_t total()
+
+      A method whose C++ helpers are named as the methods declared after it.
+
+
+   
+
+   .. function:: int32_t total_call()
+
+      A method named after the C++ call helper of Total.
+
+
+   
+
+   .. function:: int32_t total_call_template()
+
+      A method named after the C++ call template helper of Total.
+
+
+   
+
+   .. function:: int32_t total_stream()
+
+      A method named after the C++ stream helper of Total.
 
 
    

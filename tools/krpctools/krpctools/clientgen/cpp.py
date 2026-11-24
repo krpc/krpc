@@ -3,7 +3,7 @@ import collections
 from krpc.types import ClassType
 from krpc.utils import snake_case
 
-from ..lang.cpp import CppLanguage, type_name
+from ..lang.cpp import CppLanguage, helper_names, type_name
 from . import crefs
 from .docparser import DocParser
 from .generator import Generator
@@ -154,8 +154,27 @@ class CppGenerator(Generator[CppLanguage]):
                 info["bound_documentation"] = info.get("documentation", "")
                 self.add_connection_param_doxygen(info)
 
+        self.name_helpers(context)
         self.escape_type_names(context)
         return context
+
+    @staticmethod
+    def name_helpers(context):
+        """Name the helpers beside each member, apart from the other members of its scope"""
+        scopes = [[context["procedures"], context["properties"]]]
+        for class_info in context["classes"].values():
+            scopes.append(
+                [
+                    class_info["methods"],
+                    class_info["static_methods"],
+                    class_info["properties"],
+                ]
+            )
+        for scope in scopes:
+            members = set(name for kind in scope for name in kind)
+            for kind in scope:
+                for name, info in kind.items():
+                    info["helpers"] = helper_names(name, members)
 
     @staticmethod
     def escape_type_names(context):

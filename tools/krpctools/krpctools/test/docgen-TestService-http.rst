@@ -111,6 +111,50 @@ Service documentation string.
 
 
 
+.. http:post:: /test-service/count
+
+   A procedure whose C++ helpers are named as the procedures declared after it.
+
+
+   :resjson int32 value:
+
+
+
+
+
+.. http:post:: /test-service/count-call
+
+   A procedure named after the C++ call helper of Count.
+
+
+   :resjson int32 value:
+
+
+
+
+
+.. http:post:: /test-service/count-call-template
+
+   A procedure named after the C++ call template helper of Count.
+
+
+   :resjson int32 value:
+
+
+
+
+
+.. http:post:: /test-service/count-stream
+
+   A procedure named after the C++ stream helper of Count.
+
+
+   :resjson int32 value:
+
+
+
+
+
 .. http:post:: /test-service/counter
 
 
@@ -868,6 +912,34 @@ Service documentation string.
 
 
 
+.. http:get:: /test-service/level
+
+   A property whose C++ helpers are named as the procedures declared after it.
+
+
+   :resjson int32 value:
+
+.. http:put:: /test-service/level
+
+   A property whose C++ helpers are named as the procedures declared after it.
+
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:post:: /test-service/level-stream
+
+   A procedure named after the C++ stream helper of the getter of Level.
+
+
+   :resjson int32 value:
+
+
+
+
+
 .. http:post:: /test-service/list-default
 
 
@@ -1066,6 +1138,17 @@ Service documentation string.
 
    :reqjson set<int32> x: Optional, defaults to ``[1, 2, 3]``.
    :resjson set<int32> value:
+
+
+
+
+
+.. http:post:: /test-service/set-level-call
+
+   A procedure named after the C++ call helper of the setter of Level.
+
+
+   :resjson int32 value:
 
 
 
@@ -1724,6 +1807,28 @@ an object takes it as ``(id)``.
 
 
 
+.. http:post:: /test-service/names/create
+
+   A static method whose C++ stream helper is named as the static method declared after it.
+
+
+   :resjson int32 value:
+
+
+
+
+
+.. http:post:: /test-service/names/create-stream
+
+   A static method named after the C++ stream helper of Create.
+
+
+   :resjson int32 value:
+
+
+
+
+
 .. http:post:: /test-service/names/(id)/float
 
    A method named after a Python builtin.
@@ -1850,6 +1955,53 @@ an object takes it as ``(id)``.
 
 
 
+.. http:post:: /test-service/names/(id)/set-size-call
+
+   A method named after the C++ call helper of the setter of Size.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :resjson int32 value:
+
+
+
+
+
+.. http:get:: /test-service/names/(id)/size
+
+   A property whose C++ helpers are named as the methods declared after it.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :resjson int32 value:
+
+.. http:put:: /test-service/names/(id)/size
+
+   A property whose C++ helpers are named as the methods declared after it.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :reqjson int32 value: The new value.
+
+
+
+
+.. http:post:: /test-service/names/(id)/size-stream
+
+   A method named after the C++ stream helper of the getter of Size.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :resjson int32 value:
+
+
+
+
+
 .. http:post:: /test-service/names/(id)/to-string
 
    A method named after a method of java.lang.Object.
@@ -1859,6 +2011,58 @@ an object takes it as ``(id)``.
 
    :reqjson int32 value:
    :resjson string value:
+
+
+
+
+
+.. http:post:: /test-service/names/(id)/total
+
+   A method whose C++ helpers are named as the methods declared after it.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :resjson int32 value:
+
+
+
+
+
+.. http:post:: /test-service/names/(id)/total-call
+
+   A method named after the C++ call helper of Total.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :resjson int32 value:
+
+
+
+
+
+.. http:post:: /test-service/names/(id)/total-call-template
+
+   A method named after the C++ call template helper of Total.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :resjson int32 value:
+
+
+
+
+
+.. http:post:: /test-service/names/(id)/total-stream
+
+   A method named after the C++ stream helper of Total.
+
+
+   :param id: The identifier of the :ref:`Names <http-TestService.Names>` object.
+
+   :resjson int32 value:
 
 
 

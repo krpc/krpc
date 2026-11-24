@@ -117,6 +117,46 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_Count(krpc_connection_t connection, int32_t * returnValue)
+
+   A procedure whose C++ helpers are named as the procedures declared after it.
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_CountCall(krpc_connection_t connection, int32_t * returnValue)
+
+   A procedure named after the C++ call helper of Count.
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_CountCallTemplate(krpc_connection_t connection, int32_t * returnValue)
+
+   A procedure named after the C++ call template helper of Count.
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_CountStream(krpc_connection_t connection, int32_t * returnValue)
+
+   A procedure named after the C++ stream helper of Count.
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_Counter(krpc_connection_t connection, int32_t * returnValue, const char * id, int32_t divisor)
 
 
@@ -933,6 +973,26 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_Level(krpc_connection_t connection, int32_t * returnValue)
+.. function:: krpc_error_t krpc_TestService_set_Level(krpc_connection_t connection, int32_t value)
+
+   A property whose C++ helpers are named as the procedures declared after it.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_LevelStream(krpc_connection_t connection, int32_t * returnValue)
+
+   A procedure named after the C++ stream helper of the getter of Level.
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_ListDefault(krpc_connection_t connection, krpc_list_int32_t * returnValue, const krpc_list_int32_t * x)
 
 
@@ -1144,6 +1204,16 @@ Service documentation string.
 
    :Parameters:
 
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_SetLevelCall(krpc_connection_t connection, int32_t * returnValue)
+
+   A procedure named after the C++ call helper of the setter of Level.
 
 
    
@@ -1743,6 +1813,20 @@ Service documentation string.
 
    
 
+   .. function:: krpc_error_t krpc_TestService_Names_Create(krpc_connection_t connection, int32_t * returnValue)
+
+      A static method whose C++ stream helper is named as the static method declared after it.
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_CreateStream(krpc_connection_t connection, int32_t * returnValue)
+
+      A static method named after the C++ stream helper of Create.
+
+
+   
+
    .. function:: krpc_error_t krpc_TestService_Names_Float(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
 
       A method named after a Python builtin.
@@ -1829,12 +1913,61 @@ Service documentation string.
 
    
 
+   .. function:: krpc_error_t krpc_TestService_Names_SetSizeCall(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+
+      A method named after the C++ call helper of the setter of Size.
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_Size(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+   .. function:: krpc_error_t krpc_TestService_Names_set_Size(krpc_connection_t connection, krpc_TestService_Names_t instance, int32_t value)
+
+      A property whose C++ helpers are named as the methods declared after it.
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_SizeStream(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+
+      A method named after the C++ stream helper of the getter of Size.
+
+
+   
+
    .. function:: krpc_error_t krpc_TestService_Names_ToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_Names_t instance, int32_t value)
 
       A method named after a method of java.lang.Object.
 
       :Parameters:
 
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_Total(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+
+      A method whose C++ helpers are named as the methods declared after it.
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_TotalCall(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+
+      A method named after the C++ call helper of Total.
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_TotalCallTemplate(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+
+      A method named after the C++ call template helper of Total.
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_Names_TotalStream(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_Names_t instance)
+
+      A method named after the C++ stream helper of Total.
 
 
    

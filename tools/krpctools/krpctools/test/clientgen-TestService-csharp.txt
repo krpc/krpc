@@ -296,6 +296,46 @@ namespace KRPC.Client.Services.TestService
             return (string)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec4, connection);
         }
 
+        /// <summary>
+        /// A procedure whose C++ helpers are named as the procedures declared after it.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Count", typeof(_TypeSpecs))]
+        public int Count ()
+        {
+            var _result = connection.Invoke ("TestService", "Count");
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
+        /// A procedure named after the C++ call helper of Count.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "CountCall", typeof(_TypeSpecs))]
+        public int CountCall ()
+        {
+            var _result = connection.Invoke ("TestService", "CountCall");
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
+        /// A procedure named after the C++ call template helper of Count.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "CountCallTemplate", typeof(_TypeSpecs))]
+        public int CountCallTemplate ()
+        {
+            var _result = connection.Invoke ("TestService", "CountCallTemplate");
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
+        /// A procedure named after the C++ stream helper of Count.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "CountStream", typeof(_TypeSpecs))]
+        public int CountStream ()
+        {
+            var _result = connection.Invoke ("TestService", "CountStream");
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Counter", typeof(_TypeSpecs))]
         public int Counter (string id = "", int divisor = 1)
         {
@@ -991,6 +1031,16 @@ namespace KRPC.Client.Services.TestService
             return (string)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec4, connection);
         }
 
+        /// <summary>
+        /// A procedure named after the C++ stream helper of the getter of Level.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "LevelStream", typeof(_TypeSpecs))]
+        public int LevelStream ()
+        {
+            var _result = connection.Invoke ("TestService", "LevelStream");
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ListDefault", typeof(_TypeSpecs))]
         public global::System.Collections.Generic.IList<int> ListDefault (global::System.Collections.Generic.IList<int> x = null)
         {
@@ -1141,6 +1191,16 @@ namespace KRPC.Client.Services.TestService
             };
             var _result = connection.Invoke ("TestService", "SetDefault", _args);
             return (genericCollectionsAlias::ISet<int>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec46, connection);
+        }
+
+        /// <summary>
+        /// A procedure named after the C++ call helper of the setter of Level.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "SetLevelCall", typeof(_TypeSpecs))]
+        public int SetLevelCall ()
+        {
+            var _result = connection.Invoke ("TestService", "SetLevelCall");
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "StringDefault", typeof(_TypeSpecs))]
@@ -1428,6 +1488,24 @@ namespace KRPC.Client.Services.TestService
                     global::KRPC.Client.Encoder.Encode (value, _TypeSpecs.Spec4)
                 };
                 connection.Invoke ("TestService", "set_DeprecatedProperty", _args);
+            }
+        }
+
+        /// <summary>
+        /// A property whose C++ helpers are named as the procedures declared after it.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_Level", typeof(_TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("TestService", "set_Level")]
+        public int Level {
+            get {
+                var _result = connection.Invoke ("TestService", "get_Level");
+                return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+            }
+            set {
+                var _args = new global::Google.Protobuf.ByteString[] {
+                    global::KRPC.Client.Encoder.Encode (value, _TypeSpecs.Spec1)
+                };
+                connection.Invoke ("TestService", "set_Level", _args);
             }
         }
 
@@ -3193,6 +3271,32 @@ namespace KRPC.Client.Services.TestService
         }
 
         /// <summary>
+        /// A method named after the C++ call helper of the setter of Size.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_SetSizeCall", typeof(_TypeSpecs))]
+        public int SetSizeCall ()
+        {
+            var _args = new global::Google.Protobuf.ByteString[] {
+                global::KRPC.Client.Encoder.Encode (this, _TypeSpecs.Spec48)
+            };
+            var _result = connection.Invoke ("TestService", "Names_SetSizeCall", _args);
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
+        /// A method named after the C++ stream helper of the getter of Size.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_SizeStream", typeof(_TypeSpecs))]
+        public int SizeStream ()
+        {
+            var _args = new global::Google.Protobuf.ByteString[] {
+                global::KRPC.Client.Encoder.Encode (this, _TypeSpecs.Spec48)
+            };
+            var _result = connection.Invoke ("TestService", "Names_SizeStream", _args);
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
         /// A method named after a method of java.lang.Object.
         /// </summary>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_ToString", typeof(_TypeSpecs))]
@@ -3204,6 +3308,58 @@ namespace KRPC.Client.Services.TestService
             };
             var _result = connection.Invoke ("TestService", "Names_ToString", _args);
             return (string)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec4, connection);
+        }
+
+        /// <summary>
+        /// A method whose C++ helpers are named as the methods declared after it.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_Total", typeof(_TypeSpecs))]
+        public int Total ()
+        {
+            var _args = new global::Google.Protobuf.ByteString[] {
+                global::KRPC.Client.Encoder.Encode (this, _TypeSpecs.Spec48)
+            };
+            var _result = connection.Invoke ("TestService", "Names_Total", _args);
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
+        /// A method named after the C++ call helper of Total.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_TotalCall", typeof(_TypeSpecs))]
+        public int TotalCall ()
+        {
+            var _args = new global::Google.Protobuf.ByteString[] {
+                global::KRPC.Client.Encoder.Encode (this, _TypeSpecs.Spec48)
+            };
+            var _result = connection.Invoke ("TestService", "Names_TotalCall", _args);
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
+        /// A method named after the C++ call template helper of Total.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_TotalCallTemplate", typeof(_TypeSpecs))]
+        public int TotalCallTemplate ()
+        {
+            var _args = new global::Google.Protobuf.ByteString[] {
+                global::KRPC.Client.Encoder.Encode (this, _TypeSpecs.Spec48)
+            };
+            var _result = connection.Invoke ("TestService", "Names_TotalCallTemplate", _args);
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
+        /// A method named after the C++ stream helper of Total.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_TotalStream", typeof(_TypeSpecs))]
+        public int TotalStream ()
+        {
+            var _args = new global::Google.Protobuf.ByteString[] {
+                global::KRPC.Client.Encoder.Encode (this, _TypeSpecs.Spec48)
+            };
+            var _result = connection.Invoke ("TestService", "Names_TotalStream", _args);
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
         }
 
         /// <summary>
@@ -3233,6 +3389,32 @@ namespace KRPC.Client.Services.TestService
             if (connection == null)
                 throw new global::System.ArgumentNullException (nameof (connection));
             var _result = connection.Invoke ("TestService", "Names_static_Bind");
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
+        /// A static method whose C++ stream helper is named as the static method declared after it.
+        /// </summary>
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_static_Create", typeof(_TypeSpecs))]
+        public static int Create (global::KRPC.Client.IConnection connection)
+        {
+            if (connection == null)
+                throw new global::System.ArgumentNullException (nameof (connection));
+            var _result = connection.Invoke ("TestService", "Names_static_Create");
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
+        /// A static method named after the C++ stream helper of Create.
+        /// </summary>
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_static_CreateStream", typeof(_TypeSpecs))]
+        public static int CreateStream (global::KRPC.Client.IConnection connection)
+        {
+            if (connection == null)
+                throw new global::System.ArgumentNullException (nameof (connection));
+            var _result = connection.Invoke ("TestService", "Names_static_CreateStream");
             return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
         }
 
@@ -3331,6 +3513,24 @@ namespace KRPC.Client.Services.TestService
             }
 
             /// <summary>
+            /// A static method whose C++ stream helper is named as the static method declared after it.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_static_Create", typeof(_TypeSpecs))]
+            public int Create ()
+            {
+                return global::KRPC.Client.Services.TestService.Names.Create (connection);
+            }
+
+            /// <summary>
+            /// A static method named after the C++ stream helper of Create.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_static_CreateStream", typeof(_TypeSpecs))]
+            public int CreateStream ()
+            {
+                return global::KRPC.Client.Services.TestService.Names.CreateStream (connection);
+            }
+
+            /// <summary>
             /// A structure with the given value in its field named Bound.
             /// </summary>
             /// <param name="bound">The value.</param>
@@ -3378,6 +3578,28 @@ namespace KRPC.Client.Services.TestService
                     global::KRPC.Client.Encoder.Encode (value, _TypeSpecs.Spec1)
                 };
                 connection.Invoke ("TestService", "Names_set_Property", _args);
+            }
+        }
+
+        /// <summary>
+        /// A property whose C++ helpers are named as the methods declared after it.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Names_get_Size", typeof(_TypeSpecs))]
+        [global::KRPC.Client.Attributes.RPCSetterAttribute ("TestService", "Names_set_Size")]
+        public int Size {
+            get {
+                var _args = new global::Google.Protobuf.ByteString[] {
+                    global::KRPC.Client.Encoder.Encode (this, _TypeSpecs.Spec48)
+                };
+                var _result = connection.Invoke ("TestService", "Names_get_Size", _args);
+                return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+            }
+            set {
+                var _args = new global::Google.Protobuf.ByteString[] {
+                    global::KRPC.Client.Encoder.Encode (this, _TypeSpecs.Spec48),
+                    global::KRPC.Client.Encoder.Encode (value, _TypeSpecs.Spec1)
+                };
+                connection.Invoke ("TestService", "Names_set_Size", _args);
             }
         }
 

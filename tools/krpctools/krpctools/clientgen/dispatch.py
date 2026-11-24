@@ -27,7 +27,7 @@ from krpc.types import (
 )
 from krpc.utils import snake_case
 
-from ..lang.cpp import CppLanguage
+from ..lang.cpp import CppLanguage, helper_names
 from ..lang.cpp import type_name as cpp_type_name
 from ..lang.csharp import CsharpLanguage, service_accessor
 from ..lang.csharp import type_name as csharp_type_name
@@ -763,46 +763,53 @@ class CppDispatchGenerator(DispatchGenerator):
     def _name(self, name):
         return self.language.parse_name(name)
 
-    def call(self, kind, cls, name, parameters, suffix=""):
+    def _member_name(self, kind, name):
+        prefix = "set_" if kind in (SETTER, CLASS_SETTER) else ""
+        return prefix + self._name(name)
+
+    def _helper(self, kind, cls, name, suffix):
+        """The name of a helper of a member, as the stubs name it"""
+        scope = set()
+        for procedure_name, _ in self._get_defs("procedures"):
+            other_kind, other_cls, other_name = _classify(procedure_name)
+            if other_cls == cls:
+                scope.add(self._member_name(other_kind, other_name))
+        return helper_names(self._member_name(kind, name), scope)[suffix]
+
+    def call(self, kind, cls, name, parameters, suffix=None):
+        """A call of a member, or of its helper with the given suffix"""
         service = "::krpc::services::%s(connection)" % self._service
+        if suffix is None:
+            member = self._member_name(kind, name)
+        else:
+            member = self._helper(kind, cls, name, suffix)
         if kind == PROCEDURE:
-            return "%s.%s%s(%s)" % (
-                service,
-                self._name(name),
-                suffix,
-                _arguments(parameters),
-            )
+            return "%s.%s(%s)" % (service, member, _arguments(parameters))
         if kind == GETTER:
-            return "%s.%s%s()" % (service, self._name(name), suffix)
+            return "%s.%s()" % (service, member)
         if kind == SETTER:
-            return "%s.set_%s(a0)" % (service, self._name(name))
+            return "%s.%s(a0)" % (service, member)
         if kind == STATIC_METHOD:
             args = ", ".join(["connection"] + [x["name"] for x in parameters])
-            return "%s::%s%s(%s)" % (
-                self.class_type(self._service, cls),
-                self._name(name),
-                suffix,
-                args,
-            )
+            return "%s::%s(%s)" % (self.class_type(self._service, cls), member, args)
         if kind == METHOD:
-            return "a0.%s%s(%s)" % (self._name(name), suffix, _arguments(parameters, 1))
+            return "a0.%s(%s)" % (member, _arguments(parameters, 1))
         if kind == CLASS_GETTER:
-            return "a0.%s%s()" % (self._name(name), suffix)
-        return "a0.set_%s(a1)" % self._name(name)
+            return "a0.%s()" % member
+        return "a0.%s(a1)" % member
 
     def stream(self, kind, cls, name, parameters):
-        return self.call(kind, cls, name, parameters, "_stream")
+        return self.call(kind, cls, name, parameters, "stream")
 
     def procedure_call(self, kind, cls, name, parameters):
-        return self.call(kind, cls, name, parameters, "_call")
+        return self.call(kind, cls, name, parameters, "call")
 
     def call_template(self, kind, cls, name, parameters):
         if kind in (PROCEDURE, GETTER, SETTER):
             owner = "::krpc::services::%s" % self._service
         else:
             owner = self.class_type(self._service, cls)
-        prefix = "set_" if kind in (SETTER, CLASS_SETTER) else ""
-        return "%s::%s%s_call_template()" % (owner, prefix, self._name(name))
+        return "%s::%s()" % (owner, self._helper(kind, cls, name, "call_template"))
 
     def bound_call(self, cls, name, parameters):
         return "%s::bind(connection).%s(%s)" % (
