@@ -31,7 +31,11 @@ from krpc.declarations import service_attribute, type_name
 from krpc.decoder import Decoder
 from krpc.encoder import Encoder
 from krpc.event import Event
-from krpc.service import RemoteService
+from krpc.service import (
+    RESERVED_ENUM_VALUE_NAMES,
+    RESERVED_PARAMETER_NAMES,
+    RemoteService,
+)
 from krpc.transport import Transport
 from krpc.types import RemoteObject, TypeBase
 from krpc.utils import snake_case
@@ -237,7 +241,7 @@ class Testee:
         elif case == "invoke":
             func, args = self._resolve(command.invoke)
             kwargs = {
-                snake_case(x.name): self._from_value(x.value)
+                parameter_name(x.name): self._from_value(x.value)
                 for x in command.invoke.named_arguments
             }
             reply.value.CopyFrom(self._to_value(func(*args, **kwargs)))
@@ -501,15 +505,15 @@ class Testee:
                 )
                 return getattr(cls, member_name(member)), args
             if Attributes.is_a_class_property_getter(name):
-                return getattr, [args[0], snake_case(member)]
+                return getattr, [args[0], member_name(member)]
             if Attributes.is_a_class_property_setter(name):
-                return setattr, [args[0], snake_case(member), args[1]]
+                return setattr, [args[0], member_name(member), args[1]]
             return getattr(args[0], member_name(member)), args[1:]
         service = getattr(self._connection(), service_attribute(command.service))
         if Attributes.is_a_property_getter(name):
-            return getattr, [service, snake_case(Attributes.get_property_name(name))]
+            return getattr, [service, member_name(Attributes.get_property_name(name))]
         if Attributes.is_a_property_setter(name):
-            prop = snake_case(Attributes.get_property_name(name))
+            prop = member_name(Attributes.get_property_name(name))
             return setattr, [service, prop, args[0]]
         return getattr(service, member_name(name)), args
 
@@ -524,14 +528,14 @@ class Testee:
             )
             member = Attributes.get_class_member_name(name)
             if Attributes.is_a_class_property_getter(name):
-                return [getattr, owner, snake_case(member)]
+                return [getattr, owner, member_name(member)]
             if Attributes.is_a_class_property_setter(name):
-                return [setattr, owner, snake_case(member)]
+                return [setattr, owner, member_name(member)]
             return [getattr(owner, member_name(member))]
         if Attributes.is_a_property_getter(name):
-            return [getattr, service, snake_case(Attributes.get_property_name(name))]
+            return [getattr, service, member_name(Attributes.get_property_name(name))]
         if Attributes.is_a_property_setter(name):
-            return [setattr, service, snake_case(Attributes.get_property_name(name))]
+            return [setattr, service, member_name(Attributes.get_property_name(name))]
         return [getattr(service, member_name(name))]
 
     def _call_back(
@@ -762,8 +766,10 @@ class Testee:
         typ = getattr(service, member_type)
         if hasattr(typ, "_fields"):
             value = typ(*[None] * len(typ._fields))
-            return lambda: getattr(value, snake_case(name))
-        return lambda: getattr(typ, snake_case(name))
+            return lambda: getattr(value, member_name(name))
+        if isinstance(typ, enum.EnumMeta):
+            return lambda: getattr(typ, enum_value_name(name))
+        return lambda: getattr(typ, member_name(name))
 
     def _codec_type(self, name: str) -> TypeBase:
         """The client's type for a codec type name, such as "list(nullable uint32)"."""
@@ -869,9 +875,24 @@ def split_codec_types(names: str) -> list[str]:
 
 
 def member_name(name: str) -> str:
-    """The name the client gives a procedure or method, with an underscore after a keyword."""
+    """The name the client gives a procedure, method, property or structure field, with an
+    underscore after a keyword."""
     name = snake_case(name)
     return name + "_" if keyword.iskeyword(name) else name
+
+
+def enum_value_name(name: str) -> str:
+    """The name the client gives an enumeration value, with an underscore after a keyword and
+    a name Enum rejects."""
+    name = member_name(name)
+    return name + "_" if name in RESERVED_ENUM_VALUE_NAMES else name
+
+
+def parameter_name(name: str) -> str:
+    """The name the client gives a parameter, with an underscore after a keyword and the names
+    of the parameters a method takes ahead of it."""
+    name = member_name(name)
+    return name + "_" if name in RESERVED_PARAMETER_NAMES else name
 
 
 def declared_type(service: str, name: str) -> Any:

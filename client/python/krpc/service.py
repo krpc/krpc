@@ -55,7 +55,7 @@ def _as_literal(value: object, typ: TypeBase) -> str:
 
 # The parameters a method takes ahead of those of its procedure. A parameter of one of these
 # names takes a trailing underscore.
-_RESERVED_PARAMETER_NAMES = frozenset(["cls", "self"])
+RESERVED_PARAMETER_NAMES = frozenset(["cls", "self"])
 
 
 def _member_name(name: str) -> str:
@@ -63,11 +63,11 @@ def _member_name(name: str) -> str:
 
 
 # The enumeration value name Enum rejects. The others it rejects start with _
-_RESERVED_ENUM_VALUE_NAMES = frozenset(["mro"])
+RESERVED_ENUM_VALUE_NAMES = frozenset(["mro"])
 
 
 def _enum_value_name(name: str) -> str:
-    return _update_names(snake_case(name), reserved=_RESERVED_ENUM_VALUE_NAMES)[0]
+    return _update_names(snake_case(name), reserved=RESERVED_ENUM_VALUE_NAMES)[0]
 
 
 def _update_names(*names: str, reserved: frozenset[str] = frozenset()) -> list[str]:
@@ -104,7 +104,7 @@ def _construct_func(
     param_names = list(param_names)
     first = param_names[:1] if instance else []
     param_names = first + _update_names(
-        *param_names[len(first) :], reserved=_RESERVED_PARAMETER_NAMES
+        *param_names[len(first) :], reserved=RESERVED_PARAMETER_NAMES
     )
 
     params = []

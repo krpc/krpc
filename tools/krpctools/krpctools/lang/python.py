@@ -2,6 +2,7 @@ import keyword
 
 from krpc.declarations import type_name
 from krpc.schema.KRPC_pb2 import Type
+from krpc.service import RESERVED_ENUM_VALUE_NAMES, RESERVED_PARAMETER_NAMES
 from krpc.types import (
     NATIVE_EXCEPTIONS,
     STREAM_REMOVED,
@@ -26,7 +27,7 @@ class PythonLanguage(Language):
     keywords = keyword.kwlist
 
     # The parameters a method takes ahead of those of its procedure
-    parameter_reserved = frozenset(["cls", "self"])
+    parameter_reserved = RESERVED_PARAMETER_NAMES
 
     value_map = {"null": "None", "true": "True", "false": "False"}
 
@@ -53,8 +54,8 @@ class PythonLanguage(Language):
         (Type.UINT64, "max"): "krpc.limits.UINT64_MAX",
     }
 
-    # The enumeration value name Enum rejects. The others it rejects start with _
-    reserved_enum_value_names = frozenset(["mro"])
+    # The enumeration value names Enum rejects
+    reserved_enum_value_names = RESERVED_ENUM_VALUE_NAMES
 
     def parse_name(self, name):
         return super().parse_name(snake_case(name))
