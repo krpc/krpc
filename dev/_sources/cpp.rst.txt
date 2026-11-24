@@ -321,6 +321,10 @@ Each procedure has a function with ``_stream`` added to its name, such as ``posi
 creates the stream from the procedure's arguments, and returns a :class:`~krpc::Stream`, whose
 template argument is the procedure's return type. Calling the stream returns its latest value.
 
+.. note::
+   Where a class or service has a member named ``position_stream`` beside ``position``, the
+   function is ``position__stream``.
+
 A property is streamed the same way, with ``_stream`` added to the name of its getter:
 
 .. literalinclude:: /scripts/cpp/Streaming3.cpp
@@ -419,7 +423,8 @@ returns the call as a message, for :func:`~krpc::services::KRPC::Expression::cal
 function. A static function with ``_call_template`` added to the name, such as
 ``Engine::has_fuel_call_template()``, returns the call template. It names the procedure and
 carries no arguments, for :func:`~krpc::services::KRPC::Expression::call_with_arguments` to
-supply each one, as in :ref:`server-side-functions-collections`.
+supply each one, as in :ref:`server-side-functions-collections`. Either function takes ``__``
+in place of ``_`` where a member already has its name, as ``_stream`` does.
 :ref:`server-side-functions-api` in the :ref:`server side functions guide
 <server-side-functions>` describes how to build functions.
 

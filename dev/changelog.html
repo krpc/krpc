@@ -581,6 +581,7 @@
 <li><p>Client generation</p>
 <ul>
 <li><p>Fix the TypeScript generated for a procedure with a parameter named <code class="docutils literal notranslate"><span class="pre">options</span></code> and an optional parameter, which did not type-check (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1399">#1399</a>)</p></li>
+<li><p>Fix the generated C++ code for a member named as the <code class="docutils literal notranslate"><span class="pre">_stream</span></code>, <code class="docutils literal notranslate"><span class="pre">_call</span></code> or <code class="docutils literal notranslate"><span class="pre">_call_template</span></code> function of another member, which becomes <code class="docutils literal notranslate"><span class="pre">foo__stream</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1414">#1414</a>)</p></li>
 </ul>
 </li>
 <li><p>Fix generated client code for a service that declares a name the code uses, such as a class named <code class="docutils literal notranslate"><span class="pre">Object</span></code> or <code class="docutils literal notranslate"><span class="pre">String</span></code>, or a parameter named <code class="docutils literal notranslate"><span class="pre">self</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1413">#1413</a>)</p></li>

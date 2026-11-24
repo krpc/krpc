@@ -14,6 +14,13 @@ types of every service in full, so a class of the service cannot shadow them. A 
 methods has a static ``bind`` and a nested class ``Bound``, so a member named ``bind`` is
 ``bind_`` and a type named ``Bound`` is ``Bound_``.
 
+The ``_stream``, ``_call`` and ``_call_template`` functions of a member ``foo`` take ``__`` in
+place of ``_`` where the scope has a member of that name, as in ``foo__stream`` beside a method
+``foo_stream``. Server names hold only letters and digits, so no member name contains ``__``.
+Renaming the member in place of the helper would rename a member such as ``add_stream``, which has
+no clash. The cost is that adding a member ``foo_stream`` to a service renames the existing
+``foo_stream`` helper of ``foo``. Such a pair is rare, and the rename is confined to C++ helpers.
+
 Ownership
 ---------
 

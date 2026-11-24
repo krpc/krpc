@@ -604,6 +604,12 @@ every library and standard type from the global namespace, such as <code class="
 types of every service in full, so a class of the service cannot shadow them. A class with static
 methods has a static <code class="docutils literal notranslate"><span class="pre">bind</span></code> and a nested class <code class="docutils literal notranslate"><span class="pre">Bound</span></code>, so a member named <code class="docutils literal notranslate"><span class="pre">bind</span></code> is
 <code class="docutils literal notranslate"><span class="pre">bind_</span></code> and a type named <code class="docutils literal notranslate"><span class="pre">Bound</span></code> is <code class="docutils literal notranslate"><span class="pre">Bound_</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">_stream</span></code>, <code class="docutils literal notranslate"><span class="pre">_call</span></code> and <code class="docutils literal notranslate"><span class="pre">_call_template</span></code> functions of a member <code class="docutils literal notranslate"><span class="pre">foo</span></code> take <code class="docutils literal notranslate"><span class="pre">__</span></code> in
+place of <code class="docutils literal notranslate"><span class="pre">_</span></code> where the scope has a member of that name, as in <code class="docutils literal notranslate"><span class="pre">foo__stream</span></code> beside a method
+<code class="docutils literal notranslate"><span class="pre">foo_stream</span></code>. Server names hold only letters and digits, so no member name contains <code class="docutils literal notranslate"><span class="pre">__</span></code>.
+Renaming the member in place of the helper would rename a member such as <code class="docutils literal notranslate"><span class="pre">add_stream</span></code>, which has
+no clash. The cost is that adding a member <code class="docutils literal notranslate"><span class="pre">foo_stream</span></code> to a service renames the existing
+<code class="docutils literal notranslate"><span class="pre">foo_stream</span></code> helper of <code class="docutils literal notranslate"><span class="pre">foo</span></code>. Such a pair is rare, and the rename is confined to C++ helpers.</p>
 </section>
 <section id="ownership">
 <h2>Ownership<a class="headerlink" href="#ownership" title="Link to this heading">#</a></h2>
