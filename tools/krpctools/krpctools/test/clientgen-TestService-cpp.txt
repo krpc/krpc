@@ -40,6 +40,7 @@ class TestService : public ::krpc::RemoteService {
   explicit TestService(const ::krpc::Connection& connection);
 
   // Class forward declarations
+  class Bound_;
   class ByteString;
   class ClassBase;
   class Client;
@@ -1296,6 +1297,49 @@ class TestService : public ::krpc::RemoteService {
   static ::krpc::schema::ProcedureCall set_string_property_private_get_call_template();
 
   static ::krpc::schema::ProcedureCall string_property_private_set_call_template();
+
+  /**
+   * A class named after the class a class with static methods nests.
+   */
+  class Bound_ : public ::krpc::RemoteObject<Bound_> {
+   public:
+    Bound_();
+    Bound_(const ::krpc::Connection& connection, ::std::uint64_t id);
+
+    /**
+     * A static method, which gives the class its nested class of static methods.
+     */
+    static ::std::int32_t make(::krpc::Connection& connection);
+
+    static ::krpc::Stream<::std::int32_t> make_stream(::krpc::Connection& connection);
+
+    static ::krpc::schema::ProcedureCall make_call(::krpc::Connection& connection);
+
+    static ::krpc::schema::ProcedureCall make_call_template();
+
+    /**
+     * The static methods of TestService::Bound_, bound to a connection.
+     */
+    class Bound {
+     public:
+      explicit Bound(const ::krpc::Connection& connection);
+
+      /**
+       * A static method, which gives the class its nested class of static methods.
+       */
+      ::std::int32_t make() const;
+
+     private:
+      mutable ::krpc::Connection _connection;
+    };
+
+    /**
+     * Binds the static methods of TestService::Bound_ to a connection.
+     * @param connection The connection the methods are called on.
+     * @return The bound methods.
+     */
+    static Bound bind(const ::krpc::Connection& connection);
+  };
 
   /**
    * A class named ByteString.
@@ -6066,6 +6110,42 @@ inline ::krpc::schema::ProcedureCall TestService::set_string_property_private_ge
 
 inline ::krpc::schema::ProcedureCall TestService::string_property_private_set_call_template() {
   return ::krpc::Connection::build_call("TestService", "get_StringPropertyPrivateSet");
+}
+
+inline TestService::Bound_::Bound_():
+  ::krpc::RemoteObject<Bound_>("TestService::Bound") {}
+
+inline TestService::Bound_::Bound_(const ::krpc::Connection& connection, ::std::uint64_t id):
+  ::krpc::RemoteObject<Bound_>(connection, "TestService::Bound", id) {}
+
+inline ::std::int32_t TestService::Bound_::make(::krpc::Connection& _connection) {
+  auto _data = _connection.invoke("TestService", "Bound_static_Make", {}, ::krpc::Connection::Returns::value);
+    ::std::int32_t _result{};
+  ::krpc::decoder::decode_result(_result, _data, &_connection);
+  return _result;
+}
+
+inline ::krpc::Stream<::std::int32_t> TestService::Bound_::make_stream(::krpc::Connection& _connection) {
+  return ::krpc::Stream<::std::int32_t>(_connection, _connection.build_call("TestService", "Bound_static_Make"));
+}
+
+inline ::krpc::schema::ProcedureCall TestService::Bound_::make_call(::krpc::Connection& _connection) {
+  return _connection.build_call("TestService", "Bound_static_Make");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::Bound_::make_call_template() {
+  return ::krpc::Connection::build_call("TestService", "Bound_static_Make");
+}
+
+inline TestService::Bound_::Bound::Bound(const ::krpc::Connection& connection):
+  _connection(connection) {}
+
+inline ::std::int32_t TestService::Bound_::Bound::make() const {
+  return TestService::Bound_::make(_connection);
+}
+
+inline TestService::Bound_::Bound TestService::Bound_::bind(const ::krpc::Connection& connection) {
+  return Bound(connection);
 }
 
 inline TestService::ByteString::ByteString():

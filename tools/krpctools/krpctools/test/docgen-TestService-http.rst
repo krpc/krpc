@@ -1427,6 +1427,28 @@ Service documentation string.
 
 
 
+.. _http-TestService.Bound:
+
+.. rubric:: Bound
+
+A class named after the class a class with static methods nests.
+
+A ``Bound`` object is passed and returned as its identifier, a number. A path that acts on
+an object takes it as ``(id)``.
+
+
+.. http:post:: /test-service/bound/make
+
+   A static method, which gives the class its nested class of static methods.
+
+
+   :resjson int32 value:
+
+
+
+
+
+
 .. _http-TestService.ByteString:
 
 .. rubric:: ByteString

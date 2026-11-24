@@ -13,7 +13,7 @@ import sys
 import pytest
 
 from krpc.declarations import CONNECTION_MEMBERS as PYTHON_CONNECTION_MEMBERS
-from krpctools.lang import csharp, js
+from krpctools.lang import cpp, csharp, java, js
 from krpctools.lang.lua import LuaLanguage
 
 PATHS = dict(x.split("=", 1) for x in sys.argv[1:] if "=" in x)
@@ -59,6 +59,14 @@ def test_csharp_generated_type_names():
     source = read("csharp-compiler")
     names = strings(array(source, r"generatedTypeNames ="))
     assert names == set(csharp.GENERATED_TYPE_NAMES)
+
+
+def test_bound_type_names():
+    # C++, C# and Java nest a class Bound in each class with static methods
+    assert set(cpp.GENERATED_TYPE_NAMES) == set(java.GENERATED_TYPE_NAMES)
+    assert set(java.GENERATED_TYPE_NAMES) <= set(csharp.GENERATED_TYPE_NAMES)
+    names = strings(array(read("java-decoder"), r"GENERATED_TYPE_NAMES = Set\.of"))
+    assert names == set(java.GENERATED_TYPE_NAMES)
 
 
 def test_js_names():

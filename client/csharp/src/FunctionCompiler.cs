@@ -2522,9 +2522,10 @@ namespace KRPC.Client
                 .OrderBy (property => property.MetadataToken);
         }
 
-        // The classes generated in the namespace of each service, beside its types. A type of
-        // one of these names takes a trailing underscore in the generated code
-        static readonly string[] generatedTypeNames = { "ExtensionMethods", "Service" };
+        // The classes generated in the namespace of each service, beside its types, and the
+        // class a class with static methods nests. A type of one of these names takes a
+        // trailing underscore in the generated code
+        static readonly string[] generatedTypeNames = { "Bound", "ExtensionMethods", "Service" };
 
         /// <summary>
         /// The name the server gives a generated class, enumeration or structure.

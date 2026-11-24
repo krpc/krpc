@@ -23,6 +23,16 @@ _LIBRARY_NAMES = re.compile(
     r'"(?:\\.|[^"\\])*"|(?<![\w:])(std::|krpc::|u?int(?:8|16|32|64)_t\b)'
 )
 
+# The class a class with static methods nests, which a class of the same name cannot hold. A type
+# of this name takes a trailing underscore
+GENERATED_TYPE_NAMES = frozenset(["Bound"])
+
+
+def type_name(name):
+    """The name of a class, enumeration, structure or exception of a service, with a trailing
+    underscore where it is the name of a class the generated code nests"""
+    return name + "_" if name in GENERATED_TYPE_NAMES else name
+
 
 def _qualify_library_name(match):
     name = match.group(1)
@@ -246,12 +256,10 @@ class CppLanguage(Language):
                 self._parse_nullable_type(t) for t in typ.value_types
             )
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
+            name = type_name(typ.protobuf_type.name)
             if self.qualified:
-                return "krpc::services::%s::%s" % (
-                    typ.protobuf_type.service,
-                    typ.protobuf_type.name,
-                )
-            name = "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
+                return "krpc::services::%s::%s" % (typ.protobuf_type.service, name)
+            name = "%s.%s" % (typ.protobuf_type.service, name)
             return self.shorten_ref(name).replace(".", "::")
         raise RuntimeError("Unknown type '%s'" % str(typ))
 

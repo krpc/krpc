@@ -19,7 +19,7 @@ from krpc.types import (
 )
 from krpc.utils import lower_camel_case
 
-from ..lang.java import JavaLanguage
+from ..lang.java import JavaLanguage, type_name
 from ..utils import as_type, is_nullable
 from . import crefs
 from .docparser import DocParser
@@ -112,7 +112,7 @@ class JavaGenerator(Generator[JavaLanguage]):
                 return "{@link %s}" % alias
         name = target.service
         if target.type is not None:
-            name += "." + target.type
+            name += "." + type_name(target.type)
         if target.member is None:
             return "{@link %s}" % name
         if target.kind in (crefs.PROPERTY, crefs.CLASS_PROPERTY):
@@ -299,7 +299,19 @@ class JavaGenerator(Generator[JavaLanguage]):
 
         context["types_table"] = self.build_types_table(context)
 
+        self.escape_type_names(context)
         return context
+
+    @staticmethod
+    def escape_type_names(context):
+        """Key the types of the service by their names in the generated code, keeping the name
+        the server gives each"""
+        for kind in ("classes", "enumerations", "structs", "exceptions"):
+            types = collections.OrderedDict()
+            for name, info in context[kind].items():
+                info["remote_name"] = name
+                types[type_name(name)] = info
+            context[kind] = types
 
     def build_types_table(self, context):
         # Flat table of every procedure's return and parameter type specs, used

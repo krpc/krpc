@@ -1451,6 +1451,19 @@ Service documentation string.
 
 
 
+.. class:: Bound
+
+   A class named after the class a class with static methods nests.
+
+   .. function:: make()
+
+      A static method, which gives the class its nested class of static methods.
+
+      :rtype: ``number``
+   
+
+
+
 .. class:: ByteString
 
    A class named ByteString.

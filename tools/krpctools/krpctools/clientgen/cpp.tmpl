@@ -410,7 +410,7 @@ inline {{ service_name }}::{{ service_name }}(const ::krpc::Connection& connecti
   ::krpc::RemoteService(connection) {
   {% for exception_name,exception in exceptions.items() %}
   _connection.add_exception_thrower(
-    "{{ service_name }}", "{{ exception_name }}",
+    "{{ service_name }}", "{{ exception.remote_name }}",
     [] (const ::std::string& msg) { throw {{ exception_name }}(msg); });
   {% endfor %}
 }
@@ -451,10 +451,10 @@ inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ procedure_name }}_ca
 {% for class_name,cls in classes.items() %}
 
 inline {{ service_name }}::{{ class_name }}::{{ class_name }}():
-  ::krpc::RemoteObject<{{ class_name }}>("{{ service_name }}::{{ class_name }}") {}
+  ::krpc::RemoteObject<{{ class_name }}>("{{ service_name }}::{{ cls.remote_name }}") {}
 
 inline {{ service_name }}::{{ class_name }}::{{ class_name }}(const ::krpc::Connection& connection, ::std::uint64_t id):
-  ::krpc::RemoteObject<{{ class_name }}>(connection, "{{ service_name }}::{{ class_name }}", id) {}
+  ::krpc::RemoteObject<{{ class_name }}>(connection, "{{ service_name }}::{{ cls.remote_name }}", id) {}
 {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
 
 inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_name }}({{ impl_parameters(method.parameters) }}) {

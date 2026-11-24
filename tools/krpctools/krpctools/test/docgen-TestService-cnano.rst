@@ -1514,6 +1514,23 @@ Service documentation string.
 
 
 
+.. type:: krpc_TestService_Bound_t
+
+   A class named after the class a class with static methods nests.
+
+   .. macro:: KRPC_CLASS_TESTSERVICE_BOUND
+
+      The service and class ids of the class, for :func:`krpc_KRPC_Type_ClassTypeById`.
+
+   .. function:: krpc_error_t krpc_TestService_Bound_Make(krpc_connection_t connection, int32_t * returnValue)
+
+      A static method, which gives the class its nested class of static methods.
+
+
+   
+
+
+
 .. type:: krpc_TestService_ByteString_t
 
    A class named ByteString.

@@ -219,6 +219,22 @@ namespace TestServer.Names
     }
 
     /// <summary>
+    /// A class named after the class a class with static methods nests.
+    /// </summary>
+    [KRPCClass (Service = "TestService")]
+    public sealed class Bound
+    {
+        /// <summary>
+        /// A static method, which gives the class its nested class of static methods.
+        /// </summary>
+        [KRPCMethod]
+        public static int Make ()
+        {
+            return 0;
+        }
+    }
+
+    /// <summary>
     /// A class named ClassBase.
     /// </summary>
     [KRPCClass (Service = "TestService")]

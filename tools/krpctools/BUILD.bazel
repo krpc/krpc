@@ -365,6 +365,7 @@ native_py_test(
     args = [
         "csharp-compiler=$(rootpath //client/csharp:src/FunctionCompiler.cs)",
         "csharp-test=$(rootpath //client/csharp:test/ConnectionNamesTest.cs)",
+        "java-decoder=$(rootpath //client/java:src/krpc/client/Decoder.java)",
         "js-conventions=$(rootpath //client/js:conformance/conventions.json)",
         "js-naming=$(rootpath //client/js:src/naming.ts)",
         "lua-connection=$(rootpath //client/lua:krpc/connection.lua)",
@@ -375,6 +376,7 @@ native_py_test(
     data = [
         "//client/csharp:src/FunctionCompiler.cs",
         "//client/csharp:test/ConnectionNamesTest.cs",
+        "//client/java:src/krpc/client/Decoder.java",
         "//client/js:conformance/conventions.json",
         "//client/js:src/naming.ts",
         "//client/lua:conformance/conventions.json",

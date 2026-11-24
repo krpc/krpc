@@ -247,6 +247,13 @@ export interface Service extends RemoteService<"TestService"> {
   setStringProperty(value: string): Promise<void>;
   setStringPropertyPrivateGet(value: string): Promise<void>;
   getStringPropertyPrivateSet(): Promise<string>;
+  /** A class named after the class a class with static methods nests. */
+  readonly Bound: {
+    [Symbol.hasInstance](value: unknown): value is Bound;
+    readonly prototype: Bound;
+    /** A static method, which gives the class its nested class of static methods. */
+    make(): Promise<number>;
+  };
   /** A class named ByteString. */
   readonly ByteString: {
     [Symbol.hasInstance](value: unknown): value is ByteString;
@@ -568,6 +575,9 @@ export interface Service extends RemoteService<"TestService"> {
     [Symbol.hasInstance](value: unknown): value is ServerError;
   };
 }
+
+/** A class named after the class a class with static methods nests. */
+export interface Bound extends _RemoteObject<"TestService.Bound"> {}
 
 /** A class named ByteString. */
 export interface ByteString extends _RemoteObject<"TestService.ByteString"> {}
@@ -1118,6 +1128,12 @@ export declare namespace Server {
     stringProperty: string;
     set stringPropertyPrivateGet(value: string);
     readonly stringPropertyPrivateSet: string;
+    /** A class named after the class a class with static methods nests. */
+    readonly Bound: {
+      [Symbol.hasInstance](value: unknown): value is Bound;
+      /** A static method, which gives the class its nested class of static methods. */
+      make(): number;
+    };
     /** A class named ByteString. */
     readonly ByteString: {
       [Symbol.hasInstance](value: unknown): value is ByteString;
@@ -1330,6 +1346,9 @@ export declare namespace Server {
     readonly RuntimeError: ClientService["RuntimeError"];
   }
 
+  /** A class named after the class a class with static methods nests. */
+  interface Bound extends ServerObject<"TestService.Bound"> {}
+
   /** A class named ByteString. */
   interface ByteString extends ServerObject<"TestService.ByteString"> {}
 
@@ -1499,6 +1518,7 @@ export declare namespace Server {
 declare module "@krpc-org/krpc" {
   interface ServerTypes {
     "TestService": Server.Service;
+    "TestService.Bound": Server.Bound;
     "TestService.ByteString": Server.ByteString;
     "TestService.ClassBase": Server.ClassBase;
     "TestService.Client": Server.Client;
@@ -1534,6 +1554,7 @@ declare module "@krpc-org/krpc" {
   }
   interface ClientTypes {
     "TestService": Service;
+    "TestService.Bound": Bound;
     "TestService.ByteString": ByteString;
     "TestService.ClassBase": ClassBase;
     "TestService.Client": Client;

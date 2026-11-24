@@ -98,35 +98,36 @@ namespace KRPC.Client.Services.TestService
         internal static readonly global::KRPC.Client.TypeSpec Spec64 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.PartlyDeprecatedStruct));
         internal static readonly global::KRPC.Client.TypeSpec Spec65 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<uint>));
         internal static readonly global::KRPC.Client.TypeSpec Spec66 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<ulong>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec67 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.ByteString));
-        internal static readonly global::KRPC.Client.TypeSpec Spec68 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.ClassBase));
-        internal static readonly global::KRPC.Client.TypeSpec Spec69 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Client));
-        internal static readonly global::KRPC.Client.TypeSpec Spec70 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.ClientService));
-        internal static readonly global::KRPC.Client.TypeSpec Spec71 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Connection));
-        internal static readonly global::KRPC.Client.TypeSpec Spec72 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.DocEnum));
-        internal static readonly global::KRPC.Client.TypeSpec Spec73 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Encoder));
-        internal static readonly global::KRPC.Client.TypeSpec Spec74 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Event));
-        internal static readonly global::KRPC.Client.TypeSpec Spec75 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Exception));
-        internal static readonly global::KRPC.Client.TypeSpec Spec76 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.ExtensionMethods_));
-        internal static readonly global::KRPC.Client.TypeSpec Spec77 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.IConnection));
-        internal static readonly global::KRPC.Client.TypeSpec Spec78 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.IEquatable));
-        internal static readonly global::KRPC.Client.TypeSpec Spec79 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.List));
-        internal static readonly global::KRPC.Client.TypeSpec Spec80 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.NamedTuple));
-        internal static readonly global::KRPC.Client.TypeSpec Spec81 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.NamesStruct));
-        internal static readonly global::KRPC.Client.TypeSpec Spec82 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.None));
-        internal static readonly global::KRPC.Client.TypeSpec Spec83 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Optional));
-        internal static readonly global::KRPC.Client.TypeSpec Spec84 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Override));
-        internal static readonly global::KRPC.Client.TypeSpec Spec85 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.RPCException));
-        internal static readonly global::KRPC.Client.TypeSpec Spec86 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.RemoteObject));
-        internal static readonly global::KRPC.Client.TypeSpec Spec87 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Serializable));
-        internal static readonly global::KRPC.Client.TypeSpec Spec88 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Server));
-        internal static readonly global::KRPC.Client.TypeSpec Spec89 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Service_));
-        internal static readonly global::KRPC.Client.TypeSpec Spec90 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Stream));
-        internal static readonly global::KRPC.Client.TypeSpec Spec91 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.String));
-        internal static readonly global::KRPC.Client.TypeSpec Spec92 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.TestServiceConnection));
-        internal static readonly global::KRPC.Client.TypeSpec Spec93 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Tuple));
-        internal static readonly global::KRPC.Client.TypeSpec Spec94 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.TypeSpecs));
-        internal static readonly global::KRPC.Client.TypeSpec Spec95 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.UInt64));
+        internal static readonly global::KRPC.Client.TypeSpec Spec67 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Bound_));
+        internal static readonly global::KRPC.Client.TypeSpec Spec68 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.ByteString));
+        internal static readonly global::KRPC.Client.TypeSpec Spec69 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.ClassBase));
+        internal static readonly global::KRPC.Client.TypeSpec Spec70 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Client));
+        internal static readonly global::KRPC.Client.TypeSpec Spec71 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.ClientService));
+        internal static readonly global::KRPC.Client.TypeSpec Spec72 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Connection));
+        internal static readonly global::KRPC.Client.TypeSpec Spec73 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.DocEnum));
+        internal static readonly global::KRPC.Client.TypeSpec Spec74 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Encoder));
+        internal static readonly global::KRPC.Client.TypeSpec Spec75 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Event));
+        internal static readonly global::KRPC.Client.TypeSpec Spec76 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Exception));
+        internal static readonly global::KRPC.Client.TypeSpec Spec77 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.ExtensionMethods_));
+        internal static readonly global::KRPC.Client.TypeSpec Spec78 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.IConnection));
+        internal static readonly global::KRPC.Client.TypeSpec Spec79 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.IEquatable));
+        internal static readonly global::KRPC.Client.TypeSpec Spec80 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.List));
+        internal static readonly global::KRPC.Client.TypeSpec Spec81 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.NamedTuple));
+        internal static readonly global::KRPC.Client.TypeSpec Spec82 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.NamesStruct));
+        internal static readonly global::KRPC.Client.TypeSpec Spec83 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.None));
+        internal static readonly global::KRPC.Client.TypeSpec Spec84 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Optional));
+        internal static readonly global::KRPC.Client.TypeSpec Spec85 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Override));
+        internal static readonly global::KRPC.Client.TypeSpec Spec86 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.RPCException));
+        internal static readonly global::KRPC.Client.TypeSpec Spec87 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.RemoteObject));
+        internal static readonly global::KRPC.Client.TypeSpec Spec88 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Serializable));
+        internal static readonly global::KRPC.Client.TypeSpec Spec89 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Server));
+        internal static readonly global::KRPC.Client.TypeSpec Spec90 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Service_));
+        internal static readonly global::KRPC.Client.TypeSpec Spec91 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Stream));
+        internal static readonly global::KRPC.Client.TypeSpec Spec92 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.String));
+        internal static readonly global::KRPC.Client.TypeSpec Spec93 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.TestServiceConnection));
+        internal static readonly global::KRPC.Client.TypeSpec Spec94 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Tuple));
+        internal static readonly global::KRPC.Client.TypeSpec Spec95 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.TypeSpecs));
+        internal static readonly global::KRPC.Client.TypeSpec Spec96 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.UInt64));
 
         // The procedures whose values a C# type cannot describe on its own, which a call
         // built from an expression looks up by name
@@ -2731,6 +2732,66 @@ namespace KRPC.Client.Services.TestService
     }
 
     /// <summary>
+    /// A class named after the class a class with static methods nests.
+    /// </summary>
+    public class Bound_ : global::KRPC.Client.RemoteObject
+    {
+        /// <summary>
+        /// Construct an instance of this remote object. Should not be called directly. This interface is intended for internal decoding.
+        /// </summary>
+        public Bound_ (global::KRPC.Client.IConnection connection, ulong id) : base (connection, id)
+        {
+        }
+
+        /// <summary>
+        /// A static method, which gives the class its nested class of static methods.
+        /// </summary>
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Bound_static_Make", typeof(_TypeSpecs))]
+        public static int Make (global::KRPC.Client.IConnection connection)
+        {
+            if (connection == null)
+                throw new global::System.ArgumentNullException (nameof (connection));
+            var _result = connection.Invoke ("TestService", "Bound_static_Make");
+            return (int)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec1, connection);
+        }
+
+        /// <summary>
+        /// Binds the static methods of <see cref="Bound_" /> to a connection.
+        /// </summary>
+        /// <param name="connection">The connection the methods are called on.</param>
+        /// <returns>The bound methods.</returns>
+        public static Bound Bind (global::KRPC.Client.IConnection connection)
+        {
+            if (connection == null)
+                throw new global::System.ArgumentNullException (nameof (connection));
+            return new Bound (connection);
+        }
+
+        /// <summary>
+        /// The static methods of <see cref="Bound_" />, bound to a connection.
+        /// </summary>
+        public sealed class Bound
+        {
+            readonly global::KRPC.Client.IConnection connection;
+
+            internal Bound (global::KRPC.Client.IConnection connection)
+            {
+                this.connection = connection;
+            }
+
+            /// <summary>
+            /// A static method, which gives the class its nested class of static methods.
+            /// </summary>
+            [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Bound_static_Make", typeof(_TypeSpecs))]
+            public int Make ()
+            {
+                return global::KRPC.Client.Services.TestService.Bound_.Make (connection);
+            }
+        }
+    }
+
+    /// <summary>
     /// A class named ByteString.
     /// </summary>
     public class ByteString : global::KRPC.Client.RemoteObject
@@ -3189,7 +3250,7 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (bound, _TypeSpecs.Spec1)
             };
             var _result = connection.Invoke ("TestService", "Names_static_MakeStruct", _args);
-            return (global::KRPC.Client.Services.TestService.NamesStruct)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec81, connection);
+            return (global::KRPC.Client.Services.TestService.NamesStruct)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec82, connection);
         }
 
         /// <summary>

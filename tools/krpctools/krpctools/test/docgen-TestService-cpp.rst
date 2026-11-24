@@ -1173,6 +1173,19 @@
 
 
 
+.. class:: Bound_
+
+   A class named after the class a class with static methods nests.
+
+   .. function:: static int32_t make(krpc::Connection& connection)
+
+      A static method, which gives the class its nested class of static methods.
+
+
+   
+
+
+
 .. class:: ByteString
 
    A class named ByteString.

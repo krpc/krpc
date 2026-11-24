@@ -1016,6 +1016,16 @@ Service documentation string.
 
 
 
+.. class:: Bound
+
+   A class named after the class a class with static methods nests.
+
+   .. staticmethod:: make(): number
+
+      A static method, which gives the class its nested class of static methods.
+
+
+
 .. class:: ByteString
 
    A class named ByteString.

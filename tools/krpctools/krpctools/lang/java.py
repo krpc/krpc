@@ -16,6 +16,16 @@ from krpc.utils import lower_camel_case, upper_snake_case
 
 from .language import Language
 
+# The class a class with static methods nests, which a class of the same name cannot hold. A type
+# of this name takes a trailing underscore
+GENERATED_TYPE_NAMES = frozenset(["Bound"])
+
+
+def type_name(name):
+    """The name of a class, enumeration, structure or exception of a service, with a trailing
+    underscore where it is the name of a class the generated code nests"""
+    return name + "_" if name in GENERATED_TYPE_NAMES else name
+
 
 class JavaLanguage(Language):
     keywords = set(
@@ -225,7 +235,7 @@ class JavaLanguage(Language):
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
             return "krpc.client.services.%s.%s" % (
                 typ.protobuf_type.service,
-                typ.protobuf_type.name,
+                type_name(typ.protobuf_type.name),
             )
         if isinstance(typ, TupleType):
             name = self.get_tuple_class_name(typ.value_types)

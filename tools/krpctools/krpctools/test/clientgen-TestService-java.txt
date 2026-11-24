@@ -2441,6 +2441,61 @@ public class TestService extends krpc.client.RemoteService {
     }
 
     /**
+     * A class named after the class a class with static methods nests.
+     */
+    public static class Bound_ extends krpc.client.RemoteObject {
+
+        private static final long serialVersionUID = 38480153672205325L;
+
+        public Bound_(krpc.client.Connection connection, long id) {
+            super(connection, id);
+        }
+
+        /**
+         * A static method, which gives the class its nested class of static methods.
+         */
+        @java.lang.SuppressWarnings({ "unchecked" })
+        @krpc.client.RPCInfo(service = "TestService", procedure = "Bound_static_Make", types = _Types.class)
+        public static int make(krpc.client.Connection connection)
+        {
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("TestService", "Bound_static_Make");
+            return (int) krpc.client.Decoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), connection);
+        }
+
+        /**
+         * Binds the static methods of {@link Bound_} to a connection.
+         * @param connection The connection the methods are called on.
+         * @return The bound methods.
+         */
+        public static Bound bind(krpc.client.Connection connection) {
+            if (connection == null) {
+                throw new java.lang.NullPointerException("connection");
+            }
+            return new Bound(connection);
+        }
+
+        /**
+         * The static methods of {@link Bound_}, bound to a connection.
+         */
+        public static final class Bound {
+            private final krpc.client.Connection connection;
+
+            private Bound(krpc.client.Connection connection) {
+                this.connection = connection;
+            }
+
+            /**
+             * A static method, which gives the class its nested class of static methods.
+             */
+            @krpc.client.RPCInfo(service = "TestService", procedure = "Bound_static_Make", types = _Types.class)
+            public int make()
+            {
+                return krpc.client.services.TestService.Bound_.make(connection);
+            }
+        }
+    }
+
+    /**
      * A class named ByteString.
      */
     public static class ByteString extends krpc.client.RemoteObject {
@@ -3779,6 +3834,8 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("set_StringPropertyPrivateGet", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("get_StringPropertyPrivateSet", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("get_StringPropertyPrivateSet", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("Bound_static_Make", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Bound_static_Make", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("DeprecatedClass_DeprecatedMethod", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("DeprecatedClass_DeprecatedMethod", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "DeprecatedClass") });
             RETURN_TYPES.put("DeprecatedClass_InheritedMethod", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
@@ -3837,11 +3894,11 @@ public class TestService extends krpc.client.RemoteService {
             PARAMETER_TYPES.put("TestClass_get_IntProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
             RETURN_TYPES.put("TestClass_set_IntProperty", null);
             PARAMETER_TYPES.put("TestClass_set_IntProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
-            RETURN_TYPES.put("TestClass_get_ObjectProperty", krpc.client.Types.createClass("TestService", "TestClass"));
-            PARAMETER_TYPES.put("TestClass_get_ObjectProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
         }
 
         private static void initTypes3() {
+            RETURN_TYPES.put("TestClass_get_ObjectProperty", krpc.client.Types.createClass("TestService", "TestClass"));
+            PARAMETER_TYPES.put("TestClass_get_ObjectProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
             RETURN_TYPES.put("TestClass_set_ObjectProperty", null);
             PARAMETER_TYPES.put("TestClass_set_ObjectProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass"), krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass")) });
             RETURN_TYPES.put("TestClass_set_StringPropertyPrivateGet", null);

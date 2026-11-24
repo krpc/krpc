@@ -59,7 +59,7 @@ return ({{type.name}}) krpc.client.Decoder.decode(_data.getValue(), {{type.spec}
 
     private void addExceptionTypes(krpc.client.Connection connection) {
         {% for exception_name,exception in exceptions.items() %}
-        connection.addExceptionType("{{ service_name }}", "{{ exception_name }}", {{ exception.alias or exception_name }}.class);
+        connection.addExceptionType("{{ service_name }}", "{{ exception.remote_name }}", {{ exception.alias or exception_name }}.class);
         {% endfor %}
     }
     {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
@@ -270,7 +270,7 @@ return ({{type.name}}) krpc.client.Decoder.decode(_data.getValue(), {{type.spec}
         @krpc.client.RPCInfo(service = "{{ service_name }}", procedure = "{{ method.remote_name }}", types = _Types.class)
         public {{ method.return_type.name }} {{ method_name }}({{ sig_parameters(method.parameters) }})
         {
-{{ args([{'name': 'this', 'type': {'name': service_name+'.'+class_name, 'spec': 'krpc.client.Types.createClass("'+service_name+'", "'+class_name+'")'}}] + method.parameters) | indent(width=12) }}
+{{ args([{'name': 'this', 'type': {'name': service_name+'.'+class_name, 'spec': 'krpc.client.Types.createClass("'+service_name+'", "'+cls.remote_name+'")'}}] + method.parameters) | indent(width=12) }}
 {{ call(service_name, method.remote_name, method.return_type.name != 'void', true) | indent(width=12) }}
 {% if method.return_type.name != 'void' %}{{ return(method.return_type) | indent(width=12) }}
 {% endif %}

@@ -236,6 +236,22 @@ class RuntimeError(krpc.error.ServerError):
     """
 
 
+class Bound(_DeclaredObject, metaclass=_DeclaredClass):
+    """
+    A class named after the class a class with static methods nests.
+    """
+    _service_name = "TestService"
+    _class_name = "Bound"
+
+    @_builtins.staticmethod
+    def make() -> _builtins.int:
+        """
+        A static method, which gives the class its nested class of static methods.
+        """
+        raise _declaration("TestService", "Bound")
+
+
+
 class ByteString(_DeclaredObject, metaclass=_DeclaredClass):
     """
     A class named ByteString.
@@ -757,6 +773,7 @@ class UInt64(_DeclaredObject, metaclass=_DeclaredClass):
 # Aliases for the types the service declares as its attributes, as an annotation in the body of
 # the service would otherwise name the attribute itself
 if TYPE_CHECKING:
+    _type_Bound = Bound
     _type_ByteString = ByteString
     _type_ClassBase = ClassBase
     _type_Client = Client
@@ -814,6 +831,7 @@ class TestService(metaclass=_DeclaredClass):
     _service_name = "TestService"
     _class_name = None
 
+    Bound: type[_type_Bound] = Bound
     ByteString: type[_type_ByteString] = ByteString
     ClassBase: type[_type_ClassBase] = ClassBase
     Client: type[_type_Client] = Client

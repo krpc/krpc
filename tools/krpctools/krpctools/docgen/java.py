@@ -14,7 +14,7 @@ from krpc.types import (
 )
 from krpc.utils import lower_camel_case, upper_snake_case
 
-from ..lang.java import JavaLanguage
+from ..lang.java import JavaLanguage, type_name
 from .domain import Domain
 from .nodes import (
     Class,
@@ -88,7 +88,7 @@ class JavaDomain(Domain[JavaLanguage]):
             return "krpc.schema.KRPC.%s" % typ.python_type.__name__
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
             return self.shorten_ref(
-                "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
+                "%s.%s" % (typ.protobuf_type.service, type_name(typ.protobuf_type.name))
             )
         if isinstance(typ, ListType):
             return "java.util.List<%s>" % self._type(typ.value_type, True)
@@ -135,8 +135,18 @@ class JavaDomain(Domain[JavaLanguage]):
             )
         raise RuntimeError("Unknown type '%s'" % str(typ))
 
+    @staticmethod
+    def type_name(obj):
+        """The name of a class, enumeration, structure or exception in the generated code"""
+        return type_name(obj.name)
+
     def ref(self, obj):
         name = obj.fullname
+        # A type, and a member of one, is named as the generated code names the type
+        if not isinstance(obj, (Service, Procedure, Property)):
+            parts = name.split(".")
+            parts[1] = type_name(parts[1])
+            name = ".".join(parts)
         # A service's procedures and properties are members of the class named after the service
         if isinstance(obj, (Procedure, Property)):
             name = obj.service_name + "." + name

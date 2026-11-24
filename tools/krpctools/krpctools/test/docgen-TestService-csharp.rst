@@ -1165,6 +1165,19 @@
 
 
 
+.. class:: Bound_
+
+   A class named after the class a class with static methods nests.
+
+   .. function:: static int Make(IConnection connection)
+
+      A static method, which gives the class its nested class of static methods.
+
+
+      :Game Scenes: All
+
+
+
 .. class:: ByteString
 
    A class named ByteString.

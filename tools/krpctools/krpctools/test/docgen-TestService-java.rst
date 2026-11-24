@@ -867,6 +867,18 @@
 
 
 
+.. type:: public class Bound_
+
+   A class named after the class a class with static methods nests.
+
+   .. method:: static int make(Connection connection)
+
+      A static method, which gives the class its nested class of static methods.
+
+   
+
+
+
 .. type:: public class ByteString
 
    A class named ByteString.

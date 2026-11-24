@@ -28,9 +28,11 @@ from krpc.types import (
 from krpc.utils import snake_case
 
 from ..lang.cpp import CppLanguage
+from ..lang.cpp import type_name as cpp_type_name
 from ..lang.csharp import CsharpLanguage, service_accessor
 from ..lang.csharp import type_name as csharp_type_name
 from ..lang.java import JavaLanguage
+from ..lang.java import type_name as java_type_name
 from .cnano import CnanoGenerator
 from .generator import Generator
 
@@ -531,7 +533,7 @@ class JavaDispatchGenerator(DispatchGenerator):
     language = JavaLanguage()
 
     def class_type(self, service, name):
-        return "krpc.client.services.%s.%s" % (service, name)
+        return "krpc.client.services.%s.%s" % (service, java_type_name(name))
 
     def _nullable(self, typ, conversion):
         # A primitive takes its boxed form where it can hold null, and the conversion
@@ -718,7 +720,7 @@ class CppDispatchGenerator(DispatchGenerator):
     has_defaults = True
 
     def class_type(self, service, name):
-        return "::krpc::services::%s::%s" % (service, name)
+        return "::krpc::services::%s::%s" % (service, cpp_type_name(name))
 
     def _nullable(self, typ, tag):
         if typ.nullable:

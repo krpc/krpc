@@ -31,5 +31,7 @@
   JavaScript, with an underscore (#1413)
 - Suffix the C# accessor of a service named as a member of the connection, such as `Dispose`, with
   an underscore (#1413)
+- Fix C++, C# and Java code for a class named `Bound` with static methods, which takes a trailing
+  underscore (#1413)
 - Separate the service with a double underscore in a C-nano enumeration value macro whose service is
   named as a prefix of the library, such as `KRPC_ERROR__<ENUM>_<VALUE>` (#1413)

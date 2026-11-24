@@ -45,8 +45,9 @@ CONNECTION_MEMBERS = frozenset(
     ["ConnectLocal", "Dispose", "GetHashCode", "GetType", "ToString"]
 )
 
-# The classes generated in the namespace of each service, beside its types
-GENERATED_TYPE_NAMES = frozenset(["ExtensionMethods", "Service"])
+# The classes generated in the namespace of each service, beside its types, and the class a class
+# with static methods nests
+GENERATED_TYPE_NAMES = frozenset(["Bound", "ExtensionMethods", "Service"])
 
 
 def service_accessor(name):

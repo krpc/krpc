@@ -20,6 +20,10 @@ extern "C" {
 KRPC_DEPRECATED_USES_BEGIN
 
 /**
+ * A class named after the class a class with static methods nests.
+ */
+typedef krpc_object_t krpc_TestService_Bound_t;
+/**
  * A class named ByteString.
  */
 typedef krpc_object_t krpc_TestService_ByteString_t;
@@ -1020,6 +1024,7 @@ typedef enum {
   KRPC_TESTSERVICE_TESTFLAGS_VALUEAB = 3
 } krpc_TestService_TestFlags_t;
 
+#define KRPC_CLASS_TESTSERVICE_BOUND 857051661u, 2949213392u
 #define KRPC_CLASS_TESTSERVICE_BYTESTRING 857051661u, 2372919582u
 #define KRPC_CLASS_TESTSERVICE_CLASSBASE 857051661u, 2776890368u
 #define KRPC_CLASS_TESTSERVICE_CLIENT 857051661u, 167671564u
@@ -3026,6 +3031,24 @@ static inline krpc_error_t krpc_TestService_StringPropertyPrivateSet_call(krpc_s
  * krpc_free_procedure_call().
  */
 static inline krpc_error_t krpc_TestService_StringPropertyPrivateSet_call_template(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * A static method, which gives the class its nested class of static methods.
+ */
+static inline krpc_error_t krpc_TestService_Bound_Make(krpc_connection_t connection, int32_t * returnValue);
+
+/**
+ * Fills in the call krpc_TestService_Bound_Make() makes, to pass to krpc_KRPC_Expression_Call(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Bound_Make_call(krpc_schema_ProcedureCall * procedureCall);
+
+/**
+ * Fills in the call template of krpc_TestService_Bound_Make(), which names the procedure and carries no
+ * arguments, to pass to krpc_KRPC_Expression_CallWithArguments(). Free it with
+ * krpc_free_procedure_call().
+ */
+static inline krpc_error_t krpc_TestService_Bound_Make_call_template(krpc_schema_ProcedureCall * procedureCall);
 
 /**
  * Deprecated method documentation string.
@@ -10589,6 +10612,30 @@ static inline krpc_error_t krpc_TestService_StringPropertyPrivateSet_call(krpc_s
 
 static inline krpc_error_t krpc_TestService_StringPropertyPrivateSet_call_template(krpc_schema_ProcedureCall * procedureCall) {
   return krpc_procedure_call(procedureCall, 857051661, 4045402858, 0);
+}
+
+static inline krpc_error_t krpc_TestService_Bound_Make(krpc_connection_t connection, int32_t * returnValue) {
+  krpc_call_t _call;
+  KRPC_CHECK(krpc_call(&_call, 857051661, 940036415, 0, NULL));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  if (returnValue) {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_int32(&_stream, returnValue));
+  }
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Bound_Make_call(krpc_schema_ProcedureCall * procedureCall) {
+  KRPC_CHECK(krpc_procedure_call(procedureCall, 857051661, 940036415, 0));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_TestService_Bound_Make_call_template(krpc_schema_ProcedureCall * procedureCall) {
+  return krpc_procedure_call(procedureCall, 857051661, 940036415, 0);
 }
 
 static inline krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance) {
