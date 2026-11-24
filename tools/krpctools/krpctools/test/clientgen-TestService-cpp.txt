@@ -203,20 +203,20 @@ class TestService : public ::krpc::RemoteService {
   };
 
   friend constexpr TestFlags operator|(TestFlags a, TestFlags b) {
-    return static_cast<TestFlags>(static_cast<int32_t>(a) | static_cast<int32_t>(b));
+    return static_cast<TestFlags>(static_cast<::std::int32_t>(a) | static_cast<::std::int32_t>(b));
   }
 
   friend constexpr TestFlags operator&(TestFlags a, TestFlags b) {
-    return static_cast<TestFlags>(static_cast<int32_t>(a) & static_cast<int32_t>(b));
+    return static_cast<TestFlags>(static_cast<::std::int32_t>(a) & static_cast<::std::int32_t>(b));
   }
 
   friend constexpr TestFlags operator^(TestFlags a, TestFlags b) {
-    return static_cast<TestFlags>(static_cast<int32_t>(a) ^ static_cast<int32_t>(b));
+    return static_cast<TestFlags>(static_cast<::std::int32_t>(a) ^ static_cast<::std::int32_t>(b));
   }
 
   // The complement within the values the enumeration declares
   friend constexpr TestFlags operator~(TestFlags a) {
-    return static_cast<TestFlags>(~static_cast<int32_t>(a) & 7);
+    return static_cast<TestFlags>(~static_cast<::std::int32_t>(a) & 7);
   }
 
   friend TestFlags& operator|=(TestFlags& a, TestFlags b) {
@@ -2555,23 +2555,23 @@ int_field(int_field), nullable_int_field(nullable_int_field), nullable_enum_fiel
 namespace encoder {
 
   inline std::string encode(const services::TestService::DeprecatedEnum& value) {
-    return krpc::encoder::encode(static_cast<int32_t>(value));
+    return krpc::encoder::encode(static_cast<::std::int32_t>(value));
   }
 
   inline std::string encode(const services::TestService::NamesEnum& value) {
-    return krpc::encoder::encode(static_cast<int32_t>(value));
+    return krpc::encoder::encode(static_cast<::std::int32_t>(value));
   }
 
   inline std::string encode(const services::TestService::PartlyDeprecatedEnum& value) {
-    return krpc::encoder::encode(static_cast<int32_t>(value));
+    return krpc::encoder::encode(static_cast<::std::int32_t>(value));
   }
 
   inline std::string encode(const services::TestService::TestEnum& value) {
-    return krpc::encoder::encode(static_cast<int32_t>(value));
+    return krpc::encoder::encode(static_cast<::std::int32_t>(value));
   }
 
   inline std::string encode(const services::TestService::TestFlags& value) {
-    return krpc::encoder::encode(static_cast<int32_t>(value));
+    return krpc::encoder::encode(static_cast<::std::int32_t>(value));
   }
 
   // A structure is sent as the values of its fields in order, which is the same encoding as
@@ -2676,31 +2676,31 @@ namespace encoder {
 namespace decoder {
 
   inline void decode(services::TestService::DeprecatedEnum& value, const std::string& data, ::krpc::Connection* connection) {
-    int32_t x;
+    ::std::int32_t x;
     decode(x, data, connection);
     value = static_cast<services::TestService::DeprecatedEnum>(x);
   }
 
   inline void decode(services::TestService::NamesEnum& value, const std::string& data, ::krpc::Connection* connection) {
-    int32_t x;
+    ::std::int32_t x;
     decode(x, data, connection);
     value = static_cast<services::TestService::NamesEnum>(x);
   }
 
   inline void decode(services::TestService::PartlyDeprecatedEnum& value, const std::string& data, ::krpc::Connection* connection) {
-    int32_t x;
+    ::std::int32_t x;
     decode(x, data, connection);
     value = static_cast<services::TestService::PartlyDeprecatedEnum>(x);
   }
 
   inline void decode(services::TestService::TestEnum& value, const std::string& data, ::krpc::Connection* connection) {
-    int32_t x;
+    ::std::int32_t x;
     decode(x, data, connection);
     value = static_cast<services::TestService::TestEnum>(x);
   }
 
   inline void decode(services::TestService::TestFlags& value, const std::string& data, ::krpc::Connection* connection) {
-    int32_t x;
+    ::std::int32_t x;
     decode(x, data, connection);
     value = static_cast<services::TestService::TestFlags>(x);
   }

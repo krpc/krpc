@@ -290,7 +290,7 @@ field(field) {}
 namespace encoder {
 
   inline std::string encode(const services::DeprecatedService::ServiceEnum& value) {
-    return krpc::encoder::encode(static_cast<int32_t>(value));
+    return krpc::encoder::encode(static_cast<::std::int32_t>(value));
   }
 
   // A structure is sent as the values of its fields in order, which is the same encoding as
@@ -308,7 +308,7 @@ namespace encoder {
 namespace decoder {
 
   inline void decode(services::DeprecatedService::ServiceEnum& value, const std::string& data, ::krpc::Connection* connection) {
-    int32_t x;
+    ::std::int32_t x;
     decode(x, data, connection);
     value = static_cast<services::DeprecatedService::ServiceEnum>(x);
   }

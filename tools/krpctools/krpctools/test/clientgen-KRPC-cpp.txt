@@ -4610,11 +4610,11 @@ version(version), protocol_version(protocol_version), settings(settings), statis
 namespace encoder {
 
   inline std::string encode(const services::KRPC::GameScene& value) {
-    return krpc::encoder::encode(static_cast<int32_t>(value));
+    return krpc::encoder::encode(static_cast<::std::int32_t>(value));
   }
 
   inline std::string encode(const services::KRPC::TypeCode& value) {
-    return krpc::encoder::encode(static_cast<int32_t>(value));
+    return krpc::encoder::encode(static_cast<::std::int32_t>(value));
   }
 
   // A structure is sent as the values of its fields in order, which is the same encoding as
@@ -4688,13 +4688,13 @@ namespace encoder {
 namespace decoder {
 
   inline void decode(services::KRPC::GameScene& value, const std::string& data, ::krpc::Connection* connection) {
-    int32_t x;
+    ::std::int32_t x;
     decode(x, data, connection);
     value = static_cast<services::KRPC::GameScene>(x);
   }
 
   inline void decode(services::KRPC::TypeCode& value, const std::string& data, ::krpc::Connection* connection) {
-    int32_t x;
+    ::std::int32_t x;
     decode(x, data, connection);
     value = static_cast<services::KRPC::TypeCode>(x);
   }

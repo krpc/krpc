@@ -114,20 +114,20 @@ class {% if service_deprecated %}[[deprecated{% if service_deprecated_reason %}(
   {% if enm.flags %}
 
   friend constexpr {{ enum_name }} operator|({{ enum_name }} a, {{ enum_name }} b) {
-    return static_cast<{{ enum_name }}>(static_cast<int32_t>(a) | static_cast<int32_t>(b));
+    return static_cast<{{ enum_name }}>(static_cast<::std::int32_t>(a) | static_cast<::std::int32_t>(b));
   }
 
   friend constexpr {{ enum_name }} operator&({{ enum_name }} a, {{ enum_name }} b) {
-    return static_cast<{{ enum_name }}>(static_cast<int32_t>(a) & static_cast<int32_t>(b));
+    return static_cast<{{ enum_name }}>(static_cast<::std::int32_t>(a) & static_cast<::std::int32_t>(b));
   }
 
   friend constexpr {{ enum_name }} operator^({{ enum_name }} a, {{ enum_name }} b) {
-    return static_cast<{{ enum_name }}>(static_cast<int32_t>(a) ^ static_cast<int32_t>(b));
+    return static_cast<{{ enum_name }}>(static_cast<::std::int32_t>(a) ^ static_cast<::std::int32_t>(b));
   }
 
   // The complement within the values the enumeration declares
   friend constexpr {{ enum_name }} operator~({{ enum_name }} a) {
-    return static_cast<{{ enum_name }}>(~static_cast<int32_t>(a) & {{ enm.mask }});
+    return static_cast<{{ enum_name }}>(~static_cast<::std::int32_t>(a) & {{ enm.mask }});
   }
 
   friend {{ enum_name }}& operator|=({{ enum_name }}& a, {{ enum_name }} b) {
@@ -332,7 +332,7 @@ namespace encoder {
   {% for enum_name,enm in enumerations.items() %}
 
   inline std::string encode(const services::{{ service_name }}::{{ enum_name }}& value) {
-    return krpc::encoder::encode(static_cast<int32_t>(value));
+    return krpc::encoder::encode(static_cast<::std::int32_t>(value));
   }
   {% endfor %}
   {% for struct_name,struct in structs.items() %}
@@ -356,7 +356,7 @@ namespace decoder {
   {% for enum_name,enm in enumerations.items() %}
 
   inline void decode(services::{{ service_name }}::{{ enum_name }}& value, const std::string& data, ::krpc::Connection* connection) {
-    int32_t x;
+    ::std::int32_t x;
     decode(x, data, connection);
     value = static_cast<services::{{ service_name }}::{{ enum_name }}>(x);
   }
