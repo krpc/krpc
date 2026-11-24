@@ -380,7 +380,6 @@ describe("truth", () => {
   it("compares with null", async () => {
     const obj = await conn.testService.createTestObject("nullcheck");
     await obj.setObjectProperty(null);
-    // biome-ignore lint/suspicious/noDoubleEquals: == null is the test
     assert.equal(await run(conn, ({ obj }) => obj.objectProperty == null, { obj }), true);
     assert.equal(await run(conn, ({ limit }) => limit === null, { limit: null }), true);
     // biome-ignore lint/suspicious/noDoubleEquals: != undefined is the test

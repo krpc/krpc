@@ -711,15 +711,16 @@ test_suite(
     ],
 )
 
-# Formatting and lint of the JavaScript examples, from biome-scripts.jsonc. The
-# file is not named biome.jsonc, as Biome rejects a second root configuration
-# it finds in a directory it checks.
+# Formatting and lint of the JavaScript examples, from biome-scripts.jsonc, where a
+# warning fails the test. The file is not named biome.jsonc, as Biome rejects a
+# second root configuration it finds in a directory it checks.
 biome.biome_test(
     name = "biome",
     size = "small",
     args = [
         "ci",
         "--colors=off",
+        "--error-on-warnings",
         "--config-path=doc/src/scripts/biome-scripts.jsonc",
         "$(rootpaths :biome-srcs)",
     ],
