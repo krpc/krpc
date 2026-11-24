@@ -70,6 +70,30 @@
       :param byte[] value:
    
 
+   .. method:: int count()
+
+      A procedure whose C++ helpers are named as the procedures declared after it.
+
+   
+
+   .. method:: int countCall()
+
+      A procedure named after the C++ call helper of Count.
+
+   
+
+   .. method:: int countCallTemplate()
+
+      A procedure named after the C++ call template helper of Count.
+
+   
+
+   .. method:: int countStream()
+
+      A procedure named after the C++ stream helper of Count.
+
+   
+
    .. method:: int counter(String id, int divisor)
 
 
@@ -528,6 +552,20 @@
       :returns: The strings joined.
    
 
+   .. method:: int getLevel()
+
+   .. method:: void setLevel(int value)
+
+      A property whose C++ helpers are named as the procedures declared after it.
+
+   
+
+   .. method:: int levelStream()
+
+      A procedure named after the C++ stream helper of the getter of Level.
+
+   
+
    .. method:: java.util.List<Integer> listDefault(java.util.List<Integer> x)
 
 
@@ -654,6 +692,12 @@
 
 
       :param java.util.Set<Integer> x:
+   
+
+   .. method:: int setLevelCall()
+
+      A procedure named after the C++ call helper of the setter of Level.
+
    
 
    .. method:: String stringDefault(String x)
@@ -1022,6 +1066,18 @@
 
    
 
+   .. method:: static int create(Connection connection)
+
+      A static method whose C++ stream helper is named as the static method declared after it.
+
+   
+
+   .. method:: static int createStream(Connection connection)
+
+      A static method named after the C++ stream helper of Create.
+
+   
+
    .. method:: int float_()
 
       A method named after a Python builtin.
@@ -1097,11 +1153,55 @@
 
    
 
+   .. method:: int setSizeCall()
+
+      A method named after the C++ call helper of the setter of Size.
+
+   
+
+   .. method:: int getSize()
+
+   .. method:: void setSize(int value)
+
+      A property whose C++ helpers are named as the methods declared after it.
+
+   
+
+   .. method:: int sizeStream()
+
+      A method named after the C++ stream helper of the getter of Size.
+
+   
+
    .. method:: String toString_(int value)
 
       A method named after a method of java.lang.Object.
 
       :param int value:
+   
+
+   .. method:: int total()
+
+      A method whose C++ helpers are named as the methods declared after it.
+
+   
+
+   .. method:: int totalCall()
+
+      A method named after the C++ call helper of Total.
+
+   
+
+   .. method:: int totalCallTemplate()
+
+      A method named after the C++ call template helper of Total.
+
+   
+
+   .. method:: int totalStream()
+
+      A method named after the C++ stream helper of Total.
+
    
 
    .. method:: static int uint64T(Connection connection)

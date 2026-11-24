@@ -75,6 +75,38 @@ Service documentation string.
 
 
 
+.. staticmethod:: count(): number
+
+   A procedure whose C++ helpers are named as the procedures declared after it.
+
+
+
+
+
+.. staticmethod:: count_call(): number
+
+   A procedure named after the C++ call helper of Count.
+
+
+
+
+
+.. staticmethod:: count_call_template(): number
+
+   A procedure named after the C++ call template helper of Count.
+
+
+
+
+
+.. staticmethod:: count_stream(): number
+
+   A procedure named after the C++ stream helper of Count.
+
+
+
+
+
 .. staticmethod:: counter(id?: string, divisor?: number): number
 
 
@@ -610,6 +642,23 @@ Service documentation string.
 
 
 
+.. attribute:: level: number
+
+   A property whose C++ helpers are named as the procedures declared after it.
+
+   :Attribute: Can be read or written
+
+
+
+
+.. staticmethod:: level_stream(): number
+
+   A procedure named after the C++ stream helper of the getter of Level.
+
+
+
+
+
 .. staticmethod:: list_default(x?: List): List
 
 
@@ -760,6 +809,14 @@ Service documentation string.
 
 
    :param x: Defaults to ``{1, 2, 3}``.
+
+
+
+
+.. staticmethod:: set_level_call(): number
+
+   A procedure named after the C++ call helper of the setter of Level.
+
 
 
 
@@ -1155,6 +1212,14 @@ Service documentation string.
 
       A method named after a method of a Penlight class.
 
+   .. staticmethod:: create(): number
+
+      A static method whose C++ stream helper is named as the static method declared after it.
+
+   .. staticmethod:: create_stream(): number
+
+      A static method named after the C++ stream helper of Create.
+
    .. method:: float(): number
 
       A method named after a Python builtin.
@@ -1187,9 +1252,39 @@ Service documentation string.
 
       :Attribute: Can be read or written
 
+   .. method:: set_size_call(): number
+
+      A method named after the C++ call helper of the setter of Size.
+
+   .. attribute:: size: number
+
+      A property whose C++ helpers are named as the methods declared after it.
+
+      :Attribute: Can be read or written
+
+   .. method:: size_stream(): number
+
+      A method named after the C++ stream helper of the getter of Size.
+
    .. method:: to_string(value: number): string
 
       A method named after a method of java.lang.Object.
+
+   .. method:: total(): number
+
+      A method whose C++ helpers are named as the methods declared after it.
+
+   .. method:: total_call(): number
+
+      A method named after the C++ call helper of Total.
+
+   .. method:: total_call_template(): number
+
+      A method named after the C++ call template helper of Total.
+
+   .. method:: total_stream(): number
+
+      A method named after the C++ stream helper of Total.
 
    .. staticmethod:: uint_64t(): number
 

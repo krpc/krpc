@@ -368,6 +368,84 @@ namespace TestServer.Names
         }
 
         /// <summary>
+        /// A method whose C++ helpers are named as the methods declared after it.
+        /// </summary>
+        [KRPCMethod]
+        public int Total ()
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// A method named after the C++ stream helper of Total.
+        /// </summary>
+        [KRPCMethod]
+        public int TotalStream ()
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// A method named after the C++ call helper of Total.
+        /// </summary>
+        [KRPCMethod]
+        public int TotalCall ()
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// A method named after the C++ call template helper of Total.
+        /// </summary>
+        [KRPCMethod]
+        public int TotalCallTemplate ()
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// A static method whose C++ stream helper is named as the static method declared after it.
+        /// </summary>
+        [KRPCMethod]
+        public static int Create ()
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// A static method named after the C++ stream helper of Create.
+        /// </summary>
+        [KRPCMethod]
+        public static int CreateStream ()
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// A property whose C++ helpers are named as the methods declared after it.
+        /// </summary>
+        [KRPCProperty]
+        public int Size { get; set; }
+
+        /// <summary>
+        /// A method named after the C++ stream helper of the getter of Size.
+        /// </summary>
+        [KRPCMethod]
+        public int SizeStream ()
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// A method named after the C++ call helper of the setter of Size.
+        /// </summary>
+        [KRPCMethod]
+        public int SetSizeCall ()
+        {
+            return 0;
+        }
+
+        /// <summary>
         /// A static method with parameters named after names in the generated code.
         /// </summary>
         [KRPCMethod]

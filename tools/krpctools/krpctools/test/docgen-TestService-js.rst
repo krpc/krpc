@@ -118,6 +118,46 @@ Service documentation string.
 
 
 
+.. function:: count()
+
+   A procedure whose C++ helpers are named as the procedures declared after it.
+
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: countCall()
+
+   A procedure named after the C++ call helper of Count.
+
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: countCallTemplate()
+
+   A procedure named after the C++ call template helper of Count.
+
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: countStream()
+
+   A procedure named after the C++ stream helper of Count.
+
+   :rtype: ``number``
+   
+
+
+
+
 .. function:: counter([id[, divisor]])
 
 
@@ -891,6 +931,28 @@ Service documentation string.
 
 
 
+.. function:: getLevel()
+              setLevel(value)
+
+   A property whose C++ helpers are named as the procedures declared after it.
+
+   :Property: Can be read or written
+   :rtype: ``number``
+   
+
+
+
+
+.. function:: levelStream()
+
+   A procedure named after the C++ stream helper of the getter of Level.
+
+   :rtype: ``number``
+   
+
+
+
+
 .. function:: listDefault([x])
 
 
@@ -1098,6 +1160,16 @@ Service documentation string.
    :param x: Defaults to ``new Set([1, 2, 3])``.
    :type x: ``Set`` of ``number``
    :rtype: ``Set`` of ``number``
+   
+
+
+
+
+.. function:: setLevelCall()
+
+   A procedure named after the C++ call helper of the setter of Level.
+
+   :rtype: ``number``
    
 
 
@@ -1614,6 +1686,20 @@ Service documentation string.
       :rtype: ``number``
    
 
+   .. function:: create()
+
+      A static method whose C++ stream helper is named as the static method declared after it.
+
+      :rtype: ``number``
+   
+
+   .. function:: createStream()
+
+      A static method named after the C++ stream helper of Create.
+
+      :rtype: ``number``
+   
+
    .. method:: float()
 
       A method named after a Python builtin.
@@ -1727,6 +1813,29 @@ Service documentation string.
       :rtype: ``number``
    
 
+   .. method:: setSizeCall()
+
+      A method named after the C++ call helper of the setter of Size.
+
+      :rtype: ``number``
+   
+
+   .. method:: getSize()
+               setSize(value)
+
+      A property whose C++ helpers are named as the methods declared after it.
+
+      :Property: Can be read or written
+      :rtype: ``number``
+   
+
+   .. method:: sizeStream()
+
+      A method named after the C++ stream helper of the getter of Size.
+
+      :rtype: ``number``
+   
+
    .. method:: toString_(value)
 
       A method named after a method of java.lang.Object.
@@ -1734,6 +1843,34 @@ Service documentation string.
       :param value:
       :type value: ``number``
       :rtype: ``string``
+   
+
+   .. method:: total()
+
+      A method whose C++ helpers are named as the methods declared after it.
+
+      :rtype: ``number``
+   
+
+   .. method:: totalCall()
+
+      A method named after the C++ call helper of Total.
+
+      :rtype: ``number``
+   
+
+   .. method:: totalCallTemplate()
+
+      A method named after the C++ call template helper of Total.
+
+      :rtype: ``number``
+   
+
+   .. method:: totalStream()
+
+      A method named after the C++ stream helper of Total.
+
+      :rtype: ``number``
    
 
    .. function:: uint64T()

@@ -34,6 +34,20 @@ def type_name(name):
     return name + "_" if name in GENERATED_TYPE_NAMES else name
 
 
+HELPER_SUFFIXES = ("stream", "call", "call_template")
+
+
+def helper_names(name, members):
+    """The helpers the generated code declares beside a member, keyed by suffix. A helper named
+    as another member of its scope, such as foo_stream beside foo, takes a second underscore,
+    as in foo__stream"""
+    helpers = {}
+    for suffix in HELPER_SUFFIXES:
+        helper = "%s_%s" % (name, suffix)
+        helpers[suffix] = "%s__%s" % (name, suffix) if helper in members else helper
+    return helpers
+
+
 def _qualify_library_name(match):
     name = match.group(1)
     if name is None:

@@ -16,6 +16,14 @@ export interface Service extends RemoteService<"TestService"> {
   bytesDefault(x?: Uint8Array): Promise<Uint8Array>;
   bytesDefault(options: { x?: Uint8Array }): Promise<Uint8Array>;
   bytesToHexString(value: Uint8Array): Promise<string>;
+  /** A procedure whose C++ helpers are named as the procedures declared after it. */
+  count(): Promise<number>;
+  /** A procedure named after the C++ call helper of Count. */
+  countCall(): Promise<number>;
+  /** A procedure named after the C++ call template helper of Count. */
+  countCallTemplate(): Promise<number>;
+  /** A procedure named after the C++ stream helper of Count. */
+  countStream(): Promise<number>;
   counter(id?: string, divisor?: number): Promise<number>;
   counter(options: { id?: string; divisor?: number }): Promise<number>;
   /**
@@ -147,6 +155,8 @@ export interface Service extends RemoteService<"TestService"> {
    * @returns The strings joined.
    */
   joinWithAtSign(firstValue: string, from: string): Promise<string>;
+  /** A procedure named after the C++ stream helper of the getter of Level. */
+  levelStream(): Promise<number>;
   listDefault(x?: readonly number[]): Promise<number[]>;
   listDefault(options: { x?: readonly number[] }): Promise<number[]>;
   nestedStructEcho(x: TestNestedStruct): Promise<TestNestedStruct>;
@@ -171,6 +181,8 @@ export interface Service extends RemoteService<"TestService"> {
   service(): Promise<number>;
   setDefault(x?: ReadonlySet<number>): Promise<Set<number>>;
   setDefault(options: { x?: ReadonlySet<number> }): Promise<Set<number>>;
+  /** A procedure named after the C++ call helper of the setter of Level. */
+  setLevelCall(): Promise<number>;
   stringDefault(x?: string): Promise<string>;
   stringDefault(options: { x?: string }): Promise<string>;
   stringToBool(value: string): Promise<boolean>;
@@ -231,6 +243,10 @@ export interface Service extends RemoteService<"TestService"> {
    * @deprecated Use stringProperty instead.
    */
   setDeprecatedProperty(value: string): Promise<void>;
+  /** A property whose C++ helpers are named as the procedures declared after it. */
+  getLevel(): Promise<number>;
+  /** A property whose C++ helpers are named as the procedures declared after it. */
+  setLevel(value: number): Promise<void>;
   getNullableObject(): Promise<TestClass | null>;
   setNullableObject(value: TestClass | null): Promise<void>;
   /**
@@ -348,6 +364,10 @@ export interface Service extends RemoteService<"TestService"> {
      * to a connection.
      */
     bind(): Promise<number>;
+    /** A static method whose C++ stream helper is named as the static method declared after it. */
+    create(): Promise<number>;
+    /** A static method named after the C++ stream helper of Create. */
+    createStream(): Promise<number>;
     /**
      * A structure with the given value in its field named Bound.
      *
@@ -667,8 +687,20 @@ export interface Names extends _RemoteObject<"TestService.Names"> {
   instanceParameters(client: number, connection: number, instance: number, returnValue: number, returnValueIsNull: number, null_: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number, procedureCall: number): Promise<number>;
   /** A method named after the Python client package. */
   krpc(): Promise<number>;
+  /** A method named after the C++ call helper of the setter of Size. */
+  setSizeCall(): Promise<number>;
+  /** A method named after the C++ stream helper of the getter of Size. */
+  sizeStream(): Promise<number>;
   /** A method named after a method of java.lang.Object. */
   toString_(value: number): Promise<string>;
+  /** A method whose C++ helpers are named as the methods declared after it. */
+  total(): Promise<number>;
+  /** A method named after the C++ call helper of Total. */
+  totalCall(): Promise<number>;
+  /** A method named after the C++ call template helper of Total. */
+  totalCallTemplate(): Promise<number>;
+  /** A method named after the C++ stream helper of Total. */
+  totalStream(): Promise<number>;
   /**
    * A method declared after methods named after Python builtins, with defaults that
    * name them.
@@ -679,6 +711,10 @@ export interface Names extends _RemoteObject<"TestService.Names"> {
   getProperty(): Promise<number>;
   /** A property named after a Python builtin. */
   setProperty(value: number): Promise<void>;
+  /** A property whose C++ helpers are named as the methods declared after it. */
+  getSize(): Promise<number>;
+  /** A property whose C++ helpers are named as the methods declared after it. */
+  setSize(value: number): Promise<void>;
   /** A property declared after the property named Property. */
   getValue(): Promise<number>;
   /** A property declared after the property named Property. */
@@ -908,6 +944,14 @@ export declare namespace Server {
     bytesDefault(x?: Uint8Array): Uint8Array;
     bytesDefault(options: { x?: Uint8Array }): Uint8Array;
     bytesToHexString(value: Uint8Array): string;
+    /** A procedure whose C++ helpers are named as the procedures declared after it. */
+    count(): number;
+    /** A procedure named after the C++ call helper of Count. */
+    countCall(): number;
+    /** A procedure named after the C++ call template helper of Count. */
+    countCallTemplate(): number;
+    /** A procedure named after the C++ stream helper of Count. */
+    countStream(): number;
     counter(id?: string, divisor?: number): number;
     counter(options: { id?: string; divisor?: number }): number;
     /**
@@ -1039,6 +1083,8 @@ export declare namespace Server {
      * @returns The strings joined.
      */
     joinWithAtSign(firstValue: string, from: string): string;
+    /** A procedure named after the C++ stream helper of the getter of Level. */
+    levelStream(): number;
     listDefault(x?: readonly number[]): number[];
     listDefault(options: { x?: readonly number[] }): number[];
     nestedStructEcho(x: TestNestedStruct): TestNestedStruct;
@@ -1063,6 +1109,8 @@ export declare namespace Server {
     service(): number;
     setDefault(x?: ReadonlySet<number>): Set<number>;
     setDefault(options: { x?: ReadonlySet<number> }): Set<number>;
+    /** A procedure named after the C++ call helper of the setter of Level. */
+    setLevelCall(): number;
     stringDefault(x?: string): string;
     stringDefault(options: { x?: string }): string;
     stringToBool(value: string): boolean;
@@ -1117,6 +1165,8 @@ export declare namespace Server {
      * @deprecated Use stringProperty instead.
      */
     deprecatedProperty: string;
+    /** A property whose C++ helpers are named as the procedures declared after it. */
+    level: number;
     nullableObject: TestClass | null;
     /**
      * A property holding an object.
@@ -1212,6 +1262,10 @@ export declare namespace Server {
        * to a connection.
        */
       bind(): number;
+      /** A static method whose C++ stream helper is named as the static method declared after it. */
+      create(): number;
+      /** A static method named after the C++ stream helper of Create. */
+      createStream(): number;
       /**
        * A structure with the given value in its field named Bound.
        *
@@ -1431,8 +1485,20 @@ export declare namespace Server {
     instanceParameters(client: number, connection: number, instance: number, returnValue: number, returnValueIsNull: number, null_: number, krpc: number, java: number, com: number, org: number, nameof: number, self: number, cls: number, invoke: number, procedureCall: number): number;
     /** A method named after the Python client package. */
     krpc(): number;
+    /** A method named after the C++ call helper of the setter of Size. */
+    setSizeCall(): number;
+    /** A method named after the C++ stream helper of the getter of Size. */
+    sizeStream(): number;
     /** A method named after a method of java.lang.Object. */
     toString_(value: number): string;
+    /** A method whose C++ helpers are named as the methods declared after it. */
+    total(): number;
+    /** A method named after the C++ call helper of Total. */
+    totalCall(): number;
+    /** A method named after the C++ call template helper of Total. */
+    totalCallTemplate(): number;
+    /** A method named after the C++ stream helper of Total. */
+    totalStream(): number;
     /**
      * A method declared after methods named after Python builtins, with defaults that
      * name them.
@@ -1441,6 +1507,8 @@ export declare namespace Server {
     withDefaults(options: { x?: number; y?: number }): number;
     /** A property named after a Python builtin. */
     property: number;
+    /** A property whose C++ helpers are named as the methods declared after it. */
+    size: number;
     /** A property declared after the property named Property. */
     value: number;
   }
