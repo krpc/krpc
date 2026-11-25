@@ -59,6 +59,13 @@ The guide starts from a `main` that holds the code to release.
    The email cannot be recalled, and a version can only be deleted by hand on the site.
 9. `62-check-borea.py` - waits for the Borea watcher to stamp the release into
    `KSAModding/content-index-releases`, and shows the bounds it was stamped with.
-10. `70-announcements.py` - prints the post for the
+10. Read the description of the
+    [listing](https://github.com/KSAModding/content-index/blob/main/listings/kRPC.toml) against
+    the release, and update it when the release makes it out of date. Borea shows this text, and
+    the watcher never changes it. Edit it with the
+    [listing page](https://ksamodding.github.io/content-index/), under "Change a listed one",
+    which opens the pull request from your fork. The pull request merges itself once its checks
+    pass.
+11. `70-announcements.py` - prints the post for the
     [forum thread](https://forums.ahwoo.com/forums/kitten-space-agency/mod-releases/krpc-v0-1-0-control-ksa-with-scripts-in-python-c-c-c-java-lua-and-more.1462/).
     Post it, and update the first post of the thread. The forum has no API for this.
