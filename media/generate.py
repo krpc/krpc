@@ -123,20 +123,12 @@ ROCKETS = {"ksp": (929, 269), "ksa": (956, 260)}
 # Each thumbnail scene's scale of its screenshot, and how far it lowers it
 THUMBNAIL_SCENES = {"ksp": (0.68, 76), "ksa": (0.85, 30)}
 GAMES = list(ROCKETS)
-BANNER_CODE = """import krpc
-conn = krpc.connect(name='Launch')
-vessel = conn.space_center.active_vessel
-
-vessel.auto_pilot.engage()
-vessel.auto_pilot.target_pitch_and_heading(90, 90)
-vessel.control.throttle = 1.0
-vessel.control.activate_next_stage()
-
-flight = vessel.flight()
-altitude = conn.add_stream(getattr, flight, 'mean_altitude')
-while altitude() < 10000:
-    pass
-vessel.auto_pilot.target_pitch_and_heading(60, 90)"""
+# Each banner's code, from its game's example on the docs home page, which the
+# docs tests run in game. The banner drops its blank lines and prints to fit.
+BANNER_CODE = {
+    "ksp": MEDIA.parent / "doc/src/scripts/index/Launch.py",
+    "ksa": MEDIA.parent / "experimental/ksa/doc/src/scripts/index/Launch.py",
+}
 CODE_COLORS = {
     Token.Keyword: "#c792ea",
     Token.Name.Builtin: "#82aaff",
@@ -344,11 +336,17 @@ def svg(width, height, body, scale=1.0):
     )
 
 
-def code_lines(font, x, y, size, line_height):
-    """The banner's code, syntax highlighted, one path per color."""
+def banner_code(game):
+    """The lines of the game's banner code."""
+    lines = BANNER_CODE[game].read_text().splitlines()
+    return [line for line in lines if line.strip() and not line.startswith("print(")]
+
+
+def code_lines(font, lines, x, y, size, line_height):
+    """The code, syntax highlighted, one path per color."""
     by_color = {}
     advance = font.advance("m", size)
-    for row, line in enumerate(BANNER_CODE.split("\n")):
+    for row, line in enumerate(lines):
         column = 0
         for token, text in PythonLexer().get_tokens(line):
             text = text.rstrip("\n")
@@ -396,16 +394,19 @@ def title_block(fonts, word):
 # The code panel's width, font size and line height
 PANEL_W = 730
 CODE_SIZE, CODE_LINE_HEIGHT = 18, 27
-PANEL_H = (BANNER_CODE.count("\n") + 1) * CODE_LINE_HEIGHT + 62
 
 
-def code_panel(fonts):
-    """The code in a panel with a title bar, from its top left."""
+def panel_height(game):
+    return len(banner_code(game)) * CODE_LINE_HEIGHT + 62
+
+
+def code_panel(fonts, game):
+    """The game's code in a panel with a title bar, from its top left."""
     mono = Font(fonts["dejavu-mono"])
-    pw, ph = PANEL_W, PANEL_H
+    pw, ph = PANEL_W, panel_height(game)
     size, line_height = CODE_SIZE, CODE_LINE_HEIGHT
     title, _ = mono.path("launch.py", 14, 22, 27, shape=False)
-    code = code_lines(mono, 26, 72, size, line_height)
+    code = code_lines(mono, banner_code(game), 26, 72, size, line_height)
     panel = (
         f'<rect width="{pw}" height="{ph}" rx="14" fill="#0b1220" fill-opacity="0.72" '
         f'stroke="#ffffff" stroke-opacity="0.12" stroke-width="1.5"/>'
@@ -448,13 +449,13 @@ def backdrop(
 BANNER_SHADE = [(0, 0.92), (0.36, 0.35), (0.52, 0), (0.62, 0.25), (1, 0.75)]
 
 
-def banner_layout(fonts, word):
+def banner_layout(fonts, word, game):
     """Logo and tagline, a gap for the rocket, then the code, on the banner."""
     title = title_block(fonts, word)
-    panel = code_panel(fonts)
+    panel = code_panel(fonts, game)
     return (
         f'<g transform="translate(110 {BANNER_H / 2 - TILE_SIZE / 2 * 2.3 - 52:.2f})">{title}</g>'
-        f'<g transform="translate(1120 84)">{panel}</g>'
+        f'<g transform="translate(1120 {(BANNER_H - panel_height(game)) / 2:.2f})">{panel}</g>'
     )
 
 
@@ -462,7 +463,7 @@ def banner(fonts, word, game):
     """The forum banner."""
     background = f"background-{game}.png"
     check_size(background, BANNER_W, BANNER_H)
-    body = banner_layout(fonts, word)
+    body = banner_layout(fonts, word, game)
     return backdrop(BANNER_W, BANNER_H, background, BANNER_SHADE, body)
 
 
@@ -493,13 +494,13 @@ def spacedock(fonts, word, game):
     code_scale = 0.62
     body = (
         f'<g transform="translate(0 {(h - BANNER_H * s) / 2:.2f}) scale({s})">'
-        f"{banner_layout(fonts, word)}</g>"
+        f"{banner_layout(fonts, word, game)}</g>"
         f'<clipPath id="thumbnail-clip"><rect x="{THUMBNAIL_SCENE_X}" '
         f'width="{THUMBNAIL_SCENE_W}" height="{h}"/></clipPath>'
         f'<g transform="translate({thumb_x + 28:.2f} 28) scale({logo_scale:.4f})">{logo}</g>'
         f'<g clip-path="url(#thumbnail-clip)"><g transform="translate({thumb_x + 300:.2f} '
-        f"{(h - PANEL_H * code_scale) / 2:.2f}) "
-        f'scale({code_scale})">{code_panel(fonts)}</g></g>'
+        f"{(h - panel_height(game) * code_scale) / 2:.2f}) "
+        f'scale({code_scale})">{code_panel(fonts, game)}</g></g>'
     )
     return backdrop(w, h, background, shade, body, screenshot)
 
