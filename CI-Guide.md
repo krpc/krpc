@@ -189,8 +189,8 @@ every later Bazel command in a job uses it. Both include `ci`. Keeping the setti
 GitHub evicts a cache unused for 7 days, and the least recently used ones over the repository's
 10 GB. A cache saved by a pull request run is visible only to that pull request, and one saved
 by a merge queue run is lost with the queue's branch. So the caches later runs restore are saved
-by the push run on `main`, which builds only to fill a missing cache. Each of its jobs checks its
-keys without restoring them. The Bazel download cache is the exception: it is restored, as
+by the push run on `main`, which runs a job only to fill a missing cache. Each of its jobs checks
+its keys without restoring them. The Bazel download cache is the exception: it is restored, as
 computing the C++ disk cache key fetches repositories. The daily jobs run on `main` only in the
 daily run, which saves their caches.
 
