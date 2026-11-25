@@ -94,7 +94,7 @@ genrule(
 ksp_avc_version = """{
   "NAME": "kRPC",
   "URL": "http://ksp-avc.cybutek.net/version.php?id=254",
-  "DOWNLOAD": "https://github.com/krpc/krpc/releases/latest",
+  "DOWNLOAD": "https://spacedock.info/mod/69/kRPC",
   "VERSION": { %s },
   "KSP_VERSION": { %s },
   "KSP_VERSION_MAX": { %s },
