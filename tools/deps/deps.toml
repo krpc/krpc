@@ -134,12 +134,13 @@ at = ['MODULE.bazel: bazel_dep(name = "aspect_rules_ts", version = "{version}")'
 
 # ----------------------- Toolchains -----------------------------------------------------
 
-# rules_dotnet lists the SDKs it can download
+# The SDK rules_dotnet builds its apphost with, which it always downloads, so the build
+# downloads one SDK
 [[dep]]
 name = "dotnet-sdk"
-version = "10.0.400"
-source = "dotnet-sdk:10.0"
-verify = [{ source = "regex:https://raw.githubusercontent.com/bazel-contrib/rules_dotnet/v{dep:rules_dotnet}/dotnet/private/sdk/versions.bzl", version = "{version}", tag = '"(\d+\.\d+\.\d+)": \{' }]
+version = "10.0.201"
+source = "regex:https://raw.githubusercontent.com/bazel-contrib/rules_dotnet/v{dep:rules_dotnet}/MODULE.bazel"
+tag = 'dotnet_version = "(\d+\.\d+\.\d+)"'
 at = ['MODULE.bazel: dotnet.toolchain(dotnet_version = "{version}")']
 
 [[dep]]
