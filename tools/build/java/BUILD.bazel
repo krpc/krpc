@@ -1,0 +1,13 @@
+load("@rules_java//toolchains:default_java_toolchain.bzl", "DEFAULT_TOOLCHAIN_CONFIGURATION", "default_java_toolchain")
+
+# The Java toolchain of CI (--config=ci). It runs the compiler on the installed JDK of
+# --tool_java_runtime_version, where the default toolchain runs it on a JDK Bazel downloads.
+default_java_toolchain(
+    name = "installed_jdk",
+    configuration = dict(
+        DEFAULT_TOOLCHAIN_CONFIGURATION,
+        java_runtime = "@bazel_tools//tools/jdk:current_java_runtime",
+    ),
+    source_version = "17",
+    target_version = "17",
+)

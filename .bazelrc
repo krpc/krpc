@@ -53,10 +53,11 @@ build:macos --copt=-Wno-thread-safety-analysis --host_copt=-Wno-thread-safety-an
 # for, and so the oldest one it runs on: unix domain sockets arrived in Java 16, and 17 is
 # the oldest release a toolchain is registered for. The tool_ variants say the same for
 # anything built to be run by the build itself, such as the client jar staged into the
-# client test harness.
-build --java_runtime_version=remotejdk_25
+# client test harness. The runtime versions are common options, so the ci config can
+# replace them (CI-Guide.md, "Changing CI").
+common --java_runtime_version=remotejdk_25
 build --java_language_version=17
-build --tool_java_runtime_version=remotejdk_25
+common --tool_java_runtime_version=remotejdk_25
 build --tool_java_language_version=17
 
 # rules_python's default launcher is itself a python script, so every py_binary
@@ -126,6 +127,10 @@ build:ci --skip_incompatible_explicit_targets
 # Retry a failed download for about three and a half minutes, at most 15 seconds
 # apart, to outlast a GitHub release download returning 500
 common:ci --http_connector_attempts=20 --http_connector_retry_max_timeout=15s
+# Java runs on the JDK of the buildenv image or the Windows runner, so the CI cache
+# holds no JDK. JAVA_HOME names it.
+common:ci --java_runtime_version=local_jdk --tool_java_runtime_version=local_jdk
+common:ci --extra_toolchains=//tools/build/java:installed_jdk_definition
 
 # The Linux CI jobs, which run in the buildenv container
 common:ci-linux --config=ci --config=system-llvm

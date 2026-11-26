@@ -2,11 +2,13 @@ runs:
   using: composite
   steps:
     # Turn on the ci-windows config for every later bazel command in the job,
-    # from the system-wide rc file Bazel reads on Windows. The short output root
-    # keeps runfiles paths, such as the sphinx-build DLLs, under MAX_PATH.
+    # from the user rc file, as the Linux action does. The short output root
+    # keeps runfiles paths, such as the sphinx-build DLLs, under MAX_PATH. The
+    # runner's JAVA_HOME is JDK 17, and the build runs Java on its JDK 25. An rc
+    # file reads a backslash as an escape, so its path takes forward slashes.
     - name: bazel-config
       shell: pwsh
-      run: Set-Content -Path "$env:ProgramData\bazel.bazelrc" -Value "startup --output_user_root=D:/b", "common --config=ci-windows"
+      run: Set-Content -Path "$env:USERPROFILE\.bazelrc" -Value "startup --output_user_root=D:/b", "common --config=ci-windows", "common --repo_env=JAVA_HOME=$($env:JAVA_HOME_25_X64.Replace('\', '/'))"
     - name: get-bazel-version
       shell: bash
       run: |

@@ -113,7 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.16.0
+      image: ghcr.io/krpc/buildenv:3.17.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -152,7 +152,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.16.0
+      image: ghcr.io/krpc/buildenv:3.17.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -238,7 +238,7 @@ jobs:
         uses: ./.github/actions/bazel-disk-cache
         with:
           bazel: bazelisk
-          bazelrc: C:/ProgramData/bazel.bazelrc
+          bazelrc: $HOME/.bazelrc
       - name: build
         if: matrix.build
         shell: bash
@@ -267,7 +267,7 @@ jobs:
         uses: ./.github/actions/bazel-disk-cache
         with:
           bazel: bazelisk
-          bazelrc: C:/ProgramData/bazel.bazelrc
+          bazelrc: $HOME/.bazelrc
       - name: build
         shell: bash
         run: bazelisk build //client/cpp:cpp
@@ -291,7 +291,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.16.0
+      image: ghcr.io/krpc/buildenv:3.17.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -323,7 +323,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.16.0
+      image: ghcr.io/krpc/buildenv:3.17.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -396,7 +396,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.16.0
+      image: ghcr.io/krpc/buildenv:3.17.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -420,7 +420,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.16.0
+      image: ghcr.io/krpc/buildenv:3.17.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -487,7 +487,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.16.0
+      image: ghcr.io/krpc/buildenv:3.17.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -642,7 +642,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/krpc/buildenv:3.16.0
+      image: ghcr.io/krpc/buildenv:3.17.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}

@@ -223,13 +223,21 @@ hold = "the Java version the client supports"
 at = [
   ".bazelrc: build --java_language_version={version}",
   ".bazelrc: build --tool_java_language_version={version}",
+  'tools/build/java/BUILD.bazel: source_version = "{version}"',
+  'tools/build/java/BUILD.bazel: target_version = "{version}"',
 ]
 
+# The JDK: the one Bazel downloads for a local build, and the installed one CI uses
 [[dep]]
-name = "remotejdk"
+name = "jdk"
 version = "25"
-hold = "rules_java lists the JDKs"
-at = [".bazelrc: java_runtime_version=remotejdk_{version}"]
+hold = "rules_java lists the JDKs, and CI needs a new buildenv image"
+at = [
+  ".bazelrc: java_runtime_version=remotejdk_{version}",
+  "tools/buildenv/Dockerfile: --no-install-recommends openjdk-{version}-jdk-headless",
+  "tools/buildenv/Dockerfile: JAVA_HOME=/usr/lib/jvm/java-{version}-openjdk-amd64",
+  ".github/actions/bazel-fetch-windows/action.yml: JAVA_HOME=$($env:JAVA_HOME_{version}_X64",
+]
 
 # ----------------------- Protobuf -------------------------------------------------------
 
@@ -929,7 +937,7 @@ at = ["tools/buildenv/Dockerfile: FROM ubuntu:{version}"]
 
 [[dep]]
 name = "buildenv"
-version = "3.16.0"
+version = "3.17.0"
 hold = "set after pushing a new image"
 at = [
   "tools/buildenv/VERSION.txt: {version}",

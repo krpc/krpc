@@ -130,7 +130,8 @@ last person to change its schedule.
 
 The Linux Bazel jobs run in the `ghcr.io/krpc/buildenv` image (`tools/buildenv/`), pinned by
 version in each job. The image holds socat for the serial transport tests, and an LLVM install
-that the Linux jobs use in place of Bazel's own (see [Bazel Configuration](#bazel-configuration)).
+and a JDK that the Linux jobs use in place of Bazel's own (see
+[Bazel Configuration](#bazel-configuration)).
 The .NET SDK for the `KRPC.sln` build comes from `actions/setup-dotnet`. The container runs as
 the `runner` user, so it owns the files the checkout writes.
 
@@ -189,7 +190,7 @@ which a compile cannot always see.
 
 ## Bazel Configuration
 
-The `bazel-fetch` actions turn on `ci-linux` or `ci-windows`, from a user or system rc file, so
+The `bazel-fetch` actions turn on `ci-linux` or `ci-windows`, from the user rc file, so
 every later Bazel command in a job uses it. Both include `ci`. Keeping the settings in
 `.bazelrc` lets a developer reproduce CI with `--config=ci-linux`.
 
@@ -201,6 +202,10 @@ every later Bazel command in a job uses it. Both include `ci`. Keeping the setti
 - **System LLVM on Linux.** `ci-linux` builds with the buildenv image's LLVM in place of the
   hermetic LLVM release Bazel would download. That release is about 2 GB, and GitHub keeps
   10 GB of caches per repository, so CI stores LLVM in the image instead of the download cache.
+- **Installed JDK.** `ci` runs Java on an installed JDK 25, the buildenv image's on Linux and the
+  runner's on Windows, in place of the 220 MB JDK Bazel would download. The default Java
+  toolchain runs the compiler on that downloaded JDK, so `ci` registers one that runs it on the
+  installed JDK (`tools/build/java`).
 - **No `parse_headers`.** Abseil compiles each of its headers on its own as a check. That is a
   third of the compile actions a client's conformance testee needs.
 - **Download retries.** A failed download is retried for about three and a half minutes, at most
@@ -343,6 +348,9 @@ cancel each other, as a release moves a tag and `main` together and both push to
 
 ## Changing CI
 
+- A CI config replaces a default in `.bazelrc` only when the default is a `common` line, and only
+  from the user rc file. Bazel applies the `common` lines of every rc file before any `build`
+  line, and reads the system rc file before `.bazelrc` and the user rc file after it.
 - The jobs name their Bazel targets by hand, mostly a package's `:test` suite. A new test goes in
   its package's suite. A new suite goes in `//:test` and in a job.
 - A new job goes in the `needs` of `all-checks-passed`. A new artifact goes in the list in
