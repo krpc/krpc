@@ -16,11 +16,12 @@ to `krpc/krpc` and to your fork of the Borea content index use your normal git s
 The Bazel targets take the game from `KSA_DIR`, and run StarMap from `STARMAP_DIR`. Set both to
 absolute paths.
 
-The guide starts from a `main` that holds the code to release.
+The guide starts from a release branch that holds the code to release: `main`, or a maintenance
+branch such as `release/0.8` ([release branches](../../Release-Guide.md#release-branches)).
 
 ## 1. Prepare
 
-1. `01-prepare.py [version]` - on a release preparation branch off an up to date `main`,
+1. `01-prepare.py [version]` - on a release preparation branch off an up to date release branch,
    releases the unreleased section of `CHANGELOG.md`, sets `mod_version` in `config.bzl`, and
    commits them as `Release kRPC for KSA X.Y.Z`. A release that only follows a KSA update is the
    patch version the update started. Pass a version for a minor release. If `core/src` changed
@@ -45,7 +46,7 @@ The guide starts from a `main` that holds the code to release.
    `//experimental/ksa:release`, against the KSA install in `KSA_DIR`, and runs
    `//experimental/ksa:test` and the docs link check.
 5. `40-tag.py` - makes the annotated `ksa-vX.Y.Z` tag on the release commit, which must be on
-   `main`, and pushes it. A `v*` tag would start the docs workflow of the kRPC release.
+   the release branch, and pushes it. A `v*` tag would start the docs workflow of the kRPC release.
 
 ## 3. Publish
 

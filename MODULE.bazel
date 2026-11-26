@@ -28,7 +28,7 @@ single_version_override(
 )
 
 dotnet = use_extension("@rules_dotnet//dotnet:extensions.bzl", "dotnet")
-dotnet.toolchain(dotnet_version = "10.0.400")
+dotnet.toolchain(dotnet_version = "10.0.201")
 use_repo(dotnet, "dotnet_toolchains")
 
 register_toolchains("@dotnet_toolchains//:all")
@@ -147,6 +147,14 @@ use_repo(pip, "krpc_pypi")
 bazel_dep(name = "rules_nodejs", version = "6.7.7")
 bazel_dep(name = "aspect_rules_js", version = "3.6.1")
 bazel_dep(name = "aspect_rules_ts", version = "3.10.1")
+
+# Download only the host's native TypeScript package, the one tsc runs, out of the 20 that
+# TypeScript 7 lists
+single_version_override(
+    module_name = "aspect_rules_ts",
+    patch_strip = 1,
+    patches = ["//tools/build/typescript/patches:rules_ts-host-native-package.patch"],
+)
 
 node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
 node.toolchain(node_version = "22.23.5")

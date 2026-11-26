@@ -371,6 +371,8 @@ NOT_PINS: list[tuple[str, re.Pattern[str]]] = [
     # kRPC for KSA's own version, the kRPC client release it works with, and the KSA build,
     # which is closed source and has no release to check. update-ksa.py moves the KSA build.
     ("experimental/ksa/config.bzl", re.compile(r'(?m)^(mod|client|ksa)_version = "')),
+    # The installed JDK of CI, which the jdk entry pins where it is installed
+    (".bazelrc", re.compile(r"_version=local_jdk")),
 ]
 
 # Not scanned: lock files the regenerators write, and the KSP mods (the mods command and

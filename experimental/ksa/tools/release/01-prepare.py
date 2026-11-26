@@ -8,8 +8,9 @@ minor version for a section the update script started as a patch. If KRPC.Core
 changed since its version was last bumped, the step asks how to bump it, and
 the release commit includes the bump.
 
-Run on a branch off an up to date main. The release commit reaches main through
-the release preparation pull request, and 40-tag.py tags it there.
+Run on a branch off an up to date release branch: main, or a maintenance branch
+such as release/0.8. The release commit reaches the release branch through the
+release preparation pull request, and 40-tag.py tags it there.
 
     01-prepare.py
     01-prepare.py 0.3.0
@@ -34,13 +35,14 @@ def main():
     lib.require("git")
     lib.require_clean_tree()
     branch = lib.capture("git", "rev-parse", "--abbrev-ref", "HEAD")
-    if branch in ("main", "HEAD"):
+    if branch == "HEAD" or lib.is_release_branch(branch):
         raise lib.ReleaseError("prepare on the release preparation branch")
-    lib.run("git", "fetch", "-q", "origin", "main")
-    if lib.capture("git", "rev-parse", "HEAD") != lib.capture(
-        "git", "rev-parse", "origin/main"
-    ):
-        raise lib.ReleaseError(f"{branch} is not at origin/main")
+    bases = lib.release_branches_at()
+    if not bases:
+        raise lib.ReleaseError(
+            f"{branch} is not at the tip of origin/main or of a maintenance "
+            "branch such as origin/release/0.8"
+        )
 
     sections = ksalib.sections()
     if not sections or not sections[0].unreleased:
@@ -64,9 +66,9 @@ def main():
 
     lib.banner("Done")
     print(
-        f"Push {branch} and open the release preparation pull request. Once it "
-        "merges, check out the release commit and run "
-        "experimental/ksa/tools/release/10-preflight.py."
+        f"Push {branch} and open the release preparation pull request against "
+        f"{' or '.join(bases)}. Once it merges, check out the release commit "
+        "and run experimental/ksa/tools/release/10-preflight.py."
     )
 
 

@@ -1,3 +1,6 @@
+## [v3.17.0]
+- Add OpenJDK 25, the JDK the build runs Java on in CI
+
 ## [v3.16.0]
 - Remove LaTeX, which built the documentation PDF
 - Remove `graphviz` (the documentation's one graph is an SVG image in the source)

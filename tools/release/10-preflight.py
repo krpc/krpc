@@ -51,14 +51,12 @@ def check_repository(report):
 
     # The commit to tag is the fold commit of the release preparation pull
     # request, below its version bump. It is checked out, often detached.
-    # Quietly, and reporting a failure rather than raising: a check that
-    # cannot be carried out is one line of the report, not the end of it
-    if not lib.succeeds("git", "fetch", "-q", "origin", "main"):
-        report.fail("could not fetch origin/main to compare against")
-    elif lib.succeeds("git", "merge-base", "--is-ancestor", "HEAD", "origin/main"):
-        report.ok("HEAD is on origin/main")
-    else:
-        report.fail("HEAD is not on origin/main (unpushed or missing commits)")
+    # Reporting a failure rather than raising: a check that cannot be carried
+    # out is one line of the report, not the end of it
+    try:
+        report.ok(f"HEAD is on {lib.on_release_branch()}")
+    except lib.ReleaseError as exception:
+        report.fail(f"{exception} (unpushed or missing commits)")
 
     if lib.succeeds("git", "rev-parse", "-q", "--verify", f"refs/tags/{lib.TAG}"):
         if lib.capture("git", "rev-parse", f"{lib.TAG}^{{commit}}") == lib.capture(

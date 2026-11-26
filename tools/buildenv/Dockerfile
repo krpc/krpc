@@ -18,6 +18,12 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends socat && \
     apt-get clean
 
+# Install the JDK the build runs Java on, through --config=ci
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends openjdk-25-jdk-headless && \
+    apt-get clean
+ENV JAVA_HOME=/usr/lib/jvm/java-25-openjdk-amd64
+
 # Install a font for the text in the documentation's diagrams, which the build
 # rasterizes from SVG
 RUN apt-get update && \

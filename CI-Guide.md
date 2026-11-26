@@ -8,7 +8,7 @@ configs of `.bazelrc`.
 
 | Workflow | Runs on | Does |
 | --- | --- | --- |
-| `ci` | pull request, merge queue, push to `main`, manual, `daily` | Builds and tests everything, and keeps the caches |
+| `ci` | pull request to `main` or `release/**`, merge queue, push to `main` or `release/**`, manual, `daily` | Builds and tests everything, and keeps the caches |
 | `daily` | 04:37 UTC each day, manual | Runs `ci` on `main` with the daily jobs |
 | `prune-caches` | push to `main`, manual | Deletes the caches no later run can restore |
 | `flaky-tests` | completion of a `ci` run | Comments on the pull request when a test passed only on a retry |
@@ -37,6 +37,31 @@ A failed job removes the pull request from the queue once `all-checks-passed` re
 jobs cannot be re-run into the same queue entry, and queueing the pull request again starts a
 new run. This is why CI retries the steps that fail for reasons outside the change (see
 [Flakes](#flakes)).
+
+## Maintenance Branches
+
+A maintenance branch, such as `release/0.8`, carries the releases of a series `main` has moved
+past (`Release-Guide.md`). `ci` and `changelog-hints` run on its pull requests, matched by the
+branch pattern `release/**`.
+
+The rulesets protect it as they protect `main`, with one difference. A merge queue rule cannot
+target a pattern, so a maintenance branch has no queue. Its ruleset requires `all-checks-passed`
+on a pull request that is up to date with the branch. For a branch with few pull requests, this
+gives the guarantee of the queue.
+
+Its pull requests restore its own caches and those of `main`. Its push run saves a cache only
+where its key differs from `main`'s, as a lookup finds the caches of `main` too. That leaves two
+caches:
+
+- **Bazel downloads.** The key changes with any edit to `MODULE.bazel`, so the branch's key
+  diverges from `main`'s almost at once. The branch keeps its own copy, over 1 GB per OS.
+  There is one maintenance branch at a time, for the series before `main`, so the copy fits
+  in the 10 GB.
+- **Third-party C++ libraries.** These diverge when `main` changes their versions, flags or
+  toolchain.
+
+The daily jobs run on `main` only. Run them on a pull request by hand with
+`gh workflow run ci.yml --ref <branch>`.
 
 ## Jobs
 
@@ -105,7 +130,8 @@ last person to change its schedule.
 
 The Linux Bazel jobs run in the `ghcr.io/krpc/buildenv` image (`tools/buildenv/`), pinned by
 version in each job. The image holds socat for the serial transport tests, and an LLVM install
-that the Linux jobs use in place of Bazel's own (see [Bazel Configuration](#bazel-configuration)).
+and a JDK that the Linux jobs use in place of Bazel's own (see
+[Bazel Configuration](#bazel-configuration)).
 The .NET SDK for the `KRPC.sln` build comes from `actions/setup-dotnet`. The container runs as
 the `runner` user, so it owns the files the checkout writes.
 
@@ -164,7 +190,7 @@ which a compile cannot always see.
 
 ## Bazel Configuration
 
-The `bazel-fetch` actions turn on `ci-linux` or `ci-windows`, from a user or system rc file, so
+The `bazel-fetch` actions turn on `ci-linux` or `ci-windows`, from the user rc file, so
 every later Bazel command in a job uses it. Both include `ci`. Keeping the settings in
 `.bazelrc` lets a developer reproduce CI with `--config=ci-linux`.
 
@@ -176,6 +202,10 @@ every later Bazel command in a job uses it. Both include `ci`. Keeping the setti
 - **System LLVM on Linux.** `ci-linux` builds with the buildenv image's LLVM in place of the
   hermetic LLVM release Bazel would download. That release is about 2 GB, and GitHub keeps
   10 GB of caches per repository, so CI stores LLVM in the image instead of the download cache.
+- **Installed JDK.** `ci` runs Java on an installed JDK 25, the buildenv image's on Linux and the
+  runner's on Windows, in place of the 220 MB JDK Bazel would download. The default Java
+  toolchain runs the compiler on that downloaded JDK, so `ci` registers one that runs it on the
+  installed JDK (`tools/build/java`).
 - **No `parse_headers`.** Abseil compiles each of its headers on its own as a check. That is a
   third of the compile actions a client's conformance testee needs.
 - **Download retries.** A failed download is retried for about three and a half minutes, at most
@@ -318,14 +348,18 @@ cancel each other, as a release moves a tag and `main` together and both push to
 
 ## Changing CI
 
+- A CI config replaces a default in `.bazelrc` only when the default is a `common` line, and only
+  from the user rc file. Bazel applies the `common` lines of every rc file before any `build`
+  line, and reads the system rc file before `.bazelrc` and the user rc file after it.
 - The jobs name their Bazel targets by hand, mostly a package's `:test` suite. A new test goes in
   its package's suite. A new suite goes in `//:test` and in a job.
 - A new job goes in the `needs` of `all-checks-passed`. A new artifact goes in the list in
   `copy-artifacts`.
 - A cache that later runs restore must be saved by the push run on `main`, or for a daily job
   by the daily run.
-- `pull_request_target` and `workflow_run` workflows run from `main`, so `changelog-hints` and
-  `flaky-tests` cannot be tested by the pull request that changes them. Test them after merge.
+- `pull_request_target` workflows run from the base branch, and `workflow_run` ones from `main`,
+  so `changelog-hints` and `flaky-tests` cannot be tested by the pull request that changes them.
+  Test them after merge.
 - The push run's cache jobs, `copy-artifacts` and `prune-caches` also run only after merge.
   `prune-caches` can be run by hand.
 - A Windows job, or one whose checks can wait a day, takes the condition of the other daily jobs.

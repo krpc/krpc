@@ -19,11 +19,12 @@ def main():
             f"v{ksalib.VERSION} (run 01-prepare.py)"
         )
 
-    lib.run("git", "fetch", "-q", "origin", "main")
-    if not lib.succeeds("git", "merge-base", "--is-ancestor", "HEAD", "origin/main"):
+    try:
+        lib.on_release_branch()
+    except lib.NotOnReleaseBranchError as exception:
         raise lib.ReleaseError(
-            "HEAD is not on origin/main; merge the release preparation pull request"
-        )
+            f"{exception}; merge the release preparation pull request"
+        ) from exception
 
     if lib.succeeds("git", "rev-parse", "-q", "--verify", f"refs/tags/{ksalib.TAG}"):
         if lib.capture("git", "rev-parse", f"{ksalib.TAG}^{{commit}}") != lib.capture(
