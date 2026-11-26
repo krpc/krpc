@@ -631,6 +631,13 @@ the documentation. It needs network access and is in no suite. Run it by name, a
 checks do.</p>
 <p><code class="docutils literal notranslate"><span class="pre">//doc:lint</span></code> checks the formatting of the documentation examples at 76 columns, the width of a
 rendered code block. The C# and Java examples are wrapped to that width by hand.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">clientgen</span></code> and <code class="docutils literal notranslate"><span class="pre">docgen</span></code> tests compare the generators’ output with golden files in
+<code class="docutils literal notranslate"><span class="pre">tools/krpctools/krpctools/test/</span></code>. After a change to <code class="docutils literal notranslate"><span class="pre">TestService</span></code>, the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service or a
+generator template, rewrite them and review the diff:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>run<span class="w"> </span>//:update-goldens
+</pre></div>
+</div>
+<p>The target is tagged <code class="docutils literal notranslate"><span class="pre">manual</span></code>, so <code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">build</span> <span class="pre">//...</span></code> skips it.</p>
 <p>Useful options for <code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">test</span></code> are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--cache_test_results=false</span></code> runs tests whose results are cached.</p></li>
