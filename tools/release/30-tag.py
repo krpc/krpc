@@ -30,7 +30,7 @@ def main():
 
     lib.banner("Pushing to GitHub")
     lib.confirm(f"Push {lib.TAG} to origin?")
-    lib.run("git", "push", "origin", lib.TAG)
+    lib.run("git", "push", "origin", f"refs/tags/{lib.TAG}")
 
     lib.banner("Done")
     print("Next: tools/release/40-build-assets.py")

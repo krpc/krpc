@@ -124,7 +124,7 @@ example tests, in ``tools/doc_examples/``.
 Documentation
 -------------
 
-Build this documentation, or serve it on http://localhost:8080 with rebuild on edit:
+Build this documentation, or serve it on ``http://localhost:8080`` with rebuild on edit:
 
 .. code-block:: bash
 

@@ -3,16 +3,12 @@
 
 The Borea watcher stamps a release with the bounds in the listing at the time,
 so they are updated before the release is published. game_min becomes the KSA
-build the release is built against, and the StarMap min the pinned StarMap,
-unless --game-min or --loader-min give others.
+build the release is built against, and the StarMap min the pinned StarMap.
 
 The listing changes through a pull request to the content index, from a fork on
 the account of GITHUB_TOKEN. It merges itself once its checks pass, as the
 repository topic of krpc/krpc proves ownership, and the step waits for that.
 Re-running it re-checks the listing, and waits on a pull request already open.
-
-    20-borea-listing.py
-    20-borea-listing.py --loader-min 0.4.8
 """
 
 import argparse
@@ -153,9 +149,7 @@ def main():
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("--game-min", help="the oldest KSA build the release runs on")
-    parser.add_argument("--loader-min", help="the oldest StarMap the release runs on")
-    arguments = parser.parse_args()
+    parser.parse_args()
 
     lib.require("git", "gh")
     credentials = ksalib.load_credentials()
@@ -163,8 +157,8 @@ def main():
     login, _ = lib.github_user(credentials["GITHUB_TOKEN"])
 
     pins = ksalib.pins()
-    game_min = arguments.game_min or pins["ksa_version"]
-    loader_min = arguments.loader_min or pins["starmap_version"]
+    game_min = pins["ksa_version"]
+    loader_min = pins["starmap_version"]
     text = ksalib.listing()
     if ksalib.listing_bounds(text) == (game_min, loader_min):
         lib.banner("Done")

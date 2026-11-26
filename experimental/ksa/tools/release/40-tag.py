@@ -40,7 +40,7 @@ def main():
 
     lib.banner("Pushing the tag")
     lib.confirm(f"Push {ksalib.TAG} to origin?")
-    lib.run("git", "push", "origin", ksalib.TAG)
+    lib.run("git", "push", "origin", f"refs/tags/{ksalib.TAG}")
 
     lib.banner("Done")
     print("Next: experimental/ksa/tools/release/50-release-github.py")
