@@ -51,7 +51,7 @@ def main():
         )
 
     branch = lib.capture("git", "rev-parse", "--abbrev-ref", "HEAD")
-    if branch in ("main", "HEAD"):
+    if branch == "HEAD" or lib.is_release_branch(branch):
         raise lib.ReleaseError("bump on the release preparation branch")
 
     # The bump goes above the fold commit, which 30-tag.py tags

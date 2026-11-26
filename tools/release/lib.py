@@ -148,6 +148,57 @@ def require_clean_tree():
         raise ReleaseError("the working tree has uncommitted changes")
 
 
+# The branches a release is made from: main, and a maintenance branch under
+# release/, such as release/0.8
+RELEASE_BRANCH = re.compile(r"main|release/.+")
+
+
+class NotOnReleaseBranchError(ReleaseError):
+    """A commit is on no release branch of origin."""
+
+
+def is_release_branch(name):
+    return RELEASE_BRANCH.fullmatch(name) is not None
+
+
+def release_branches():
+    """Fetch the release branches of origin, and return their names."""
+    heads = capture("git", "ls-remote", "--heads", "origin")
+    names = [line.split("refs/heads/", 1)[1] for line in heads.splitlines()]
+    names = [name for name in names if is_release_branch(name)]
+    refspecs = [f"+refs/heads/{name}:refs/remotes/origin/{name}" for name in names]
+    capture("git", "fetch", "-q", "origin", *refspecs)
+    return names
+
+
+def release_branches_at(commit="HEAD"):
+    """The release branches of origin whose tip is the commit."""
+    sha = capture("git", "rev-parse", commit)
+    return [
+        name
+        for name in release_branches()
+        if capture("git", "rev-parse", f"origin/{name}") == sha
+    ]
+
+
+def on_release_branch(commit="HEAD"):
+    """Name the release branches of origin that hold the commit.
+
+    Raises a NotOnReleaseBranchError when no release branch holds it.
+    """
+    names = [
+        f"origin/{name}"
+        for name in release_branches()
+        if succeeds("git", "merge-base", "--is-ancestor", commit, f"origin/{name}")
+    ]
+    if not names:
+        raise NotOnReleaseBranchError(
+            f"{commit} is on no release branch, origin/main or a maintenance "
+            "branch such as origin/release/0.8"
+        )
+    return " and ".join(names)
+
+
 CONFIG = Path("config.bzl")
 
 # The sources compiled into KRPC.Core.dll

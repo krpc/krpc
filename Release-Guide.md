@@ -24,12 +24,26 @@ the armored secret key and its passphrase, and the step imports them into a thro
 public key must be on `keys.openpgp.org` or `keyserver.ubuntu.com`, where the Central Portal looks
 it up. Publish a new key with `gpg --send-keys --keyserver keyserver.ubuntu.com <fingerprint>`.
 
+## Release Branches
+
+A release is made from `main`, or from a maintenance branch under `release/`, such as
+`release/0.8`. A maintenance branch carries a series `main` can no longer release, such as the
+KSA mod for the 0.8 clients while `main` works towards 1.0.
+
+* **A change for the series lands on the maintenance branch first.** Pull requests target it.
+* **The maintenance branch merges forward into `main`**, through a pull request soon after each
+  change. The merge commit resolves the conflicts with `main`. Changes never move back from `main`.
+* **To create one**, push it from the last commit of `main` the series can release. The rulesets
+  that target `release/**` protect it from the start, and require its pull requests to pass CI
+  up to date with the branch (`CI-Guide.md`).
+* **Delete it** once a release from `main` replaces the series.
+
 ## 1. Prepare
 
-A release preparation pull request takes `main` from the version being released to the next one.
-`version` in `config.bzl` names the version being released.
+A release preparation pull request takes the release branch from the version being released to
+the next one. `version` in `config.bzl` names the version being released.
 
-1. Create a branch off `main`, such as `release-vx.y.z`.
+1. Create a branch off the release branch, such as `release-vx.y.z`.
 2. `tools/release/01-fold-changelogs.py` - writes the fragments in `changelog.d/` into each
    component's `CHANGELOG.md`, deletes them, and drops the ` - unreleased` suffix. Reorder and edit
    the merged entries by hand, then commit everything as one commit, the fold commit. Components
@@ -39,7 +53,8 @@ A release preparation pull request takes `main` from the version being released 
    assemblies compile against, minor for an addition, patch for a fix. `core_version` is the
    assembly version of `KRPC.Core.dll`, which every game mod ships.
 3. `tools/release/02-bump-version.py` - sets `version` in `config.bzl` to the next version to work
-   towards, and commits. Builds from `main` are then stamped as pre-releases of that version.
+   towards, and commits. Builds from the release branch are then stamped as pre-releases of that
+   version.
 4. Push the branch, open the pull request, and run every CI job on it by hand:
    `gh workflow run ci.yml --ref release-vx.y.z`. The pull request and the merge queue skip the
    daily jobs, such as Windows and the CMake and vcpkg builds. Add the pull request to the merge
@@ -49,8 +64,8 @@ A release preparation pull request takes `main` from the version being released 
    `git checkout <bump commit>^`. The remaining steps run from there.
 6. `tools/release/10-preflight.py` - checks the release can start, and publishes nothing, so run
    it as often as you like:
-   * The tree is clean, the commit is on `origin/main`, and the changelogs are folded. It also
-     reports which components have changelog sections for the new version.
+   * The tree is clean, the commit is on a release branch of `origin`, and the changelogs are
+     folded. It also reports which components have changelog sections for the new version.
    * `bazel`, `git` and `gh` are installed. A missing publish tool, such as `npm`, or a missing
      `VCPKG_ROOT`, is a warning, as only its own step needs it.
    * Every credential is present. It logs in to GitHub, luarocks.org, AWS, the Central Portal,

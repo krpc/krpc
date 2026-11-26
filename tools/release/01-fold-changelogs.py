@@ -20,7 +20,7 @@ def main():
     lib.require("git")
     lib.require_clean_tree()
     branch = lib.capture("git", "rev-parse", "--abbrev-ref", "HEAD")
-    if branch in ("main", "HEAD"):
+    if branch == "HEAD" or lib.is_release_branch(branch):
         raise lib.ReleaseError("fold on the release preparation branch")
 
     fragments = lib.fragments()

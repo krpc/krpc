@@ -37,12 +37,10 @@ def check_repository(report):
     else:
         report.ok("working tree is clean")
 
-    if not lib.succeeds("git", "fetch", "-q", "origin", "main"):
-        report.fail("could not fetch origin/main to compare against")
-    elif lib.succeeds("git", "merge-base", "--is-ancestor", "HEAD", "origin/main"):
-        report.ok("HEAD is on origin/main")
-    else:
-        report.fail("HEAD is not on origin/main")
+    try:
+        report.ok(f"HEAD is on {lib.on_release_branch()}")
+    except lib.ReleaseError as exception:
+        report.fail(str(exception))
 
     if ksalib.is_released():
         report.ok(f"{ksalib.CHANGELOG} releases v{ksalib.VERSION}")
