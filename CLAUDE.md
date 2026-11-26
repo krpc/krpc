@@ -52,12 +52,21 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
  * Deprecating a member switches its tests, doc examples and tutorials to the replacement.
    Deprecated members are unsupported and get no tests.
  * Client comms tests use a local `TestServer` (no KSP needed); SerialIO ones need `socat`.
+ * A fixture for a service API feature goes in `tools/TestServer/src/TestService.cs`, which feeds
+   the clientgen and docgen goldens in `tools/krpctools/krpctools/test/`. `ConformanceService` is
+   for the internals of the conformance tests. No target regenerates the goldens: uncomment the
+   write block in `clientgentest.py` and `docgentest.py`. Regenerate them after a change to
+   `TestService`, the `KRPC` service or a generator template.
  * Flags: `--test_output=streamed`, `--cache_test_results=false`, `--subcommands`,
    `--config=system-llvm` (C/C++ as CI). Bazel applies the `windows` config on a Windows host.
  * A full `//:test` takes several minutes, over the foreground Bash timeout. Start it with
    `run_in_background` and wait for the completion notification, which carries the exit code.
    Judge the result by the exit code, then `Read` the tail of the output file for the summary.
    Do not re-run the suite just to see how it ended.
+ * **Never pipe a gate**, as in `bazel test //:test | tail`. The pipeline's exit code is the last
+   command's, so failures pass unseen. Read the `Executed N out of M tests` line.
+ * **A gate covers only the tree it ran on.** After any edit made after the gates, re-run
+   `bazel build //...`. `//:test` does not compile the doc examples.
  * Run **one bazel command at a time**. A second blocks on the server lock, printing
    `Another command … is running. Waiting for it to complete`, and also looks hung.
 
@@ -79,6 +88,8 @@ the tests: a test's docstring is the requirement's text, its markers the level a
    request with each test that passed on a retry, under the job it ran in. A test its language
    cannot carry out goes in `client/<client>/conformance/unsupported.txt`. A stale line in
    either fails the run.
+ * An `expected-failures.txt` line counts as a filed defect. It needs no issue, and the client's
+   pages still document the wanted behavior.
  * A client's profiles are listed in its `conformance_test` target.
  * Run every client in one command: `bazel test //client/{cnano,cpp,csharp,java,js,lua,python}:conformance
    //client/conformance:test`.
@@ -111,6 +122,11 @@ monodis --output=/tmp/ksp.il "$KSP_DIR/KSP_Data/Managed/Assembly-CSharp.dll"
 
 The whole game is in that one assembly, and the listing is millions of lines — grep it
 (`\.class.*<Name>`, `\.custom.*KSPScenario`) rather than reading it.
+
+RPCs run in kRPC's `FixedUpdate`, in the middle of a physics step. A scene load or a spawn of a
+physics object issued there misbehaves, as a stale `FlightGlobals.ready` or a flung kerbal. Run it
+from `Update`, as the game's own buttons do: `GameSceneSwitcher` queues scene loads, and
+`EVAAddon.RunInUpdate` runs EVA actions.
 
 ### Reflection
 
@@ -157,6 +173,9 @@ Rules for the code itself, in every language. Its comments are under *Code comme
    behavior.
  * **Match the code around it.** Follow the naming, layout and error handling of the neighboring
    code. A new pattern needs a reason.
+ * **A review finding counts only if the branch introduced it**, or new code reaches it where old
+   code did not. A pre-existing defect is recorded, as an expected failure or a draft issue, and
+   does not block the branch.
 
 ## Integration tests
 
@@ -164,12 +183,13 @@ Python tests driving a live game, in `service/*/test/`. Need a real KSP install 
 `--game-dir`. Everything after `--` goes to pytest.
 
 ```bash
-bazel run //tools/game:test-ksp                                                 # whole suite
 bazel run //tools/game:test-ksp -- service/SpaceCenter/test/test_camera.py -v   # one file
 bazel run //tools/game:test-ksp -- "…::TestClass::test_method"                  # one test
 bazel run //tools/game:test-ksp -- -k test_camera_mode                          # by name
 ```
 
+ * **Run the test files that cover the change**, never the whole suite unless asked. It takes
+   hours. Group the files by mod set, as each set restarts the game.
  * **Auto-launches KSP**: builds/installs DLLs and required mods, launches, loads a save, runs, stops.
    All code changes picked up automatically.
  * Cold run ~70–90s → **start with `run_in_background`** and wait for the completion notification.
@@ -178,6 +198,10 @@ bazel run //tools/game:test-ksp -- -k test_camera_mode                          
    progress of a run in flight needs it.
  * Progress logged per stage (`installing kRPC`, `launching KSP`, `waiting for kRPC server...`,
    `stopping KSP`).
+ * **The user builds test craft in game.** Give them a part spec (each part, how it attaches, module
+   states, the craft name) and the `run-ksp` command. Copy the saved
+   `$KSP_DIR/saves/krpctest/Ships/VAB/<Name>.craft` into `service/<Service>/test/craft/`. Do not
+   hand-write `.craft` files.
 
 ### Documentation examples
 
@@ -201,6 +225,8 @@ alone. `doc/test/examples.py` declares how each runs, `unsupported.txt` lists th
  * Install reconciles GameData to **exactly** the requested set (plus kRPC) — required-but-missing and
    installed-but-unneeded are both wrong.
  * Pytest groups tests by mod set; game restarts at most once per set.
+ * A new mod integration adds the mod to the list in `doc/src/user-guide/mods.rst`, the one page
+   that links the mod. Each member that needs the mod has `<remarks>Requires X.</remarks>`.
 
 ### Iterating without reloading
 
@@ -237,6 +263,8 @@ The API reference is generated from the XML comments, which change with the code
    change: a page goes untouched only because it was read and still holds.
  * **A review reports a page the change made false as a finding.**
  * **Each fact has one page.** Link to it in place of repeating it.
+ * A package README, such as `client/python/README.md` on PyPI, is a title, one sentence and a link
+   to the docs site.
 
 ### Client pages
 
@@ -385,6 +413,8 @@ code itself cannot.
    a single-line summary then short paragraph(s).
  * Wrap the body at 72 columns, with a blank line after the summary. The one-line-per-paragraph
    rule under *Pull requests* is for PR descriptions only.
+ * A cleanup of code a branch adds goes into the commit that added it: `git commit --fixup=<sha>`,
+   then `GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash main`.
 
 ## Pull requests
 
