@@ -8,7 +8,7 @@ configs of `.bazelrc`.
 
 | Workflow | Runs on | Does |
 | --- | --- | --- |
-| `ci` | pull request, merge queue, push to `main`, manual, `daily` | Builds and tests everything, and keeps the caches |
+| `ci` | pull request to `main` or `release/**`, merge queue, push to `main` or `release/**`, manual, `daily` | Builds and tests everything, and keeps the caches |
 | `daily` | 04:37 UTC each day, manual | Runs `ci` on `main` with the daily jobs |
 | `prune-caches` | push to `main`, manual | Deletes the caches no later run can restore |
 | `flaky-tests` | completion of a `ci` run | Comments on the pull request when a test passed only on a retry |
@@ -37,6 +37,31 @@ A failed job removes the pull request from the queue once `all-checks-passed` re
 jobs cannot be re-run into the same queue entry, and queueing the pull request again starts a
 new run. This is why CI retries the steps that fail for reasons outside the change (see
 [Flakes](#flakes)).
+
+## Maintenance Branches
+
+A maintenance branch, such as `release/0.8`, carries the releases of a series `main` has moved
+past (`Release-Guide.md`). `ci` and `changelog-hints` run on its pull requests, matched by the
+branch pattern `release/**`.
+
+The rulesets protect it as they protect `main`, with one difference. A merge queue rule cannot
+target a pattern, so a maintenance branch has no queue. Its ruleset requires `all-checks-passed`
+on a pull request that is up to date with the branch. For a branch with few pull requests, this
+gives the guarantee of the queue.
+
+Its pull requests restore its own caches and those of `main`. Its push run saves a cache only
+where its key differs from `main`'s, as a lookup finds the caches of `main` too. That leaves two
+caches:
+
+- **Bazel downloads.** The key changes with any edit to `MODULE.bazel`, so the branch's key
+  diverges from `main`'s almost at once. The branch keeps its own copy, over 1 GB per OS.
+  There is one maintenance branch at a time, for the series before `main`, so the copy fits
+  in the 10 GB.
+- **Third-party C++ libraries.** These diverge when `main` changes their versions, flags or
+  toolchain.
+
+The daily jobs run on `main` only. Run them on a pull request by hand with
+`gh workflow run ci.yml --ref <branch>`.
 
 ## Jobs
 
@@ -324,8 +349,9 @@ cancel each other, as a release moves a tag and `main` together and both push to
   `copy-artifacts`.
 - A cache that later runs restore must be saved by the push run on `main`, or for a daily job
   by the daily run.
-- `pull_request_target` and `workflow_run` workflows run from `main`, so `changelog-hints` and
-  `flaky-tests` cannot be tested by the pull request that changes them. Test them after merge.
+- `pull_request_target` workflows run from the base branch, and `workflow_run` ones from `main`,
+  so `changelog-hints` and `flaky-tests` cannot be tested by the pull request that changes them.
+  Test them after merge.
 - The push run's cache jobs, `copy-artifacts` and `prune-caches` also run only after merge.
   `prune-caches` can be run by hand.
 - A Windows job, or one whose checks can wait a day, takes the condition of the other daily jobs.

@@ -10,6 +10,7 @@ on:
   pull_request_target:
     branches:
       - main
+      - "release/**"
     # edited: a new description can change the related numbers
     types: [opened, synchronize, reopened, edited, labeled, unlabeled]
 

@@ -6,10 +6,12 @@ on:
   pull_request:
     branches:
       - main
+      - "release/**"
   merge_group:
   push:
     branches:
       - main
+      - "release/**"
   workflow_dispatch:
   workflow_call:
     inputs:
