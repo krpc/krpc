@@ -136,6 +136,26 @@ invocation, with no boxing.
  * A KSP part module field set through `BaseField.SetValue` also fires `OnValueModified`. Keep
    that call where the module reacts to the change.
 
+## Code
+
+Rules for the code itself, in every language. Its comments are under *Code comments*.
+
+ * **Search before writing.** Before adding a helper, look for one that does the job. Extend a
+   shared helper in place of writing a variant of it.
+ * **Use the shared mechanisms:**
+   * Equality: `KRPC.Utils.Equatable<T>`, with hash codes from `Hash.Of (a).And (b)`.
+   * Protobuf values on the server: `Encoder.Encode` and `Encoder.Decode`, or a generated
+     `Parser`. Only `Encoder` reads the wire format with `ReadTag`.
+   * Non-public and mod members: `Accessor` and `ModAPI`, as under *Reflection*.
+ * **Write each piece of logic once.** Logic that appears a second time in a change moves into one
+   function. Within one client, the generated code and the hand-written code share helpers.
+ * **Fix the cause.** A review finding that seems to need a flag or a special case often means
+   the structure is wrong. Check that before adding the branch.
+ * **Delete what a change leaves unused**: members, parameters, fallbacks and tests of removed
+   behavior.
+ * **Match the code around it.** Follow the naming, layout and error handling of the neighboring
+   code. A new pattern needs a reason.
+
 ## Integration tests
 
 Python tests driving a live game, in `service/*/test/`. Need a real KSP install via `KSP_DIR` or
