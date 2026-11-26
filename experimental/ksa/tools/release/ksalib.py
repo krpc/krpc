@@ -74,7 +74,7 @@ def _version():
 VERSION = _version()
 TAG = "ksa-v" + VERSION
 # Written by bazel build //experimental/ksa:release
-ARCHIVE = Path("bazel-bin") / KSA / f"krpc-ksa-{VERSION}.zip"
+ARCHIVE = Path("bazel-bin") / KSA / f"krpc-ksa-v{VERSION}.zip"
 
 
 def sections():

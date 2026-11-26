@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds the release archive, bazel-bin/experimental/ksa/krpc-ksa-<version>.zip,
+"""Builds the release archive, bazel-bin/experimental/ksa/krpc-ksa-v<version>.zip,
 and runs the tests that need no game and the docs link check. A failed link
 check only warns.
 

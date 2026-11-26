@@ -208,7 +208,7 @@ pkg_zip(
         ":release-root",
         ":release-stubs",
     ],
-    out = "krpc-ksa-%s.zip" % mod_version,
+    out = "krpc-ksa-v%s.zip" % mod_version,
 )
 
 # The tests that need no game: bazel test //experimental/ksa:test. The in-game tests run with
