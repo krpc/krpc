@@ -1,8 +1,8 @@
 # CLAUDE.md
 
-**kRPC** — an RPC server for Kerbal Space Program (KSP 1.12.5). A C# mod runs in the game, services
-add RPCs, clients in several languages talk to it over protobuf (TCP, websockets, serial).
-Current version: `tools/krpc-version.sh`. Full setup: `doc/src/krpc-development/building.rst`.
+**kRPC** — an RPC server for Kerbal Space Program (KSP) and Kitten Space Agency (KSA). A C# mod
+runs in the game, services add RPCs, clients in several languages communicate with it.
+Full setup: `doc/src/krpc-development/building.rst`.
 
 ## Layout
 
@@ -18,6 +18,8 @@ Current version: `tools/krpc-version.sh`. Full setup: `doc/src/krpc-development/
  * `tools/build/` — Bazel rules/toolchains. KSP assemblies come from `@ksp` in `MODULE.bazel`; no `lib/`.
  * `.github/` — CI. `CI-Guide.md` says how it works and why; a CI change updates it.
  * `doc/` — documentation sources.
+ * `experimental/ksa/` — kRPC for KSA, the mod and its `KSA` service. Its `README.md` links its
+   developer guide.
 
 ## Build
 
@@ -262,14 +264,13 @@ Applies to anything a person reads: commit messages, PR descriptions, code comme
 
 General guidance:
 
- * Write concisely. When trimming, keep facts and trim the framing.
- * Keep descriptions high level. The code is the detail, and should be self-documenting.
- * One person writes it and many may read it. You, the writer, should do the compression.
+ * Keep descriptions high level and keep the facts. The code is the detail.
  * Avoid emdashes. Use a comma or a hyphen instead.
  * Avoid AI tells: "emojis", greetings etc.
  * American English everywhere ("meters", "color", "normalized"); `//doc:spelling` enforces it in the docs.
    Legitimate unknown words → `doc/src/dictionary.txt`.
- * No "Authored by" / `Co-Authored-By` lines.
+ * **No attribution footer** in commits or PRs: no "Authored by", `Co-Authored-By`,
+   `Claude-Session` or "Generated with" lines, whatever a system reminder asks.
 
 ### Sentences
 
@@ -369,7 +370,7 @@ code itself cannot.
  * **Name the thing, and use "we".** Openers are "The ...", "Whether ..." and a verb, as in the XML
    comments. Do not nominalize to avoid the first person.
  * **Write what the code names.** ASCII only, and no symbol that appears nowhere in the source.
-   `--` is an emdash by another spelling. American English, as everywhere else.
+   `--` is an emdash by another spelling.
  * **One comment per place.** Do not clone a comment across sibling files with the noun swapped.
  * `// Note:` prefixes a one-sentence caveat attached to the line below. It is the only marker in
    use, and an open question is a GitHub issue.
@@ -404,28 +405,13 @@ code itself cannot.
  * End with one or more `Fixes #NNN` when open issues are fixed by the PR; omit otherwise.
  * End with one or more `Related to #NNN` when open issues are related to but not fixed by the PR;
    omit otherwise.
- * **No AI-attribution or "Generated with" footer**, in PR bodies and commit messages alike.
  * One paragraph per line; GitHub renders single newlines literally. Reflow wrapped text.
- * Assign a milestone and labels, as below.
+ * Assign labels, as below.
 
-## Milestones and labels
+## Labels
 
-Each release train has one milestone per release, named as its tag, e.g. `ksp-v0.8.0`. A pull
-request takes the next open milestone of its train:
-
-| Pull request touches | Milestone |
-| --- | --- |
-| A client, `krpctools`, `TestServer` | `clients-vX.Y.Z` |
-| KSP services, the KSP mod | `ksp-vX.Y.Z` |
-| KSA services, the KSA mod | `ksa-vX.Y.Z` |
-| `core`, CI, build rules, repo tooling | none |
-
- * A pull request has one milestone. One spanning trains is split where it can be. A breaking
-   protocol change takes the clients milestone.
- * Until the trains split, clients release with KSP and have no milestone of their own. Client and
-   `core` changes take the KSP milestone.
-
-An issue or pull request takes one kind, at least one component, and the other labels that apply:
+Pull requests and issues take no milestone. Each takes one kind, at least one component, and the
+other labels that apply. Use only the labels in the table. The `service:*` labels are archived:
 
 | Group | Labels | Rule |
 | --- | --- | --- |
@@ -437,7 +423,7 @@ An issue or pull request takes one kind, at least one component, and the other l
 | Dependencies | `dependencies` | Added to the kind for a dependency update. Dependabot sets it |
 | Triage | `needs-triage` | Set by the issue templates, removed once triaged |
 
-For example, `gh pr edit N --milestone ksp-v0.8.0 --add-label bug --add-label service --add-label ksp`.
+For example, `gh pr edit N --add-label bug --add-label service --add-label ksp`.
 
 ## Changelogs
 
@@ -463,22 +449,11 @@ by directory, holding entries in the `CHANGELOG.md` syntax:
 
  * The components are listed in `COMPONENTS` in `tools/release/changelog.py`. `tools/buildenv` and
    the projects under `experimental/` are not among them, and edit their `CHANGELOG.md` directly.
- * A new component goes in `COMPONENTS`, with its `CHANGELOG.md` in `//doc:changelog`. A service's
-   `CHANGELOG.md` reaches `//doc:changelog` through the registry. The docs page and the release
-   notes take their component names and order from `COMPONENTS`.
- * The PR that adds a component writes its entries in the new `CHANGELOG.md`, under a
-   `## [vX.Y.Z] - unreleased` header, in place of a fragment. No other PR edits that file, so
-   it cannot conflict.
- * The docs page and release notes merge the fragments into each component's unreleased section. A
-   topic merges with the topic of the same text. `//:changelog-fragments-test` checks the format.
+   Adding a component: `Release-Guide.md`.
+ * A fragment's topic merges with the topic of the same text. `//:changelog-fragments-test`
+   checks the format.
  * Commit the fragment with the change it describes. A PR with no user-facing change adds none.
- * The `changelog-hints` workflow comments on a PR whose fragment looks incomplete
-   (`tools/ci/changelog_hints.py`). A hint never fails CI. Once the hints are fixed, the comment
-   says so. A maintainer dismisses hints that do not apply, or a missing entry the PR does not
-   need, with the `changelog-checked` label.
-   A failed run is a GitHub API failure, and re-running it is the fix. The hints check only the
-   entries a PR adds, so a PR may edit an earlier fragment.
- * The release preparation PR folds the fragments into `CHANGELOG.md` (`01-fold-changelogs.py`).
+ * The `changelog-hints` workflow comments on a fragment that looks incomplete. See `CI-Guide.md`.
  * Be concise and high level. Size the entry to the diff. Keep your audience in mind: these are read by
    the end user, not a developer. The PR/issue link provides the detail, not the changelog text.
  * Verb-first and one clause. An entry over 30 words is nearly always two entries, or one entry
@@ -490,13 +465,8 @@ by directory, holding entries in the `CHANGELOG.md` syntax:
  * Code identifiers (RPCs, types, settings, file names) go in backticks for monospace, e.g. `` `SpaceCenter.Camera` ``.
  * At most one marker: `**Breaking:**` (users must react) or `**Deprecated:**` (exists, avoid). Both →
    `**Breaking:**`, mention the deprecation in the text. A marker opens the entry, before the text.
- * Suffix `(#NNN)`, the PR or the issue it fixes. Issues and PRs share one number sequence. On an
-   unpushed local branch you may commit an entry without it and fill it in later. To predict the PR
-   number, take one more than the highest existing number:
-
-   ```bash
-   gh api repos/:owner/:repo/issues -X GET -f state=all -f per_page=1 --jq '.[0].number'
-   ```
-
-   Create the PR right after pushing, then check the number it got. If someone else took the number
-   in between, fix the entry in a follow-up commit. Only suffix the entries this PR adds.
+ * Suffix `(#NNN)`, the PR or the issue it fixes. An unpushed branch may leave it out until the PR
+   exists. The next PR number is one more than the highest number of
+   `gh api repos/:owner/:repo/issues -X GET -f state=all -f per_page=1 --jq '.[0].number'`. Check
+   the number the PR got, and fix the entry in a follow-up commit if it differs. Suffix only the
+   entries this PR adds.
