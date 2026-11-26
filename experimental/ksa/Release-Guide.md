@@ -46,7 +46,7 @@ branch such as `release/0.8` ([release branches](../../Release-Guide.md#release-
 
 ## 2. Build and Tag
 
-5. `30-build.py` - builds `bazel-bin/experimental/ksa/krpc-ksa-X.Y.Z.zip` with
+5. `30-build.py` - builds `bazel-bin/experimental/ksa/krpc-ksa-vX.Y.Z.zip` with
    `//experimental/ksa:release`, against the KSA install in `KSA_DIR`, and runs
    `//experimental/ksa:test` and the docs link check. A link can break after step 2, so a failed
    link check only warns.
