@@ -23,8 +23,6 @@ permissions:
 
 jobs:
   notify:
-    # A push run of ci only refreshes the caches, and runs no conformance tests
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.event != 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

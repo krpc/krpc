@@ -18,8 +18,9 @@ outputs:
 # A Bazel disk cache holding the third-party C++ libraries the clients build
 # against: protobuf, abseil, zlib and googletest. These take most of a C++ job's
 # compile time. A job using JSON builds them twice, the second time for the
-# protoc plugin that generates the well-known types. The C++ test job saves the
-# cache, as its build covers every library the other jobs use.
+# protoc plugin that generates the well-known types. The C++ test jobs and
+# update-caches save the cache, as their build covers every library the other
+# jobs use.
 #
 # The key is a hash of the libraries' actions, as aquery prints them. It
 # changes with their versions, the build flags and, on Windows, the MSVC paths

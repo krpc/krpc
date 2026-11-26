@@ -8,10 +8,6 @@ on:
       - main
       - "release/**"
   merge_group:
-  push:
-    branches:
-      - main
-      - "release/**"
   workflow_dispatch:
   workflow_call:
     inputs:
@@ -35,7 +31,6 @@ jobs:
   # `cpp-cache` restores the third-party C++ libraries
   linux:
     name: linux-${{ matrix.name }}
-    if: github.event_name != 'push'
     strategy:
       fail-fast: false
       matrix:
@@ -287,7 +282,6 @@ jobs:
           key: ${{ steps.cpp-cache.outputs.key }}
 
   linux-build-krpc:
-    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
@@ -319,7 +313,6 @@ jobs:
           path: bazel-bin/tools/krpctools/krpctools-*.whl
 
   linux-test-client-python:
-    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
@@ -392,7 +385,6 @@ jobs:
         run: PYTHONPATH=testee python tools/ci/smoke_test_tools.py
 
   linux-build-genfiles:
-    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
@@ -416,7 +408,6 @@ jobs:
 
   linux-build-csharp-sln:
     needs: linux-build-genfiles
-    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
@@ -483,7 +474,6 @@ jobs:
         run: bazelisk test //:csproj-test
 
   linux-test-client-cnano:
-    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
@@ -652,19 +642,14 @@ jobs:
         uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
-        with:
-          long-version: ${{ github.event_name != 'push' }}
       - name: cpp-cache
         id: cpp-cache
         uses: ./.github/actions/bazel-disk-cache
         with:
           bazelrc: $HOME/.bazelrc
-          lookup-only: ${{ github.event_name == 'push' }}
       - name: build
-        if: github.event_name != 'push' || steps.cpp-cache.outputs.cache-hit != 'true'
         run: bazel build //client/cpp:cpp
       - name: test
-        if: github.event_name != 'push' || steps.cpp-cache.outputs.cache-hit != 'true'
         run: bazel test //client/cpp:test
       - name: flaky-tests
         if: ${{ !cancelled() }}
@@ -677,9 +662,7 @@ jobs:
         with:
           path: ${{ steps.cpp-cache.outputs.path }}
           key: ${{ steps.cpp-cache.outputs.key }}
-      # On a push, copy-artifacts uploads the merge queue run's archive
       - name: upload-artifact
-        if: github.event_name != 'push'
         uses: ./.github/actions/upload-artifact
         with:
           name: client-cpp
@@ -802,92 +785,6 @@ jobs:
           VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
         run: client/cpp/test-vcpkg-windows.sh
 
-  # On a push, gives the run the merge queue run's artifacts. Lists every
-  # artifact the jobs upload.
-  copy-artifacts:
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - name: checkout
-        uses: actions/checkout@v7
-      - name: merge-group-run
-        id: merge-group-run
-        uses: ./.github/actions/merge-group-run
-      - name: download
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/download-artifact@v8
-        with:
-          path: artifacts
-          run-id: ${{ steps.merge-group-run.outputs.run-id }}
-          github-token: ${{ github.token }}
-      - name: upload-docs-html
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/upload-artifact@v7
-        with:
-          name: docs-html
-          path: artifacts/docs-html/
-      - name: upload-client-csharp-nupkg
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/upload-artifact@v7
-        with:
-          name: client-csharp-nupkg
-          path: artifacts/client-csharp-nupkg/
-      - name: upload-client-java
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/upload-artifact@v7
-        with:
-          name: client-java
-          path: artifacts/client-java/
-      - name: upload-client-python
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/upload-artifact@v7
-        with:
-          name: client-python
-          path: artifacts/client-python/
-      - name: upload-client-lua
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/upload-artifact@v7
-        with:
-          name: client-lua
-          path: artifacts/client-lua/
-      - name: upload-client-js
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/upload-artifact@v7
-        with:
-          name: client-js
-          path: artifacts/client-js/
-      - name: upload-krpc
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/upload-artifact@v7
-        with:
-          name: krpc
-          path: artifacts/krpc/
-      - name: upload-krpctools
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/upload-artifact@v7
-        with:
-          name: krpctools
-          path: artifacts/krpctools/
-      - name: upload-genfiles
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/upload-artifact@v7
-        with:
-          name: genfiles
-          path: artifacts/genfiles/
-      - name: upload-client-cnano
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/upload-artifact@v7
-        with:
-          name: client-cnano
-          path: artifacts/client-cnano/
-      - name: upload-client-cpp
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/upload-artifact@v7
-        with:
-          name: client-cpp
-          path: artifacts/client-cpp/
-
   all-checks-passed:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -913,7 +810,6 @@ jobs:
       - windows-build-client-cpp-cmake
       - linux-build-client-cpp-vcpkg
       - windows-build-client-cpp-vcpkg
-      - copy-artifacts
     steps:
       - name: check
         run: |
