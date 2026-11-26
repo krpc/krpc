@@ -161,3 +161,13 @@ after the release. The fix is a commit on a `v<version>-docs` branch off the tag
 builds that content with the current toolchain and theme. With `--publish DIR`, it stages the
 result into the `gh-pages` checkout `DIR` and commits, for you to push. `--help` lists its other
 options.
+
+## Adding a changelog component
+
+A new component goes in `COMPONENTS` in `tools/release/changelog.py`, and its `CHANGELOG.md` in
+`//doc:changelog`. A service's `CHANGELOG.md` reaches `//doc:changelog` through the registry. The
+docs page and the release notes take their component names and order from `COMPONENTS`.
+
+The pull request that adds a component writes its entries in the new `CHANGELOG.md`, under a
+`## [vX.Y.Z] - unreleased` header, in place of a fragment. No other pull request edits that file,
+so it cannot conflict.

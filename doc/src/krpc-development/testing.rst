@@ -47,6 +47,16 @@ checks do.
 ``//doc:lint`` checks the formatting of the documentation examples at 76 columns, the width of a
 rendered code block. The C# and Java examples are wrapped to that width by hand.
 
+The ``clientgen`` and ``docgen`` tests compare the generators' output with golden files in
+``tools/krpctools/krpctools/test/``. After a change to ``TestService``, the ``KRPC`` service or a
+generator template, rewrite them and review the diff:
+
+.. code-block:: bash
+
+   bazel run //:update-goldens
+
+The target is tagged ``manual``, so ``bazel build //...`` skips it.
+
 Useful options for ``bazel test`` are:
 
 * ``--cache_test_results=false`` runs tests whose results are cached.

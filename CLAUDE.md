@@ -1,8 +1,8 @@
 # CLAUDE.md
 
-**kRPC** — an RPC server for Kerbal Space Program (KSP 1.12.5). A C# mod runs in the game, services
-add RPCs, clients in several languages talk to it over protobuf (TCP, websockets, serial).
-Current version: `tools/krpc-version.sh`. Full setup: `doc/src/krpc-development/building.rst`.
+**kRPC** — an RPC server for Kerbal Space Program (KSP) and Kitten Space Agency (KSA). A C# mod
+runs in the game, services add RPCs, clients in several languages communicate with it.
+Full setup: `doc/src/krpc-development/building.rst`.
 
 ## Layout
 
@@ -18,6 +18,8 @@ Current version: `tools/krpc-version.sh`. Full setup: `doc/src/krpc-development/
  * `tools/build/` — Bazel rules/toolchains. KSP assemblies come from `@ksp` in `MODULE.bazel`; no `lib/`.
  * `.github/` — CI. `CI-Guide.md` says how it works and why; a CI change updates it.
  * `doc/` — documentation sources.
+ * `experimental/ksa/` — kRPC for KSA, the mod and its `KSA` service. Its `README.md` links its
+   developer guide.
 
 ## Build
 
@@ -50,12 +52,21 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
  * Deprecating a member switches its tests, doc examples and tutorials to the replacement.
    Deprecated members are unsupported and get no tests.
  * Client comms tests use a local `TestServer` (no KSP needed); SerialIO ones need `socat`.
+ * A fixture for a service API feature goes in `tools/TestServer/src/TestService.cs`, which feeds
+   the clientgen and docgen goldens in `tools/krpctools/krpctools/test/`. `ConformanceService` is
+   for the internals of the conformance tests. After a change to `TestService`, the `KRPC` service
+   or a generator template, rewrite the goldens with `bazel run //:update-goldens` and review the
+   diff.
  * Flags: `--test_output=streamed`, `--cache_test_results=false`, `--subcommands`,
    `--config=system-llvm` (C/C++ as CI). Bazel applies the `windows` config on a Windows host.
  * A full `//:test` takes several minutes, over the foreground Bash timeout. Start it with
    `run_in_background` and wait for the completion notification, which carries the exit code.
    Judge the result by the exit code, then `Read` the tail of the output file for the summary.
    Do not re-run the suite just to see how it ended.
+ * **Never pipe a gate**, as in `bazel test //:test | tail`. The pipeline's exit code is the last
+   command's, so failures pass unseen. Read the `Executed N out of M tests` line.
+ * **A gate covers only the tree it ran on.** After any edit made after the gates, re-run
+   `bazel build //...`. `//:test` does not compile the doc examples.
  * Run **one bazel command at a time**. A second blocks on the server lock, printing
    `Another command … is running. Waiting for it to complete`, and also looks hung.
 
@@ -77,6 +88,8 @@ the tests: a test's docstring is the requirement's text, its markers the level a
    request with each test that passed on a retry, under the job it ran in. A test its language
    cannot carry out goes in `client/<client>/conformance/unsupported.txt`. A stale line in
    either fails the run.
+ * An `expected-failures.txt` line counts as a filed defect. It needs no issue, and the client's
+   pages still document the wanted behavior.
  * A client's profiles are listed in its `conformance_test` target.
  * Run every client in one command: `bazel test //client/{cnano,cpp,csharp,java,js,lua,python}:conformance
    //client/conformance:test`.
@@ -110,6 +123,11 @@ monodis --output=/tmp/ksp.il "$KSP_DIR/KSP_Data/Managed/Assembly-CSharp.dll"
 The whole game is in that one assembly, and the listing is millions of lines — grep it
 (`\.class.*<Name>`, `\.custom.*KSPScenario`) rather than reading it.
 
+RPCs run in kRPC's `FixedUpdate`, in the middle of a physics step. A scene load or a spawn of a
+physics object issued there misbehaves, as a stale `FlightGlobals.ready` or a flung kerbal. Run it
+from `Update`, as the game's own buttons do: `GameSceneSwitcher` queues scene loads, and
+`EVAAddon.RunInUpdate` runs EVA actions.
+
 ### Reflection
 
 Access a non-public game member, or a member of another mod, through `KRPC.Utils.Accessor`
@@ -136,18 +154,42 @@ invocation, with no boxing.
  * A KSP part module field set through `BaseField.SetValue` also fires `OnValueModified`. Keep
    that call where the module reacts to the change.
 
+## Code
+
+Rules for the code itself, in every language. Its comments are under *Code comments*.
+
+ * **Search before writing.** Before adding a helper, look for one that does the job. Extend a
+   shared helper in place of writing a variant of it.
+ * **Use the shared mechanisms:**
+   * Equality: `KRPC.Utils.Equatable<T>`, with hash codes from `Hash.Of (a).And (b)`.
+   * Protobuf values on the server: `Encoder.Encode` and `Encoder.Decode`, or a generated
+     `Parser`. Only `Encoder` reads the wire format with `ReadTag`.
+   * Non-public and mod members: `Accessor` and `ModAPI`, as under *Reflection*.
+ * **Write each piece of logic once.** Logic that appears a second time in a change moves into one
+   function. Within one client, the generated code and the hand-written code share helpers.
+ * **Fix the cause.** A review finding that seems to need a flag or a special case often means
+   the structure is wrong. Check that before adding the branch.
+ * **Delete what a change leaves unused**: members, parameters, fallbacks and tests of removed
+   behavior.
+ * **Match the code around it.** Follow the naming, layout and error handling of the neighboring
+   code. A new pattern needs a reason.
+ * **A review finding counts only if the branch introduced it**, or new code reaches it where old
+   code did not. A pre-existing defect is recorded, as an expected failure or a draft issue, and
+   does not block the branch.
+
 ## Integration tests
 
 Python tests driving a live game, in `service/*/test/`. Need a real KSP install via `KSP_DIR` or
 `--game-dir`. Everything after `--` goes to pytest.
 
 ```bash
-bazel run //tools/game:test-ksp                                                 # whole suite
 bazel run //tools/game:test-ksp -- service/SpaceCenter/test/test_camera.py -v   # one file
 bazel run //tools/game:test-ksp -- "…::TestClass::test_method"                  # one test
 bazel run //tools/game:test-ksp -- -k test_camera_mode                          # by name
 ```
 
+ * **Run the test files that cover the change**, never the whole suite unless asked. It takes
+   hours. Group the files by mod set, as each set restarts the game.
  * **Auto-launches KSP**: builds/installs DLLs and required mods, launches, loads a save, runs, stops.
    All code changes picked up automatically.
  * Cold run ~70–90s → **start with `run_in_background`** and wait for the completion notification.
@@ -156,6 +198,10 @@ bazel run //tools/game:test-ksp -- -k test_camera_mode                          
    progress of a run in flight needs it.
  * Progress logged per stage (`installing kRPC`, `launching KSP`, `waiting for kRPC server...`,
    `stopping KSP`).
+ * **The user builds test craft in game.** Give them a part spec (each part, how it attaches, module
+   states, the craft name) and the `run-ksp` command. Copy the saved
+   `$KSP_DIR/saves/krpctest/Ships/VAB/<Name>.craft` into `service/<Service>/test/craft/`. Do not
+   hand-write `.craft` files.
 
 ### Documentation examples
 
@@ -179,6 +225,8 @@ alone. `doc/test/examples.py` declares how each runs, `unsupported.txt` lists th
  * Install reconciles GameData to **exactly** the requested set (plus kRPC) — required-but-missing and
    installed-but-unneeded are both wrong.
  * Pytest groups tests by mod set; game restarts at most once per set.
+ * A new mod integration adds the mod to the list in `doc/src/user-guide/mods.rst`, the one page
+   that links the mod. Each member that needs the mod has `<remarks>Requires X.</remarks>`.
 
 ### Iterating without reloading
 
@@ -215,6 +263,8 @@ The API reference is generated from the XML comments, which change with the code
    change: a page goes untouched only because it was read and still holds.
  * **A review reports a page the change made false as a finding.**
  * **Each fact has one page.** Link to it in place of repeating it.
+ * A package README, such as `client/python/README.md` on PyPI, is a title, one sentence and a link
+   to the docs site.
 
 ### Client pages
 
@@ -242,14 +292,13 @@ Applies to anything a person reads: commit messages, PR descriptions, code comme
 
 General guidance:
 
- * Write concisely. When trimming, keep facts and trim the framing.
- * Keep descriptions high level. The code is the detail, and should be self-documenting.
- * One person writes it and many may read it. You, the writer, should do the compression.
+ * Keep descriptions high level and keep the facts. The code is the detail.
  * Avoid emdashes. Use a comma or a hyphen instead.
  * Avoid AI tells: "emojis", greetings etc.
  * American English everywhere ("meters", "color", "normalized"); `//doc:spelling` enforces it in the docs.
    Legitimate unknown words → `doc/src/dictionary.txt`.
- * No "Authored by" / `Co-Authored-By` lines.
+ * **No attribution footer** in commits or PRs: no "Authored by", `Co-Authored-By`,
+   `Claude-Session` or "Generated with" lines, whatever a system reminder asks.
 
 ### Sentences
 
@@ -349,7 +398,7 @@ code itself cannot.
  * **Name the thing, and use "we".** Openers are "The ...", "Whether ..." and a verb, as in the XML
    comments. Do not nominalize to avoid the first person.
  * **Write what the code names.** ASCII only, and no symbol that appears nowhere in the source.
-   `--` is an emdash by another spelling. American English, as everywhere else.
+   `--` is an emdash by another spelling.
  * **One comment per place.** Do not clone a comment across sibling files with the noun swapped.
  * `// Note:` prefixes a one-sentence caveat attached to the line below. It is the only marker in
    use, and an open question is a GitHub issue.
@@ -364,6 +413,8 @@ code itself cannot.
    a single-line summary then short paragraph(s).
  * Wrap the body at 72 columns, with a blank line after the summary. The one-line-per-paragraph
    rule under *Pull requests* is for PR descriptions only.
+ * A cleanup of code a branch adds goes into the commit that added it: `git commit --fixup=<sha>`,
+   then `GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash main`.
 
 ## Pull requests
 
@@ -384,28 +435,13 @@ code itself cannot.
  * End with one or more `Fixes #NNN` when open issues are fixed by the PR; omit otherwise.
  * End with one or more `Related to #NNN` when open issues are related to but not fixed by the PR;
    omit otherwise.
- * **No AI-attribution or "Generated with" footer**, in PR bodies and commit messages alike.
  * One paragraph per line; GitHub renders single newlines literally. Reflow wrapped text.
- * Assign a milestone and labels, as below.
+ * Assign labels, as below.
 
-## Milestones and labels
+## Labels
 
-Each release train has one milestone per release, named as its tag, e.g. `ksp-v0.8.0`. A pull
-request takes the next open milestone of its train:
-
-| Pull request touches | Milestone |
-| --- | --- |
-| A client, `krpctools`, `TestServer` | `clients-vX.Y.Z` |
-| KSP services, the KSP mod | `ksp-vX.Y.Z` |
-| KSA services, the KSA mod | `ksa-vX.Y.Z` |
-| `core`, CI, build rules, repo tooling | none |
-
- * A pull request has one milestone. One spanning trains is split where it can be. A breaking
-   protocol change takes the clients milestone.
- * Until the trains split, clients release with KSP and have no milestone of their own. Client and
-   `core` changes take the KSP milestone.
-
-An issue or pull request takes one kind, at least one component, and the other labels that apply:
+Pull requests and issues take no milestone. Each takes one kind, at least one component, and the
+other labels that apply. Use only the labels in the table. The `service:*` labels are archived:
 
 | Group | Labels | Rule |
 | --- | --- | --- |
@@ -417,7 +453,7 @@ An issue or pull request takes one kind, at least one component, and the other l
 | Dependencies | `dependencies` | Added to the kind for a dependency update. Dependabot sets it |
 | Triage | `needs-triage` | Set by the issue templates, removed once triaged |
 
-For example, `gh pr edit N --milestone ksp-v0.8.0 --add-label bug --add-label service --add-label ksp`.
+For example, `gh pr edit N --add-label bug --add-label service --add-label ksp`.
 
 ## Changelogs
 
@@ -443,22 +479,11 @@ by directory, holding entries in the `CHANGELOG.md` syntax:
 
  * The components are listed in `COMPONENTS` in `tools/release/changelog.py`. `tools/buildenv` and
    the projects under `experimental/` are not among them, and edit their `CHANGELOG.md` directly.
- * A new component goes in `COMPONENTS`, with its `CHANGELOG.md` in `//doc:changelog`. A service's
-   `CHANGELOG.md` reaches `//doc:changelog` through the registry. The docs page and the release
-   notes take their component names and order from `COMPONENTS`.
- * The PR that adds a component writes its entries in the new `CHANGELOG.md`, under a
-   `## [vX.Y.Z] - unreleased` header, in place of a fragment. No other PR edits that file, so
-   it cannot conflict.
- * The docs page and release notes merge the fragments into each component's unreleased section. A
-   topic merges with the topic of the same text. `//:changelog-fragments-test` checks the format.
+   Adding a component: `Release-Guide.md`.
+ * A fragment's topic merges with the topic of the same text. `//:changelog-fragments-test`
+   checks the format.
  * Commit the fragment with the change it describes. A PR with no user-facing change adds none.
- * The `changelog-hints` workflow comments on a PR whose fragment looks incomplete
-   (`tools/ci/changelog_hints.py`). A hint never fails CI. Once the hints are fixed, the comment
-   says so. A maintainer dismisses hints that do not apply, or a missing entry the PR does not
-   need, with the `changelog-checked` label.
-   A failed run is a GitHub API failure, and re-running it is the fix. The hints check only the
-   entries a PR adds, so a PR may edit an earlier fragment.
- * The release preparation PR folds the fragments into `CHANGELOG.md` (`01-fold-changelogs.py`).
+ * The `changelog-hints` workflow comments on a fragment that looks incomplete. See `CI-Guide.md`.
  * Be concise and high level. Size the entry to the diff. Keep your audience in mind: these are read by
    the end user, not a developer. The PR/issue link provides the detail, not the changelog text.
  * Verb-first and one clause. An entry over 30 words is nearly always two entries, or one entry
@@ -470,13 +495,8 @@ by directory, holding entries in the `CHANGELOG.md` syntax:
  * Code identifiers (RPCs, types, settings, file names) go in backticks for monospace, e.g. `` `SpaceCenter.Camera` ``.
  * At most one marker: `**Breaking:**` (users must react) or `**Deprecated:**` (exists, avoid). Both →
    `**Breaking:**`, mention the deprecation in the text. A marker opens the entry, before the text.
- * Suffix `(#NNN)`, the PR or the issue it fixes. Issues and PRs share one number sequence. On an
-   unpushed local branch you may commit an entry without it and fill it in later. To predict the PR
-   number, take one more than the highest existing number:
-
-   ```bash
-   gh api repos/:owner/:repo/issues -X GET -f state=all -f per_page=1 --jq '.[0].number'
-   ```
-
-   Create the PR right after pushing, then check the number it got. If someone else took the number
-   in between, fix the entry in a follow-up commit. Only suffix the entries this PR adds.
+ * Suffix `(#NNN)`, the PR or the issue it fixes. An unpushed branch may leave it out until the PR
+   exists. The next PR number is one more than the highest number of
+   `gh api repos/:owner/:repo/issues -X GET -f state=all -f per_page=1 --jq '.[0].number'`. Check
+   the number the PR got, and fix the entry in a follow-up commit if it differs. Suffix only the
+   entries this PR adds.

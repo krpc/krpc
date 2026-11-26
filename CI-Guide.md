@@ -303,6 +303,10 @@ fragment, and edits it as the pull request changes. It runs on `pull_request_tar
 same reason as `flaky-tests`, reads the pull request through the API, and runs none of its code.
 A hint never fails the check, and the check is not required.
 
+The hints check only the entries a pull request adds, so it may edit an earlier fragment. Once the
+hints are fixed, the comment says so. A maintainer dismisses hints that do not apply with the
+`changelog-checked` label. A failed run is a GitHub API failure, and re-running it is the fix.
+
 ## Documentation Site
 
 `docs` publishes into the `gh-pages` branch, one directory per version. A push to `main`
