@@ -8,7 +8,8 @@ configs of `.bazelrc`.
 
 | Workflow | Runs on | Does |
 | --- | --- | --- |
-| `ci` | pull request to `main` or `release/**`, merge queue, push to `main` or `release/**`, manual, `daily` | Builds and tests everything, and keeps the caches |
+| `ci` | pull request to `main` or `release/**`, merge queue, manual, `daily` | Builds and tests everything |
+| `post-merge` | push to `main` or `release/**` | Keeps the caches, and attaches the merge queue run's artifacts |
 | `daily` | 04:37 UTC each day, manual | Runs `ci` on `main` with the daily jobs |
 | `prune-caches` | push to `main`, manual | Deletes the caches no later run can restore |
 | `flaky-tests` | completion of a `ci` run | Comments on the pull request when a test passed only on a retry |
@@ -26,12 +27,12 @@ up to date" is off, as the queue already tests each pull request on the latest `
 cancelled. One required check means the branch protection settings never change when a job is
 added or renamed. A new job goes in its `needs` list, or it gates nothing.
 
-The queue fast-forwards `main` to the commit its run tested. So the push run that follows skips
-the build and test jobs, and only refreshes the caches that later runs restore (see
-[Caches](#caches)). `copy-artifacts` attaches the merge queue run's artifacts to the push run,
-so `main` still lists its builds. Its list of artifacts must match what the jobs upload. The
+The queue fast-forwards `main` to the commit its run tested, so the push runs `post-merge` in
+place of `ci`. Its `update-caches` job refreshes the caches that later runs restore (see
+[Caches](#caches)). Its `copy-artifacts` job attaches the merge queue run's artifacts, so `main`
+still lists its builds. Its list of artifacts must match what the `ci` jobs upload. The
 `merge-group-run` action finds the merge queue run for the pushed commit, and waits for it to
-finish. A direct push to `main` has no merge queue run and builds nothing.
+finish. A direct push to `main` has no merge queue run, and attaches nothing.
 
 A failed job removes the pull request from the queue once `all-checks-passed` reports. Failed
 jobs cannot be re-run into the same queue entry, and queueing the pull request again starts a
@@ -49,7 +50,7 @@ target a pattern, so a maintenance branch has no queue. Its ruleset requires `al
 on a pull request that is up to date with the branch. For a branch with few pull requests, this
 gives the guarantee of the queue.
 
-Its pull requests restore its own caches and those of `main`. Its push run saves a cache only
+Its pull requests restore its own caches and those of `main`. `post-merge` saves a cache only
 where its key differs from `main`'s, as a lookup finds the caches of `main` too. That leaves two
 caches:
 
@@ -71,8 +72,7 @@ Each component is built and tested in a job of its own, on Linux and on Windows.
 component then shows as the job that failed, and the jobs run in parallel. Jobs that differ only
 in their Bazel targets and artifact are entries of the `linux` and `windows` matrices, a few
 lines each. A job stays outside a matrix when it produces more than one artifact, runs something
-other than Bazel, saves a cache on a push, runs on other events than the matrix, or is named in
-another job's `needs`. A job-level `if` and `needs` cannot address a single matrix entry.
+other than Bazel, runs on other events than the matrix, or is named in another job's `needs`. A job-level `if` and `needs` cannot address a single matrix entry.
 
 The doc examples are compiled and clang-tidied in Linux jobs of their own. The C++ examples take
 most of that time, as each parses every generated service header. `build-docs-examples` compiles
@@ -219,10 +219,10 @@ every later Bazel command in a job uses it. Both include `ci`. Keeping the setti
 GitHub evicts a cache unused for 7 days, and the least recently used ones over the repository's
 10 GB. A cache saved by a pull request run is visible only to that pull request, and one saved
 by a merge queue run is lost with the queue's branch. So the caches later runs restore are saved
-by the push run on `main`, which runs a job only to fill a missing cache. Each of its jobs checks
-its keys without restoring them. The Bazel download cache is the exception: it is restored, as
-computing the C++ disk cache key fetches repositories. The daily jobs run on `main` only in the
-daily run, which saves their caches.
+by `update-caches`, in the `post-merge` run of a push to `main`. It checks each key without
+restoring the cache, and builds only to fill a missing one. The Bazel download cache is the
+exception: it is restored, as computing the C++ disk cache key fetches repositories. The daily
+jobs run on `main` only in the daily run, which saves their caches.
 
 The daily jobs' caches are touched once a day at most, so they are the least recently used, and
 the first evicted. Two things keep them:
@@ -243,7 +243,7 @@ changes one of those, such as the compiler.
 | --- | --- | --- |
 | Bazel downloads | OS, Bazel version, `MODULE.bazel` and the Python lock file | Every job that misses it |
 | Bazelisk | OS and `.bazelversion` | Every job that misses it |
-| Third-party C++ libraries | The libraries' Bazel actions | `linux-test-client-cpp`, `windows-test-client-cpp` |
+| Third-party C++ libraries | The libraries' Bazel actions | `update-caches`, `windows-test-client-cpp` |
 | vcpkg binaries | Package set, runner image and ABI hashes | The vcpkg actions |
 | ccache | Job, compiler, CMake template and vcpkg ABI hashes | The CMake consumer jobs |
 
@@ -261,9 +261,10 @@ fetch, which keeps the cache from growing. Bazelisk's download of Bazel itself i
 The conformance testees use protobuf's JSON support, which compiles protobuf, abseil and zlib
 twice, once for the protoc plugin that generates the well-known types. The `bazel-disk-cache`
 action keeps a Bazel disk cache of those libraries, keyed on a hash of their `aquery` actions,
-which changes with their versions, the build flags and, on Windows, the MSVC paths. The C++ test
-jobs save it, and the C-nano, benchmark and doc example jobs restore it. Without it, compiling
-these libraries is most of a C++ job's time.
+which changes with their versions, the build flags and, on Windows, the MSVC paths.
+`update-caches` saves it on Linux and `windows-test-client-cpp` on Windows, and the C++, C-nano,
+benchmark and doc example jobs restore it. Without it, compiling these libraries is most of a C++
+job's time.
 
 ### vcpkg
 
@@ -355,12 +356,12 @@ cancel each other, as a release moves a tag and `main` together and both push to
   its package's suite. A new suite goes in `//:test` and in a job.
 - A new job goes in the `needs` of `all-checks-passed`. A new artifact goes in the list in
   `copy-artifacts`.
-- A cache that later runs restore must be saved by the push run on `main`, or for a daily job
-  by the daily run.
+- A cache that later runs restore must be saved by `update-caches`, or for a daily job by the
+  daily run.
 - `pull_request_target` workflows run from the base branch, and `workflow_run` ones from `main`,
   so `changelog-hints` and `flaky-tests` cannot be tested by the pull request that changes them.
   Test them after merge.
-- The push run's cache jobs, `copy-artifacts` and `prune-caches` also run only after merge.
+- `post-merge` and `prune-caches` also run only after merge.
   `prune-caches` can be run by hand.
 - A Windows job, or one whose checks can wait a day, takes the condition of the other daily jobs.
 - `flaky-tests` reports the flakes of a pull request or merge queue run. A daily run's flakes are

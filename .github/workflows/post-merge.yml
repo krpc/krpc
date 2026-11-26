@@ -1,0 +1,137 @@
+name: post-merge
+
+# Runs after a push to main or a release branch. The merge queue or the pull
+# request has already tested the commit, so this runs no tests. It keeps the
+# caches and lists the builds of the commit. CI-Guide.md says how.
+on:
+  push:
+    branches:
+      - main
+      - "release/**"
+
+permissions:
+  actions: read
+  contents: read
+  packages: read
+
+jobs:
+  # Saves each cache that later runs restore and the branch lacks: the Bazel
+  # downloads and Bazelisk, through the setup, and the third-party C++
+  # libraries. For a missing libraries cache it builds the C++ client and its
+  # tests, which cover every library the ci jobs use.
+  update-caches:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    container:
+      image: ghcr.io/krpc/buildenv:3.17.0
+      options: --user runner:runner
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+      - name: setup
+        uses: ./.github/actions/build-setup
+        with:
+          long-version: false
+      - name: cpp-cache
+        id: cpp-cache
+        uses: ./.github/actions/bazel-disk-cache
+        with:
+          bazelrc: $HOME/.bazelrc
+          lookup-only: true
+      - name: build-cpp
+        if: steps.cpp-cache.outputs.cache-hit != 'true'
+        run: bazel build //client/cpp:cpp //client/cpp:test
+      - name: save-cpp-cache
+        if: steps.cpp-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ steps.cpp-cache.outputs.path }}
+          key: ${{ steps.cpp-cache.outputs.key }}
+
+  # Gives this run the artifacts of the merge queue run of ci, so the branch
+  # lists its builds. Lists every artifact the ci jobs upload.
+  copy-artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+      - name: merge-group-run
+        id: merge-group-run
+        uses: ./.github/actions/merge-group-run
+      - name: download
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+          run-id: ${{ steps.merge-group-run.outputs.run-id }}
+          github-token: ${{ github.token }}
+      - name: upload-docs-html
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: docs-html
+          path: artifacts/docs-html/
+      - name: upload-client-csharp-nupkg
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: client-csharp-nupkg
+          path: artifacts/client-csharp-nupkg/
+      - name: upload-client-java
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: client-java
+          path: artifacts/client-java/
+      - name: upload-client-python
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: client-python
+          path: artifacts/client-python/
+      - name: upload-client-lua
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: client-lua
+          path: artifacts/client-lua/
+      - name: upload-client-js
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: client-js
+          path: artifacts/client-js/
+      - name: upload-krpc
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: krpc
+          path: artifacts/krpc/
+      - name: upload-krpctools
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: krpctools
+          path: artifacts/krpctools/
+      - name: upload-genfiles
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: genfiles
+          path: artifacts/genfiles/
+      - name: upload-client-cnano
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: client-cnano
+          path: artifacts/client-cnano/
+      - name: upload-client-cpp
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: client-cpp
+          path: artifacts/client-cpp/
