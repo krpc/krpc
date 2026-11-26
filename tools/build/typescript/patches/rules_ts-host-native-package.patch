@@ -1,0 +1,29 @@
+--- a/ts/private/npm_repositories.bzl
++++ b/ts/private/npm_repositories.bzl
+@@ -82,7 +82,8 @@
+ 
+ def _link_native_packages(rctx, version, native_typescript_version):
+     native_package_integrities = native_typescript_version.get("native_package_integrities", {})
+-    native_packages = _declared_native_packages(rctx)
++    host = _host_native_package(rctx)
++    native_packages = [p for p in _declared_native_packages(rctx) if p == host]
+     missing_native_packages = [
+         native_package
+         for native_package in native_packages
+@@ -120,6 +121,16 @@
+ 
+     return native_package_labels, native_package_targets
+ 
++def _host_native_package(rctx):
++    """The native package of the host, such as typescript-linux-x64, the one tsc runs."""
++    os = rctx.os.name.lower()
++    if os.startswith("mac"):
++        os = "darwin"
++    elif os.startswith("windows"):
++        os = "win32"
++    arch = {"aarch64": "arm64", "amd64": "x64", "x86_64": "x64"}.get(rctx.os.arch, rctx.os.arch)
++    return "typescript-{}-{}".format(os, arch)
++
+ def _declared_native_packages(rctx):
+     package_json = json.decode(rctx.read(rctx.path("package/package.json")))
+     optional_dependencies = package_json.get("optionalDependencies", {})

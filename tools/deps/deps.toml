@@ -130,6 +130,7 @@ at = ['MODULE.bazel: bazel_dep(name = "aspect_rules_js", version = "{version}")'
 name = "aspect_rules_ts"
 version = "3.10.1"
 source = "bcr:aspect_rules_ts"
+note = "rebase tools/build/typescript/patches/rules_ts-host-native-package.patch if it no longer applies"
 at = ['MODULE.bazel: bazel_dep(name = "aspect_rules_ts", version = "{version}")']
 
 # ----------------------- Toolchains -----------------------------------------------------
