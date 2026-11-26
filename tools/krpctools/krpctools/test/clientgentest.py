@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 from ..clientgen.docparser import DocumentationMarkupWarning
 from ..clientgen.generator import Generator
 from ..definitions import Definitions
+from .golden import check_golden
 
 # A mixin, so that the base class is not collected as a test case of its own
 if TYPE_CHECKING:
@@ -116,18 +117,7 @@ class ClientGenTestCase(_Base):
     def run_test(self, service_name, name, deps=()):
         defs = self.load_with_deps(name, deps)
         actual = self.generate(service_name, defs)
-
-        # with open('/home/alex/workspaces/krpc/krpc/' +
-        #           'tools/krpctools/krpctools/test/' +
-        #           'clientgen-'+name+'-'+self.language+'.txt', 'w') as f:
-        #     f.write(actual)
-
-        expected = (
-            files("krpctools.test")
-            .joinpath("clientgen-" + name + "-" + self.language + ".txt")
-            .read_text(encoding="utf-8")
-        )
-        self.assertEqual(expected, actual)
+        check_golden(self, "clientgen-%s-%s.txt" % (name, self.language), actual)
 
         # A service may be defined after one that uses its types, so the definitions in the
         # reverse order have to generate the same thing

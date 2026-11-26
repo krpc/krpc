@@ -276,6 +276,19 @@ py_test(
     deps = deps,
 )
 
+# Runs krpctoolstest with each golden check rewriting its golden file in the source tree. Run it
+# as //:update-goldens.
+py_test(
+    name = "update-goldens",
+    size = "medium",
+    src = ":krpctools",
+    env = {"KRPCTOOLS_UPDATE_GOLDENS": "true"},
+    tags = ["manual"],
+    tests = ["krpctools/test"],
+    visibility = ["//:__pkg__"],
+    deps = deps,
+)
+
 # The names of client/conformance/names.json, which Starlark cannot read, and the snake case
 # clientgen.bzl gives each. naming-test checks the list against the file.
 NAMING_TEST_NAMES = [

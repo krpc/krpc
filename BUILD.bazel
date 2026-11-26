@@ -224,6 +224,14 @@ test_suite(
     ] + service_targets("test"),
 )
 
+# Rewrites the clientgen and docgen golden files from the current generators and fixtures:
+# bazel run //:update-goldens
+alias(
+    name = "update-goldens",
+    actual = "//tools/krpctools:update-goldens",
+    tags = ["manual"],
+)
+
 filegroup(
     name = "csproj",
     testonly = True,

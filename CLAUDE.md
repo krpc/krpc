@@ -54,9 +54,9 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
  * Client comms tests use a local `TestServer` (no KSP needed); SerialIO ones need `socat`.
  * A fixture for a service API feature goes in `tools/TestServer/src/TestService.cs`, which feeds
    the clientgen and docgen goldens in `tools/krpctools/krpctools/test/`. `ConformanceService` is
-   for the internals of the conformance tests. No target regenerates the goldens: uncomment the
-   write block in `clientgentest.py` and `docgentest.py`. Regenerate them after a change to
-   `TestService`, the `KRPC` service or a generator template.
+   for the internals of the conformance tests. After a change to `TestService`, the `KRPC` service
+   or a generator template, rewrite the goldens with `bazel run //:update-goldens` and review the
+   diff.
  * Flags: `--test_output=streamed`, `--cache_test_results=false`, `--subcommands`,
    `--config=system-llvm` (C/C++ as CI). Bazel applies the `windows` config on a Windows host.
  * A full `//:test` takes several minutes, over the foreground Bash timeout. Start it with
