@@ -3,7 +3,7 @@
 
 Sets the versions in config.bzl, and adds
 "Support KSA v<version>" to the unreleased section of CHANGELOG.md, creating a
-section for the next patch version if there is none. For a new StarMap, it
+section for the ksa train's version in the root config.bzl if there is none. For a new StarMap, it
 downloads the release zip to take its sha256.
 
 Commits nothing: the change goes in a pull request with the fixes the new
@@ -45,11 +45,6 @@ def starmap_sha256(version):
         ) from exception
 
 
-def next_patch(version):
-    major, minor, patch = version.split(".")
-    return f"{major}.{minor}.{int(patch) + 1}"
-
-
 def update_changelog(ksa_version):
     """Add or replace the KSA support entry of the unreleased section.
 
@@ -59,7 +54,12 @@ def update_changelog(ksa_version):
     lines = ksalib.CHANGELOG.read_text().splitlines()
     sections = ksalib.sections()
     if not sections or not sections[0].unreleased:
-        version = next_patch(sections[0].version) if sections else "0.1.0"
+        version = ksalib.VERSION
+        if any(section.version == version for section in sections):
+            raise lib.ReleaseError(
+                f"{ksalib.CHANGELOG} already releases v{version}; "
+                "run 03-bump-version.py on the release preparation branch"
+            )
         start = sections[0].start if sections else len(lines)
         lines[start:start] = [f"## [v{version}] - unreleased", "", "- Mod", entry, ""]
     else:

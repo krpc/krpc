@@ -41,20 +41,17 @@ KSA mod for the 0.8 clients while `main` works towards 1.0.
 ## 1. Prepare
 
 A release preparation pull request takes the release branch from the version being released to
-the next one. `version` in `config.bzl` names the version being released.
+the next one. `versions` in `config.bzl` holds the version each release train works towards. A
+release takes every train but `ksa`, at the version of the `ksp` train. The preflight step checks that they match. Every release step sets
+`KRPC_RELEASE=1` for the builds it runs, so they are release builds, with no `-dev` marker.
 
 1. Create a branch off the release branch, such as `release-vx.y.z`.
 2. `tools/release/01-fold-changelogs.py` - writes the fragments in `changelog.d/` into each
    component's `CHANGELOG.md`, deletes them, and drops the ` - unreleased` suffix. Reorder and edit
    the merged entries by hand, then commit everything as one commit, the fold commit. Components
-   without user-facing changes get no section and are omitted from the release notes. If
-   `core/src` changed since `core_version` in `config.bzl` was last bumped, the step lists the
-   commits and asks how to bump it: major for a change that breaks the API the server and service
-   assemblies compile against, minor for an addition, patch for a fix. `core_version` is the
-   assembly version of `KRPC.Core.dll`, which every game mod ships.
-3. `tools/release/02-bump-version.py` - sets `version` in `config.bzl` to the next version to work
-   towards, and commits. Builds from the release branch are then stamped as pre-releases of that
-   version.
+   without user-facing changes get no section and are omitted from the release notes.
+3. `tools/release/02-bump-version.py` - sets every train's version in `config.bzl` to the next
+   version to work towards, and commits.
 4. Push the branch, open the pull request, and run every CI job on it by hand:
    `gh workflow run ci.yml --ref release-vx.y.z`. The pull request and the merge queue skip the
    daily jobs, such as Windows and the CMake and vcpkg builds. Add the pull request to the merge

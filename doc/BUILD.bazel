@@ -5,7 +5,7 @@ load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@npm//client/js:@biomejs/biome/package_json.bzl", biome = "bin")
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
 load("@rules_python//python/entry_points:py_console_script_binary.bzl", "py_console_script_binary")
-load("//:config.bzl", "version")
+load("//:config.bzl", "dev", "versions")
 load("//doc:changelog.bzl", "changeloggen")
 load("//doc:check_documented.bzl", "check_documented_test")
 load("//doc:macros.bzl", "api_toctree")
@@ -21,8 +21,9 @@ load("//tools/doc_examples:defs.bzl", "cc_binary_multiple", "csharp_binary_multi
 load("//tools/krpctools:docgen.bzl", "docgen")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 
-# The release version, without the suffix CI stamps on a dev build
-package_version = version.partition("-")[0]
+# The docs follow the KSP train. Until the changelogs are per train, every component's unreleased
+# section is headed with its version
+version = versions["ksp"]
 
 filegroup(
     name = "doc",
@@ -158,7 +159,6 @@ changeloggen(
     name = "changelog",
     out = "src/changelog.rst",
     changelogs = [
-        "//core:CHANGELOG.md",
         "//server:CHANGELOG.md",
     ] + ["//service/%s:CHANGELOG.md" % s.package for s in SERVICES] + [
         "//client/cnano:CHANGELOG.md",
@@ -171,7 +171,7 @@ changeloggen(
         "//tools/krpctools:CHANGELOG.md",
     ],
     fragments = ["//:changelog-fragments"],
-    version = package_version,
+    version = version,
 )
 
 py_console_script_binary(
@@ -258,13 +258,10 @@ py_library(
     ],
 )
 
-# Release builds carry a plain "x.y.z" version; CI stamps dev builds with a
-# "-<build>-<sha>" suffix (the build-setup action's version step). A dev build is
-# published under /dev/ and stamped "dev" so the theme's version switcher and
-# old-version warning banner flag it as unreleased; a release publishes under
-# /<version>/ stamped with its number. Deriving the channel from the version
-# string keeps the docs in step with the version everything else builds with.
-docs_version = "dev" if "-" in version else version
+# A dev build is published under /dev/ and stamped "dev" so the theme's version
+# switcher and old-version warning banner flag it as unreleased; a release
+# publishes under /<version>/ stamped with its number.
+docs_version = "dev" if dev else version
 
 genrule(
     name = "conf",
@@ -275,7 +272,7 @@ genrule(
     # footer at page-load time via build-info.json, keeping the HTML identical
     # from one commit to the next.
     cmd = ("sed -e 's/%VERSION%/" + docs_version + "/g' -e 's/%SUBPATH%/" + docs_version +
-           "/g' -e 's/%PACKAGE_VERSION%/" + package_version + "/g' \"$<\" > \"$@\""),
+           "/g' -e 's/%PACKAGE_VERSION%/" + versions["java"] + "/g' \"$<\" > \"$@\""),
 )
 
 sphinx_build(
@@ -692,7 +689,7 @@ java_binary_multiple(
         "-Xlint:all",
     ],
     deps = [
-        "//client/java:krpc-jar",
+        "//client/java:krpc",
         "@maven//:com_google_protobuf_protobuf_java",
         "@maven//:org_javatuples_javatuples",
     ],
@@ -805,6 +802,7 @@ py_pyright_test(
     python_version = "3.12",
     deps = [
         "//:changelog",
+        "//:versions",
         "//client/python:krpc_lib",
         "@krpc_pypi//cogapp",
         "@krpc_pypi//spylls",

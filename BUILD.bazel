@@ -1,5 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_library", "py_test")
-load("//:config.bzl", "avc_version", "ksp_avc_version_max", "ksp_avc_version_min", "python_version", "version")
+load("//:config.bzl", "avc_version", "ksp_avc_version_max", "ksp_avc_version_min", "readable_version", "version_file", "versions")
 load("//service:build.bzl", "service_targets", "service_zip_path_map")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
@@ -77,18 +77,12 @@ genrule(
     visibility = ["//visibility:public"],
 )
 
-genrule(
-    name = "version",
-    outs = ["VERSION.txt"],
-    cmd = 'echo "%s" > "$@"' % version,
-    visibility = ["//visibility:public"],
-)
+version = versions["ksp"]
 
-genrule(
-    name = "python_version",
-    outs = ["version.py"],
-    cmd = 'echo "__version__ = \\"%s\\"" > "$@"' % python_version,
-    visibility = ["//visibility:public"],
+version_file(
+    name = "version",
+    version = version,
+    visibility = ["//server:__pkg__"],
 )
 
 ksp_avc_version = """{
@@ -99,7 +93,12 @@ ksp_avc_version = """{
   "KSP_VERSION": { %s },
   "KSP_VERSION_MAX": { %s },
   "KSP_VERSION_MIN": { %s }
-}""" % (avc_version, ksp_avc_version_max, ksp_avc_version_max, ksp_avc_version_min)
+}""" % (
+    avc_version(version),
+    ksp_avc_version_max,
+    ksp_avc_version_max,
+    ksp_avc_version_min,
+)
 
 genrule(
     name = "ksp-avc-version",
@@ -109,7 +108,7 @@ genrule(
 
 pkg_zip(
     name = "krpc",
-    out = "krpc-%s.zip" % version,
+    out = "krpc-%s.zip" % readable_version(version),
     exclude = ["*.mdb"],
     files = [
         ":readme",
@@ -200,7 +199,9 @@ test_suite(
         "//:changelog-test",
         "//:csproj-test",
         "//:pyright-release",
+        "//:pyright-version",
         "//:ruff-release",
+        "//:ruff-version",
         "//client/cnano:test",
         "//client/conformance:test",
         "//client/cpp:test",
@@ -267,7 +268,18 @@ py_library(
     ],
     imports = ["tools/release"],
     visibility = ["//experimental/ksa/tools/release:__pkg__"],
-    deps = [":changelog"],
+    deps = [
+        ":changelog",
+        ":versions",
+    ],
+)
+
+# The reader of the versions in config.bzl, for tools/version.py and the docs index
+py_library(
+    name = "versions",
+    srcs = ["tools/release/versions.py"],
+    imports = ["tools/release"],
+    visibility = ["//doc:__pkg__"],
 )
 
 # The unreleased changelog entries, one file per pull request. Absent after a
@@ -309,4 +321,18 @@ py_pyright_test(
     size = "medium",
     srcs = glob(["tools/release/*.py"]),
     python_version = "3.12",
+)
+
+py_ruff_test(
+    name = "ruff-version",
+    size = "small",
+    srcs = ["tools/version.py"],
+)
+
+py_pyright_test(
+    name = "pyright-version",
+    size = "small",
+    srcs = ["tools/version.py"],
+    python_version = "3.12",
+    deps = [":versions"],
 )

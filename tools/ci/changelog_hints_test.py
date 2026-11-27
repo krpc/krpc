@@ -61,6 +61,15 @@ class TestHints(unittest.TestCase):
         self.assertEqual(1, len(found))
         self.assertIn("has an entry under `## client/cpp`", found[0])
 
+    def test_core_change_needs_no_entry(self):
+        files = [File("core/src/Server/Server.cs", "modified")]
+        self.assertEqual([], texts(pull_request(files)))
+
+    def test_server_entry_for_a_core_change(self):
+        files = [File("core/src/Server/Server.cs", "modified")]
+        pr = with_fragment("## server\n- Fix a server (#1240)\n", files)
+        self.assertEqual([], texts(pr))
+
     def test_fragment_matches(self):
         pr = with_fragment("## service/SpaceCenter\n- Fix a vessel (#1240)\n")
         self.assertEqual([], texts(pr))

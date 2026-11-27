@@ -33,8 +33,6 @@ jobs:
         uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
-        with:
-          long-version: false
       - name: cpp-cache
         id: cpp-cache
         uses: ./.github/actions/bazel-disk-cache

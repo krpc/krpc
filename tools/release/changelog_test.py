@@ -141,7 +141,7 @@ class TestParse(unittest.TestCase):
 
     def test_fragment_empty_section(self):
         self.check_fragment_error(
-            "## server\n## core\n- An entry\n", r"^f.md:1: '## server' has no"
+            "## server\n## client/python\n- An entry\n", r"^f.md:1: '## server' has no"
         )
 
     def test_fragment_empty(self):
@@ -171,7 +171,7 @@ class TestLoad(unittest.TestCase):
             self,
             {
                 "b.md": "## server\n- Entry (#1230)\n",
-                "c.md": "## server\n- Entry (#1100)\n## core\n- Entry (#1228)\n",
+                "c.md": "## server\n- Entry (#1100)\n## client/python\n- Entry (#1228)\n",
                 "a.md": "## server\n- Entry\n",
             },
         )
@@ -281,7 +281,7 @@ class TestFold(unittest.TestCase):
         )
 
     def test_fold_other_component(self):
-        fragments = [changelog.parse_fragment("## core\n- New (#1)\n", "a.md")]
+        fragments = [changelog.parse_fragment("## client/python\n- New (#1)\n", "a.md")]
         self.assertEqual(
             CHANGELOG, changelog.fold(CHANGELOG, "c", "0.8.0", fragments, "server")
         )

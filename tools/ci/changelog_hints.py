@@ -64,6 +64,8 @@ TEST_DIRS = {"test", "tests"}
 # The sources the clients' generated code comes from. A change to them changes
 # each client's API with no change to the client's own files.
 CLIENT_API_SOURCES = ("core/", "service/", "protobuf/", "tools/krpctools/")
+# KRPC.Core ships in each game mod, so its entries go under the mods
+CORE_SOURCES = ("core/",)
 
 
 def component_of(path):
@@ -78,10 +80,10 @@ def component_of(path):
     return None
 
 
-def changes_client_api(files):
-    """Whether the pull request changes the sources of the clients' generated code."""
+def changes_sources(files, sources):
+    """Whether the pull request changes files under the sources, leaving out tests."""
     return any(
-        f.filename.startswith(CLIENT_API_SOURCES)
+        f.filename.startswith(sources)
         and not TEST_DIRS & set(f.filename.split("/")[:-1])
         for f in files
     )
@@ -213,8 +215,10 @@ def hints(pr):
                     )
                 )
         unchanged = set(sections) - set(changed_components)
-        if changes_client_api(pr.files):
+        if changes_sources(pr.files, CLIENT_API_SOURCES):
             unchanged = {c for c in unchanged if not c.startswith("client/")}
+        if changes_sources(pr.files, CORE_SOURCES):
+            unchanged.discard("server")
         for component in sorted(unchanged):
             out.append(
                 Hint(

@@ -4,6 +4,11 @@ http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "ht
 
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
+# Whether the build is a release build (tools/build/release/release.bzl)
+release_switch = use_repo_rule("//tools/build/release:release.bzl", "release_switch")
+
+release_switch(name = "krpc_release")
+
 bazel_dep(name = "platforms", version = "1.1.0")
 bazel_dep(name = "bazel_skylib", version = "1.9.2")
 bazel_dep(name = "rules_cc", version = "0.2.28")

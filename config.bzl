@@ -1,48 +1,79 @@
 " global configuration "
 
-author = "djungelorm"
-version = "1.0.0"
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@krpc_release//:defs.bzl", "release")
 
-# The version of KRPC.Core. Each game mod ships core as it stands on main, and the release
-# preparation of a mod bumps this when core changed since the last bump
+author = "djungelorm"
+
+# The version of each release train, keyed by its tag prefix, as in python-v1.0.0: the release it
+# works towards. KSA releases on its own tooling. A vx.y.z release takes every other train.
+versions = {
+    "ksp": "1.0.0",
+    "python": "1.0.0",
+    "csharp": "1.0.0",
+    "java": "1.0.0",
+    "cpp": "1.0.0",
+    "cnano": "1.0.0",
+    "lua": "1.0.0",
+    "js": "1.0.0",
+    "krpctools": "1.0.0",
+    "ksa": "0.4.0",
+}
+
+# The assembly version of KRPC.Core, which is fixed. Each game mod ships core built from its own
+# commit, so the mod's version identifies it
 core_version = "1.0.0"
+
+# Whether this is a dev build (tools/build/release/release.bzl)
+dev = not release
 
 ksp_version_max = "1.12.5.3190"
 ksp_version_min = "1.12.5.3190"
-ksp_version_max_parts = ksp_version_max.split(".")
-ksp_version_min_parts = ksp_version_min.split(".")
 
-def get_version_parts(version):
-    version_parts = version.partition("-")[0].split(".")
-    if "-" in version:
-        version_parts.extend(version.partition("-")[2].split("-"))
-    return version_parts
+# The version people read, and the NuGet, npm, Maven and Arduino version: x.y.z, or x.y.z-dev for a
+# dev build. A format with no pre-releases, such as an assembly version, takes x.y.z
+def readable_version(version):
+    return version + "-dev" if dev else version
 
-version_parts = get_version_parts(version)
+# Python version x.y.z[.dev0]
+def python_version(version):
+    return version + ".dev0" if dev else version
 
-# Python version x.y.z[.devw[+sha]]
-python_version = \
-    ".".join(version_parts) if len(version_parts) == 3 else ".".join(version_parts[:3]) + ".dev" + version_parts[3] + ("+" + ".".join(version_parts[4:]) if len(version_parts) > 4 else "")
+# KSP-AVC version fields, from the first three parts of a version
+def avc_version(version):
+    fields = zip(["MAJOR", "MINOR", "PATCH"], version.split("."))
+    return ", ".join(['"%s": %s' % field for field in fields])
 
-# C# assembly version: x.y.z[.w]
-assembly_version = ".".join(version_parts[:4])
+ksp_avc_version_max = avc_version(ksp_version_max)
+ksp_avc_version_min = avc_version(ksp_version_min)
 
-# Nuget package version: x.y.z[-buildw]
-nuget_version = \
-    ".".join(version_parts[:3]) if len(version_parts) == 3 else ".".join(version_parts[:3]) + "-build" + version_parts[3]
+def _version_file_impl(ctx):
+    ctx.actions.run_shell(
+        inputs = [ctx.info_file],
+        outputs = [ctx.outputs.out],
+        command = 'commit=$(sed -n "s/^STABLE_GIT_COMMIT //p" "$1"); printf "%s\\n%s\\n" "$2" "${commit:-unknown}" > "$3"',
+        arguments = [ctx.info_file.path, ctx.attr.version, ctx.outputs.out.path],
+        mnemonic = "VersionFile",
+    )
 
-# Lua rock version: x.y.z[.w]
-lua_version = ".".join(version_parts[:4])
+_version_file = rule(
+    implementation = _version_file_impl,
+    attrs = {
+        "version": attr.string(mandatory = True),
+        "out": attr.output(mandatory = True),
+    },
+)
 
-# npm package version, semver: x.y.z[-build.w]
-npm_version = \
-    ".".join(version_parts[:3]) if len(version_parts) == 3 else ".".join(version_parts[:3]) + "-build." + version_parts[3]
+# VERSION.txt, holding the readable form of a version and the commit, for a package. The commit
+# comes from the workspace status, which Bazel writes on every build
+def version_file(name, version, out = "VERSION.txt", **kwargs):
+    _version_file(name = name, out = out, version = readable_version(version), **kwargs)
 
-# CMake version: x.y.z[.build] — purely numeric; sha suffix dropped
-cmake_version = ".".join(version_parts[:4]) if len(version_parts) > 3 else version
-
-# KSP-AVC versions
-avc_version = \
-    '"MAJOR": %s, "MINOR": %s, "PATCH": %s' % (version_parts[0], version_parts[1], version_parts[2]) if len(version_parts) == 3 else '"MAJOR": %s, "MINOR": %s, "PATCH": %s, "BUILD": %s' % (version_parts[0], version_parts[1], version_parts[2], version_parts[3])
-ksp_avc_version_max = '"MAJOR": %s, "MINOR": %s, "PATCH": %s' % (ksp_version_max_parts[0], ksp_version_max_parts[1], ksp_version_max_parts[2])
-ksp_avc_version_min = '"MAJOR": %s, "MINOR": %s, "PATCH": %s' % (ksp_version_min_parts[0], ksp_version_min_parts[1], ksp_version_min_parts[2])
+# The version.py of a Python package, holding its Python version
+def python_version_file(name, out, version):
+    write_file(
+        name = name,
+        out = out,
+        content = ['__version__ = "%s"' % python_version(version), ""],
+        newline = "unix",
+    )

@@ -41,28 +41,23 @@ jobs:
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
+    env:
+      # A tag build is a release build, and a main build a dev build
+      KRPC_RELEASE: ${{ startsWith(github.ref, 'refs/tags/') && '1' || '0' }}
     steps:
       - name: checkout
         uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
-        with:
-          # A tag build is a release: keep the plain version so it publishes
-          # under /<version>/. A main build is a dev build: take the suffixed
-          # version (the build-setup version step) so it publishes under /dev/.
-          long-version: ${{ startsWith(github.ref, 'refs/tags/') && 'false' || 'true' }}
       - name: determine target
         id: target
-        # Kept POSIX-sh compatible so it doesn't depend on the container's
-        # shell. The subpath follows the version stamped in config.bzl: a
-        # suffixed (dev) version publishes under /dev/, a plain release version
-        # under /x.y.z/.
+        # A dev build publishes under /dev/, a release build under /x.y.z/
         run: |
-          version=$(sed -n 's/^version = "\(.*\)"$/\1/p' config.bzl)
-          case "$version" in
-            *-*) echo "subpath=dev" >> "$GITHUB_OUTPUT" ;;
-            *) echo "subpath=$version" >> "$GITHUB_OUTPUT" ;;
-          esac
+          if [ "$KRPC_RELEASE" = 1 ]; then
+            echo "subpath=$(tools/version.py ksp)" >> "$GITHUB_OUTPUT"
+          else
+            echo "subpath=dev" >> "$GITHUB_OUTPUT"
+          fi
       - name: build
         run: bazel build //doc:html
       - name: publish

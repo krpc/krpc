@@ -24,9 +24,9 @@ namespace KRPC.KSA.UI
         /// Open the popup. Calls <paramref name="ignore"/> when the player chooses not to be
         /// shown it again for this game version.
         /// </summary>
-        public CompatibilityPopup (Version modVersion, IList<string> breakages, Action ignore)
+        public CompatibilityPopup (string modVersion, IList<string> breakages, Action ignore)
         {
-            versions = "kRPC " + modVersion.ToString (3) + " was built for KSA " + GameCompatibility.BuiltFor +
+            versions = "kRPC " + modVersion + " was built for KSA " + GameCompatibility.BuiltFor +
                 ". This is KSA " + GameCompatibility.Running + ".";
             this.breakages = breakages;
             buttons = new [] {

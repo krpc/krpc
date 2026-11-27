@@ -2,15 +2,17 @@ load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_filegroup", "pkg_files", "strip_prefix")
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
-load("//:config.bzl", "core_version")
+load("//:config.bzl", "core_version", "readable_version", "version_file", "versions")
 load("//experimental/ksa/tools/build:mod.bzl", "ASPNETCORE_RIDS", "NATIVE_PORTS", "deps_json", "files_in")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
-load(":config.bzl", "client_version", "ksa_version", "mod_version", "starmap_version")
+load(":config.bzl", "client_version", "ksa_version", "starmap_version")
 
 exports_files(["CHANGELOG.md"])
 
 # The kRPC for KSA mod and release archives. The game assemblies come from @ksa, the KSA
 # install at KSA_DIR.
+
+version = versions["ksa"]
 
 # The versions of the NuGet packages in the mod folder, as locked in
 # //tools/build/dotnet:paket.lock
@@ -25,7 +27,12 @@ grpc_version = "2.71.0"
 write_file(
     name = "deps-json",
     out = "KRPC.KSA.deps.json",
-    content = [deps_json(mod_version, core_version, protobuf_version, ports_version)],
+    content = [deps_json(
+        version,
+        core_version,
+        protobuf_version,
+        ports_version,
+    )],
 )
 
 # Loaded by StarMap into its own load context, as a component
@@ -170,7 +177,7 @@ expand_template(
         "@KRPC_VERSION@": client_version,
         "@KSA_VERSION@": ksa_version,
         "@STARMAP_VERSION@": starmap_version,
-        "@VERSION@": mod_version,
+        "@VERSION@": readable_version(version),
     },
     template = "//experimental/ksa/tools/release:README.txt",
 )
@@ -185,6 +192,19 @@ pkg_files(
 pkg_files(
     name = "release-mod-licenses",
     srcs = licenses,
+    prefix = "kRPC",
+    strip_prefix = strip_prefix.files_only(),
+)
+
+version_file(
+    name = "version",
+    version = version,
+)
+
+# The version and commit, in the mod folder Borea installs
+pkg_files(
+    name = "release-mod-version",
+    srcs = [":version"],
     prefix = "kRPC",
     strip_prefix = strip_prefix.files_only(),
 )
@@ -205,10 +225,11 @@ pkg_zip(
     name = "release",
     srcs = mod_files + [
         ":release-mod-licenses",
+        ":release-mod-version",
         ":release-root",
         ":release-stubs",
     ],
-    out = "krpc-ksa-v%s.zip" % mod_version,
+    out = "krpc-ksa-v%s.zip" % readable_version(version),
 )
 
 # The tests that need no game: bazel test //experimental/ksa:test. The in-game tests run with

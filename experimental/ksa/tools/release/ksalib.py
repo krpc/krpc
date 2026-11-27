@@ -21,8 +21,8 @@ import lib  # noqa: E402
 
 KSA = Path("experimental/ksa")
 CHANGELOG = KSA / "CHANGELOG.md"
-# The versions of the mod, KSA and StarMap, as name = "value" lines
-VERSIONS = KSA / "config.bzl"
+# The versions of the kRPC clients, KSA and StarMap, as name = "value" lines
+PINS = KSA / "config.bzl"
 PUBLISH_DOCS = KSA / "tools" / "release" / "publish-docs.sh"
 
 # The listing of the mod in the Borea content index, and the repository its
@@ -47,7 +47,7 @@ CREDENTIAL_KEYS = ("GITHUB_TOKEN", "SPACEDOCK_USERNAME", "SPACEDOCK_PASSWORD")
 def pins():
     """The versions in config.bzl, such as ksa_version, by name."""
     return dict(
-        re.findall(r'^([a-z0-9_]+) = "([^"]*)"$', VERSIONS.read_text(), re.MULTILINE)
+        re.findall(r'^([a-z0-9_]+) = "([^"]*)"$', PINS.read_text(), re.MULTILINE)
     )
 
 
@@ -56,25 +56,29 @@ def set_pin(name, value):
     text, count = re.subn(
         rf'^{name} = ".*"$',
         f'{name} = "{value}"',
-        VERSIONS.read_text(),
+        PINS.read_text(),
         flags=re.MULTILINE,
     )
     if count != 1:
-        raise lib.ReleaseError(f"no {name} found in {VERSIONS}")
-    VERSIONS.write_text(text)
+        raise lib.ReleaseError(f"no {name} found in {PINS}")
+    PINS.write_text(text)
 
 
-def _version():
-    version = pins().get("mod_version")
-    if version is None:
-        raise lib.ReleaseError(f"no mod_version found in {VERSIONS}")
-    return version
-
-
-VERSION = _version()
+# The version of the ksa train, which the release commit releases
+VERSION = lib.VERSIONS["ksa"]
 TAG = "ksa-v" + VERSION
 # Written by bazel build //experimental/ksa:release
 ARCHIVE = Path("bazel-bin") / KSA / f"krpc-ksa-v{VERSION}.zip"
+
+
+def require_release_commit():
+    """Raise unless HEAD is a release commit, whose CHANGELOG.md releases VERSION.
+    Above it, the commit of 03-bump-version.py works towards the next version."""
+    if not is_released():
+        raise lib.ReleaseError(
+            f"the top section of {CHANGELOG} does not release v{VERSION}; "
+            "run 01-prepare.py, or check out the release commit"
+        )
 
 
 def sections():

@@ -8,10 +8,9 @@ The changes since the last release are in `changelog.d/`, one file per pull requ
 release adds them to these changelogs. The documentation site shows them merged into each
 component's unreleased section.
 
-## Server and core
+## Server
 
 - [Server](server/CHANGELOG.md)
-- [Core](core/CHANGELOG.md)
 
 ## Services
 

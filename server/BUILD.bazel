@@ -1,4 +1,4 @@
-load("//:config.bzl", "assembly_version", "author", "ksp_version_max", "ksp_version_min")
+load("//:config.bzl", "author", "ksp_version_max", "ksp_version_min", "versions")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_library")
 load("//tools/build:image.bzl", "png_images")
@@ -24,7 +24,7 @@ csharp_assembly_info(
     custom = {"AssemblyKSPVersion": '"%s", "%s"' % (ksp_version_max, ksp_version_min)},
     description = "RPC server for Kerbal Space Program",
     title = "KRPC",
-    version = assembly_version,
+    version = versions["ksp"],
     visibility = [
         "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
         "//tools/ServiceDefinitions:__pkg__",  # Make visible to ServiceDefinitions so it can build KRPC.dll with .NET 4.5 references

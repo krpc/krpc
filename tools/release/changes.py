@@ -9,19 +9,7 @@ import sys
 from pathlib import Path
 
 import changelog
-
-
-def current_version():
-    version = None
-    with open("config.bzl") as config:
-        for line in config.readlines():
-            m = re.search(r'^version\s*=\s*"(.+)"$', line)
-            if m:
-                version = m.group(1)
-    if version is None:
-        print("Failed to get version from config.bzl", file=sys.stderr)
-        sys.exit(1)
-    return version
+import lib
 
 
 def render_nodes(out, nodes, level):
@@ -39,7 +27,7 @@ def render(version):
     changelist = []
     for component, name in changelog.shown_components():
         path = f"{component}/CHANGELOG.md"
-        changes = get_changes(path, current_version(), fragments)
+        changes = get_changes(path, lib.VERSION, fragments)
         nodes = changes.get(version)
         if nodes and (len(nodes) > 1 or nodes[0].text != "None"):
             changelist.append((name, nodes))
@@ -57,7 +45,7 @@ def render(version):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("version", nargs="?", default=current_version())
+    parser.add_argument("version", nargs="?", default=lib.VERSION)
     args = parser.parse_args()
     try:
         print(render(args.version))

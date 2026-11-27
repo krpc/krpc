@@ -43,11 +43,11 @@ def check_repository(report):
         report.fail(str(exception))
 
     if ksalib.is_released():
-        report.ok(f"{ksalib.CHANGELOG} releases v{ksalib.VERSION}")
+        report.ok(f"HEAD is the release commit of v{ksalib.VERSION}")
     else:
         report.fail(
             f"the top section of {ksalib.CHANGELOG} does not release "
-            f"v{ksalib.VERSION} (run 01-prepare.py)"
+            f"v{ksalib.VERSION} (check out the release commit)"
         )
 
     if lib.succeeds("git", "rev-parse", "-q", "--verify", f"refs/tags/{ksalib.TAG}"):

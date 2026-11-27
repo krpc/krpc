@@ -68,6 +68,15 @@ def check_repository(report):
     else:
         report.ok(f"tag {lib.TAG} not created yet (30-tag.py will create it)")
 
+    behind = [train for train in lib.TRAINS if lib.VERSIONS[train] != lib.VERSION]
+    if behind:
+        report.fail(
+            f"{lib.TAG} releases every train, but {', '.join(behind)} "
+            f"in config.bzl are not at {lib.VERSION}"
+        )
+    else:
+        report.ok(f"every train in config.bzl is at {lib.VERSION}")
+
 
 def check_changelogs(report):
     lib.banner("Changelog fold")

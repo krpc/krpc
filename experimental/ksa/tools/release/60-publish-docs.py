@@ -12,11 +12,7 @@ import lib
 def main():
     lib.require("bash", "git")
     lib.require_clean_tree()
-    if not ksalib.is_released():
-        raise lib.ReleaseError(
-            f"the top section of {ksalib.CHANGELOG} does not release "
-            f"v{ksalib.VERSION} (run 01-prepare.py)"
-        )
+    ksalib.require_release_commit()
 
     lib.banner(f"Publishing the docs of kRPC for KSA {ksalib.VERSION}")
     lib.confirm(f"Build the docs and push them to {ksalib.DOCS}?")

@@ -479,6 +479,9 @@ by directory, holding entries in the `CHANGELOG.md` syntax:
 
  * The components are listed in `COMPONENTS` in `tools/release/changelog.py`. `tools/buildenv` and
    the projects under `experimental/` are not among them, and edit their `CHANGELOG.md` directly.
+ * `core` has no changelog, as it ships inside each game mod. A `core/` change gets its entries in
+   each mod it affects: under `## server`, and under the "Mod" topic of
+   `experimental/ksa/CHANGELOG.md`. Each is worded for its own mod.
    Adding a component: `Release-Guide.md`.
  * A fragment's topic merges with the topic of the same text. `//:changelog-fragments-test`
    checks the format.

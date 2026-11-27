@@ -30,7 +30,6 @@ FRAGMENT_DIR = "changelog.d"
 # a CHANGELOG.md whose unreleased header takes the version from config.bzl.
 # //service:registry-test checks the services against service/registry.bzl.
 COMPONENTS = {
-    "core": "Core",
     "server": "Server",
     "service/SpaceCenter": "SpaceCenter service",
     "service/Drawing": "Drawing service",

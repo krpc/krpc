@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """Makes the release commit, on the release preparation branch.
 
-Releases the unreleased section of CHANGELOG.md, sets mod_version in
-config.bzl to its version, and commits both as "Release kRPC for KSA
-X.Y.Z". Pass a version to release the section under another version, e.g. a
-minor version for a section the update script started as a patch. If KRPC.Core
-changed since its version was last bumped, the step asks how to bump it, and
-the release commit includes the bump.
+Releases the unreleased section of CHANGELOG.md, sets the version of the ksa
+train in the root config.bzl to its version, and commits both as "Release kRPC
+for KSA X.Y.Z". Pass a version to release the section under another version.
+03-bump-version.py then makes the commit above it.
 
 Run on a branch off an up to date release branch: main, or a maintenance branch
 such as release/0.8. 02-test.py tests the branch. The release commit reaches the
@@ -22,6 +20,7 @@ import re
 
 import ksalib
 import lib
+import versions
 
 
 def main():
@@ -58,11 +57,10 @@ def main():
         ksalib.changelog.unreleased_header(section.version), f"## [v{version}]", 1
     )
     ksalib.CHANGELOG.write_text(text)
-    ksalib.set_pin("mod_version", version)
-    lib.bump_core_version()
+    versions.set_trains(["ksa"], version)
 
     lib.banner(f"Release commit for kRPC for KSA {version}")
-    lib.run("git", "add", ksalib.CHANGELOG, ksalib.VERSIONS, lib.CONFIG)
+    lib.run("git", "add", ksalib.CHANGELOG, lib.CONFIG)
     lib.run("git", "commit", "-q", "-m", f"Release kRPC for KSA {version}")
 
     lib.banner("Done")

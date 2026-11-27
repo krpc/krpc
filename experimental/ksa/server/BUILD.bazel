@@ -1,5 +1,4 @@
-load("//:config.bzl", "author")
-load("//experimental/ksa:config.bzl", "mod_version")
+load("//:config.bzl", "author", "versions")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_library")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
@@ -12,7 +11,7 @@ csharp_assembly_info(
     copyright = author,
     description = "RPC server for Kitten Space Agency",
     title = "KRPC.KSA",
-    version = mod_version,
+    version = versions["ksa"],
 )
 
 csharp_library(

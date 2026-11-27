@@ -1,11 +1,6 @@
-""" The versions of kRPC for KSA, of the kRPC clients it works with, and of the game and loader it
-is built and tested against.
-
-tools/release/publish-docs.sh reads mod_version from this file too.
+""" The versions of the kRPC clients kRPC for KSA works with, and of the game and loader it is
+built and tested against. The versions of the mod are the ksa train's, in the root config.bzl.
 """
-
-# The version of the mod
-mod_version = "0.3.0"
 
 # The release of the kRPC client libraries the mod works with
 client_version = "0.8.0"

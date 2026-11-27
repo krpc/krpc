@@ -69,8 +69,7 @@ namespace KRPC.KSA
             LoadServiceAssemblies ();
 
             core = Core.Instance;
-            var version = typeof (Addon).Assembly.GetName ().Version;
-            core.Version = version.Major + "." + version.Minor + "." + version.Build;
+            core.Version = typeof (Addon).Assembly.InformationalVersion ();
             config = new ConfigurationFile (ConfigurationFile.DefaultPath);
             config.Load ();
             foreach (var server in config.Configuration.Servers) {
@@ -151,7 +150,7 @@ namespace KRPC.KSA
         [MethodImpl (MethodImplOptions.NoInlining)]
         void ShowCompatibilityPopup ()
         {
-            new CompatibilityPopup (typeof (Addon).Assembly.GetName ().Version, breakages, () => {
+            new CompatibilityPopup (core.Version, breakages, () => {
                 config.IgnoredGameVersion = GameCompatibility.Running.ToString ();
                 config.Save ();
             });

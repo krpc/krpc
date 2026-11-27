@@ -1,5 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library")
-load("//:config.bzl", "assembly_version", "author")
+load("//:config.bzl", "author", "versions")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:benchmark.bzl", "optimized_binary")
 load("//tools/build:csharp.bzl", "csharp_library")
@@ -55,7 +55,7 @@ csharp_assembly_info(
     cls_compliant = False,
     copyright = author,
     title = "KRPC.Benchmark",
-    version = assembly_version,
+    version = versions["krpctools"],
     visibility = [
         "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
     ],

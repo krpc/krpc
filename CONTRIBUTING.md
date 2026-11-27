@@ -61,6 +61,9 @@ two spaces, ending with the issue it fixes or the pull request number. `bazel te
 //:changelog-fragments-test` checks the file. The entries are added to each component's
 `CHANGELOG.md` when kRPC is released.
 
+`core` has no changelog, as `KRPC.Core` ships inside each game mod. A change to it gets its entries
+under `## server`, and also in `experimental/ksa/CHANGELOG.md` when it affects kRPC for KSA.
+
 ## License
 
 Your contribution is licensed under the license of the part of kRPC you change. See

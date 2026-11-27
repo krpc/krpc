@@ -1,5 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_test")
-load("//:config.bzl", "assembly_version", "author", "nuget_version")
+load("//:config.bzl", "author", "readable_version", "version_file", "versions")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:conformance.bzl", "conformance_test")
@@ -27,6 +27,8 @@ alias(
     visibility = ["//visibility:public"],
 )
 
+version = versions["csharp"]
+
 nuget_package(
     name = "nuget",
     assembly = ":KRPC.Client",
@@ -37,10 +39,16 @@ nuget_package(
     license = "LGPL-3.0-or-later",
     project_url = "https://github.com/krpc/krpc",
     readme = "README.md",
-    version = nuget_version,
+    version = readable_version(version),
+    version_file = ":version",
     deps = {
         "Google.Protobuf": "3.36.2",
     },
+)
+
+version_file(
+    name = "version",
+    version = version,
 )
 
 csharp_assembly_info(
@@ -49,7 +57,7 @@ csharp_assembly_info(
     copyright = author,
     description = "C# client for kRPC",
     title = "KRPC.Client",
-    version = assembly_version,
+    version = version,
     visibility = [
         "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
     ],
@@ -122,7 +130,7 @@ csharp_assembly_info(
     cls_compliant = False,
     copyright = author,
     title = "KRPC.Client.Test",
-    version = assembly_version,
+    version = version,
 )
 
 # CS1701: Google.Protobuf references net5/6-era framework assemblies; unification

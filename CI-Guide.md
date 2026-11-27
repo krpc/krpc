@@ -164,13 +164,18 @@ The free plan runs at most 20 jobs at once. A run has more jobs than that, so jo
 runner. A run then takes at least its total job time divided by 20. A new job adds its setup to
 that total, which is why `CPP_SHARDS` is small.
 
-### Version Stamping
+### Dev and Release Builds
 
-The `build-setup` action stamps `config.bzl` with `x.y.z-<count>-g<sha>`, where the count is the
-number of commits since the last release tag. The count orders dev builds and stays inside the
-16-bit build field of a .NET assembly version. The checkout is shallow, so the action deepens it
-first, fetching commits but no trees or blobs. The `g` prefix stops Python packaging reading an
-all-digit sha as a number. `KRPC.Core` takes `core_version`, which the action leaves as it is.
+Every CI build is a dev build, versioned `1.0.0-dev`, or `1.0.0.dev0` for Python. The docs
+workflow's tag builds are the exception: they set `KRPC_RELEASE=1`, which the repository rule in
+`tools/build/release/release.bzl` reads, so the docs publish under the release's version. No
+version string changes from one commit to the next, so compiled outputs stay cached.
+
+Each package carries a `VERSION.txt` with the version and the commit, which names the commit a
+downloaded artifact came from. The commit comes from the `--workspace_status_command` in
+`.bazelrc`, and only the rule that writes `VERSION.txt` reads it. A tree with uncommitted changes
+to tracked files gives the commit a `-dirty` suffix. The tests run against the Java jar and the
+wheels built without `VERSION.txt`, so their results stay cached from one commit to the next.
 
 ### The Tool Packages
 
