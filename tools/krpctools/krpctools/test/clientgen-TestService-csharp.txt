@@ -1,12 +1,4 @@
 
-#if NET35
-using systemAlias = global::KRPC.Client.Compatibility;
-using genericCollectionsAlias = global::KRPC.Client.Compatibility;
-#else
-using systemAlias = global::System;
-using genericCollectionsAlias = global::System.Collections.Generic;
-#endif
-
 // Generated code references its own deprecated members (e.g. when registering
 // exception types), so suppress the deprecation warnings within this file.
 #pragma warning disable 612, 618
@@ -37,7 +29,7 @@ namespace KRPC.Client.Services.TestService
         internal static readonly global::KRPC.Client.TypeSpec Spec3 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IDictionary<string,global::KRPC.Client.Services.TestService.TestClass>));
         internal static readonly global::KRPC.Client.TypeSpec Spec4 = global::KRPC.Client.TypeSpec.For (typeof(string));
         internal static readonly global::KRPC.Client.TypeSpec Spec5 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec6 = global::KRPC.Client.TypeSpec.For (typeof(genericCollectionsAlias::ISet<global::KRPC.Client.Services.TestService.TestClass>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec6 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.ISet<global::KRPC.Client.Services.TestService.TestClass>));
         internal static readonly global::KRPC.Client.TypeSpec Spec7 = global::KRPC.Client.TypeSpec.For (typeof(bool));
         internal static readonly global::KRPC.Client.TypeSpec Spec8 = global::KRPC.Client.TypeSpec.For (typeof(byte[]));
         internal static readonly global::KRPC.Client.TypeSpec Spec9 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.DeprecatedClass));
@@ -59,14 +51,14 @@ namespace KRPC.Client.Services.TestService
         internal static readonly global::KRPC.Client.TypeSpec Spec25 = global::KRPC.Client.TypeSpec.Null (typeof(int));
         internal static readonly global::KRPC.Client.TypeSpec Spec26 = global::KRPC.Client.TypeSpec.Null (typeof(global::System.Collections.Generic.IList<int>));
         internal static readonly global::KRPC.Client.TypeSpec Spec27 = global::KRPC.Client.TypeSpec.Null (typeof(long));
-        internal static readonly global::KRPC.Client.TypeSpec Spec28 = global::KRPC.Client.TypeSpec.Null (typeof(genericCollectionsAlias::ISet<int>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec28 = global::KRPC.Client.TypeSpec.Null (typeof(global::System.Collections.Generic.ISet<int>));
         internal static readonly global::KRPC.Client.TypeSpec Spec29 = global::KRPC.Client.TypeSpec.Null (typeof(string));
-        internal static readonly global::KRPC.Client.TypeSpec Spec30 = global::KRPC.Client.TypeSpec.Null (typeof(systemAlias::Tuple<int,long>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec30 = global::KRPC.Client.TypeSpec.Null (typeof(global::System.Tuple<int,long>));
         internal static readonly global::KRPC.Client.TypeSpec Spec31 = global::KRPC.Client.TypeSpec.Null (typeof(uint));
         internal static readonly global::KRPC.Client.TypeSpec Spec32 = global::KRPC.Client.TypeSpec.Null (typeof(ulong));
-        internal static readonly global::KRPC.Client.TypeSpec Spec33 = global::KRPC.Client.TypeSpec.For (typeof(genericCollectionsAlias::ISet<string>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec33 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.ISet<string>));
         internal static readonly global::KRPC.Client.TypeSpec Spec34 = global::KRPC.Client.TypeSpec.Null (typeof(global::KRPC.Client.Services.TestService.TestClass));
-        internal static readonly global::KRPC.Client.TypeSpec Spec35 = new global::KRPC.Client.TypeSpec (typeof(systemAlias::Tuple<int,global::KRPC.Client.Services.TestService.TestClass>), global::KRPC.Client.TypeSpec.For (typeof(int)), global::KRPC.Client.TypeSpec.Null (typeof(global::KRPC.Client.Services.TestService.TestClass)));
+        internal static readonly global::KRPC.Client.TypeSpec Spec35 = new global::KRPC.Client.TypeSpec (typeof(global::System.Tuple<int,global::KRPC.Client.Services.TestService.TestClass>), global::KRPC.Client.TypeSpec.For (typeof(int)), global::KRPC.Client.TypeSpec.Null (typeof(global::KRPC.Client.Services.TestService.TestClass)));
         internal static readonly global::KRPC.Client.TypeSpec Spec36 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<string>));
         internal static readonly global::KRPC.Client.TypeSpec Spec37 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.TestEnum));
         internal static readonly global::KRPC.Client.TypeSpec Spec38 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum>));
@@ -77,8 +69,8 @@ namespace KRPC.Client.Services.TestService
         internal static readonly global::KRPC.Client.TypeSpec Spec43 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<int>));
         internal static readonly global::KRPC.Client.TypeSpec Spec44 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestStruct>));
         internal static readonly global::KRPC.Client.TypeSpec Spec45 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec46 = global::KRPC.Client.TypeSpec.For (typeof(genericCollectionsAlias::ISet<int>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec47 = global::KRPC.Client.TypeSpec.For (typeof(systemAlias::Tuple<int,long>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec46 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.ISet<int>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec47 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Tuple<int,long>));
         internal static readonly global::KRPC.Client.TypeSpec Spec48 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Names));
         internal static readonly global::KRPC.Client.TypeSpec Spec49 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.TestNestedStruct));
         internal static readonly global::KRPC.Client.TypeSpec Spec50 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.TestClass));
@@ -86,8 +78,8 @@ namespace KRPC.Client.Services.TestService
         internal static readonly global::KRPC.Client.TypeSpec Spec52 = global::KRPC.Client.TypeSpec.For (typeof(uint));
         internal static readonly global::KRPC.Client.TypeSpec Spec53 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.TestStruct));
         internal static readonly global::KRPC.Client.TypeSpec Spec54 = global::KRPC.Client.TypeSpec.Null (typeof(global::KRPC.Client.Services.TestService.TestStruct));
-        internal static readonly global::KRPC.Client.TypeSpec Spec55 = global::KRPC.Client.TypeSpec.For (typeof(systemAlias::Tuple<global::KRPC.Client.Services.TestService.TestClass,global::KRPC.Client.Services.TestService.TestClass>));
-        internal static readonly global::KRPC.Client.TypeSpec Spec56 = global::KRPC.Client.TypeSpec.For (typeof(systemAlias::Tuple<int,bool>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec55 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Tuple<global::KRPC.Client.Services.TestService.TestClass,global::KRPC.Client.Services.TestService.TestClass>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec56 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Tuple<int,bool>));
         internal static readonly global::KRPC.Client.TypeSpec Spec57 = global::KRPC.Client.TypeSpec.For (typeof(ulong));
         internal static readonly global::KRPC.Client.TypeSpec Spec58 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.Object));
         internal static readonly global::KRPC.Client.TypeSpec Spec59 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.TestService.DeprecatedStruct));
@@ -245,14 +237,14 @@ namespace KRPC.Client.Services.TestService
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "AddToObjectSet", typeof(_TypeSpecs))]
-        public genericCollectionsAlias::ISet<global::KRPC.Client.Services.TestService.TestClass> AddToObjectSet (genericCollectionsAlias::ISet<global::KRPC.Client.Services.TestService.TestClass> h, string value)
+        public global::System.Collections.Generic.ISet<global::KRPC.Client.Services.TestService.TestClass> AddToObjectSet (global::System.Collections.Generic.ISet<global::KRPC.Client.Services.TestService.TestClass> h, string value)
         {
             var _args = new global::Google.Protobuf.ByteString[] {
                 global::KRPC.Client.Encoder.Encode (h, _TypeSpecs.Spec6),
                 global::KRPC.Client.Encoder.Encode (value, _TypeSpecs.Spec4)
             };
             var _result = connection.Invoke ("TestService", "AddToObjectSet", _args);
-            return (genericCollectionsAlias::ISet<global::KRPC.Client.Services.TestService.TestClass>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec6, connection);
+            return (global::System.Collections.Generic.ISet<global::KRPC.Client.Services.TestService.TestClass>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec6, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "BlockingProcedure", typeof(_TypeSpecs))]
@@ -662,7 +654,7 @@ namespace KRPC.Client.Services.TestService
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableSet", typeof(_TypeSpecs))]
-        public genericCollectionsAlias::ISet<int> EchoNullableSet (genericCollectionsAlias::ISet<int> h)
+        public global::System.Collections.Generic.ISet<int> EchoNullableSet (global::System.Collections.Generic.ISet<int> h)
         {
             var _args = new global::Google.Protobuf.ByteString[] {
                 global::KRPC.Client.Encoder.Encode (h, _TypeSpecs.Spec28)
@@ -670,7 +662,7 @@ namespace KRPC.Client.Services.TestService
             var _result = connection.Invoke ("TestService", "EchoNullableSet", _args);
             if (_result.IsNull)
                 return null;
-            return (genericCollectionsAlias::ISet<int>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec28, connection);
+            return (global::System.Collections.Generic.ISet<int>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec28, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableString", typeof(_TypeSpecs))]
@@ -686,7 +678,7 @@ namespace KRPC.Client.Services.TestService
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableTuple", typeof(_TypeSpecs))]
-        public systemAlias::Tuple<int,long> EchoNullableTuple (systemAlias::Tuple<int,long> t)
+        public global::System.Tuple<int,long> EchoNullableTuple (global::System.Tuple<int,long> t)
         {
             var _args = new global::Google.Protobuf.ByteString[] {
                 global::KRPC.Client.Encoder.Encode (t, _TypeSpecs.Spec30)
@@ -694,7 +686,7 @@ namespace KRPC.Client.Services.TestService
             var _result = connection.Invoke ("TestService", "EchoNullableTuple", _args);
             if (_result.IsNull)
                 return null;
-            return (systemAlias::Tuple<int,long>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec30, connection);
+            return (global::System.Tuple<int,long>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec30, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableUInt", typeof(_TypeSpecs))]
@@ -722,13 +714,13 @@ namespace KRPC.Client.Services.TestService
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoStringSet", typeof(_TypeSpecs))]
-        public genericCollectionsAlias::ISet<string> EchoStringSet (genericCollectionsAlias::ISet<string> h)
+        public global::System.Collections.Generic.ISet<string> EchoStringSet (global::System.Collections.Generic.ISet<string> h)
         {
             var _args = new global::Google.Protobuf.ByteString[] {
                 global::KRPC.Client.Encoder.Encode (h, _TypeSpecs.Spec33)
             };
             var _result = connection.Invoke ("TestService", "EchoStringSet", _args);
-            return (genericCollectionsAlias::ISet<string>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec33, connection);
+            return (global::System.Collections.Generic.ISet<string>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec33, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoTestObject", typeof(_TypeSpecs))]
@@ -744,13 +736,13 @@ namespace KRPC.Client.Services.TestService
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoTupleWithANullableObject", typeof(_TypeSpecs))]
-        public systemAlias::Tuple<int,global::KRPC.Client.Services.TestService.TestClass> EchoTupleWithANullableObject (systemAlias::Tuple<int,global::KRPC.Client.Services.TestService.TestClass> t)
+        public global::System.Tuple<int,global::KRPC.Client.Services.TestService.TestClass> EchoTupleWithANullableObject (global::System.Tuple<int,global::KRPC.Client.Services.TestService.TestClass> t)
         {
             var _args = new global::Google.Protobuf.ByteString[] {
                 global::KRPC.Client.Encoder.Encode (t, _TypeSpecs.Spec35)
             };
             var _result = connection.Invoke ("TestService", "EchoTupleWithANullableObject", _args);
-            return (systemAlias::Tuple<int,global::KRPC.Client.Services.TestService.TestClass>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec35, connection);
+            return (global::System.Tuple<int,global::KRPC.Client.Services.TestService.TestClass>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec35, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EmptyListDefault", typeof(_TypeSpecs))]
@@ -936,23 +928,23 @@ namespace KRPC.Client.Services.TestService
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementSet", typeof(_TypeSpecs))]
-        public genericCollectionsAlias::ISet<int> IncrementSet (genericCollectionsAlias::ISet<int> h)
+        public global::System.Collections.Generic.ISet<int> IncrementSet (global::System.Collections.Generic.ISet<int> h)
         {
             var _args = new global::Google.Protobuf.ByteString[] {
                 global::KRPC.Client.Encoder.Encode (h, _TypeSpecs.Spec46)
             };
             var _result = connection.Invoke ("TestService", "IncrementSet", _args);
-            return (genericCollectionsAlias::ISet<int>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec46, connection);
+            return (global::System.Collections.Generic.ISet<int>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec46, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementTuple", typeof(_TypeSpecs))]
-        public systemAlias::Tuple<int,long> IncrementTuple (systemAlias::Tuple<int,long> t)
+        public global::System.Tuple<int,long> IncrementTuple (global::System.Tuple<int,long> t)
         {
             var _args = new global::Google.Protobuf.ByteString[] {
                 global::KRPC.Client.Encoder.Encode (t, _TypeSpecs.Spec47)
             };
             var _result = connection.Invoke ("TestService", "IncrementTuple", _args);
-            return (systemAlias::Tuple<int,long>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec47, connection);
+            return (global::System.Tuple<int,long>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec47, connection);
         }
 
         /// <summary>
@@ -1184,13 +1176,13 @@ namespace KRPC.Client.Services.TestService
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "SetDefault", typeof(_TypeSpecs))]
-        public genericCollectionsAlias::ISet<int> SetDefault (genericCollectionsAlias::ISet<int> x = null)
+        public global::System.Collections.Generic.ISet<int> SetDefault (global::System.Collections.Generic.ISet<int> x = null)
         {
             var _args = new global::Google.Protobuf.ByteString[] {
                 global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.HashSet<int> { 1, 2, 3 }, _TypeSpecs.Spec46)
             };
             var _result = connection.Invoke ("TestService", "SetDefault", _args);
-            return (genericCollectionsAlias::ISet<int>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec46, connection);
+            return (global::System.Collections.Generic.ISet<int>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec46, connection);
         }
 
         /// <summary>
@@ -1326,13 +1318,13 @@ namespace KRPC.Client.Services.TestService
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "SwapObjectTuple", typeof(_TypeSpecs))]
-        public systemAlias::Tuple<global::KRPC.Client.Services.TestService.TestClass,global::KRPC.Client.Services.TestService.TestClass> SwapObjectTuple (systemAlias::Tuple<global::KRPC.Client.Services.TestService.TestClass,global::KRPC.Client.Services.TestService.TestClass> t)
+        public global::System.Tuple<global::KRPC.Client.Services.TestService.TestClass,global::KRPC.Client.Services.TestService.TestClass> SwapObjectTuple (global::System.Tuple<global::KRPC.Client.Services.TestService.TestClass,global::KRPC.Client.Services.TestService.TestClass> t)
         {
             var _args = new global::Google.Protobuf.ByteString[] {
                 global::KRPC.Client.Encoder.Encode (t, _TypeSpecs.Spec55)
             };
             var _result = connection.Invoke ("TestService", "SwapObjectTuple", _args);
-            return (systemAlias::Tuple<global::KRPC.Client.Services.TestService.TestClass,global::KRPC.Client.Services.TestService.TestClass>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec55, connection);
+            return (global::System.Tuple<global::KRPC.Client.Services.TestService.TestClass,global::KRPC.Client.Services.TestService.TestClass>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec55, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowArgumentException", typeof(_TypeSpecs))]
@@ -1417,13 +1409,13 @@ namespace KRPC.Client.Services.TestService
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TupleDefault", typeof(_TypeSpecs))]
-        public systemAlias::Tuple<int,bool> TupleDefault (systemAlias::Tuple<int,bool> x = null)
+        public global::System.Tuple<int,bool> TupleDefault (global::System.Tuple<int,bool> x = null)
         {
             var _args = new global::Google.Protobuf.ByteString[] {
-                global::KRPC.Client.Encoder.Encode (x ?? new systemAlias::Tuple<int,bool> (1, false), _TypeSpecs.Spec56)
+                global::KRPC.Client.Encoder.Encode (x ?? new global::System.Tuple<int,bool> (1, false), _TypeSpecs.Spec56)
             };
             var _result = connection.Invoke ("TestService", "TupleDefault", _args);
-            return (systemAlias::Tuple<int,bool>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec56, connection);
+            return (global::System.Tuple<int,bool>)global::KRPC.Client.Decoder.Decode (_result.Value, _TypeSpecs.Spec56, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "UInt32ToString", typeof(_TypeSpecs))]
