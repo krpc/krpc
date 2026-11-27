@@ -1,12 +1,4 @@
 
-#if NET35
-using systemAlias = global::KRPC.Client.Compatibility;
-using genericCollectionsAlias = global::KRPC.Client.Compatibility;
-#else
-using systemAlias = global::System;
-using genericCollectionsAlias = global::System.Collections.Generic;
-#endif
-
 // Generated code references its own deprecated members (e.g. when registering
 // exception types), so suppress the deprecation warnings within this file.
 #pragma warning disable 612, 618
@@ -45,7 +37,7 @@ namespace KRPC.Client.Services.KRPC
         internal static readonly global::KRPC.Client.TypeSpec Spec11 = global::KRPC.Client.TypeSpec.For (typeof(float));
         internal static readonly global::KRPC.Client.TypeSpec Spec12 = global::KRPC.Client.TypeSpec.For (typeof(long));
         internal static readonly global::KRPC.Client.TypeSpec Spec13 = global::KRPC.Client.TypeSpec.For (typeof(ulong));
-        internal static readonly global::KRPC.Client.TypeSpec Spec14 = global::KRPC.Client.TypeSpec.For (typeof(genericCollectionsAlias::ISet<global::KRPC.Client.Services.KRPC.Expression>));
+        internal static readonly global::KRPC.Client.TypeSpec Spec14 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.ISet<global::KRPC.Client.Services.KRPC.Expression>));
         internal static readonly global::KRPC.Client.TypeSpec Spec15 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IDictionary<string,global::KRPC.Client.Services.KRPC.Expression>));
         internal static readonly global::KRPC.Client.TypeSpec Spec16 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Expression>>));
         internal static readonly global::KRPC.Client.TypeSpec Spec17 = global::KRPC.Client.TypeSpec.Null (typeof(global::KRPC.Client.Services.KRPC.Expression));
@@ -2193,7 +2185,7 @@ namespace KRPC.Client.Services.KRPC
         /// <param name="values">The values.</param>
         /// <param name="connection">A connection object.</param>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_CreateSet", typeof(_TypeSpecs))]
-        public static global::KRPC.Client.Services.KRPC.Expression CreateSet (global::KRPC.Client.IConnection connection, genericCollectionsAlias::ISet<global::KRPC.Client.Services.KRPC.Expression> values)
+        public static global::KRPC.Client.Services.KRPC.Expression CreateSet (global::KRPC.Client.IConnection connection, global::System.Collections.Generic.ISet<global::KRPC.Client.Services.KRPC.Expression> values)
         {
             if (connection == null)
                 throw new global::System.ArgumentNullException (nameof (connection));
@@ -4645,7 +4637,7 @@ namespace KRPC.Client.Services.KRPC
             /// <returns>The set.</returns>
             /// <param name="values">The values.</param>
             [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_static_CreateSet", typeof(_TypeSpecs))]
-            public global::KRPC.Client.Services.KRPC.Expression CreateSet (genericCollectionsAlias::ISet<global::KRPC.Client.Services.KRPC.Expression> values)
+            public global::KRPC.Client.Services.KRPC.Expression CreateSet (global::System.Collections.Generic.ISet<global::KRPC.Client.Services.KRPC.Expression> values)
             {
                 return global::KRPC.Client.Services.KRPC.Expression.CreateSet (connection, values);
             }

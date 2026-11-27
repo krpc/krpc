@@ -421,7 +421,7 @@ class CsharpDispatchGenerator(DispatchGenerator):
         return {
             "arg": "Arg.Set (%s)" % item["arg"],
             "result": "Result.Set<%s> (%s)" % (item["type"], item["result"]),
-            "type": "genericCollectionsAlias::ISet<%s>" % item["type"],
+            "type": "global::System.Collections.Generic.ISet<%s>" % item["type"],
         }
 
     def dictionary(self, typ, key, value):
@@ -439,7 +439,7 @@ class CsharpDispatchGenerator(DispatchGenerator):
             "arg": "Arg.Tuple (%s)" % ", ".join(x["arg"] for x in items),
             "result": "Result.Tuple<%s> (%s)"
             % (types, ", ".join(x["result"] for x in items)),
-            "type": "systemAlias::Tuple<%s>" % types,
+            "type": "global::System.Tuple<%s>" % types,
         }
 
     def _name(self, name, cls):

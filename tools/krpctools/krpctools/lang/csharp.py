@@ -233,7 +233,7 @@ class CsharpLanguage(Language):
         if isinstance(typ, MessageType):
             return "global::KRPC.Schema.KRPC.%s" % typ.python_type.__name__
         if isinstance(typ, TupleType):
-            return "systemAlias::Tuple<%s>" % ",".join(
+            return "global::System.Tuple<%s>" % ",".join(
                 self._at_position(t) for t in typ.value_types
             )
         if isinstance(typ, ListType):
@@ -247,7 +247,7 @@ class CsharpLanguage(Language):
             )
         if isinstance(typ, SetType):
             if interface:
-                name = "genericCollectionsAlias::ISet"
+                name = "global::System.Collections.Generic.ISet"
             else:
                 name = "global::System.Collections.Generic.HashSet"
             return "%s<%s>" % (name, self._parse_type(typ.value_type))
