@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Makes the release commit, on the release preparation branch.
 
-Releases the unreleased section of CHANGELOG.md, sets the version of the ksa
-train in the root config.bzl to its version, and commits both as "Release kRPC
-for KSA X.Y.Z". Pass a version to release the section under another version.
+Folds the experimental/ksa sections of the changelog fragments into
+CHANGELOG.md, releases them, sets the version of the ksa train in the root
+config.bzl to the version, and commits it all as "Release kRPC for KSA X.Y.Z".
+Pass a version to release the entries under another version.
 03-bump-version.py then makes the commit above it.
 
 Run on a branch off an up to date release branch: main, or a maintenance branch
@@ -21,6 +22,8 @@ import re
 import ksalib
 import lib
 import versions
+
+changelog = ksalib.changelog
 
 
 def main():
@@ -44,23 +47,37 @@ def main():
             "branch such as origin/release/0.8"
         )
 
-    sections = ksalib.sections()
+    fragments = lib.fragments()
+    try:
+        text = changelog.fold(
+            ksalib.CHANGELOG.read_text(),
+            ksalib.CHANGELOG,
+            ksalib.VERSION,
+            fragments,
+            changelog.KSA,
+        )
+        sections = changelog.parse_changelog(text, str(ksalib.CHANGELOG))
+    except changelog.ChangelogError as exception:
+        raise lib.ReleaseError(str(exception)) from exception
     if not sections or not sections[0].unreleased:
-        raise lib.ReleaseError(f"{ksalib.CHANGELOG} has no unreleased section")
+        raise lib.ReleaseError(
+            f"nothing to release: no fragment in {changelog.FRAGMENT_DIR}/ has a "
+            f"## {changelog.KSA} section"
+        )
     section = sections[0]
     version = arguments.version or section.version
     if any(s.version == version for s in sections[1:]):
         raise lib.ReleaseError(f"{ksalib.CHANGELOG} already has a v{version} section")
 
-    text = ksalib.CHANGELOG.read_text()
     text = text.replace(
-        ksalib.changelog.unreleased_header(section.version), f"## [v{version}]", 1
+        changelog.unreleased_header(section.version), f"## [v{version}]", 1
     )
     ksalib.CHANGELOG.write_text(text)
+    folded = changelog.remove_folded(fragments, [changelog.KSA])
     versions.set_trains(["ksa"], version)
 
     lib.banner(f"Release commit for kRPC for KSA {version}")
-    lib.run("git", "add", ksalib.CHANGELOG, lib.CONFIG)
+    lib.run("git", "add", "-A", "--", ksalib.CHANGELOG, lib.CONFIG, *folded)
     lib.run("git", "commit", "-q", "-m", f"Release kRPC for KSA {version}")
 
     lib.banner("Done")

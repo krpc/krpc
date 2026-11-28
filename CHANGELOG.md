@@ -41,3 +41,7 @@ component's unreleased section.
 ## Tools
 
 - [krpctools](tools/krpctools/CHANGELOG.md)
+
+## kRPC for KSA
+
+- [kRPC for KSA](experimental/ksa/CHANGELOG.md)

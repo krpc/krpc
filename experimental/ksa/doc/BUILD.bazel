@@ -100,9 +100,12 @@ py_binary(
 
 genrule(
     name = "changelog",
-    srcs = ["//experimental/ksa:CHANGELOG.md"],
+    srcs = [
+        "//:changelog-fragments",
+        "//experimental/ksa:CHANGELOG.md",
+    ],
     outs = ["gen/changelog.rst"],
-    cmd = "$(execpath :changelog-page) $@ $<",
+    cmd = "$(execpath :changelog-page) $@ $(execpath //experimental/ksa:CHANGELOG.md) %s $(execpaths //:changelog-fragments)" % versions["ksa"],
     tools = [":changelog-page"],
 )
 

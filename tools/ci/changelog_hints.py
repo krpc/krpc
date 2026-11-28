@@ -68,15 +68,23 @@ CLIENT_API_SOURCES = ("core/", "service/", "protobuf/", "tools/krpctools/")
 CORE_SOURCES = ("core/",)
 
 
+# The directories whose files count towards each component. kRPC for KSA ships
+# its server and services, under its one component.
+SOURCES = {component: component for component in changelog.COMPONENTS} | {
+    f"{changelog.KSA}/server": changelog.KSA,
+    f"{changelog.KSA}/service": changelog.KSA,
+}
+
+
 def component_of(path):
     """The release component a changed file counts towards, or None. Tests and
     the changelog itself do not count."""
-    for component in sorted(changelog.COMPONENTS, key=len, reverse=True):
-        if path.startswith(component + "/"):
-            rest = path[len(component) + 1 :]
+    for source in sorted(SOURCES, key=len, reverse=True):
+        if path.startswith(source + "/"):
+            rest = path[len(source) + 1 :]
             if TEST_DIRS & set(rest.split("/")[:-1]) or rest == "CHANGELOG.md":
                 return None
-            return component
+            return SOURCES[source]
     return None
 
 
@@ -91,6 +99,25 @@ def changes_sources(files, sources):
 
 def is_fragment(path):
     return path.startswith(changelog.FRAGMENT_DIR + "/")
+
+
+def folded(file):
+    """The components whose sections a change to a fragment takes out, as the
+    fold of a release does, or none for a change that adds lines."""
+    if not is_fragment(file.filename):
+        return set()
+    if file.status == "modified" and added_lines(file) != set():
+        return set()
+    if file.status not in ("modified", "removed"):
+        return set()
+    # GitHub leaves out the patch of a large file
+    if file.patch is None:
+        return set(changelog.FRAGMENT_COMPONENTS)
+    return {
+        line[len("-## ") :].strip()
+        for line in file.patch.splitlines()
+        if line.startswith("-## ")
+    }
 
 
 def added_lines(file):
@@ -143,14 +170,12 @@ def hints(pr):
     fragment_files = [
         f for f in pr.files if is_fragment(f.filename) and f.status != "removed"
     ]
-    removes_fragment = any(
-        is_fragment(f.filename) and f.status == "removed" for f in pr.files
-    )
+    folded_components = set().union(*(folded(f) for f in pr.files))
     component_changelogs = [
         f
         for f in pr.files
         if f.filename.endswith("/CHANGELOG.md")
-        and f.filename[: -len("/CHANGELOG.md")] in changelog.COMPONENTS
+        and f.filename[: -len("/CHANGELOG.md")] in changelog.FRAGMENT_COMPONENTS
     ]
     # A new component adds its CHANGELOG.md with its entries in place of a fragment
     new_components = {
@@ -159,8 +184,12 @@ def hints(pr):
         if f.status == "added"
     }
     changed_components = [c for c in changed_components if c not in new_components]
+    # A release folds the fragments into the CHANGELOG.md files
     edits_changelog = sorted(
-        f.filename for f in component_changelogs if f.status != "added"
+        f.filename
+        for f in component_changelogs
+        if f.status != "added"
+        and f.filename[: -len("/CHANGELOG.md")] not in folded_components
     )
 
     fragments = []
@@ -182,7 +211,6 @@ def hints(pr):
                 )
             )
 
-    edits_changelog = edits_changelog if not removes_fragment else []
     if not fragment_files:
         # The CHANGELOG.md hint below covers a pull request that edits one
         if changed_components and not edits_changelog:
@@ -218,7 +246,7 @@ def hints(pr):
         if changes_sources(pr.files, CLIENT_API_SOURCES):
             unchanged = {c for c in unchanged if not c.startswith("client/")}
         if changes_sources(pr.files, CORE_SOURCES):
-            unchanged.discard("server")
+            unchanged -= {"server", changelog.KSA}
         for component in sorted(unchanged):
             out.append(
                 Hint(

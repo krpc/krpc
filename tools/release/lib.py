@@ -224,6 +224,15 @@ def fragments():
         raise ReleaseError(f"bad changelog fragment:\n{exception}") from exception
 
 
+def unfolded_fragments():
+    """The fragments holding entries for this release's components."""
+    return [
+        fragment.path
+        for fragment in fragments()
+        if set(fragment.sections) & set(changelog.COMPONENTS)
+    ]
+
+
 def _sections():
     """The sections of every component changelog, by path."""
     try:

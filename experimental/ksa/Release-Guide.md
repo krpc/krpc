@@ -22,10 +22,9 @@ branch such as `release/0.8` ([release branches](../../Release-Guide.md#release-
 ## 1. Prepare
 
 1. `01-prepare.py [version]` - on a release preparation branch off an up to date release branch,
-   releases the unreleased section of `CHANGELOG.md`, sets the version of the `ksa` train in the
-   root `config.bzl`, and commits them as `Release kRPC for KSA X.Y.Z`. The release takes the
-   version of the unreleased section, which `update-ksa.py` heads with the train's version. Pass a
-   version for another release. Check that `client_version` in `config.bzl` names the kRPC client
+   folds the `## experimental/ksa` sections of the fragments in `changelog.d/` into `CHANGELOG.md`,
+   sets the version of the `ksa` train in the root `config.bzl`, and commits them as `Release kRPC
+   for KSA X.Y.Z`. The release takes the train's version. Pass a version for another release. Check that `client_version` in `config.bzl` names the kRPC client
    release whose protocol the mod speaks, as the docs and the stubs readme name it.
 2. `02-test.py` - on the release preparation branch, builds the archive, and runs
    `//experimental/ksa:test` and the docs link check. Fix a failure on the branch and re-run the

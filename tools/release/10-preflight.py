@@ -80,14 +80,14 @@ def check_repository(report):
 
 def check_changelogs(report):
     lib.banner("Changelog fold")
-    paths = changelog.fragment_paths(lib.ROOT)
+    paths = lib.unfolded_fragments()
     if paths:
         report.fail(
-            f"{changelog.FRAGMENT_DIR}/ holds {len(paths)} file(s); "
+            f"{len(paths)} fragment(s) hold entries for {lib.TAG}; "
             f"fold them with 01-fold-changelogs.py"
         )
     else:
-        report.ok(f"{changelog.FRAGMENT_DIR}/ holds no fragment")
+        report.ok(f"no fragment holds entries for {lib.TAG}")
     unreleased = lib.unreleased_changelogs()
     if unreleased:
         report.fail(f"still marked unreleased: {', '.join(unreleased)}")

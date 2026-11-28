@@ -477,13 +477,13 @@ by directory, holding entries in the `CHANGELOG.md` syntax:
 - Accept clients over one connection (#1219)
 ```
 
- * The components are listed in `COMPONENTS` in `tools/release/changelog.py`. The projects under
-   `experimental/` are not among them, and edit their `CHANGELOG.md` directly. `tools/buildenv`
-   has no changelog, as no user installs the image.
+ * The components are listed in `COMPONENTS` in `tools/release/changelog.py`, with
+   `experimental/ksa`, which releases on its own tooling. kRPC for KSA is one component, with its
+   server and services as topics. Adding a component: `Release-Guide.md`.
  * `core` has no changelog, as it ships inside each game mod. A `core/` change gets its entries in
-   each mod it affects: under `## server`, and under the "Mod" topic of
-   `experimental/ksa/CHANGELOG.md`. Each is worded for its own mod.
-   Adding a component: `Release-Guide.md`.
+   each mod it affects, under `## server` and `## experimental/ksa`. Each is worded for its own
+   mod.
+ * `tools/buildenv` has no changelog, as no user installs the image.
  * A fragment's topic merges with the topic of the same text. `//:changelog-fragments-test`
    checks the format.
  * Commit the fragment with the change it describes. A PR with no user-facing change adds none.

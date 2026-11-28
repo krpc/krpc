@@ -42,14 +42,17 @@ KSA mod for the 0.8 clients while `main` works towards 1.0.
 
 A release preparation pull request takes the release branch from the version being released to
 the next one. `versions` in `config.bzl` holds the version each release train works towards. A
-release takes every train but `ksa`, at the version of the `ksp` train. The preflight step checks that they match. Every release step sets
-`KRPC_RELEASE=1` for the builds it runs, so they are release builds, with no `-dev` marker.
+release takes every train but `ksa`, at the version of the `ksp` train. The preflight step checks
+that they match. Every release step sets `KRPC_RELEASE=1` for the builds it runs, so they are
+release builds, with no `-dev` marker.
 
 1. Create a branch off the release branch, such as `release-vx.y.z`.
 2. `tools/release/01-fold-changelogs.py` - writes the fragments in `changelog.d/` into each
-   component's `CHANGELOG.md`, deletes them, and drops the ` - unreleased` suffix. Reorder and edit
-   the merged entries by hand, then commit everything as one commit, the fold commit. Components
-   without user-facing changes get no section and are omitted from the release notes.
+   component's `CHANGELOG.md`, takes those sections out of the fragments, and drops the
+   ` - unreleased` suffix. A fragment keeps its `## experimental/ksa` section for the KSA release,
+   and is deleted once it is empty. Reorder and edit the merged entries by hand, then commit
+   everything as one commit, the fold commit. Components without user-facing changes get no
+   section and are omitted from the release notes.
 3. `tools/release/02-bump-version.py` - sets every train's version in `config.bzl` to the next
    version to work towards, and commits.
 4. Push the branch, open the pull request, and run every CI job on it by hand:

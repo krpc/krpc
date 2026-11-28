@@ -299,5 +299,55 @@ class TestFold(unittest.TestCase):
         )
 
 
+class TestRemoveFolded(unittest.TestCase):
+    TEXT = (
+        "## server\n- Fix (#1240)\n\n"
+        "## experimental/ksa\n\n- Mod\n  - Fix (#1240)\n\n"
+        "## client/python\n- Add (#1240)\n"
+    )
+
+    def test_fragment_names_ksa(self):
+        fragment = changelog.parse_fragment(self.TEXT, "f.md")
+        self.assertIn(changelog.KSA, fragment.sections)
+
+    def test_remove_sections(self):
+        self.assertEqual(
+            "## experimental/ksa\n\n- Mod\n  - Fix (#1240)\n",
+            changelog.remove_sections(self.TEXT, changelog.COMPONENTS),
+        )
+
+    def test_remove_every_section(self):
+        self.assertIsNone(
+            changelog.remove_sections(self.TEXT, changelog.FRAGMENT_COMPONENTS)
+        )
+
+    def test_remove_folded(self):
+        files = FragmentFiles(
+            self,
+            {
+                "a.md": self.TEXT,
+                "b.md": "## server\n- Other (#1241)\n",
+                "c.md": "## client/lua\n- Lua (#1242)\n",
+            },
+        )
+        a, b, c = files.paths
+        fragments = changelog.load_fragments(files.paths)
+        changed = changelog.remove_folded(fragments, ["server", "client/lua"])
+        self.assertEqual({a, b, c}, set(changed))
+        self.assertEqual(
+            "## experimental/ksa\n\n- Mod\n  - Fix (#1240)\n\n"
+            "## client/python\n- Add (#1240)\n",
+            Path(a).read_text(),
+        )
+        self.assertFalse(Path(b).exists())
+        self.assertFalse(Path(c).exists())
+
+    def test_remove_folded_leaves_other_fragments(self):
+        files = FragmentFiles(self, {"a.md": "## client/python\n- Add (#1240)\n"})
+        fragments = changelog.load_fragments(files.paths)
+        self.assertEqual([], changelog.remove_folded(fragments, ["server"]))
+        self.assertTrue(Path(files.paths[0]).exists())
+
+
 if __name__ == "__main__":
     unittest.main()

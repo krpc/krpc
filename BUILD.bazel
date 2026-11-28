@@ -290,7 +290,10 @@ filegroup(
         ["changelog.d/**"],
         allow_empty = True,
     ),
-    visibility = ["//doc:__pkg__"],
+    visibility = [
+        "//doc:__pkg__",
+        "//experimental/ksa/doc:__pkg__",
+    ],
 )
 
 py_test(

@@ -3,12 +3,12 @@
 version released.
 
 The first step of the release preparation branch. Each fragment's entries are
-written into the unreleased section of its components, the fragments are
-deleted, and the ' - unreleased' suffix is dropped. The changes are left
-uncommitted, to be reordered and edited by hand before committing.
+written into the unreleased section of its components and taken out of the
+fragment, and the ' - unreleased' suffix is dropped. A fragment keeps its
+sections for kRPC for KSA, which folds them at its own release. The changes are
+left uncommitted, to be reordered and edited by hand before committing.
 """
 
-import shutil
 from pathlib import Path
 
 import changelog
@@ -40,12 +40,12 @@ def main():
     for path, text in changed.items():
         path.write_text(text)
         print(path)
-    shutil.rmtree(changelog.FRAGMENT_DIR, ignore_errors=True)
+    changelog.remove_folded(fragments, changelog.COMPONENTS)
 
     lib.banner("Done")
     print(
-        "Reorder and edit the entries, then commit the changelogs and "
-        f"the removal of {changelog.FRAGMENT_DIR}/ as one commit."
+        "Reorder and edit the entries, then commit the changelogs and the "
+        f"changes to {changelog.FRAGMENT_DIR}/ as one commit."
     )
     print("Next: tools/release/02-bump-version.py")
 

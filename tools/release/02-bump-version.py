@@ -6,7 +6,6 @@ The second commit of the release preparation branch, above the fold commit,
 which 30-tag.py tags.
 """
 
-import changelog
 import lib
 import versions
 
@@ -20,7 +19,7 @@ def main():
         raise lib.ReleaseError("bump on the release preparation branch")
 
     # The bump goes above the fold commit, which 30-tag.py tags
-    if changelog.fragment_paths(lib.ROOT) or lib.unreleased_changelogs():
+    if lib.unfolded_fragments() or lib.unreleased_changelogs():
         raise lib.ReleaseError(
             "the changelogs are not folded; run 01-fold-changelogs.py and commit first"
         )
