@@ -10,6 +10,12 @@ Originally written by `Genhis <https://github.com/Genhis/KRPC.MechJeb>`_.
 The service acts on the MechJeb of the active vessel, which needs a part with MechJeb. Its
 classes follow MechJeb's windows: a setting is found under the window that shows it.
 
+.. seealso::
+
+   The service supports MechJeb's releases. For MechJeb's development builds, use
+   `krpc-mechjeb-dev <https://krpc.github.io/krpc-mechjeb-dev/>`_, a best-effort replacement of
+   this service, released on its own.
+
 .. toctree::
    :includehidden:
    :maxdepth: 1
