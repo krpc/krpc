@@ -74,8 +74,8 @@ CONTENT_PATHS = (
 # The per-component CHANGELOG.md files the unified changelog page is merged from.
 # Unlike the API surfaces these are toolchain, not content: the current
 # checkout's files carry entries for versions released since, so trim_changelogs
-# prunes each to the version being built. Other CHANGELOG.md files in the tree
-# (the top-level one, tools/buildenv) do not feed the page and are left alone.
+# prunes each to the version being built. The top-level CHANGELOG.md does not
+# feed the page and is left alone.
 CHANGELOG_PATHS = tuple(
     f"{component}/CHANGELOG.md" for component, _ in changelog.shown_components()
 )

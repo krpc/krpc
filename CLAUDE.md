@@ -477,8 +477,9 @@ by directory, holding entries in the `CHANGELOG.md` syntax:
 - Accept clients over one connection (#1219)
 ```
 
- * The components are listed in `COMPONENTS` in `tools/release/changelog.py`. `tools/buildenv` and
-   the projects under `experimental/` are not among them, and edit their `CHANGELOG.md` directly.
+ * The components are listed in `COMPONENTS` in `tools/release/changelog.py`. The projects under
+   `experimental/` are not among them, and edit their `CHANGELOG.md` directly. `tools/buildenv`
+   has no changelog, as no user installs the image.
  * `core` has no changelog, as it ships inside each game mod. A `core/` change gets its entries in
    each mod it affects: under `## server`, and under the "Mod" topic of
    `experimental/ksa/CHANGELOG.md`. Each is worded for its own mod.
