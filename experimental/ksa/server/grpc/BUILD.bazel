@@ -1,5 +1,4 @@
-load("//:config.bzl", "author")
-load("//experimental/ksa:config.bzl", "mod_version")
+load("//:config.bzl", "author", "versions")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_library")
 
@@ -9,7 +8,7 @@ csharp_assembly_info(
     copyright = author,
     description = "gRPC server for kRPC for KSA",
     title = "KRPC.KSA.Grpc",
-    version = mod_version,
+    version = versions["ksa"],
 )
 
 # Built against ASP.NET Core and not the game assemblies, as the game references newer

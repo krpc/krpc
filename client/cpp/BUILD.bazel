@@ -1,5 +1,5 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
-load("//:config.bzl", "cmake_version", "version")
+load("//:config.bzl", "readable_version", "version_file", "versions")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build:cpp.bzl", "cc_deprecation_signals", "clang_format_test", "clang_tidy_test", "doxygen_test")
@@ -18,7 +18,9 @@ services = clientgen_services(
     outs = {"TestService": "test/services/test_service.hpp"},
 )
 
-name = "krpc-cpp-%s" % version
+version = versions["cpp"]
+
+name = "krpc-cpp-%s" % readable_version(version)
 
 pkg_zip(
     name = "cpp",
@@ -34,22 +36,26 @@ pkg_zip(
         "LICENSE",
         "README.txt",
         ":cmake",
-        "//:version",
+        ":version",
         "//protobuf:krpc.proto",
     ] + services,
     path_map = {
         "client/cpp/": "%s/" % name,
-        "VERSION.txt": "%s/VERSION.txt" % name,
         "protobuf/": "%s/protobuf/" % name,
     },
     visibility = ["//:__pkg__"],
+)
+
+version_file(
+    name = "version",
+    version = version,
 )
 
 genrule(
     name = "cmake",
     srcs = ["CMakeLists.txt.tmpl"],
     outs = ["CMakeLists.txt"],
-    cmd = "sed 's/%VERSION%/" + cmake_version + '/g\' "$<" > "$@"',
+    cmd = "sed 's/%VERSION%/" + version + '/g\' "$<" > "$@"',
 )
 
 srcs = glob(["src/*.cpp"])

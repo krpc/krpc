@@ -917,8 +917,9 @@ at = [".github/**/*.yml: actions/setup-python@v{version}"]
 
 # ----------------------- Build environment image ----------------------------------------
 #
-# A change to the Dockerfile needs a new image. Build and push it (tools/buildenv/Makefile),
-# then point CI at it with: deps.py update buildenv --to <version>
+# A change to the Dockerfile needs a new image, at the next version. Build and push it with
+# make build deploy VERSION=<version> in tools/buildenv, then point CI at it with:
+# deps.py update buildenv --to <version>
 
 [[dep]]
 name = "bazelisk"
@@ -939,7 +940,4 @@ at = ["tools/buildenv/Dockerfile: FROM ubuntu:{version}"]
 name = "buildenv"
 version = "3.17.0"
 hold = "set after pushing a new image"
-at = [
-  "tools/buildenv/VERSION.txt: {version}",
-  ".github/**/*.yml: ghcr.io/krpc/buildenv:{version}",
-]
+at = [".github/**/*.yml: ghcr.io/krpc/buildenv:{version}"]

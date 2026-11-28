@@ -4,8 +4,7 @@ load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_java//java:defs.bzl", "java_library")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
-load("//:config.bzl", "author")
-load("//experimental/ksa:config.bzl", "mod_version")
+load("//:config.bzl", "author", "versions")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_library")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
@@ -22,7 +21,7 @@ csharp_assembly_info(
     copyright = author,
     description = "The KFS service of kRPC for KSA",
     title = "KRPC.KSA.KFS",
-    version = mod_version,
+    version = versions["ksa"],
 )
 
 csharp_library(

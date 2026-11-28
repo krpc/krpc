@@ -1,3 +1,8 @@
+# The commit, which each package's VERSION.txt records. Only that rule reads it, so a new commit
+# reruns no compile.
+build --workspace_status_command=tools/build/release/workspace_status.sh
+build:windows --workspace_status_command=tools/build/release/workspace_status.bat
+
 # Apply the build:<os> groups below automatically, keyed on the host OS, so the
 # right C++ flags reach clang/gcc (Linux, macOS) versus MSVC (Windows) without
 # every invocation having to pass --config.

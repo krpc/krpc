@@ -1,6 +1,9 @@
 .PHONY: build test deploy
 
-VERSION=`cat VERSION.txt`
+# The version of the image, as in: make build VERSION=3.18.0
+ifndef VERSION
+$(error set VERSION to the version of the image, as in: make build VERSION=3.18.0)
+endif
 
 build:
 	docker build -t ghcr.io/krpc/buildenv:$(VERSION) .

@@ -1,5 +1,7 @@
 " Generates an AssemblyInfo.cs source file for a C# assembly "
 
+load("//:config.bzl", "readable_version")
+
 def _assembly_info_impl(ctx):
     content = ["using System;", "using System.Reflection;", "using System.Runtime.InteropServices;"]
     if len(ctx.attr.internals_visible_to) > 0:
@@ -10,6 +12,7 @@ def _assembly_info_impl(ctx):
     content.append('[assembly: AssemblyDescription ("%s")]' % ctx.attr.description)
     content.append('[assembly: AssemblyCopyright ("%s")]' % ctx.attr.copyright)
     content.append('[assembly: AssemblyVersion ("%s")]' % ctx.attr.version)
+    content.append('[assembly: AssemblyInformationalVersion ("%s")]' % readable_version(ctx.attr.version))
 
     for pkg in ctx.attr.internals_visible_to:
         content.append('[assembly: InternalsVisibleTo ("%s")]' % pkg)

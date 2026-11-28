@@ -1,5 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library")
-load("//:config.bzl", "python_version")
+load("//:config.bzl", "python_version", "python_version_file", "version_file", "versions")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build:python.bzl", "py_autodoc_test", "py_pyright_test", "py_ruff_test", "py_test", "py_wheel")
@@ -76,34 +76,53 @@ clientgen_python_bundle(
     template = "ksp_init.py.tmpl",
 )
 
-genrule(
+version = versions["python"]
+
+python_version_file(
     name = "krpc-version-py",
-    srcs = ["//:python_version"],
-    outs = ["krpc/version.py"],
-    cmd = 'cp "$<" "$@"',
+    out = "krpc/version.py",
+    version = version,
+)
+
+version_file(
+    name = "version",
+    out = "krpc/VERSION.txt",
+    version = version,
+)
+
+wheel_files = [
+    "LICENSE",
+    "README.md",
+    "pyproject.toml",
+    ":krpc-version-py",
+    ":services-ksp",
+    ":services-testservice",
+    "//:COPYING",
+    "//:COPYING.LESSER",
+    "//protobuf:python",
+    "//tools/build/protobuf:LICENSE.Google.Protobuf",
+] + services + glob(["krpc/**/*"])
+
+wheel_path_map = {
+    "client/python/": "",
+    "protobuf/": "krpc/schema/",
+    "tools/build/protobuf/LICENSE.Google.Protobuf": "LICENSE.protobuf",
+}
+
+# The published wheel, the package with its VERSION.txt. The commit stays out of the wheel the
+# tests install, so they stay cached from one commit to the next.
+py_wheel(
+    name = "python",
+    out = "krpc-%s-py3-none-any.whl" % python_version(version),
+    files = wheel_files + [":version"],
+    path_map = wheel_path_map,
 )
 
 py_wheel(
-    name = "python",
-    out = "krpc-%s-py3-none-any.whl" % python_version,
-    files = [
-        "LICENSE",
-        "README.md",
-        "pyproject.toml",
-        ":services-ksp",
-        ":services-testservice",
-        "//:COPYING",
-        "//:COPYING.LESSER",
-        "//:python_version",
-        "//protobuf:python",
-        "//tools/build/protobuf:LICENSE.Google.Protobuf",
-    ] + services + glob(["krpc/**/*"]),
-    path_map = {
-        "version.py": "krpc/version.py",
-        "client/python/": "",
-        "protobuf/": "krpc/schema/",
-        "tools/build/protobuf/LICENSE.Google.Protobuf": "LICENSE.protobuf",
-    },
+    name = "python-test",
+    out = "test/krpc-%s-py3-none-any.whl" % python_version(version),
+    files = wheel_files,
+    path_map = wheel_path_map,
 )
 
 # The tests that need no server, and those that run against one. Splitting them keeps the
@@ -147,7 +166,7 @@ deps = ["@krpc_pypi//protobuf"]
 py_test(
     name = "unit",
     size = "small",
-    src = ":python",
+    src = ":python-test",
     tests = unit_tests,
     deps = deps,
 )
@@ -165,7 +184,7 @@ client_test(
 py_test(
     name = "clienttest",
     size = "small",
-    src = ":python",
+    src = ":python-test",
     tags = ["requires-network"],
     tests = client_tests,
     deps = deps,

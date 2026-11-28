@@ -10,7 +10,9 @@ A fragment in ``changelog.d/`` holds the unreleased entries of one pull
 request: a ``## <component>`` section per component, each holding bullets in
 the same syntax. The unreleased section of a component is its ``CHANGELOG.md``
 section followed by the entries of every fragment, in fragment order. A topic
-merges by text with an earlier topic of the same text.
+merges by text with an earlier topic of the same text. A release folds its own
+components' sections out of each fragment, and deletes a fragment once it is
+empty.
 
 Shared by the docs changelog page, the release notes, the release fold and the
 CI checks. Imports nothing from the release scripts, as it runs inside Bazel
@@ -30,7 +32,6 @@ FRAGMENT_DIR = "changelog.d"
 # a CHANGELOG.md whose unreleased header takes the version from config.bzl.
 # //service:registry-test checks the services against service/registry.bzl.
 COMPONENTS = {
-    "core": "Core",
     "server": "Server",
     "service/SpaceCenter": "SpaceCenter service",
     "service/Drawing": "Drawing service",
@@ -55,6 +56,14 @@ COMPONENTS = {
     "client/python": "Python client",
     "tools/krpctools": "krpctools",
 }
+
+
+# kRPC for KSA, which releases on its own tooling, at the version of the ksa
+# train. Its server and services are topics of the one changelog.
+KSA = "experimental/ksa"
+
+# The components a fragment can name
+FRAGMENT_COMPONENTS = [*COMPONENTS, KSA]
 
 
 def shown_components():
@@ -287,12 +296,12 @@ def parse_fragment(text, path):
                 )
             close()
             component = match.group(1)
-            if component not in COMPONENTS:
+            if component not in FRAGMENT_COMPONENTS:
                 raise _error(
                     path,
                     number,
-                    f"'{component}' is not a component on the kRPC release version. "
-                    f"Expected one of: {', '.join(COMPONENTS)}",
+                    f"'{component}' is not a component. "
+                    f"Expected one of: {', '.join(FRAGMENT_COMPONENTS)}",
                 )
             if component in sections:
                 raise _error(path, number, f"'## {component}' appears twice")
@@ -338,6 +347,41 @@ def fragment_paths(root):
     if not directory.exists():
         return []
     return sorted(str(path) for path in directory.rglob("*") if not path.is_dir())
+
+
+def remove_sections(text, components):
+    """A fragment's text without the sections of the components, or None when
+    no section is left. Other sections are kept as written."""
+    kept = []
+    keep = True
+    for line in text.splitlines():
+        match = _COMPONENT_RE.match(line)
+        if match:
+            keep = match.group(1) not in components
+        if keep:
+            kept.append(line)
+    if not any(_COMPONENT_RE.match(line) for line in kept):
+        return None
+    while kept and not kept[-1].strip():
+        kept.pop()
+    return "\n".join(kept) + "\n"
+
+
+def remove_folded(fragments, components):
+    """Take the sections of the components out of the fragment files, deleting a
+    file once it is empty. Returns the paths changed."""
+    changed = []
+    for fragment in fragments:
+        if not set(fragment.sections) & set(components):
+            continue
+        path = Path(fragment.path)
+        text = remove_sections(path.read_text(encoding="utf-8"), components)
+        if text is None:
+            path.unlink()
+        else:
+            path.write_text(text, encoding="utf-8")
+        changed.append(fragment.path)
+    return changed
 
 
 def merge(nodes, additions):

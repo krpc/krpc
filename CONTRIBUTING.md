@@ -56,10 +56,13 @@ your branch, such as `changelog.d/fix-stream-wait.md`:
 ```
 
 Each `##` heading names the directory of a component you changed, such as `server`,
-`service/SpaceCenter` or `client/python`. Each entry is a `- ` bullet with wrapped lines indented by
+`service/SpaceCenter`, `client/python` or `experimental/ksa`. Each entry is a `- ` bullet with wrapped lines indented by
 two spaces, ending with the issue it fixes or the pull request number. `bazel test
 //:changelog-fragments-test` checks the file. The entries are added to each component's
-`CHANGELOG.md` when kRPC is released.
+`CHANGELOG.md` when kRPC, or kRPC for KSA, is released.
+
+`core` has no changelog, as `KRPC.Core` ships inside each game mod. A change to it gets its entries
+under `## server`, and also under `## experimental/ksa` when it affects kRPC for KSA.
 
 ## License
 

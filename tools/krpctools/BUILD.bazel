@@ -1,7 +1,7 @@
 load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", native_py_test = "py_test")
-load("//:config.bzl", "python_version", "version_parts")
+load("//:config.bzl", "python_version", "python_version_file", "version_file", "versions")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_test", "py_wheel")
 load("//tools/TestServer:rids.bzl", "RIDS")
 load(":clientgen.bzl", "snake_case")
@@ -102,9 +102,8 @@ dotnet_native_libs = {
     for directory in dotnet_publishes
 }
 
-# The krpc requirement is the version built alongside. A dev build, x.y.z.devN, sorts below
-# x.y.z, so it requires x.y.z.dev0.
-krpc_requirement = python_version.partition(".dev")[0] + (".dev0" if ".dev" in python_version else "")
+# The krpc requirement is the version built alongside
+krpc_requirement = python_version(versions["python"])
 
 genrule(
     name = "pyproject",
@@ -141,64 +140,79 @@ ksp_addon = {
     "//tools/benchmarks:KRPC.Benchmark.net472": "tools/benchmarks/KRPC.Benchmark.net472/net472/",
 }
 
+wheel_exclude = [
+    "*.pdb",
+    "*.repo_mapping",
+    # The translations of System.CommandLine's messages. The tools fall back to English.
+    "*.resources.dll",
+    "*.runfiles_manifest",
+] + [
+    # An apphost takes the .exe extension when built on Windows
+    tool["publish"] + tool["apphost"] + extension
+    for tool in dotnet_tools
+    for extension in [
+        "",
+        ".exe",
+    ]
+]
+
+wheel_files = [
+    "README.md",
+    ":game-data",
+    ":ksp-krpc-version",
+    ":license",
+    ":pyproject",
+    ":version-py",
+    "//:COPYING",
+    "//:COPYING.LESSER",
+    "//client/conformance:dist",
+    "//core:ServiceDefinitions",
+    "//tools/TestServer:ConformanceServiceDefinitions",
+    "//tools/TestServer:DeprecatedServiceDefinitions",
+    "//tools/TestServer:ServiceDefinitions",
+    "//tools/TestServer:TestService2ServiceDefinitions",
+    "//tools/build/protobuf:LICENSE.Google.Protobuf",
+] + list(ksp_addon) + [tool["target"] for tool in dotnet_tools] + [":xmldoc-%d" % i for i in range(len(xmldocs))] + glob([
+    "krpctools/**/*.py",
+    "krpctools/**/*.tmpl",
+    "krpctools/test/*.json",
+    "krpctools/test/**/*.txt",
+    "krpctools/test/**/*.rst",
+])
+
+wheel_path_map = dotnet_publishes | dotnet_native_libs | {
+    path: "krpctools/game/ksp/addon/"
+    for path in ksp_addon.values()
+} | {
+    "core/KRPC.Core.json": "krpctools/test/KRPC.json",
+    "client/conformance/": "krpctools/conformance/",
+    "tools/krpctools/": "",
+    "tools/krpctools/generated/": "",
+    "tools/krpctools/bin/": "krpctools/bin/",
+    "tools/TestServer/ConformanceService.json": "krpctools/test/ConformanceService.json",
+    "tools/TestServer/DeprecatedService.json": "krpctools/test/DeprecatedService.json",
+    "tools/TestServer/TestService.json": "krpctools/test/TestService.json",
+    "tools/TestServer/TestService2.json": "krpctools/test/TestService2.json",
+    "tools/build/serverprocess.py": "krpctools/conformance/serverprocess.py",
+    "tools/build/protobuf/LICENSE.Google.Protobuf": "LICENSE.protobuf",
+}
+
+# The published wheel, the package with its VERSION.txt. The commit stays out of the wheel the
+# tests install, so they stay cached from one commit to the next.
 py_wheel(
     name = "krpctools",
-    out = "krpctools-%s-py3-none-any.whl" % python_version,
-    exclude = [
-        "*.pdb",
-        "*.repo_mapping",
-        # The translations of System.CommandLine's messages. The tools fall back to English.
-        "*.resources.dll",
-        "*.runfiles_manifest",
-    ] + [
-        # An apphost takes the .exe extension when built on Windows
-        tool["publish"] + tool["apphost"] + extension
-        for tool in dotnet_tools
-        for extension in [
-            "",
-            ".exe",
-        ]
-    ],
-    files = [
-        "README.md",
-        ":game-data",
-        ":ksp-krpc-version",
-        ":license",
-        ":pyproject",
-        "//:COPYING",
-        "//:COPYING.LESSER",
-        "//:python_version",
-        "//client/conformance:dist",
-        "//core:ServiceDefinitions",
-        "//tools/TestServer:ConformanceServiceDefinitions",
-        "//tools/TestServer:DeprecatedServiceDefinitions",
-        "//tools/TestServer:ServiceDefinitions",
-        "//tools/TestServer:TestService2ServiceDefinitions",
-        "//tools/build/protobuf:LICENSE.Google.Protobuf",
-    ] + list(ksp_addon) + [tool["target"] for tool in dotnet_tools] + [":xmldoc-%d" % i for i in range(len(xmldocs))] + glob([
-        "krpctools/**/*.py",
-        "krpctools/**/*.tmpl",
-        "krpctools/test/*.json",
-        "krpctools/test/**/*.txt",
-        "krpctools/test/**/*.rst",
-    ]),
-    path_map = dotnet_publishes | dotnet_native_libs | {
-        path: "krpctools/game/ksp/addon/"
-        for path in ksp_addon.values()
-    } | {
-        "version.py": "krpctools/version.py",
-        "core/KRPC.Core.json": "krpctools/test/KRPC.json",
-        "client/conformance/": "krpctools/conformance/",
-        "tools/krpctools/": "",
-        "tools/krpctools/generated/": "",
-        "tools/krpctools/bin/": "krpctools/bin/",
-        "tools/TestServer/ConformanceService.json": "krpctools/test/ConformanceService.json",
-        "tools/TestServer/DeprecatedService.json": "krpctools/test/DeprecatedService.json",
-        "tools/TestServer/TestService.json": "krpctools/test/TestService.json",
-        "tools/TestServer/TestService2.json": "krpctools/test/TestService2.json",
-        "tools/build/serverprocess.py": "krpctools/conformance/serverprocess.py",
-        "tools/build/protobuf/LICENSE.Google.Protobuf": "LICENSE.protobuf",
-    },
+    out = "krpctools-%s-py3-none-any.whl" % python_version(versions["krpctools"]),
+    exclude = wheel_exclude,
+    files = wheel_files + [":version"],
+    path_map = wheel_path_map,
+)
+
+py_wheel(
+    name = "krpctools-test",
+    out = "test/krpctools-%s-py3-none-any.whl" % python_version(versions["krpctools"]),
+    exclude = wheel_exclude,
+    files = wheel_files,
+    path_map = wheel_path_map,
 )
 
 # The krpctools package as an importable python library
@@ -219,11 +233,16 @@ py_library(
     ],
 )
 
-genrule(
+python_version_file(
     name = "version-py",
-    srcs = ["//:python_version"],
-    outs = ["krpctools/version.py"],
-    cmd = 'cp "$<" "$@"',
+    out = "krpctools/version.py",
+    version = versions["krpctools"],
+)
+
+version_file(
+    name = "version",
+    out = "krpctools/VERSION.txt",
+    version = versions["krpctools"],
 )
 
 # The kRPC release the KSP game installs by default: the one built from this tree, which the
@@ -231,7 +250,7 @@ genrule(
 genrule(
     name = "ksp-krpc-version",
     outs = ["krpctools/game/ksp/krpc_version.py"],
-    cmd = "echo 'KRPC_VERSION = \"%s\"' > $@" % ".".join(version_parts[:3]),
+    cmd = "echo 'KRPC_VERSION = \"%s\"' > $@" % versions["ksp"],
 )
 
 py_binary(
@@ -271,7 +290,7 @@ deps = [
 py_test(
     name = "krpctoolstest",
     size = "medium",
-    src = ":krpctools",
+    src = ":krpctools-test",
     tests = ["krpctools/test"],
     deps = deps,
 )
@@ -281,7 +300,7 @@ py_test(
 py_test(
     name = "update-goldens",
     size = "medium",
-    src = ":krpctools",
+    src = ":krpctools-test",
     env = {"KRPCTOOLS_UPDATE_GOLDENS": "true"},
     tags = ["manual"],
     tests = ["krpctools/test"],
@@ -423,7 +442,7 @@ native_py_test(
     size = "medium",
     srcs = ["conformance_test.py"],
     args = [
-        "$(rootpath :krpctools)",
+        "$(rootpath :krpctools-test)",
         "$(DOTNET_BIN)",
         "$(rootpath //client/python:conformance-testee)",
         "$(rootpath //client/python:conformance/expected-failures.txt)",
@@ -431,7 +450,7 @@ native_py_test(
         "$(rootpath //client/python:conformance/conventions.json)",
     ],
     data = [
-        ":krpctools",
+        ":krpctools-test",
         "//client/python:conformance-testee",
         "//client/python:conformance/conventions.json",
         "//client/python:conformance/expected-failures.txt",

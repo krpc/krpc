@@ -384,30 +384,7 @@ jobs:
         shell: bash
         run: PYTHONPATH=testee python tools/ci/smoke_test_tools.py
 
-  linux-build-genfiles:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    container:
-      image: ghcr.io/krpc/buildenv:3.17.0
-      options: --user runner:runner
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.github_token }}
-    steps:
-      - name: checkout
-        uses: actions/checkout@v7
-      - name: setup
-        uses: ./.github/actions/build-setup
-      - name: build
-        run: tools/release/genfiles.py
-      - name: upload-artifact
-        uses: ./.github/actions/upload-artifact
-        with:
-          name: genfiles
-          path: bazel-bin/krpc-genfiles-*.zip
-
   linux-build-csharp-sln:
-    needs: linux-build-genfiles
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
@@ -421,14 +398,8 @@ jobs:
         uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
-      - name: download-genfiles
-        uses: actions/download-artifact@v8
-        with:
-          name: genfiles
-      - name: extract-genfiles
-        run: |
-          unzip krpc-genfiles-*.zip -d ./
-          rm krpc-genfiles-*.zip
+      - name: generate
+        run: bazel build //:csproj
       - name: setup-dotnet
         uses: actions/setup-dotnet@v6
         env:
@@ -443,7 +414,6 @@ jobs:
         run: bazel test //:csproj-test
 
   windows-build-csharp-sln:
-    needs: linux-build-genfiles
     if: inputs.daily || github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
     timeout-minutes: 30
@@ -452,18 +422,9 @@ jobs:
         uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/bazel-fetch-windows
-      - name: download-genfiles
-        uses: actions/download-artifact@v8
-        with:
-          name: genfiles
-      # Git Bash carries no unzip, so unpack with what Windows does have.
-      - name: extract-genfiles
-        shell: pwsh
-        run: |
-          Get-ChildItem krpc-genfiles-*.zip | ForEach-Object {
-            Expand-Archive -Path $_ -DestinationPath . -Force
-          }
-          Remove-Item krpc-genfiles-*.zip
+      - name: generate
+        shell: bash
+        run: bazelisk build //:csproj
       - name: build
         shell: bash
         run: |
@@ -797,7 +758,6 @@ jobs:
       - linux-build-krpc
       - linux-test-client-python
       - test-tool-packages
-      - linux-build-genfiles
       - linux-build-csharp-sln
       - windows-build-csharp-sln
       - linux-test-client-cnano

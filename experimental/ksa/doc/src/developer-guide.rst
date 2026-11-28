@@ -28,7 +28,8 @@ The folders mirror those at the root of the repository:
   that publishes this documentation.
 * ``tools/TestingTools/`` - the ``TestingTools`` service, its server settings and test
   vehicles, installed only for the tests.
-* ``config.bzl`` - the versions of the mod, the kRPC clients, KSA and StarMap.
+* ``config.bzl`` - the versions of the kRPC clients, KSA and StarMap. The versions of the mod
+  are the ``ksa`` train's, in the root ``config.bzl``.
 
 Building
 --------

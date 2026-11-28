@@ -1,10 +1,12 @@
 """Writes a deterministic zip archive.
 
-  write_zip.py --out OUT [--entry SRC=ARCNAME]... [--tree DIR]...
+  write_zip.py --out OUT [--merge ZIP] [--entry SRC=ARCNAME]... [--tree DIR]...
 
---entry adds a single file as ARCNAME. --tree adds every file under DIR at its
-path relative to DIR. Entries are sorted and stamped with a fixed timestamp so
-the archive is reproducible, with no dependency on a system `zip`.
+--merge copies the entries of an existing archive first, in their order, as a
+jar keeps its manifest first. --entry adds a single file as ARCNAME. --tree
+adds every file under DIR at its path relative to DIR. The added entries are
+sorted and stamped with a fixed timestamp so the archive is reproducible, with
+no dependency on a system `zip`.
 """
 
 import argparse
@@ -29,6 +31,7 @@ def main():
     parser.add_argument("--out", required=True)
     parser.add_argument("--entry", action="append", default=[])
     parser.add_argument("--tree", action="append", default=[])
+    parser.add_argument("--merge")
     opts = parser.parse_args()
 
     entries = []
@@ -43,6 +46,10 @@ def main():
     entries.sort()
 
     with zipfile.ZipFile(opts.out, "w") as archive:
+        if opts.merge:
+            with zipfile.ZipFile(opts.merge) as merged:
+                for info in merged.infolist():
+                    archive.writestr(info, merged.read(info))
         for arcname, src in entries:
             _add(archive, src, arcname)
     return 0

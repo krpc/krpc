@@ -31,7 +31,7 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
 
  * `//:krpc` — mod release zip. `//server`, `//service/SpaceCenter`, `//client/python`, … — one component.
  * `//doc:html`; `bazel run //doc:serve` — serve with rebuild-on-edit.
- * `//:csproj` — generate the C# sources `kRPC.sln` needs.
+ * `//:csproj` — generate the C# sources `KRPC.sln` needs.
 
 ### Tests and lint
 
@@ -477,9 +477,13 @@ by directory, holding entries in the `CHANGELOG.md` syntax:
 - Accept clients over one connection (#1219)
 ```
 
- * The components are listed in `COMPONENTS` in `tools/release/changelog.py`. `tools/buildenv` and
-   the projects under `experimental/` are not among them, and edit their `CHANGELOG.md` directly.
-   Adding a component: `Release-Guide.md`.
+ * The components are listed in `COMPONENTS` in `tools/release/changelog.py`, with
+   `experimental/ksa`, which releases on its own tooling. kRPC for KSA is one component, with its
+   server and services as topics. Adding a component: `Release-Guide.md`.
+ * `core` has no changelog, as it ships inside each game mod. A `core/` change gets its entries in
+   each mod it affects, under `## server` and `## experimental/ksa`. Each is worded for its own
+   mod.
+ * `tools/buildenv` has no changelog, as no user installs the image.
  * A fragment's topic merges with the topic of the same text. `//:changelog-fragments-test`
    checks the format.
  * Commit the fragment with the change it describes. A PR with no user-facing change adds none.

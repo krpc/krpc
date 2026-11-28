@@ -33,8 +33,6 @@ jobs:
         uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
-        with:
-          long-version: false
       - name: cpp-cache
         id: cpp-cache
         uses: ./.github/actions/bazel-disk-cache
@@ -117,12 +115,6 @@ jobs:
         with:
           name: krpctools
           path: artifacts/krpctools/
-      - name: upload-genfiles
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/upload-artifact@v7
-        with:
-          name: genfiles
-          path: artifacts/genfiles/
       - name: upload-client-cnano
         if: steps.merge-group-run.outputs.run-id
         uses: actions/upload-artifact@v7

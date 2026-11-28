@@ -6,7 +6,6 @@ ready for uploading to the GitHub release.
 import shutil
 from pathlib import Path
 
-import genfiles
 import lib
 
 TARGETS = (
@@ -35,7 +34,6 @@ def assets():
             "bazel-bin/client/lua/krpc-lua-{version}.zip",
             "bazel-bin/client/python/krpc-{version}-py3-none-any.whl",
             "bazel-bin/tools/krpctools/krpctools-{version}-py3-none-any.whl",
-            "bazel-bin/krpc-genfiles-{version}.zip",
         )
     ]
 
@@ -46,7 +44,6 @@ def main():
 
     lib.banner("Building the release assets")
     lib.run("bazel", "build", *TARGETS)
-    genfiles.main()
 
     lib.banner("Collecting assets into assets/")
     directory = Path("assets")

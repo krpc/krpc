@@ -68,17 +68,26 @@ def check_repository(report):
     else:
         report.ok(f"tag {lib.TAG} not created yet (30-tag.py will create it)")
 
+    behind = [train for train in lib.TRAINS if lib.VERSIONS[train] != lib.VERSION]
+    if behind:
+        report.fail(
+            f"{lib.TAG} releases every train, but {', '.join(behind)} "
+            f"in config.bzl are not at {lib.VERSION}"
+        )
+    else:
+        report.ok(f"every train in config.bzl is at {lib.VERSION}")
+
 
 def check_changelogs(report):
     lib.banner("Changelog fold")
-    paths = changelog.fragment_paths(lib.ROOT)
+    paths = lib.unfolded_fragments()
     if paths:
         report.fail(
-            f"{changelog.FRAGMENT_DIR}/ holds {len(paths)} file(s); "
+            f"{len(paths)} fragment(s) hold entries for {lib.TAG}; "
             f"fold them with 01-fold-changelogs.py"
         )
     else:
-        report.ok(f"{changelog.FRAGMENT_DIR}/ holds no fragment")
+        report.ok(f"no fragment holds entries for {lib.TAG}")
     unreleased = lib.unreleased_changelogs()
     if unreleased:
         report.fail(f"still marked unreleased: {', '.join(unreleased)}")

@@ -58,6 +58,7 @@ from pathlib import Path
 
 import changelog
 import lib
+import versions
 
 # The documentation content inputs restored, unchanged in location, from the
 # content ref onto the current toolchain. The sources of the services in the
@@ -73,8 +74,8 @@ CONTENT_PATHS = (
 # The per-component CHANGELOG.md files the unified changelog page is merged from.
 # Unlike the API surfaces these are toolchain, not content: the current
 # checkout's files carry entries for versions released since, so trim_changelogs
-# prunes each to the version being built. Other CHANGELOG.md files in the tree
-# (the top-level one, tools/buildenv) do not feed the page and are left alone.
+# prunes each to the version being built. The top-level CHANGELOG.md does not
+# feed the page and is left alone.
 CHANGELOG_PATHS = tuple(
     f"{component}/CHANGELOG.md" for component, _ in changelog.shown_components()
 )
@@ -444,17 +445,9 @@ def trim_changelogs(worktree, version):
 
 
 def pin_version(worktree, version):
-    """Pin the version stamp (build subpath, html_baseurl, switcher match)."""
-    config = worktree / "config.bzl"
-    text, count = re.subn(
-        r'^version = ".*"$',
-        f'version = "{version}"',
-        config.read_text(encoding="utf-8"),
-        flags=re.MULTILINE,
-    )
-    if count != 1:
-        raise lib.ReleaseError("failed to pin the version in config.bzl")
-    config.write_text(text, encoding="utf-8")
+    """Pin the version stamp (build subpath, html_baseurl, switcher match) and
+    the versions the guides name, by setting every train to the version."""
+    versions.set_trains(lib.TRAINS, version, worktree / lib.CONFIG)
 
 
 def check_changelog(zip_path):

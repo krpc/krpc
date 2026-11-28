@@ -61,6 +61,23 @@ class TestHints(unittest.TestCase):
         self.assertEqual(1, len(found))
         self.assertIn("has an entry under `## client/cpp`", found[0])
 
+    def test_core_change_needs_no_entry(self):
+        files = [File("core/src/Server/Server.cs", "modified")]
+        self.assertEqual([], texts(pull_request(files)))
+
+    def test_server_entry_for_a_core_change(self):
+        files = [File("core/src/Server/Server.cs", "modified")]
+        pr = with_fragment("## server\n- Fix a server (#1240)\n", files)
+        self.assertEqual([], texts(pr))
+
+    def test_ksa_entry_for_a_core_change(self):
+        files = [File("core/src/Server/Server.cs", "modified")]
+        text = (
+            "## server\n- Fix (#1240)\n\n"
+            "## experimental/ksa\n\n- Mod\n  - Fix (#1240)\n"
+        )
+        self.assertEqual([], texts(with_fragment(text, files)))
+
     def test_fragment_matches(self):
         pr = with_fragment("## service/SpaceCenter\n- Fix a vessel (#1240)\n")
         self.assertEqual([], texts(pr))
@@ -131,6 +148,65 @@ class TestHints(unittest.TestCase):
             File("config.bzl", "modified"),
         ]
         self.assertEqual([], texts(pull_request(files)))
+
+    def test_release_preparation_keeping_other_sections(self):
+        files = [
+            File("experimental/ksa/CHANGELOG.md", "modified"),
+            File(
+                FRAGMENT,
+                "modified",
+                "@@ -1,4 +1,0 @@\n-## experimental/ksa\n-\n-- A\n-\n",
+            ),
+        ]
+        pr = pull_request(files, {FRAGMENT: "## server\n- Fix (#1240)\n"})
+        self.assertEqual([], texts(pr))
+
+    def test_entry_removed_from_a_fragment(self):
+        files = [
+            File("server/CHANGELOG.md", "modified"),
+            File(
+                FRAGMENT,
+                "modified",
+                "@@ -3,2 +3,1 @@\n - Fix (#1240)\n-- Fix (#1240)\n",
+            ),
+        ]
+        pr = pull_request(files, {FRAGMENT: "## server\n\n- Fix (#1240)\n"})
+        found = texts(pr)
+        self.assertEqual(1, len(found))
+        self.assertIn("Please don't edit `server/CHANGELOG.md` directly", found[0])
+
+    def test_fold_of_another_component(self):
+        files = [
+            File("server/CHANGELOG.md", "modified"),
+            File(
+                FRAGMENT,
+                "modified",
+                "@@ -1,4 +1,0 @@\n-## experimental/ksa\n-\n-- A\n-\n",
+            ),
+        ]
+        pr = pull_request(files, {FRAGMENT: "## server\n- Fix (#1240)\n"})
+        found = texts(pr)
+        self.assertEqual(1, len(found))
+        self.assertIn("Please don't edit `server/CHANGELOG.md` directly", found[0])
+
+    def test_ksa_change(self):
+        files = [File("experimental/ksa/service/KSA/src/Vehicle.cs", "modified")]
+        found = texts(pull_request(files))
+        self.assertEqual(1, len(found))
+        self.assertIn("changes files in `experimental/ksa/...`", found[0])
+
+    def test_ksa_docs_and_tools_need_no_entry(self):
+        files = [
+            File("experimental/ksa/doc/src/index.rst", "modified"),
+            File("experimental/ksa/tools/release/01-prepare.py", "modified"),
+        ]
+        self.assertEqual([], texts(pull_request(files)))
+
+    def test_ksa_changelog_edit(self):
+        files = [File("experimental/ksa/CHANGELOG.md", "modified")]
+        found = texts(pull_request(files))
+        self.assertEqual(1, len(found))
+        self.assertIn("Please don't edit `experimental/ksa/CHANGELOG.md`", found[0])
 
     def test_changelog_checked_label(self):
         labels = ["changelog-checked"]

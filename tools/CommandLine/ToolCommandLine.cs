@@ -3,18 +3,19 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Linq;
 using System.Reflection;
+using KRPC.Utils;
 
 namespace KRPC.Tools
 {
     // Command line handling shared by the tools, compiled into each of them
     static class ToolCommandLine
     {
-        // The version as major.minor.patch, matching the krpctools package
+        // The informational version, the version people read
         sealed class VersionAction : SynchronousCommandLineAction
         {
             public override int Invoke (ParseResult parseResult)
             {
-                Console.WriteLine (Assembly.GetEntryAssembly ().GetName ().Version.ToString (3));
+                Console.WriteLine (Assembly.GetEntryAssembly ().InformationalVersion ());
                 return 0;
             }
         }

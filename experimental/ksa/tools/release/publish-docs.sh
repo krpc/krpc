@@ -6,13 +6,20 @@
 #                           worktree
 #   publish-docs.sh --push  also push the commit to origin/gh-pages
 #
-# The docs workflow replaces only its own dev/ and <version>/ folders, and the version
-# switcher lists only those, so this folder is left alone and unlisted.
+# Run it from the release commit, which carries the ksa-v<version> tag. The docs workflow
+# replaces only its own dev/ and <version>/ folders, and the version switcher lists only
+# those, so this folder is left alone and unlisted.
 set -euo pipefail
 
 ksa="$(readlink -f "$(dirname "$0")/../..")"
 repo="$(dirname "$(dirname "$ksa")")"
-mod_version="$(sed -n 's/^mod_version = "\(.*\)"$/\1/p' "$ksa/config.bzl")"
+# The docs of a release are a release build (tools/build/release/release.bzl)
+export KRPC_RELEASE=1
+mod_version="$("$repo/tools/version.py" ksa)"
+if [ "$(git -C "$repo" tag --points-at HEAD --list "ksa-v$mod_version")" != "ksa-v$mod_version" ]; then
+  echo "HEAD is not the release commit of kRPC for KSA $mod_version (tag ksa-v$mod_version)" >&2
+  exit 1
+fi
 worktree="$ksa/bin/gh-pages"
 subpath="experimental/ksa"
 

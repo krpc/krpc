@@ -1,5 +1,5 @@
 """Checks the changelog fragments: each is named '<name>.md' and parses, and
-names only components on the kRPC release version.
+names only known components.
 
 Reads the fragment directory under the current directory, which in a Bazel test
 is the runfiles tree."""

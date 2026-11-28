@@ -16,24 +16,21 @@ def main():
     branch = lib.capture("git", "rev-parse", "--abbrev-ref", "HEAD")
     if branch == "HEAD" or lib.is_release_branch(branch):
         raise lib.ReleaseError("test on the release preparation branch")
-    if not ksalib.is_released():
+    # The release commit, or a fix or the commit of 03-bump-version.py above it
+    found = ksalib.sections()
+    if not found or found[0].unreleased:
         raise lib.ReleaseError(
-            f"the top section of {ksalib.CHANGELOG} does not release "
-            f"v{ksalib.VERSION} (run 01-prepare.py)"
+            f"the top section of {ksalib.CHANGELOG} is not released (run 01-prepare.py)"
         )
 
-    lib.banner(f"Testing kRPC for KSA {ksalib.VERSION}")
+    lib.banner(f"Testing kRPC for KSA {found[0].version}")
     lib.run("bazel", "build", "//experimental/ksa:release")
     lib.run(
         "bazel", "test", "//experimental/ksa:test", "//experimental/ksa/doc:linkcheck"
     )
 
     lib.banner("Done")
-    print(
-        f"Push {branch} and open the release preparation pull request against "
-        "its release branch. Once it merges, check out the release commit and run "
-        "experimental/ksa/tools/release/10-preflight.py."
-    )
+    print("Next: experimental/ksa/tools/release/03-bump-version.py, unless it has run")
 
 
 if __name__ == "__main__":

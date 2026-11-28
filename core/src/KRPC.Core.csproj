@@ -242,6 +242,7 @@
     <Compile Include="Service\TypeUtils.cs" />
     <Compile Include="Service\YieldException.cs" />
     <Compile Include="Utils\Accessor.cs" />
+    <Compile Include="Utils\AssemblyExtensions.cs" />
     <Compile Include="Utils\DictionaryExtensions.cs" />
     <Compile Include="Utils\DocumentationExtensions.cs" />
     <Compile Include="Utils\DynamicBuffer.cs" />

@@ -141,7 +141,7 @@ class TestParse(unittest.TestCase):
 
     def test_fragment_empty_section(self):
         self.check_fragment_error(
-            "## server\n## core\n- An entry\n", r"^f.md:1: '## server' has no"
+            "## server\n## client/python\n- An entry\n", r"^f.md:1: '## server' has no"
         )
 
     def test_fragment_empty(self):
@@ -171,7 +171,7 @@ class TestLoad(unittest.TestCase):
             self,
             {
                 "b.md": "## server\n- Entry (#1230)\n",
-                "c.md": "## server\n- Entry (#1100)\n## core\n- Entry (#1228)\n",
+                "c.md": "## server\n- Entry (#1100)\n## client/python\n- Entry (#1228)\n",
                 "a.md": "## server\n- Entry\n",
             },
         )
@@ -281,7 +281,7 @@ class TestFold(unittest.TestCase):
         )
 
     def test_fold_other_component(self):
-        fragments = [changelog.parse_fragment("## core\n- New (#1)\n", "a.md")]
+        fragments = [changelog.parse_fragment("## client/python\n- New (#1)\n", "a.md")]
         self.assertEqual(
             CHANGELOG, changelog.fold(CHANGELOG, "c", "0.8.0", fragments, "server")
         )
@@ -297,6 +297,56 @@ class TestFold(unittest.TestCase):
         self.assertTrue(
             changelog.strip_unreleased(CHANGELOG, "0.8.0").startswith("## [v0.8.0]\n")
         )
+
+
+class TestRemoveFolded(unittest.TestCase):
+    TEXT = (
+        "## server\n- Fix (#1240)\n\n"
+        "## experimental/ksa\n\n- Mod\n  - Fix (#1240)\n\n"
+        "## client/python\n- Add (#1240)\n"
+    )
+
+    def test_fragment_names_ksa(self):
+        fragment = changelog.parse_fragment(self.TEXT, "f.md")
+        self.assertIn(changelog.KSA, fragment.sections)
+
+    def test_remove_sections(self):
+        self.assertEqual(
+            "## experimental/ksa\n\n- Mod\n  - Fix (#1240)\n",
+            changelog.remove_sections(self.TEXT, changelog.COMPONENTS),
+        )
+
+    def test_remove_every_section(self):
+        self.assertIsNone(
+            changelog.remove_sections(self.TEXT, changelog.FRAGMENT_COMPONENTS)
+        )
+
+    def test_remove_folded(self):
+        files = FragmentFiles(
+            self,
+            {
+                "a.md": self.TEXT,
+                "b.md": "## server\n- Other (#1241)\n",
+                "c.md": "## client/lua\n- Lua (#1242)\n",
+            },
+        )
+        a, b, c = files.paths
+        fragments = changelog.load_fragments(files.paths)
+        changed = changelog.remove_folded(fragments, ["server", "client/lua"])
+        self.assertEqual({a, b, c}, set(changed))
+        self.assertEqual(
+            "## experimental/ksa\n\n- Mod\n  - Fix (#1240)\n\n"
+            "## client/python\n- Add (#1240)\n",
+            Path(a).read_text(),
+        )
+        self.assertFalse(Path(b).exists())
+        self.assertFalse(Path(c).exists())
+
+    def test_remove_folded_leaves_other_fragments(self):
+        files = FragmentFiles(self, {"a.md": "## client/python\n- Add (#1240)\n"})
+        fragments = changelog.load_fragments(files.paths)
+        self.assertEqual([], changelog.remove_folded(fragments, ["server"]))
+        self.assertTrue(Path(files.paths[0]).exists())
 
 
 if __name__ == "__main__":

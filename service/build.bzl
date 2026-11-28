@@ -1,6 +1,6 @@
 " common service build defs "
 
-load("//:config.bzl", "assembly_version", "author")
+load("//:config.bzl", "author", "versions")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_library")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
@@ -176,7 +176,7 @@ def ksp_service(
         copyright = copyright,
         description = service.description,
         title = assembly,
-        version = assembly_version,
+        version = versions["ksp"],
         visibility = [
             "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
         ],

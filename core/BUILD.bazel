@@ -1,9 +1,7 @@
-load("//:config.bzl", "assembly_version", "author", "core_version")
+load("//:config.bzl", "author", "core_version")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:csharp.bzl", "csharp_library", "csharp_nunit_test")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
-
-exports_files(["CHANGELOG.md"])
 
 filegroup(
     name = "LICENSE.KRPC.IO.Ports",
@@ -133,10 +131,7 @@ csharp_assembly_info(
     cls_compliant = False,
     copyright = author,
     title = "KRPC.Core.Test",
-    version = assembly_version,
-    visibility = [
-        "//:__pkg__",  # Make visible to krpc-genfiles so it can copy AssemblyInfo.cs to zip
-    ],
+    version = core_version,
 )
 
 # Procedures built against version 1 of a library and run against version 2, which removes a

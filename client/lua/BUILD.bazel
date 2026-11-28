@@ -1,5 +1,5 @@
 load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
-load("//:config.bzl", "lua_version", "version")
+load("//:config.bzl", "readable_version", "version_file", "versions")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build:lua.bzl", "lua_binary", "lua_library", "lua_luacheck_test", "lua_test")
@@ -37,9 +37,18 @@ lua_deps = [
     "//tools/build/lua:penlight",
 ]
 
+version = versions["lua"]
+
+archive_version = readable_version(version)
+
+version_file(
+    name = "version",
+    version = version,
+)
+
 pkg_zip(
     name = "lua",
-    out = "krpc-lua-%s.zip" % version,
+    out = "krpc-lua-%s.zip" % archive_version,
     files = [
         ":rockspec",
         ":src",
@@ -52,33 +61,33 @@ pkg_zip(
 
 expand_template(
     name = "rockspec",
-    out = "krpc-" + lua_version + "-0.rockspec",
+    out = "krpc-" + version + "-0.rockspec",
     substitutions = {
-        "%LUA_VERSION%": lua_version,
-        "%VERSION%": version,
+        "%LUA_VERSION%": version,
+        "%VERSION%": archive_version,
     },
     template = "rockspec.tmpl",
 )
 
 pkg_zip(
     name = "src",
-    out = "krpc-%s.zip" % version,
+    out = "krpc-%s.zip" % archive_version,
     files = glob(["krpc/**/*.lua"]) + [
         "CHANGELOG.md",
         "LICENSE",
+        ":version",
         "//:COPYING",
         "//:COPYING.LESSER",
-        "//:version",
         "//protobuf:lua",
     ],
     path_map = {
-        "COPYING": "krpc-%s/COPYING" % version,
-        "COPYING.LESSER": "krpc-%s/COPYING.LESSER" % version,
-        "VERSION.txt": "krpc-%s/VERSION.txt" % version,
-        "client/lua/CHANGELOG.md": "krpc-%s/CHANGELOG.md" % version,
-        "client/lua/LICENSE": "krpc-%s/LICENSE" % version,
-        "client/": "krpc-%s/" % version,
-        "protobuf/KRPC.lua": "krpc-%s/lua/krpc/schema/KRPC.lua" % version,
+        "COPYING": "krpc-%s/COPYING" % archive_version,
+        "COPYING.LESSER": "krpc-%s/COPYING.LESSER" % archive_version,
+        "client/lua/CHANGELOG.md": "krpc-%s/CHANGELOG.md" % archive_version,
+        "client/lua/LICENSE": "krpc-%s/LICENSE" % archive_version,
+        "client/lua/VERSION.txt": "krpc-%s/VERSION.txt" % archive_version,
+        "client/": "krpc-%s/" % archive_version,
+        "protobuf/KRPC.lua": "krpc-%s/lua/krpc/schema/KRPC.lua" % archive_version,
     },
 )
 

@@ -29,10 +29,10 @@ if [ -n "${1:-}" ]; then
 else
   bazel build //client/cpp:cpp
   bazel_bin=$(bazel info bazel-bin)
-  version=$(tools/krpc-version.sh)
+  version=$(tools/version.py cpp)
   archive="$bazel_bin/client/cpp/krpc-cpp-$version.zip"
 fi
-# Strip any dev suffix (e.g. 0.5.4-12345-abc) to get a valid semver for vcpkg.json.
+# Strip the -dev suffix to get a valid semver for vcpkg.json.
 version_semver=$(echo "$version" | grep -oE '^[0-9]+\.[0-9]+\.[0-9]+')
 
 # Create a temporary overlay port that points to the local archive

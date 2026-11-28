@@ -365,12 +365,11 @@ PIN_FORMS: list[tuple[tuple[str, ...], re.Pattern[str]]] = [
 
 # Matches of the forms above that are not dependencies
 NOT_PINS: list[tuple[str, re.Pattern[str]]] = [
-    # kRPC's own version, and the version of KRPC.Core
-    ("config.bzl", re.compile(r'(?m)^(core_)?version = "')),
+    ("config.bzl", re.compile(r'(?m)^core_version = "')),  # the version of KRPC.Core
     ("tools/krpctools/pyproject.toml", re.compile(r'"krpc >= ')),  # set by the build
-    # kRPC for KSA's own version, the kRPC client release it works with, and the KSA build,
-    # which is closed source and has no release to check. update-ksa.py moves the KSA build.
-    ("experimental/ksa/config.bzl", re.compile(r'(?m)^(mod|client|ksa)_version = "')),
+    # The kRPC client release kRPC for KSA works with, and the KSA build, which is closed
+    # source and has no release to check. update-ksa.py moves the KSA build.
+    ("experimental/ksa/config.bzl", re.compile(r'(?m)^(client|ksa)_version = "')),
     # The installed JDK of CI, which the jdk entry pins where it is installed
     (".bazelrc", re.compile(r"_version=local_jdk")),
 ]

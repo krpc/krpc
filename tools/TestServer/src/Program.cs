@@ -182,8 +182,7 @@ namespace TestServer
             // which is run to run variation in a measurement for nothing.
             if (!framePacing)
                 Configuration.Instance.AdaptiveRateControl = false;
-            var serverVersion = Assembly.GetEntryAssembly ().GetName ().Version;
-            core.Version = serverVersion.Major + "." + serverVersion.Minor + "." + serverVersion.Build;
+            core.Version = Assembly.GetEntryAssembly ().InformationalVersion ();
             CallContext.GameScene = GameScene.SpaceCenter;
             core.OnClientRequestingConnection += (s, e) => e.Request.Allow ();
 

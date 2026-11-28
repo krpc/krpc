@@ -4,8 +4,9 @@ load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@npm//client/js:@biomejs/biome/package_json.bzl", biome = "bin")
 load("@rules_python//python:defs.bzl", "py_binary")
+load("//:config.bzl", "readable_version", "versions")
 load("//doc:check_documented.bzl", "check_documented_test")
-load("//experimental/ksa:config.bzl", "client_version", "ksa_version", "mod_version", "starmap_version")
+load("//experimental/ksa:config.bzl", "client_version", "ksa_version", "starmap_version")
 load("//tools/build:cpp.bzl", "clang_format_test")
 load("//tools/build:lua.bzl", "lua_luacheck_test")
 load("//tools/build:pkg.bzl", "stage_files")
@@ -27,7 +28,7 @@ expand_files(
         "@KRPC_VERSION@": client_version,
         "@KSA_VERSION@": ksa_version,
         "@STARMAP_VERSION@": starmap_version,
-        "@VERSION@": mod_version,
+        "@VERSION@": readable_version(versions["ksa"]),
     },
 )
 
@@ -99,9 +100,12 @@ py_binary(
 
 genrule(
     name = "changelog",
-    srcs = ["//experimental/ksa:CHANGELOG.md"],
+    srcs = [
+        "//:changelog-fragments",
+        "//experimental/ksa:CHANGELOG.md",
+    ],
     outs = ["gen/changelog.rst"],
-    cmd = "$(execpath :changelog-page) $@ $<",
+    cmd = "$(execpath :changelog-page) $@ $(execpath //experimental/ksa:CHANGELOG.md) %s $(execpaths //:changelog-fragments)" % versions["ksa"],
     tools = [":changelog-page"],
 )
 

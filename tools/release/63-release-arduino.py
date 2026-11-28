@@ -112,12 +112,16 @@ def update_license(arduino, archive_path, nanopb):
         (arduino / name).unlink(missing_ok=True)
 
 
-def set_version(arduino):
-    """Set the version in the library's library.properties to the release."""
+def set_version(arduino, archive_path):
+    """Set the version in the library's library.properties to the release, and
+    copy the C-nano client's VERSION.txt, which names its commit."""
     properties = arduino / "library.properties"
     properties.write_text(
         re.sub(r"(?m)^version=.*$", f"version={lib.VERSION}", properties.read_text())
     )
+    with zipfile.ZipFile(archive_path) as archive:
+        version = archive.read(f"krpc-cnano-{lib.VERSION}/VERSION.txt")
+    (arduino / "VERSION.txt").write_bytes(version)
 
 
 def tag_release(arduino):
@@ -163,7 +167,7 @@ def main():
     lib.banner("Rebuilding the Arduino library source")
     rebuild_source(arduino, archive_path, nanopb)
     update_license(arduino, archive_path, nanopb)
-    set_version(arduino)
+    set_version(arduino, archive_path)
     print(f"Arduino library source in {arduino}")
 
     lib.banner("Updating the Arduino library repository")

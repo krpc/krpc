@@ -6,7 +6,7 @@ load("@npm//client/js:@biomejs/biome/package_json.bzl", biome = "bin")
 load("@npm//client/js:@bufbuild/protoc-gen-es/package_json.bzl", protoc_gen_es = "bin")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
-load("//:config.bzl", "npm_version", "version")
+load("//:config.bzl", "readable_version", "version_file", "versions")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build/protobuf:js.bzl", "protobuf_es")
@@ -98,6 +98,8 @@ ts_project(
     ],
 )
 
+version = versions["js"]
+
 # The npm package, as the tarball npm pack makes
 pkg_tar(
     name = "js",
@@ -107,15 +109,20 @@ pkg_tar(
     ],
     extension = "tgz",
     package_dir = "package",
-    package_file_name = "krpc-js-%s.tgz" % version,
+    package_file_name = "krpc-js-%s.tgz" % readable_version(version),
     visibility = ["//visibility:public"],
 )
 
 expand_template(
     name = "package-json",
     out = "package/package.json",
-    substitutions = {'"version": "0.0.0"': '"version": "%s"' % npm_version},
+    substitutions = {'"version": "0.0.0"': '"version": "%s"' % readable_version(version)},
     template = "package.json",
+)
+
+version_file(
+    name = "version",
+    version = version,
 )
 
 pkg_files(
@@ -125,6 +132,7 @@ pkg_files(
         "LICENSE",
         "README.md",
         ":package-json",
+        ":version",
         "//:COPYING",
         "//:COPYING.LESSER",
     ],

@@ -64,6 +64,7 @@ def _nuget_package_impl(ctx):
         '  <Default Extension="dll" ContentType="application/octet" />',
         '  <Default Extension="xml" ContentType="application/octet" />',
         '  <Default Extension="md" ContentType="text/markdown" />',
+        '  <Default Extension="txt" ContentType="text/plain" />',
         '  <Default Extension="nuspec" ContentType="application/octet" />',
         '  <Default Extension="psmdcp" ContentType="application/vnd.openxmlformats-package.core-properties+xml" />',
         "</Types>",
@@ -110,6 +111,9 @@ def _nuget_package_impl(ctx):
         readme_file = ctx.file.readme
         args.add("--entry", "%s=README.md" % readme_file.path)
         inputs.append(readme_file)
+    if ctx.attr.version_file:
+        args.add("--entry", "%s=VERSION.txt" % ctx.file.version_file.path)
+        inputs.append(ctx.file.version_file)
     for framework, info in assemblies.items():
         args.add("--entry", "%s=lib/%s/%s.dll" % (info.lib.path, framework, ctx.attr.id))
         args.add("--entry", "%s=lib/%s/%s.xml" % (info.doc.path, framework, ctx.attr.id))
@@ -134,6 +138,7 @@ nuget_package = rule(
         "project_url": attr.string(),
         "license": attr.string(),
         "readme": attr.label(allow_single_file = [".md"]),
+        "version_file": attr.label(allow_single_file = [".txt"], doc = "The VERSION.txt, at the package root"),
         "description": attr.string(mandatory = True),
         "deps": attr.string_dict(),
         "_write_zip": attr.label(

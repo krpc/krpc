@@ -25,6 +25,16 @@ import json
 import os
 import re
 import shutil
+import sys
+
+sys.path.insert(
+    0,
+    os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), os.pardir, "tools", "release"
+    ),
+)
+
+import versions  # noqa: E402
 
 # Absolute URL the site is served under. pydata-sphinx-theme's version switcher
 # requires full URLs in switcher.json (it also uses them to probe whether the
@@ -55,22 +65,6 @@ def version_key(version):
         return (tuple(nums), 1, ())
     pre_parts = tuple((0, int(p)) if _NUM.match(p) else (1, p) for p in pre.split("."))
     return (tuple(nums), 0, pre_parts)
-
-
-def planned_version():
-    """The version the /dev/ build is working towards, read from config.bzl and
-    stripped of any build-stamp suffix (e.g. `0.6.0-3-abcdef` -> `0.6.0`). It is
-    known ahead of the release, so the dev entry can name it rather than showing
-    a bare `dev`."""
-    config = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), os.pardir, "config.bzl"
-    )
-    with open(config, encoding="utf-8") as fp:
-        for line in fp:
-            match = re.match(r'^version\s*=\s*"([^"]+)"', line)
-            if match:
-                return match.group(1).partition("-")[0]
-    raise RuntimeError("no version found in %s" % config)
 
 
 def discover_versions(root):
@@ -181,7 +175,7 @@ def main():
     args = parser.parse_args()
 
     releases, has_dev = discover_versions(args.root)
-    entries = build_entries(releases, planned_version() if has_dev else None)
+    entries = build_entries(releases, versions.trains()["ksp"] if has_dev else None)
 
     switcher_path = os.path.join(args.root, "switcher.json")
     with open(switcher_path, "w", encoding="utf-8") as fp:

@@ -17,6 +17,7 @@ from pathlib import Path
 
 import changelog
 import tomllib
+import versions
 
 ROOT = Path(__file__).resolve().parents[2]
 os.chdir(ROOT)
@@ -30,16 +31,16 @@ class ReleaseError(Exception):
     """
 
 
-def _version():
-    match = re.search(
-        r'^version\s*=\s*"(.+)"$', Path("config.bzl").read_text(), re.MULTILINE
-    )
-    if match is None:
-        raise ReleaseError("no version found in config.bzl")
-    return match.group(1)
+CONFIG = versions.CONFIG.relative_to(ROOT)
 
-
-VERSION = _version()
+# Read as the module loads, before a step's main can report the error
+try:
+    VERSIONS = versions.trains()
+except versions.VersionError as exception:
+    sys.exit(f"error: {exception}")
+# A vx.y.z release releases every train but KSA at once, at the version of the KSP train
+TRAINS = [train for train in VERSIONS if train != "ksa"]
+VERSION = VERSIONS["ksp"]
 TAG = "v" + VERSION
 
 
@@ -199,55 +200,11 @@ def on_release_branch(commit="HEAD"):
     return " and ".join(names)
 
 
-CONFIG = Path("config.bzl")
-
-# The sources compiled into KRPC.Core.dll
-CORE_SOURCES = "core/src"
-
-
-def bump_core_version():
-    """Bump core_version in config.bzl, if KRPC.Core changed since its last bump.
-
-    Lists the commits that changed core, and asks which part of the version to
-    bump. Only the maintainer knows whether a change breaks the API the server
-    and service assemblies compile against. Leaves config.bzl uncommitted, and
-    returns the new version, or None if the version stays.
-    """
-    text = CONFIG.read_text()
-    match = re.search(r'^core_version = "(\d+)\.(\d+)\.(\d+)"$', text, re.MULTILINE)
-    if match is None:
-        raise ReleaseError(f"no x.y.z core_version found in {CONFIG}")
-    current = ".".join(match.groups())
-    last = capture(
-        "git", "log", "-1", "--format=%H", "-G", "^core_version = ", "--", str(CONFIG)
-    )
-    if not last:
-        raise ReleaseError(f"no commit sets core_version in {CONFIG}")
-    changes = capture("git", "log", "--oneline", f"{last}..HEAD", "--", CORE_SOURCES)
-    if not changes:
-        print(f"KRPC.Core is unchanged since {current}, and keeps its version")
-        return None
-
-    banner(f"KRPC.Core changes since {current}")
-    print(changes)
-    major, minor, patch = (int(part) for part in match.groups())
-    versions = {
-        "major": f"{major + 1}.0.0",
-        "minor": f"{major}.{minor + 1}.0",
-        "patch": f"{major}.{minor}.{patch + 1}",
-        "none": None,
-    }
-    answer = input("Bump KRPC.Core by major, minor, patch or none? [minor] ")
-    answer = answer.strip().lower() or "minor"
-    if answer not in versions:
-        raise ReleaseError(f"'{answer}' is not major, minor, patch or none")
-    version = versions[answer]
-    if version is None:
-        return None
-    CONFIG.write_text(
-        text[: match.start()] + f'core_version = "{version}"' + text[match.end() :]
-    )
-    print(f"KRPC.Core {current} -> {version}")
+def ask_version(prompt, suggestion, after):
+    """Ask for an x.y.z version that comes after another, offering a suggestion."""
+    version = input(f"{prompt} [{suggestion}] ").strip() or suggestion
+    if versions.parse(version) <= versions.parse(after):
+        raise ReleaseError(f"{version} does not come after {after}")
     return version
 
 
@@ -265,6 +222,15 @@ def fragments():
         return changelog.load_fragments(changelog.fragment_paths(ROOT))
     except changelog.ChangelogError as exception:
         raise ReleaseError(f"bad changelog fragment:\n{exception}") from exception
+
+
+def unfolded_fragments():
+    """The fragments holding entries for this release's components."""
+    return [
+        fragment.path
+        for fragment in fragments()
+        if set(fragment.sections) & set(changelog.COMPONENTS)
+    ]
 
 
 def _sections():
@@ -518,9 +484,11 @@ def twine_upload(token, distribution):
 
 def main(step):
     """Run a step, reporting a failure as an error rather than a traceback."""
+    # Every build a release step runs is a release build (tools/build/release/release.bzl)
+    os.environ["KRPC_RELEASE"] = "1"
     try:
         step()
-    except ReleaseError as exception:
+    except (ReleaseError, versions.VersionError) as exception:
         error(str(exception))
         sys.exit(1)
     except KeyboardInterrupt:

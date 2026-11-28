@@ -1,6 +1,6 @@
 load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test")
 load("@rules_jvm_external//:defs.bzl", "java_export")
-load("//:config.bzl", "version")
+load("//:config.bzl", "readable_version", "version_file", "versions")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build:java.bzl", "java_checkstyle_test", "javadoc_test")
@@ -29,12 +29,26 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+version = versions["java"]
+
+version_file(
+    name = "version",
+    version = version,
+)
+
+# The published jar, the library with its VERSION.txt. The commit stays out of the library jar,
+# which the tests run against, so they stay cached from one commit to the next.
 genrule(
     name = "krpc-jar",
-    srcs = [":krpc-maven-artifact"],
-    outs = ["krpc-java-%s.jar" % version],
-    cmd = 'cp "$<" "$@"',
+    srcs = [
+        ":krpc-maven-artifact",
+        ":version",
+    ],
+    outs = ["krpc-java-%s.jar" % readable_version(version)],
+    cmd = ('$(execpath //tools/build:write_zip) --out "$@" --merge $(execpath :krpc-maven-artifact) ' +
+           "--entry $(execpath :version)=VERSION.txt"),
     output_to_bindir = True,
+    tools = ["//tools/build:write_zip"],
     visibility = ["//visibility:public"],
 )
 
@@ -45,7 +59,7 @@ java_export(
     srcs = srcs,
     classifier_artifacts = {"sources": ":krpc-sources"},
     javacopts = copts,
-    maven_coordinates = "io.github.krpc:krpc-java:%s" % version,
+    maven_coordinates = "io.github.krpc:krpc-java:%s" % readable_version(version),
     pom_template = "pom.xml.tpl",
     resources = [
         "CHANGELOG.md",
@@ -53,7 +67,6 @@ java_export(
         "README.txt",
         "//:COPYING",
         "//:COPYING.LESSER",
-        "//:version",
     ],
     visibility = ["//visibility:public"],
     # Exported, as the API uses their types, so the POM gives them compile scope
@@ -70,7 +83,7 @@ java_export(
 # The sources jar, laid out by package
 pkg_zip(
     name = "krpc-sources",
-    out = "krpc-java-%s-sources.jar" % version,
+    out = "krpc-java-%s-sources.jar" % readable_version(version),
     files = srcs,
     path_map = {
         "client/java/src/": "",
