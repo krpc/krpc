@@ -76,8 +76,55 @@ v0.8.0
 ------
 
 
-Core
-^^^^
+Server
+^^^^^^
+
+* Servers and settings
+
+  * :breaking:`Breaking` Listen on one port or socket path per server, removing the stream port and stream path settings (:issue:`1219`)
+  * :breaking:`Breaking` Reset each existing server's settings to their defaults, so a TCP/IP and a WebSockets server both use port 50000 until one is changed (:issue:`1219`)
+  * :breaking:`Breaking` Turn on "Auto-accept new clients" for new installs. An existing settings file keeps its value (:issue:`1219`)
+  * Start a new install with a TCP/IP server on port 50000 and a WebSockets server on port 50001, each named for its protocol (:issue:`1349`, :issue:`1371`)
+  * Add \*JSON over HTTP\* to the protocols, on port 50003 by default, and the origins whose web pages may connect to WebSockets and HTTP servers (:issue:`1391`, :issue:`1392`)
+  * Add RTS/CTS flow control to serial IO servers (:issue:`1386`)
+  * Keep the server settings on an upgrade, as the release no longer includes ``settings.cfg`` (:issue:`1349`)
+  * Keep each readable setting from a damaged ``settings.cfg``, and back up a file with no readable settings as ``settings.cfg.bak`` (:issue:`1349`)
+  * Build the serial port code into ``KRPC.Core.dll``, in place of a separate ``KRPC.IO.Ports.dll`` (:issue:`1386`)
+
+* Performance
+
+  * :breaking:`Breaking` Replace "Max. time per update" with "Max. time per frame", 10 ms by default, and "Blocking receives" and "Receive timeout" with "Max. call wait", 5 ms by default (:issue:`1376`)
+  * Hold the frame rate at the new "Target frame rate" setting with adaptive rate control, 60 fps by default (:issue:`1376`)
+  * Add presets to the advanced settings: "Game first", "Balanced" and "Calls first" (:issue:`1376`)
+
+* Server windows
+
+  * Show the number of connected clients beside each server, and remember which servers are expanded (:issue:`1385`)
+  * Name a server added in the window "Server", "Server 2" and so on, and default the port of a WebSockets server to 50001 (:issue:`1371`, :issue:`1385`)
+  * Name the TCP/IP protocol "Protobuf over TCP/IP" (:issue:`1225`)
+  * Reorganize the info window around the frame, with deferred calls, stream updates and a "Limited by" row naming what holds down the call rate (:issue:`1244`, :issue:`1376`)
+  * Widen the server window so the advanced settings fit, and line up their labels (:issue:`1349`)
+  * Give the kRPC windows an opaque background, and hide them while the game hides its UI (:issue:`1349`, :issue:`1376`)
+  * Fix the server window keeping its height after clients disconnect (:issue:`1186`)
+  * Fix "Clear statistics" leaving the data read and written (:issue:`1376`)
+
+* Mods and service errors
+
+  * Keep running when a service has errors, and leave out only the members with them and the members that use them (:issue:`1345`)
+  * Load each supported mod whatever its version, and fail only the calls that use a missing member (:issue:`1341`)
+  * Disable only the integration of a mod that fails to load, and give the reason in the errors of its RPCs (:issue:`1341`, :issue:`1342`)
+  * List the members left out, the RPCs that use them, and the mods whose support failed to load, in a window at the main menu (:issue:`1345`)
+
+* Logging
+
+  * Log a connection the player is asked to allow once, naming the client, and an auto-accepted connection at the debug level (:issue:`1235`)
+  * Log auto-starting the servers only when one is stopped (:issue:`1235`)
+  * Fix the game scene in log lines reading ``Inherit, Flight`` (:issue:`1235`)
+  * Fix errors logged on every scene change, and on quitting, when the server fails its startup checks (:issue:`1376`)
+  * Log each request at the debug level as one line naming its calls and their errors, and stop logging each stream update (:issue:`1219`)
+  * Log the transport connection lines and object store sweeps at the debug level (:issue:`1235`)
+  * Log the address and settings of a server when it starts (:issue:`1235`)
+  * Name a client in log lines by its address and the start of its identifier, and leave out the time, which the game log adds (:issue:`1219`, :issue:`1235`)
 
 * Protocol
 
@@ -156,61 +203,6 @@ Core
   * :breaking:`Breaking` Reject a type named after its service, a method ``GetFoo`` or ``SetFoo`` beside a property ``Foo``, or a parameter or value name that is not ASCII letters and digits (:issue:`1325`, :issue:`1338`)
   * :breaking:`Breaking` Reject a service declared by more than one class, or a parameter defaulting to a value its enumeration does not declare (:issue:`1192`, :issue:`1325`)
   * :breaking:`Breaking` Reject a stream or an event outside a return value, or a stream returned by a procedure that is not internal (:issue:`1269`)
-
-* Logging
-
-  * Log each request at the debug level as one line naming its calls and their errors, and stop logging each stream update (:issue:`1219`)
-  * Log the transport connection lines and object store sweeps at the debug level (:issue:`1235`)
-  * Log the address and settings of a server when it starts (:issue:`1235`)
-  * Name a client in log lines by its address and the start of its identifier, and leave out the time, which the game log adds (:issue:`1219`, :issue:`1235`)
-
-
-
-Server
-^^^^^^
-
-* Servers and settings
-
-  * :breaking:`Breaking` Listen on one port or socket path per server, removing the stream port and stream path settings (:issue:`1219`)
-  * :breaking:`Breaking` Reset each existing server's settings to their defaults, so a TCP/IP and a WebSockets server both use port 50000 until one is changed (:issue:`1219`)
-  * :breaking:`Breaking` Turn on "Auto-accept new clients" for new installs. An existing settings file keeps its value (:issue:`1219`)
-  * Start a new install with a TCP/IP server on port 50000 and a WebSockets server on port 50001, each named for its protocol (:issue:`1349`, :issue:`1371`)
-  * Add \*JSON over HTTP\* to the protocols, on port 50003 by default, and the origins whose web pages may connect to WebSockets and HTTP servers (:issue:`1391`, :issue:`1392`)
-  * Add RTS/CTS flow control to serial IO servers (:issue:`1386`)
-  * Keep the server settings on an upgrade, as the release no longer includes ``settings.cfg`` (:issue:`1349`)
-  * Keep each readable setting from a damaged ``settings.cfg``, and back up a file with no readable settings as ``settings.cfg.bak`` (:issue:`1349`)
-  * Build the serial port code into ``KRPC.Core.dll``, in place of a separate ``KRPC.IO.Ports.dll`` (:issue:`1386`)
-
-* Performance
-
-  * :breaking:`Breaking` Replace "Max. time per update" with "Max. time per frame", 10 ms by default, and "Blocking receives" and "Receive timeout" with "Max. call wait", 5 ms by default (:issue:`1376`)
-  * Hold the frame rate at the new "Target frame rate" setting with adaptive rate control, 60 fps by default (:issue:`1376`)
-  * Add presets to the advanced settings: "Game first", "Balanced" and "Calls first" (:issue:`1376`)
-
-* Server windows
-
-  * Show the number of connected clients beside each server, and remember which servers are expanded (:issue:`1385`)
-  * Name a server added in the window "Server", "Server 2" and so on, and default the port of a WebSockets server to 50001 (:issue:`1371`, :issue:`1385`)
-  * Name the TCP/IP protocol "Protobuf over TCP/IP" (:issue:`1225`)
-  * Reorganize the info window around the frame, with deferred calls, stream updates and a "Limited by" row naming what holds down the call rate (:issue:`1244`, :issue:`1376`)
-  * Widen the server window so the advanced settings fit, and line up their labels (:issue:`1349`)
-  * Give the kRPC windows an opaque background, and hide them while the game hides its UI (:issue:`1349`, :issue:`1376`)
-  * Fix the server window keeping its height after clients disconnect (:issue:`1186`)
-  * Fix "Clear statistics" leaving the data read and written (:issue:`1376`)
-
-* Mods and service errors
-
-  * Keep running when a service has errors, and leave out only the members with them and the members that use them (:issue:`1345`)
-  * Load each supported mod whatever its version, and fail only the calls that use a missing member (:issue:`1341`)
-  * Disable only the integration of a mod that fails to load, and give the reason in the errors of its RPCs (:issue:`1341`, :issue:`1342`)
-  * List the members left out, the RPCs that use them, and the mods whose support failed to load, in a window at the main menu (:issue:`1345`)
-
-* Logging
-
-  * Log a connection the player is asked to allow once, naming the client, and an auto-accepted connection at the debug level (:issue:`1235`)
-  * Log auto-starting the servers only when one is stopped (:issue:`1235`)
-  * Fix the game scene in log lines reading ``Inherit, Flight`` (:issue:`1235`)
-  * Fix errors logged on every scene change, and on quitting, when the server fails its startup checks (:issue:`1376`)
 
 
 
@@ -794,9 +786,19 @@ v0.7.0
 ------
 
 
-Core
-^^^^
+Server
+^^^^^^
 
+* :breaking:`Breaking` KSP 1.12.5 is the minimum supported version, matching the maximum (:issue:`1048`)
+* Add the local socket protocol to the server window. It opens no network port (:issue:`1065`)
+* Add the ``TickHoldTimeout`` setting, which bounds how long a client may hold the game on one physics tick (:issue:`1070`)
+* Update the server before the game collects control inputs, so a control input takes effect on the tick of its call (:issue:`1070`)
+* Stop the server whenever no game is loaded, disconnecting clients when the player quits to the main menu (:issue:`1041`)
+* Save the game when setting ``KRPC.GameScene`` leaves flight, unless the game cannot be saved (:issue:`1117`)
+* Remove objects whose game objects are gone from the object store when the game loads, changes scene or destroys a part or vessel (:issue:`1051`)
+* Fix setting ``KRPC.GameScene`` from one editor to the other, or back to flight, breaking the flight camera or failing with a null reference (:issue:`1038`, :issue:`1117`)
+* Fix the error from a call that waits on the game being reported as ``Exception has been thrown by the target of an invocation`` (:issue:`1083`)
+* Fix the end of a long serial port name being hidden in the server window (:issue:`1065`)
 * Server side functions
 
   * Extend ``KRPC.Expression`` to build server side functions, which the server evaluates (:issue:`503`, :issue:`517`, :issue:`521`, :issue:`1124`)
@@ -856,21 +858,6 @@ Core
   * Fix one server stopping emptying the object store that every server shares (:issue:`1020`)
   * Fix a request naming an object the server no longer has leaving the connection stuck (:issue:`1019`)
 
-
-
-Server
-^^^^^^
-
-* :breaking:`Breaking` KSP 1.12.5 is the minimum supported version, matching the maximum (:issue:`1048`)
-* Add the local socket protocol to the server window. It opens no network port (:issue:`1065`)
-* Add the ``TickHoldTimeout`` setting, which bounds how long a client may hold the game on one physics tick (:issue:`1070`)
-* Update the server before the game collects control inputs, so a control input takes effect on the tick of its call (:issue:`1070`)
-* Stop the server whenever no game is loaded, disconnecting clients when the player quits to the main menu (:issue:`1041`)
-* Save the game when setting ``KRPC.GameScene`` leaves flight, unless the game cannot be saved (:issue:`1117`)
-* Remove objects whose game objects are gone from the object store when the game loads, changes scene or destroys a part or vessel (:issue:`1051`)
-* Fix setting ``KRPC.GameScene`` from one editor to the other, or back to flight, breaking the flight camera or failing with a null reference (:issue:`1038`, :issue:`1117`)
-* Fix the error from a call that waits on the game being reported as ``Exception has been thrown by the target of an invocation`` (:issue:`1083`)
-* Fix the end of a long serial port name being hidden in the server window (:issue:`1065`)
 
 
 SpaceCenter service
@@ -1338,22 +1325,6 @@ v0.6.0
 ------
 
 
-Core
-^^^^
-
-* Add ``Version`` property to ``Core``, set by the server plugin on startup (:issue:`848`)
-* Enable ``TCP_NODELAY`` on client TCP connections, reducing RPC round-trip latency (:issue:`879`)
-* Surface deprecated members (annotated with ``[Obsolete]``) in the service definition and over the wire (:issue:`904`)
-* Add ``KRPC.GameScene`` and make it settable to switch the current game scene (:issue:`897`)
-* :deprecated:`Deprecated` ``KRPC.CurrentGameScene``, kept as a read-only alias of ``KRPC.GameScene`` (:issue:`897`)
-* Add ``AstronautComplex``, ``MissionControl``, ``ResearchAndDevelopment``, ``Administration`` and ``MissionBuilder`` game scenes (:issue:`897`)
-* Fix the game scenes a procedure is available in never being sent by ``GetServices``; the ``game_scenes`` field of every procedure was always empty (:issue:`991`)
-* Reduce copying and allocation overhead receiving protobuf messages (:issue:`972`)
-* Fix the websocket servers rejecting connection requests that are split across multiple reads (:issue:`973`)
-* Fix websocket connection URL query parameter parsing (:issue:`973`)
-* Fix locale issues with type codes in the service description, and HTTP and websocket protocol tokens (:issue:`993`)
-
-
 Server
 ^^^^^^
 
@@ -1365,6 +1336,17 @@ Server
 * Fix incorrect unit shown for "max. time per update" and "receive timeout" (:issue:`919`)
 * Support switching the game scene by setting ``KRPC.GameScene`` (:issue:`897`)
 * Fix repeated toolbar icons appearing in some situations (:issue:`939`)
+* Add ``Version`` property to ``Core``, set by the server plugin on startup (:issue:`848`)
+* Enable ``TCP_NODELAY`` on client TCP connections, reducing RPC round-trip latency (:issue:`879`)
+* Surface deprecated members (annotated with ``[Obsolete]``) in the service definition and over the wire (:issue:`904`)
+* Add ``KRPC.GameScene`` and make it settable to switch the current game scene (:issue:`897`)
+* :deprecated:`Deprecated` ``KRPC.CurrentGameScene``, kept as a read-only alias of ``KRPC.GameScene`` (:issue:`897`)
+* Add ``AstronautComplex``, ``MissionControl``, ``ResearchAndDevelopment``, ``Administration`` and ``MissionBuilder`` game scenes (:issue:`897`)
+* Fix the game scenes a procedure is available in never being sent by ``GetServices``; the ``game_scenes`` field of every procedure was always empty (:issue:`991`)
+* Reduce copying and allocation overhead receiving protobuf messages (:issue:`972`)
+* Fix the websocket servers rejecting connection requests that are split across multiple reads (:issue:`973`)
+* Fix websocket connection URL query parameter parsing (:issue:`973`)
+* Fix locale issues with type codes in the service description, and HTTP and websocket protocol tokens (:issue:`993`)
 
 
 SpaceCenter service
@@ -1722,12 +1704,6 @@ krpctools
 
 v0.5.4
 ------
-
-
-Core
-^^^^
-
-* Initial version, split off from ``KRPC.dll``
 
 
 Server

@@ -159,19 +159,37 @@ A C# target depends on a NuGet package through its lowercase name, such as
 ``@paket.main//google.protobuf``. The target framework of the target selects the package's assets
 and dependencies.
 
-C# IDEs
--------
+The C# Solution
+---------------
 
-The repository root has a solution file, ``kRPC.sln``, for Visual Studio, Rider or a similar IDE.
-It needs some generated C# sources, which this command builds:
+The repository root has a solution file, ``KRPC.sln``, for Visual Studio, Rider or a similar IDE.
+It needs some generated C# sources and the stub KSP assemblies, which this command builds:
 
 .. code-block:: bash
 
    bazel build //:csproj
 
-Each `release <https://github.com/krpc/krpc/releases>`_ also has a
-``krpc-genfiles-<version>.zip`` holding these files. Extract it over the source tree to use the
-solution without Bazel.
+Then build the solution with the `.NET SDK <https://dotnet.microsoft.com/download>`_, version 10:
+
+.. code-block:: bash
+
+   dotnet build KRPC.sln -c Debug -warnaserror
+
+The projects find the Bazel outputs through ``bazel-bin`` and ``bazel-krpc``, the links Bazel
+creates in the repository root. The second is named for the checkout's folder. For a checkout in
+another folder, such as ``krpc-fork``, point the projects at its link in
+``tools/build/msbuild/bazeldirs.props.user``:
+
+.. code-block:: xml
+
+   <Project>
+     <PropertyGroup>
+       <bazel-external>$(SolutionDir)bazel-krpc-fork\external</bazel-external>
+     </PropertyGroup>
+   </Project>
+
+The ``.csproj`` files list their C# sources, and the Bazel build finds them with a glob. A new
+source file goes in its project's ``.csproj``, and ``bazel test //:csproj-test`` checks the lists.
 
 Docker
 ------

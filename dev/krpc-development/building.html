@@ -722,16 +722,30 @@ in-game tests, so it stays a hand edit.</p>
 <code class="docutils literal notranslate"><span class="pre">&#64;paket.main//google.protobuf</span></code>. The target framework of the target selects the package’s assets
 and dependencies.</p>
 </section>
-<section id="c-ides">
-<h2>C# IDEs<a class="headerlink" href="#c-ides" title="Link to this heading">#</a></h2>
-<p>The repository root has a solution file, <code class="docutils literal notranslate"><span class="pre">kRPC.sln</span></code>, for Visual Studio, Rider or a similar IDE.
-It needs some generated C# sources, which this command builds:</p>
+<section id="the-c-solution">
+<h2>The C# Solution<a class="headerlink" href="#the-c-solution" title="Link to this heading">#</a></h2>
+<p>The repository root has a solution file, <code class="docutils literal notranslate"><span class="pre">KRPC.sln</span></code>, for Visual Studio, Rider or a similar IDE.
+It needs some generated C# sources and the stub KSP assemblies, which this command builds:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>build<span class="w"> </span>//:csproj
 </pre></div>
 </div>
-<p>Each <a class="reference external" href="https://github.com/krpc/krpc/releases">release</a> also has a
-<code class="docutils literal notranslate"><span class="pre">krpc-genfiles-&lt;version&gt;.zip</span></code> holding these files. Extract it over the source tree to use the
-solution without Bazel.</p>
+<p>Then build the solution with the <a class="reference external" href="https://dotnet.microsoft.com/download">.NET SDK</a>, version 10:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dotnet<span class="w"> </span>build<span class="w"> </span>KRPC.sln<span class="w"> </span>-c<span class="w"> </span>Debug<span class="w"> </span>-warnaserror
+</pre></div>
+</div>
+<p>The projects find the Bazel outputs through <code class="docutils literal notranslate"><span class="pre">bazel-bin</span></code> and <code class="docutils literal notranslate"><span class="pre">bazel-krpc</span></code>, the links Bazel
+creates in the repository root. The second is named for the checkout’s folder. For a checkout in
+another folder, such as <code class="docutils literal notranslate"><span class="pre">krpc-fork</span></code>, point the projects at its link in
+<code class="docutils literal notranslate"><span class="pre">tools/build/msbuild/bazeldirs.props.user</span></code>:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;Project&gt;</span>
+<span class="w">  </span><span class="nt">&lt;PropertyGroup&gt;</span>
+<span class="w">    </span><span class="nt">&lt;bazel-external&gt;</span>$(SolutionDir)bazel-krpc-fork\external<span class="nt">&lt;/bazel-external&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/PropertyGroup&gt;</span>
+<span class="nt">&lt;/Project&gt;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">.csproj</span></code> files list their C# sources, and the Bazel build finds them with a glob. A new
+source file goes in its project’s <code class="docutils literal notranslate"><span class="pre">.csproj</span></code>, and <code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">test</span> <span class="pre">//:csproj-test</span></code> checks the lists.</p>
 </section>
 <section id="docker">
 <h2>Docker<a class="headerlink" href="#docker" title="Link to this heading">#</a></h2>
@@ -804,7 +818,7 @@ bazel<span class="w"> </span><span class="nb">test</span><span class="w"> </span
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building">Building</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#c-ides">C# IDEs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-c-solution">The C# Solution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#docker">Docker</a></li>
 </ul>
   </nav></div>
