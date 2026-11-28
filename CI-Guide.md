@@ -188,8 +188,8 @@ generates with `grpcio-tools`.
 
 ### The Solution Build
 
-`linux-build-csharp-sln` and `windows-build-csharp-sln` build `KRPC.sln` with `dotnet`, from the
-generated files `linux-build-genfiles` uploads. Bazel globs the C# sources, but the `.csproj`
+`linux-build-csharp-sln` and `windows-build-csharp-sln` build `KRPC.sln` with `dotnet`, after
+`//:csproj` generates the sources it needs. Bazel globs the C# sources, but the `.csproj`
 files list them, so they also run `//:csproj-test`. It catches a file missing from a project,
 which a compile cannot always see.
 

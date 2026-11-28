@@ -115,12 +115,6 @@ jobs:
         with:
           name: krpctools
           path: artifacts/krpctools/
-      - name: upload-genfiles
-        if: steps.merge-group-run.outputs.run-id
-        uses: actions/upload-artifact@v7
-        with:
-          name: genfiles
-          path: artifacts/genfiles/
       - name: upload-client-cnano
         if: steps.merge-group-run.outputs.run-id
         uses: actions/upload-artifact@v7

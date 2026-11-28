@@ -132,9 +132,6 @@ csharp_assembly_info(
     copyright = author,
     title = "KRPC.Core.Test",
     version = core_version,
-    visibility = [
-        "//:__pkg__",  # Make visible to krpc-genfiles so it can copy AssemblyInfo.cs to zip
-    ],
 )
 
 # Procedures built against version 1 of a library and run against version 2, which removes a

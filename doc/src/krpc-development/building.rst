@@ -169,10 +169,6 @@ It needs some generated C# sources, which this command builds:
 
    bazel build //:csproj
 
-Each `release <https://github.com/krpc/krpc/releases>`_ also has a
-``krpc-genfiles-<version>.zip`` holding these files. Extract it over the source tree to use the
-solution without Bazel.
-
 Docker
 ------
 

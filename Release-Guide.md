@@ -86,9 +86,8 @@ release builds, with no `-dev` marker.
 ## 3. Release on GitHub
 
 9. `tools/release/40-build-assets.py` - builds the release assets and collects them in `assets/`:
-   the mod, each client's package, the krpctools wheel and `krpc-genfiles-x.x.x.zip`, the
-   generated C# sources for opening `kRPC.sln` without a build. GitHub records the SHA-256 digest
-   of each asset.
+   the mod, each client's package and the krpctools wheel. GitHub records the SHA-256 digest of
+   each asset.
 10. `tools/release/50-release-github.py` - creates a **draft** GitHub release for the tag with the
    changelog as release notes and the assets attached. The release is not marked as latest, as the
    KSA mod releases from the same repository. Review the draft on GitHub and publish it from there.
