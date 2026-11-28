@@ -31,7 +31,7 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
 
  * `//:krpc` — mod release zip. `//server`, `//service/SpaceCenter`, `//client/python`, … — one component.
  * `//doc:html`; `bazel run //doc:serve` — serve with rebuild-on-edit.
- * `//:csproj` — generate the C# sources `kRPC.sln` needs.
+ * `//:csproj` — generate the C# sources `KRPC.sln` needs.
 
 ### Tests and lint
 
